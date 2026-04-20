@@ -364,6 +364,13 @@ Current as of 2026-04-20.
 - Plugins and MCP: https://docs.github.com/copilot/concepts/agents/copilot-cli/about-cli-plugins — covers plugins and MCP.
 - Changelog: https://github.blog/changelog/2026-02-25-github-copilot-cli-is-now-generally-available/ — covers CLI availability.
 MD
+  cat > "$dir/docs/release-checklist.md" <<'MD'
+# Release Checklist
+
+The release path is CLI-first, keeps the plugin canonical, keeps examples
+illustrative, records version updates in plugin.json, and includes release notes
+plus Copilot CLI smoke-test evidence.
+MD
   cat > "$dir/docs/v1-repo-blueprint.md" <<'MD'
 # V1 Repo Blueprint
 

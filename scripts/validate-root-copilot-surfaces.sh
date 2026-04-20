@@ -454,10 +454,17 @@ MD
   }
 }
 JSON
+  cat > "$dir/.copilot-hooks/common.sh" <<'SH'
+#!/usr/bin/env bash
+set -euo pipefail
+SH
   cat > "$dir/.copilot-hooks/session-start.sh" <<'SH'
 #!/usr/bin/env bash
 set -euo pipefail
 mkdir -p .copilot-hooks
+cat > .copilot-hooks/config.json <<'JSON'
+{"schema_version":1,"log_schema":"oh-my-copilot-hook-log-v1","project_slug":"fixture"}
+JSON
 printf 'source=root-workspace event=sessionStart\n' >> .copilot-hooks/session.log
 SH
   cat > "$dir/.copilot-hooks/post-tool-audit.sh" <<'SH'
@@ -466,7 +473,7 @@ set -euo pipefail
 mkdir -p .copilot-hooks
 printf 'source=root-workspace event=postToolUse\n' >> .copilot-hooks/tools.log
 SH
-  chmod +x "$dir/.copilot-hooks/session-start.sh" "$dir/.copilot-hooks/post-tool-audit.sh"
+  chmod +x "$dir/.copilot-hooks/common.sh" "$dir/.copilot-hooks/session-start.sh" "$dir/.copilot-hooks/post-tool-audit.sh"
   mkdir -p "$dir/.github/workflows"
   cat > "$dir/.github/workflows/docs-check.yml" <<'YAML'
 name: Docs Check
