@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-cd "$root"
+# Validate the docs-first oh-my-copilot public research repository.
+# This is intentionally a repository hygiene/test script, not product runtime.
 
 ROOT="."
 CHECK_EXTERNAL="${CHECK_EXTERNAL:-0}"
@@ -211,21 +211,45 @@ link_re = re.compile(r'(?<!!)\[[^\]]+\]\(([^)]+)\)')
 for md in root.rglob('*.md'):
     if '.git' in md.parts:
         continue
-        ;;
-      \#*)
-        continue
-        ;;
-    esac
+    text = md.read_text(encoding='utf-8')
+    for raw in link_re.findall(text):
+        target = raw.strip().split()[0]
+        if not target or target.startswith(('#', 'http://', 'https://', 'mailto:')):
+            continue
+        path_part = unquote(target.split('#', 1)[0])
+        if not path_part:
+            continue
+        resolved = (md.parent / path_part).resolve()
+        try:
+            resolved.relative_to(root)
+        except ValueError:
+            missing.append(f"{md.relative_to(root)} -> {target} escapes repository")
+            continue
+        if not resolved.exists():
+            missing.append(f"{md.relative_to(root)} -> {target}")
+if missing:
+    print('Missing internal Markdown links:', file=sys.stderr)
+    for item in missing:
+        print(f'  {item}', file=sys.stderr)
+    sys.exit(1)
+PY
+  log "internal Markdown links resolve"
+}
 
-    clean="${target%%#*}"
-    clean="${clean//%20/ }"
-    base="$(dirname "$file")"
-    if [[ ! -e "$base/$clean" ]]; then
-      printf 'Missing internal link in %s: %s\n' "$file" "$target" >&2
+validate_external_links() {
+  [[ "$CHECK_EXTERNAL" == "1" ]] || { log "external link checks skipped (set CHECK_EXTERNAL=1 to enable)"; return; }
+  command -v curl >/dev/null 2>&1 || fail "curl is required for external link checks"
+  local url failures=0
+  while IFS= read -r url; do
+    [[ -n "$url" ]] || continue
+    if ! curl --location --head --fail --silent --show-error --max-time 20 "$url" >/dev/null; then
+      printf 'External link failed: %s\n' "$url" >&2
       failures=$((failures + 1))
     fi
-  done < <(grep -oE '\[[^][]+\]\(([^() ]+)[^)]*\)' "$file" | sed -E 's/^.*\(([^() ]+).*\)$/\1/' || true)
-done < <(find . -path './.git' -prune -o -name '*.md' -type f -print | sort)
+  done < <(cd "$ROOT" && grep -RhoE 'https?://[^ )]+' README.md docs research examples | sort -u)
+  [[ "$failures" -eq 0 ]] || fail "$failures external link(s) failed"
+  log "external links are reachable"
+}
 
 validate_repo() {
   validate_required_files
@@ -433,15 +457,3 @@ if [[ "$SELF_TEST" == "1" ]]; then
 else
   validate_repo
 fi
-
-if grep -RInE 'full feature parity|runtime framework|cloud agent.*in scope|IDE.*in scope|SDK.*in scope' README.md docs research examples 2>/dev/null; then
-  echo "Potential over-scope language found; review matches above" >&2
-  failures=$((failures + 1))
-fi
-
-if (( failures > 0 )); then
-  printf 'Documentation validation failed with %d issue(s).\n' "$failures" >&2
-  exit 1
-fi
-
-printf 'Documentation validation passed.\n'
