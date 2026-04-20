@@ -3,36 +3,32 @@ set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 PLUGIN_PATH="$ROOT/packages/copilot-cli-plugin"
+INSTALL_LOG="$(mktemp)"
+trap 'rm -f "$INSTALL_LOG"' EXIT
 
 log() { printf 'ok: %s\n' "$*"; }
 fail() { printf 'FAIL: %s\n' "$*" >&2; exit 1; }
 
 command -v copilot >/dev/null 2>&1 || fail "copilot CLI not found"
-command -v gh >/dev/null 2>&1 || fail "gh CLI not found"
+command -v python3 >/dev/null 2>&1 || fail "python3 not found"
 
 log "copilot CLI detected"
-log "gh CLI detected"
+log "python3 detected"
 
-copilot plugin install "$PLUGIN_PATH" >/tmp/omc-plugin-install.out 2>&1 || true
-tail -n 5 /tmp/omc-plugin-install.out || true
+if copilot plugin install "$PLUGIN_PATH" >"$INSTALL_LOG" 2>&1; then
+  log "copilot plugin install command completed"
+else
+  install_status=$?
+  tail -n 20 "$INSTALL_LOG" || true
+  if "$ROOT/scripts/check-install-state.sh" --root "$ROOT"; then
+    log "copilot plugin install exited $install_status, but installed state is already valid"
+  else
+    fail "copilot plugin install failed and install state is invalid"
+  fi
+fi
 
-python3 - <<'PY'
-from __future__ import annotations
-import json
-import pathlib
-
-cfg = pathlib.Path.home() / ".copilot" / "config.json"
-if not cfg.exists():
-    raise SystemExit("FAIL: ~/.copilot/config.json missing after plugin install")
-data = json.loads(cfg.read_text())
-installed = data.get("installedPlugins", [])
-for entry in installed:
-    if entry.get("name") == "oh-my-copilot-power-pack":
-        print("ok: plugin config entry found")
-        break
-else:
-    raise SystemExit("FAIL: plugin config entry missing")
-PY
+tail -n 20 "$INSTALL_LOG" || true
+"$ROOT/scripts/check-install-state.sh" --root "$ROOT"
 
 ( cd "$ROOT" && ./scripts/validate-doc-links.sh )
 ( cd "$ROOT" && ./scripts/validate-power-surfaces.sh )
