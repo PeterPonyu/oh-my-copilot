@@ -1,23 +1,22 @@
 ---
 name: review
-description: Root alias for reviewing docs, registration, or surface changes before shipping.
+description: Short alias for the root reviewer flow; checks scope, parity drift, and root/plugin/example boundaries.
 agent: reviewer
-argument-hint: "<target file, diff, or change description>"
+argument-hint: "<target file, PR summary, or change>"
 ---
 
-Review the requested root workspace change using the root reviewer agent.
+Review the target using the root-local `reviewer` agent.
 
-This is the short root alias for common review work. Use it when the user wants
-the current repository checked without remembering a namespaced plugin agent.
+This is the short invocation alias for `/review-scope`. Keep the review focused
+on root workspace quality:
 
-Focus on:
-
-- CLI-first, docs/research-first scope boundaries;
-- overclaims about OMC/OMX parity, runtime behavior, or multi-surface support;
+- scope or parity drift;
 - root workspace vs reusable plugin vs illustrative example boundaries;
-- prompt `agent:` values and agent handoffs resolving to root-local agents; and
-- whether verification should run root-relative docs, power-surface, or
-  root-registration checks.
+- prompt, agent, skill, or hook routing mistakes;
+- duplicated plugin behavior that should stay canonical in
+  `packages/copilot-cli-plugin/`; and
+- missing verification evidence.
 
-If the user is testing installed reusable plugin behavior instead, call out that
-the distinct plugin route remains `oh-my-copilot-power-pack:reviewer`.
+If the caller needs the reusable installed-plugin route instead, name it
+explicitly as `oh-my-copilot-power-pack:reviewer` rather than treating this root
+alias as the plugin agent.
