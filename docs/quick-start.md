@@ -50,6 +50,8 @@ From the repository root, prefer the root-local names for current-directory work
 | Review docs, registration, or surface changes | `reviewer` or `/review-scope` |
 | Verify validation evidence and smoke-test gaps | `verifier` or `/root-registration-check` |
 | Source-ground capability claims | `research` |
+| Check install/bootstrap proof | `/install-check` |
+| Review the reusable plugin package | `/plugin-review` |
 | Run docs shipment checks | `docs-ship` skill |
 | Scan for parity-risk wording | `parity-guard` skill |
 
@@ -62,6 +64,7 @@ for example `oh-my-copilot-power-pack:reviewer`.
   and troubleshooting.
 - [Usage](./usage.md) — root agents, prompts, skills, plugin routes, hooks, and
   validation matrix.
+- [Benchmark README](../benchmark/README.md) — quick and full local proof runs.
 - [Known limitations](./known-limitations.md) — current boundaries and honest
   gaps.
 - [Release checklist](./release-checklist.md) — maintainer checklist for a
