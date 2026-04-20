@@ -66,6 +66,7 @@ required_files=(
   docs/v1-repo-blueprint.md
   docs/copilot-native-mapping.md
   docs/references.md
+  docs/release-checklist.md
   research/omc-analysis.md
   research/omx-analysis.md
   research/copilot-cli-capabilities.md

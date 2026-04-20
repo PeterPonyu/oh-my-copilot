@@ -228,6 +228,14 @@ PY
 }
 
 validate_hooks() {
+  (
+    cd "$ROOT"
+    HOOK_SOURCE=root-workspace ./.copilot-hooks/session-start.sh </dev/null
+    printf '{"tool":"validate-root-copilot-surfaces.sh","source":"release-readiness"}\n' |
+      HOOK_SOURCE=root-workspace ./.copilot-hooks/post-tool-audit.sh >/dev/null
+  )
+  log "root hook scripts emit fresh evidence"
+
   python3 - "$ROOT/.github/hooks/hooks.json" <<'PY'
 from __future__ import annotations
 import json
