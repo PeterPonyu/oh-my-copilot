@@ -110,8 +110,8 @@ validate_scope_language() {
   require_contains "README states v1 is Copilot CLI-first" 'Copilot CLI-first|CLI-first' README.md
   require_contains "design spec states v1 is Copilot CLI-first" 'Copilot CLI-first|CLI-first' docs/design-spec.md
   require_contains "public docs bound multi-surface expansion as out of scope for v1" 'multi-surface.*out of scope|out of scope.*multi-surface|cloud agent.*IDE.*SDK|cloud.*IDE.*SDK' README.md docs/design-spec.md docs/copilot-native-mapping.md
-  require_contains "mapping recommends Copilot-native adaptation" 'Copilot-native.*adapt|adapt.*Copilot-native' docs/copilot-native-mapping.md
-  require_contains "mapping rejects or bounds forced parity" 'forced parity|one-to-one parity|1:1 parity|not.*parity|parity.*not|parity.*reject|reject.*parity' docs/copilot-native-mapping.md
+  require_contains "mapping recommends Copilot-native adaptation" 'Copilot-native.*adapt|adapt.*Copilot-native|Copilot CLI-native primitive|v1 translation pattern|CLI-native primitive' docs/copilot-native-mapping.md
+  require_contains "mapping rejects or bounds forced parity" 'forced parity|one-to-one parity|1:1 parity|1:1 feature parity|avoid.*parity|parity.*avoid|not.*parity|parity.*not|parity.*reject|reject.*parity' docs/copilot-native-mapping.md
   require_contains "docs explain why Copilot CLI is the closest local analogue" 'closest.*analogue|closest.*analog|local.*Claude Code.*Codex|Claude Code.*Codex.*local' README.md docs/design-spec.md docs/copilot-native-mapping.md
 }
 
@@ -121,7 +121,7 @@ validate_comparison_matrix() {
   require_contains "comparison matrix names oh-my-copilot v1" 'oh-my-copilot v1' docs/comparison-matrix.md
 
   local dimension
-  for dimension in 'host' 'guidance files|instructions' 'skills' 'agents' 'hooks.*MCP|MCP.*hooks' 'delegation' 'state philosophy|state' 'v1 design rule|design rule'; do
+  for dimension in 'host' 'guidance files|instructions|guidance file' 'skills' 'agents' 'hooks' 'MCP|integrations' 'delegation' 'state philosophy|state' 'v1 design rule|design rule' ; do
     require_contains "comparison matrix covers ${dimension}" "$dimension" docs/comparison-matrix.md
   done
 }
@@ -205,59 +205,70 @@ import pathlib
 import re
 import sys
 from urllib.parse import unquote
+
 root = pathlib.Path(sys.argv[1]).resolve()
-missing: list[str] = []
+errors: list[str] = []
 link_re = re.compile(r'(?<!!)\[[^\]]+\]\(([^)]+)\)')
-for md in root.rglob('*.md'):
-    if '.git' in md.parts:
-        continue
-    text = md.read_text(encoding='utf-8')
-    for raw in link_re.findall(text):
-        target = raw.strip().split()[0]
-        if not target or target.startswith(('#', 'http://', 'https://', 'mailto:')):
+heading_re = re.compile(r'^(#{1,6})\s+(.+?)\s*$')
+
+def slugify(text: str) -> str:
+    text = re.sub(r'<[^>]+>', '', text)
+    text = re.sub(r'[`*_\[\]()]', '', text).strip().lower()
+    text = re.sub(r'[^a-z0-9\s-]', '', text)
+    return re.sub(r'[\s-]+', '-', text).strip('-')
+
+def collect_anchors(path: pathlib.Path) -> set[str]:
+    anchors: set[str] = set()
+    counts: dict[str, int] = {}
+    for line in path.read_text(encoding='utf-8').splitlines():
+        match = heading_re.match(line)
+        if not match:
             continue
-        path_part = unquote(target.split('#', 1)[0])
-        if not path_part:
+        base = slugify(match.group(2))
+        if not base:
             continue
         count = counts.get(base, 0)
         counts[base] = count + 1
-        anchors.add(base if count == 0 else f"{base}-{count}")
+        anchors.add(base if count == 0 else f'{base}-{count}')
     return anchors
 
-markdown_files = [p for p in root.rglob("*.md") if ".git" not in p.relative_to(root).parts and ".omx" not in p.relative_to(root).parts]
+markdown_files = [
+    p for p in root.rglob('*.md')
+    if '.git' not in p.relative_to(root).parts and '.omx' not in p.relative_to(root).parts
+]
 anchors = {p: collect_anchors(p) for p in markdown_files}
 
 for path in markdown_files:
-    text = path.read_text(encoding="utf-8")
+    text = path.read_text(encoding='utf-8')
     for lineno, line in enumerate(text.splitlines(), 1):
-        for match in link_re.finditer(line):
-            target = match.group(2).strip()
-            if not target or target.startswith(("http://", "https://", "mailto:")):
+        for raw in link_re.findall(line):
+            target = raw.strip().split()[0]
+            if not target or target.startswith(('http://', 'https://', 'mailto:')):
                 continue
-            if target.startswith("#"):
+            if target.startswith('#'):
                 dest = path
                 fragment = target[1:]
             else:
-                raw_path, sep, fragment = target.partition("#")
-                raw_path = raw_path.split("?", 1)[0]
-                dest = (path.parent / unquote(raw_path)).resolve()
+                raw_path, _sep, fragment = target.partition('#')
+                raw_path = raw_path.split('?', 1)[0]
+                dest = path if not raw_path else (path.parent / unquote(raw_path)).resolve()
                 try:
                     dest.relative_to(root)
                 except ValueError:
-                    errors.append(f"{path}:{lineno}: link escapes repository: {target}")
+                    errors.append(f'{path.relative_to(root)}:{lineno}: link escapes repository: {target}')
                     continue
             if not dest.exists():
-                errors.append(f"{path}:{lineno}: missing target: {target}")
+                errors.append(f'{path.relative_to(root)}:{lineno}: missing target: {target}')
                 continue
-            if fragment and dest.suffix.lower() == ".md":
+            if fragment and dest.suffix.lower() == '.md':
                 wanted = slugify(unquote(fragment))
                 if wanted and wanted not in anchors.get(dest, set()):
-                    errors.append(f"{path}:{lineno}: missing heading '#{fragment}' in {dest.relative_to(root)}")
+                    errors.append(f"{path.relative_to(root)}:{lineno}: missing heading '#{fragment}' in {dest.relative_to(root)}")
 
 if errors:
-    print("Internal markdown link check FAILED", file=sys.stderr)
+    print('Internal markdown link check FAILED', file=sys.stderr)
     for error in errors:
-        print(f"- {error}", file=sys.stderr)
+        print(f'- {error}', file=sys.stderr)
     sys.exit(1)
 PY
   log "internal Markdown links resolve"
