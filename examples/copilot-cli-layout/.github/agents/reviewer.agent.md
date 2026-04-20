@@ -1,3 +1,9 @@
+---
+name: reviewer
+description: Illustrative review agent for public-readiness and scope checks.
+target: vscode
+---
+
 # Reviewer agent
 
 This is an illustrative custom agent profile for Copilot CLI review workflows; it is not runtime parity machinery.

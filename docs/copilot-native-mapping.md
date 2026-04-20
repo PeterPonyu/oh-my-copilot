@@ -9,6 +9,7 @@ primitive should carry this job?"
 | Path-specific guidance | `.github/instructions/**/*.instructions.md` | High | Use `applyTo` frontmatter for file globs. |
 | Workflow skill | `.github/skills/<name>/SKILL.md` or another supported skill location | Medium | Docs support skills with instructions/resources; exact project path should be verified before publishing as supported. |
 | Specialist role prompt | `.github/agents/<role>.agent.md` | High | Repository custom agents are documented. |
+| Guided multi-step flow | Custom agent handoffs plus prompt files | High | VS Code supports handoffs in `.agent.md` frontmatter and reusable `.prompt.md` files. |
 | Explore/search lane | Built-in Explore agent or a custom research agent | Medium | Built-ins exist; exact automatic routing is model/tool dependent. |
 | Build/test lane | Built-in Task agent plus hooks or skill instructions | Medium | Prefer Copilot's built-in command/test behavior over a new worker runtime. |
 | Code review lane | Built-in Code Review agent or custom reviewer agent | High | CLI docs include review examples; changelog lists code review specialization. |
@@ -28,9 +29,11 @@ primitive should carry this job?"
 2. Put file-family rules in `.github/instructions/*.instructions.md`.
 3. Put specialized, occasionally needed workflows in skills.
 4. Put role-specific expertise in custom agents.
-5. Use hooks for bounded lifecycle validation.
-6. Use MCP for external tools/data.
-7. Use plugins only after the component set is stable enough to distribute.
+5. Use prompt files to make recurring flows easy to invoke.
+6. Use handoffs when you want a visible Plan -> Implement -> Review -> Verify chain.
+7. Use hooks for bounded lifecycle validation.
+8. Use MCP for external tools/data.
+9. Use plugins when the component set is stable enough to distribute.
 
 ## Explicit anti-mapping
 

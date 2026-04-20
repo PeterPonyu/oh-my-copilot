@@ -4,17 +4,17 @@
     "sessionStart": [
       {
         "type": "command",
-        "bash": "mkdir -p .copilot-hooks && printf 'session started: %s\\n' \"$(date -u +%Y-%m-%dT%H:%M:%SZ)\" >> .copilot-hooks/session.log",
+        "bash": "./.copilot-hooks/session-start.sh",
         "cwd": ".",
-        "timeoutSec": 10
+        "timeoutSec": 15
       }
     ],
     "postToolUse": [
       {
         "type": "command",
-        "bash": "printf 'postToolUse: %s\\n' \"$(date -u +%Y-%m-%dT%H:%M:%SZ)\" >> .copilot-hooks/tools.log",
+        "bash": "./.copilot-hooks/post-tool-audit.sh",
         "cwd": ".",
-        "timeoutSec": 10
+        "timeoutSec": 20
       }
     ]
   }

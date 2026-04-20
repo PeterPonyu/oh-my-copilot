@@ -1,0 +1,14 @@
+{
+  "name": "oh-my-copilot-power-pack",
+  "description": "Experimental Copilot CLI agents, skills, and hooks derived from oh-my-copilot.",
+  "version": "0.1.0",
+  "author": {
+    "name": "Zeyu Fu"
+  },
+  "license": "MIT",
+  "agents": "agents/",
+  "skills": [
+    "skills/"
+  ],
+  "hooks": "hooks.json"
+}

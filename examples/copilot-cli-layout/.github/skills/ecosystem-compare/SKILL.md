@@ -10,6 +10,16 @@ This is an illustrative skill for the v1 research repo, not runtime parity machi
 Use this skill when asked to explain how an OMC or OMX workflow maps to Copilot
 CLI.
 
+## Active routine
+
+If shell access is available, run:
+
+```bash
+./.github/skills/ecosystem-compare/check-parity-claims.sh .
+```
+
+If the script reports parity-risk wording, fix the wording before answering.
+
 ## Steps
 
 1. Identify the user need behind the OMC/OMX feature.

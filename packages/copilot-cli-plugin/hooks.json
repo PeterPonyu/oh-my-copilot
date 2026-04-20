@@ -1,0 +1,21 @@
+{
+  "version": 1,
+  "hooks": {
+    "sessionStart": [
+      {
+        "type": "command",
+        "bash": "mkdir -p .copilot-hooks && printf 'plugin session started: %s\\n' \"$(date -u +%Y-%m-%dT%H:%M:%SZ)\" >> .copilot-hooks/session.log && printf 'workspace: %s\\n' \"$PWD\" >> .copilot-hooks/session.log",
+        "cwd": ".",
+        "timeoutSec": 15
+      }
+    ],
+    "postToolUse": [
+      {
+        "type": "command",
+        "bash": "mkdir -p .copilot-hooks && printf 'plugin postToolUse: %s\\n' \"$(date -u +%Y-%m-%dT%H:%M:%SZ)\" >> .copilot-hooks/tools.log",
+        "cwd": ".",
+        "timeoutSec": 20
+      }
+    ]
+  }
+}

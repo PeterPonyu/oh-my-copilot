@@ -1,0 +1,21 @@
+{
+  "version": 1,
+  "hooks": {
+    "sessionStart": [
+      {
+        "type": "command",
+        "bash": "for base in \"$PWD\" \"$PWD/examples/vscode-copilot-layout\"; do if [ -x \"$base/.copilot-hooks/session-start.sh\" ]; then cd \"$base\" && exec bash ./.copilot-hooks/session-start.sh; fi; done; echo '{\"continue\":true}'",
+        "cwd": ".",
+        "timeoutSec": 15
+      }
+    ],
+    "postToolUse": [
+      {
+        "type": "command",
+        "bash": "for base in \"$PWD\" \"$PWD/examples/vscode-copilot-layout\"; do if [ -x \"$base/.copilot-hooks/post-tool-audit.sh\" ]; then cd \"$base\" && exec bash ./.copilot-hooks/post-tool-audit.sh; fi; done; echo '{\"continue\":true}'",
+        "cwd": ".",
+        "timeoutSec": 20
+      }
+    ]
+  }
+}

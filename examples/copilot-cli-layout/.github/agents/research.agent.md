@@ -1,3 +1,9 @@
+---
+name: research
+description: Illustrative research agent for source grounding and citation checks.
+target: vscode
+---
+
 # Research agent
 
 This is an illustrative custom agent profile for Copilot CLI research workflows; it is not runtime parity machinery.
