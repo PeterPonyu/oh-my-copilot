@@ -474,9 +474,13 @@ if [[ "$PRINT_EVIDENCE_TEMPLATE" == "1" ]]; then
   exit 0
 fi
 
-# Flag likely positive over-scope claims while allowing explicit non-goals such as
-# "not a runtime framework" or "out of scope for v1".
-if grep -RInE 'full feature parity|runtime framework implemented|cloud agent.*in scope|IDE.*in scope|SDK.*in scope|production runtime implementation|supported runtime implementation' README.md docs research examples 2>/dev/null; then
-  echo "Potential over-scope language found; review matches above" >&2
-  failures=$((failures + 1))
+if [[ "$SELF_TEST" == "1" ]]; then
+  tmp="$(mktemp -d)"
+  trap 'rm -rf "$tmp"' EXIT
+  create_self_test_fixture "$tmp"
+  ROOT="$tmp"
+  validate_repo
+  log "self-test fixture passed"
+else
+  validate_repo
 fi
