@@ -14,11 +14,12 @@ This note summarizes what `oh-my-copilot` should learn from `oh-my-codex`
   keeps Codex as the execution engine while adding stronger startup, workflows,
   and `.omx/` state.
 - `README.md:77-85` says OMX is for users who already like Codex and want a
-  better workflow/runtime around it; users who want plain Codex may not need
-  OMX.
+  better reference workflow/runtime around it; users who want plain Codex may
+  not need OMX.
 - `package.json` publishes `oh-my-codex` and exposes the `omx` binary.
 - `README.md:89-95` lists Node.js, Codex CLI auth, and tmux/psmux platform
-  requirements, making the runtime explicitly host- and terminal-oriented.
+  requirements, making the reference runtime explicitly host- and
+  terminal-oriented.
 
 ### Recommended workflow and execution modes
 
@@ -27,8 +28,8 @@ This note summarizes what `oh-my-copilot` should learn from `oh-my-codex`
 - `README.md:149-157` describes common in-session surfaces for clarification,
   planning, persistent completion, coordinated parallel execution, and skill
   browsing.
-- `README.md:163-172` documents `omx team` as a durable tmux/worktree runtime
-  for coordinated workers.
+- `README.md:163-172` documents `omx team` as a durable reference runtime
+  for tmux/worktree-coordinated workers.
 - `README.md:190-200` exposes `omx explore` for read-only repository lookup and
   `omx sparkshell` for shell-native inspection and bounded verification.
 
@@ -58,13 +59,13 @@ This note summarizes what `oh-my-copilot` should learn from `oh-my-codex`
 - `README.md:174-188` documents setup, doctor, HUD, native Codex hook
   registration in `.codex/hooks.json`, OMX-managed hooks in `.omx/hooks/*.mjs`,
   and fallback tmux/notification paths.
-- The source tree includes TypeScript runtime modules under `src/`, generated
+- The source tree includes TypeScript reference runtime modules under `src/`, generated
   distribution files under `dist/`, role prompts under `prompts/`, workflow
   skills under `skills/`, and Rust crates for `omx-explore`, `omx-runtime`,
   `omx-runtime-core`, `omx-mux`, and `omx-sparkshell`.
 - The docs tree includes contracts for state, team runtime, runtime authority,
-  hooks, release readiness, and QA reports, indicating a substantial runtime
-  and verification architecture.
+  hooks, release readiness, and QA reports, indicating a substantial reference
+  runtime and verification architecture.
 
 ## Evidence-backed synthesis
 
@@ -73,7 +74,7 @@ Codex; it wraps Codex with opinionated guidance, skill routing, planning,
 verification, team/worktree orchestration, hooks, and durable `.omx/` state.
 The strongest lesson for `oh-my-copilot` is the discipline of respecting the
 host platform's native primitives instead of copying another agent system's
-runtime names or assumptions.
+reference runtime names or assumptions.
 
 ## Design inference for oh-my-copilot v1
 
@@ -91,8 +92,8 @@ runtime names or assumptions.
 
 ### Do not transfer directly
 
-- Do not copy `.omx/` runtime state, tmux workers, HUD, lifecycle APIs, Rust
-  helper crates, or Codex hook machinery into `oh-my-copilot` v1.
+- Do not copy `.omx/` runtime state, tmux workers, HUD, lifecycle APIs, Rust helper
+  crates, or Codex hook machinery into `oh-my-copilot` v1.
 - Do not present `$deep-interview`, `$ralplan`, `$team`, or `$ralph` as Copilot
   CLI commands; they are OMX workflow names unless a future Copilot-native plan
   defines equivalents.
@@ -108,5 +109,5 @@ runtime names or assumptions.
   source of truth for Copilot capabilities is the GitHub documentation cited in
   `docs/references.md` and summarized in `research/copilot-cli-capabilities.md`.
 - Gap: this analysis did not run OMX workflows; it inspects source and docs to
-  identify design lineage, useful vocabulary, and non-transferable runtime
-  boundaries.
+  identify design lineage, useful vocabulary, and non-transferable reference
+  runtime boundaries.

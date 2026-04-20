@@ -14,8 +14,9 @@ Copilot-v1 design inference.
 - `README.md` positions OMC as "multi-agent orchestration for Claude Code" and
   as a low-friction layer for Claude Code users, not as a standalone coding
   agent.
-- `package.json` publishes the runtime as `oh-my-claude-sisyphus` and exposes
-  CLI binaries named `oh-my-claudecode`, `omc`, and `omc-cli`.
+- `package.json` publishes the OMC reference runtime as
+  `oh-my-claude-sisyphus` and exposes CLI binaries named
+  `oh-my-claudecode`, `omc`, and `omc-cli`.
 - `README.md:86-99` explicitly separates terminal CLI commands (`omc ...`) from
   in-session Claude Code skills such as `/autopilot`, `/team`,
   `/deep-interview`, and `/ask`.
@@ -50,9 +51,9 @@ Copilot-v1 design inference.
 
 ### State, hooks, monitoring, and runtime depth
 
-- `AGENTS.md:344-387` documents `.omc/` as persistent runtime storage for state,
-  notes, project memory, plans, and logs, plus MCP-backed state/memory/code
-  intelligence/trace tools.
+- `AGENTS.md:344-387` documents `.omc/` as OMC reference runtime storage
+  for state, notes, project memory, plans, and logs, plus MCP-backed
+  state/memory/code intelligence/trace tools.
 - `README.md:361-368` points readers to HUD, session summaries, replay logs,
   and live monitoring surfaces.
 - `README.md:393-451` documents OpenClaw notification integration and hook-like
@@ -60,7 +61,7 @@ Copilot-v1 design inference.
   `ask-user-question`, `pre-tool-use`, and `post-tool-use`.
 - The source tree includes `src/`, `bridge/`, `dist/`, `.mcp.json`, workflow
   docs, CI workflows, and benchmark tooling, showing that OMC is an implemented
-  runtime and plugin ecosystem rather than only documentation.
+  reference runtime and plugin ecosystem rather than only documentation.
 
 ## Evidence-backed synthesis
 
@@ -88,13 +89,13 @@ research-first scope.
   reusing Claude-specific agent mechanics.
 - Treat skills as bounded workflow packages with clear activation contexts,
   preferably using Copilot CLI's documented skill-folder conventions.
-- Keep verification language visible in public docs even though v1 does not ship
+- Keep verification language visible in public docs even though v1 does not claim
   a runtime verifier.
 
 ### Do not transfer directly
 
-- Do not copy Claude-specific slash commands, plugin marketplace setup,
-  `CLAUDE.md` semantics, or `.omc/` runtime storage into Copilot v1.
+- Do not copy Claude-specific slash commands, plugin marketplace setup, `CLAUDE.md`
+  semantics, or `.omc/` runtime storage into Copilot v1.
 - Do not present OMC modes such as Ralph, Ultrawork, or Team as Copilot CLI
   commands unless a later Copilot-native implementation explicitly defines and
   verifies them.
