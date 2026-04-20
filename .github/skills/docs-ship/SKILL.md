@@ -14,6 +14,7 @@ agents, skills, hooks, examples, or the plugin package.
 ```bash
 ./scripts/validate-doc-links.sh
 ./scripts/validate-power-surfaces.sh
+./scripts/validate-release-readiness.sh
 ```
 
 If a dedicated root surface validator exists, run it after the two commands

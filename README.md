@@ -15,88 +15,18 @@ Those multi-surface expansions are out of scope for v1.
 
 | Need | Read or run |
 | --- | --- |
-| Install and prove the repo is alive | [Installation](./docs/installation.md) |
-| Get productive in one pass | [Quick start](./docs/quick-start.md) |
-| Use root agents, prompts, skills, and plugin routes | [Usage](./docs/usage.md) |
-| Understand current boundaries | [Known limitations](./docs/known-limitations.md) |
-| Prepare a release | [Release checklist](./docs/release-checklist.md) |
-
-Fast path from the repository root:
-
-```bash
-./scripts/validate-doc-links.sh
-./scripts/validate-power-surfaces.sh
-./scripts/validate-root-copilot-surfaces.sh
-./scripts/bootstrap-copilot-power.sh
-```
-
-`bootstrap-copilot-power.sh` is the canonical setup/proof path when both
-`copilot` and `gh` are installed. The validation scripts are useful first
-because they do not require a live Copilot CLI login.
-
-## What this repo gives you
-
-- Root workspace guidance through [`AGENTS.md`](./AGENTS.md),
-  [`.github/copilot-instructions.md`](./.github/copilot-instructions.md), and
-  path-specific `.github/instructions/` files.
-- Short root-local agents for common work: `reviewer`, `verifier`, and
-  `research`.
-- Root prompts such as `/review-scope`, `/ship-docs`, and
-  `/root-registration-check` that route to those root agents.
-- Root skills for docs shipping, parity-claim guarding, and root surface audits.
-- A reusable plugin package under
-  [`packages/copilot-cli-plugin/`](./packages/copilot-cli-plugin/) for installed,
-  namespaced Copilot CLI routes.
-- Scripts that validate documentation, root Copilot surfaces, plugin surfaces,
-  and bounded hook evidence.
-
-## Product surfaces
-
-The repository has three deliberately separate Copilot surfaces:
-
-| Surface | Use it when | Boundary |
-| --- | --- | --- |
-| Root workspace | You are working in this repository and want current-directory instructions, agents, prompts, skills, hooks, and validation. | Canonical for root usage and root prompt routing. |
-| [`packages/copilot-cli-plugin/`](./packages/copilot-cli-plugin/) | You want reusable installed Copilot CLI capabilities with namespaced plugin routes. | Canonical for reusable plugin agents, skills, hooks, and plugin metadata. |
-| [`examples/`](./examples/) | You want small or VS Code-oriented smoke-test workspaces. | Illustrative only; nested examples are not root proof, especially for hooks. |
-
-Root-local aliases such as `reviewer`, `verifier`, and `research` are intended
-for current-directory work. Namespaced plugin agents such as
-`oh-my-copilot-power-pack:reviewer` remain the reusable plugin route.
-
-## Common workflows
-
-### Review a docs or registration change
-
-Use the root prompt or root agent from the repository root:
-
-```text
-/review-scope README.md
-```
-
-or ask Copilot CLI to use the `reviewer` agent. For reusable plugin testing, use
-the namespaced route `oh-my-copilot-power-pack:reviewer` instead.
-
-### Verify root surfaces before shipping
-
-```bash
-./scripts/validate-doc-links.sh
-./scripts/validate-power-surfaces.sh
-./scripts/validate-root-copilot-surfaces.sh
-```
-
-Then ask the `verifier` root agent, or run `/root-registration-check`, to review
-manual Copilot smoke-test gaps.
-
-### Install or refresh the plugin package
-
-```bash
-./scripts/bootstrap-copilot-power.sh
-```
-
-The bootstrap script checks for `copilot` and `gh`, installs the local plugin
-package, checks Copilot plugin config, and runs the repository validation suite.
-See [Installation](./docs/installation.md) for prerequisites and proof commands.
+| [`research/`](./research/) | Evidence and source synthesis for OMC, OMX, and current Copilot CLI capabilities. |
+| [`docs/design-spec.md`](./docs/design-spec.md) | Product/design specification for a Copilot-native v1. |
+| [`docs/comparison-matrix.md`](./docs/comparison-matrix.md) | Side-by-side comparison of OMC, OMX, and oh-my-copilot v1. |
+| [`docs/copilot-native-mapping.md`](./docs/copilot-native-mapping.md) | Mapping from OMC/OMX concepts to Copilot CLI primitives without forced parity. |
+| [`docs/root-registration.md`](./docs/root-registration.md) | Source-of-truth matrix for root workspace registration, plugin reuse, and example boundaries. |
+| [`docs/v1-repo-blueprint.md`](./docs/v1-repo-blueprint.md) | Concrete repository layout and artifact roles for the public v1. |
+| [`docs/vscode-copilot-testing.md`](./docs/vscode-copilot-testing.md) | How to smoke-test the root workspace and illustrative VS Code layout. |
+| [`docs/release-checklist.md`](./docs/release-checklist.md) | Maintainer release gates, versioning notes, and Copilot CLI smoke-test evidence. |
+| [`examples/copilot-cli-layout/`](./examples/copilot-cli-layout/) | Illustrative Copilot CLI customization layout. It is not a complete runtime. |
+| [`examples/vscode-copilot-layout/`](./examples/vscode-copilot-layout/) | Stronger VS Code Copilot workspace with handoff agents, prompt files, skills, hooks, and sample files. |
+| [`packages/copilot-cli-plugin/`](./packages/copilot-cli-plugin/) | Experimental local Copilot CLI plugin package with reusable agents, skills, hooks, and scripts. |
+| [`docs/references.md`](./docs/references.md) | Source links and access dates for capability claims. |
 
 ## Reading path
 
@@ -181,8 +111,22 @@ Run the lightweight checks from the repository root:
 ./scripts/validate-doc-links.sh
 ./scripts/validate-power-surfaces.sh
 ./scripts/validate-root-copilot-surfaces.sh
+./scripts/validate-release-readiness.sh
 ./scripts/bootstrap-copilot-power.sh
 ```
+
+If root-surface checks are folded into `validate-power-surfaces.sh`, the third
+command is optional, but the same root instruction, agent, prompt, skill, and
+hook-routing checks should still be covered.
+
+For direct Copilot CLI smoke evidence, run:
+
+```bash
+./scripts/smoke-copilot-cli.sh
+```
+
+Use `RUN_COPILOT_AGENT_SMOKE=1 ./scripts/smoke-copilot-cli.sh` only when a
+signed-in Copilot CLI session and model access are available.
 
 For manual Copilot smoke tests, including root-vs-plugin agent routing and hook
 evidence caveats, see

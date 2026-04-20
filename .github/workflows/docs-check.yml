@@ -17,3 +17,5 @@ jobs:
         run: bash scripts/validate-power-surfaces.sh
       - name: Validate root Copilot surfaces
         run: bash scripts/validate-root-copilot-surfaces.sh
+      - name: Validate release readiness
+        run: bash scripts/validate-release-readiness.sh
