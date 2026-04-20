@@ -22,6 +22,7 @@ Those multi-surface expansions are out of scope for v1.
 | [`docs/root-registration.md`](./docs/root-registration.md) | Source-of-truth matrix for root workspace registration, plugin reuse, and example boundaries. |
 | [`docs/v1-repo-blueprint.md`](./docs/v1-repo-blueprint.md) | Concrete repository layout and artifact roles for the public v1. |
 | [`docs/vscode-copilot-testing.md`](./docs/vscode-copilot-testing.md) | How to smoke-test the root workspace and illustrative VS Code layout. |
+| [`benchmark/`](./benchmark/) | Benchmark-style local proof harness for checking whether root, plugin, and example surfaces still work. |
 | [`docs/release-checklist.md`](./docs/release-checklist.md) | Maintainer release gates, versioning notes, and Copilot CLI smoke-test evidence. |
 | [`examples/copilot-cli-layout/`](./examples/copilot-cli-layout/) | Illustrative Copilot CLI customization layout. It is not a complete runtime. |
 | [`examples/vscode-copilot-layout/`](./examples/vscode-copilot-layout/) | Stronger VS Code Copilot workspace with handoff agents, prompt files, skills, hooks, and sample files. |
@@ -127,6 +128,13 @@ For direct Copilot CLI smoke evidence, run:
 
 Use `RUN_COPILOT_AGENT_SMOKE=1 ./scripts/smoke-copilot-cli.sh` only when a
 signed-in Copilot CLI session and model access are available.
+
+For a benchmark-style local proof run, use:
+
+```bash
+./benchmark/quick_test.sh
+./benchmark/run_full_comparison.sh
+```
 
 For manual Copilot smoke tests, including root-vs-plugin agent routing and hook
 evidence caveats, see

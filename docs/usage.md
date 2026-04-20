@@ -14,7 +14,10 @@ The root workspace is the default current-directory product surface.
 | `verifier` | root agent | Checking validation evidence and remaining manual smoke-test gaps. |
 | `research` | root agent | Grounding Copilot capability claims in repository files or official sources. |
 | `/review-scope` | root prompt | Sending a target file or change to the root reviewer. |
+| `/review` | root prompt | Short review alias for root-local review work. |
 | `/ship-docs` | root prompt | Reviewing docs or registration changes before shipping. |
+| `/install-check` | root prompt | Checking install/bootstrap proof from the root workspace. |
+| `/plugin-review` | root prompt | Reviewing the reusable plugin package without confusing it with root-local aliases. |
 | `/root-registration-check` | root prompt | Auditing root instructions, agents, prompts, skills, and hooks. |
 | `docs-ship` | root skill | Running docs and surface checks before completion. |
 | `parity-guard` | root skill | Scanning for overclaiming or forced-parity wording. |
@@ -47,7 +50,8 @@ If you want the least confusing path, do this in order:
 2. `./scripts/check-install-state.sh`
 3. ask Copilot: `What instructions are active in this repository?`
 4. use `/review-scope README.md`
-5. use `/verify README.md` or the `verifier` agent for evidence
+5. use `/install-check`
+6. use `/verify README.md` or the `verifier` agent for evidence
 
 ## Validation commands
 
@@ -70,6 +74,13 @@ bootstrap:
 
 ```bash
 ./scripts/check-install-state.sh
+```
+
+For benchmark-style local proof:
+
+```bash
+./benchmark/quick_test.sh
+./benchmark/run_full_comparison.sh
 ```
 
 ## Hooks and evidence
