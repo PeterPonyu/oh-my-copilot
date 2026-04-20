@@ -1,22 +1,17 @@
 ---
 name: ecosystem-compare
-description: Compare OMC, OMX, and oh-my-copilot v1 without implying forced feature parity.
+description: Compare OMC, OMX, and Copilot CLI concepts without implying parity.
 ---
 
 # Ecosystem Compare Skill
 
-Use this illustrative skill when drafting or reviewing comparison content for `oh-my-claudecode`, `oh-my-codex`, and `oh-my-copilot` v1.
+Use this skill when asked to explain how an OMC or OMX workflow maps to Copilot
+CLI.
 
-## Workflow
+## Steps
 
-1. Identify the source-system concept being compared.
-2. State what is directly evidenced in the source system.
-3. Map only to documented Copilot CLI primitives.
-4. Mark any design interpretation as inference.
-5. Prefer language such as "analogous intent" or "Copilot-native adaptation" over "equivalent" unless exact behavior is documented.
-
-## Required Guardrails
-
-- Keep v1 Copilot CLI-only.
-- Do not present OMC/OMX runtime names as required Copilot names.
-- Do not claim runtime orchestration exists unless a future implementation plan adds it.
+1. Identify the user need behind the OMC/OMX feature.
+2. Look for an existing Copilot CLI primitive: instructions, custom agents,
+   skills, hooks, MCP, plugins, plan mode, autopilot, review, or delegation.
+3. State whether the mapping is direct, partial, or only a design inference.
+4. Avoid claiming feature parity unless verified in Copilot CLI.

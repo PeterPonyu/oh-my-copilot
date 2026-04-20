@@ -1,22 +1,14 @@
-name: docs-check
+name: Docs Check
 
 on:
   pull_request:
-    paths:
-      - "**/*.md"
-      - "scripts/validate-doc-links.sh"
-      - ".github/workflows/docs-check.yml"
   push:
     branches: [main]
-    paths:
-      - "**/*.md"
-      - "scripts/validate-doc-links.sh"
-      - ".github/workflows/docs-check.yml"
 
 jobs:
-  validate-doc-links:
+  docs-check:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Validate internal markdown links
-        run: scripts/validate-doc-links.sh
+      - name: Validate documentation links and scope language
+        run: ./scripts/validate-doc-links.sh

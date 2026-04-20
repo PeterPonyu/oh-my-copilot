@@ -1,25 +1,17 @@
 ---
 name: blueprint-check
-description: Check whether a proposed oh-my-copilot repo layout stays within the v1 docs/research/examples boundary.
+description: Check that an oh-my-copilot v1 repository layout stays docs-first and Copilot CLI-only.
 ---
 
 # Blueprint Check Skill
 
-Use this illustrative skill when reviewing repository layout changes for `oh-my-copilot` v1.
+Use this skill to review an `oh-my-copilot` v1 repository draft.
 
 ## Checklist
 
-- Public docs live under `docs/` or the repository root.
-- Evidence and source synthesis live under `research/`.
-- Copilot CLI layout examples live under `examples/copilot-cli-layout/`.
-- Documentation hygiene scripts live under `scripts/`.
-- CI, if present, runs docs checks only.
-- No runtime package, daemon, background service, or orchestration framework is introduced.
-
-## Response
-
-Return a compact verdict:
-
-- `PASS`: within v1 boundary.
-- `WARN`: acceptable but needs clearer labels or citations.
-- `FAIL`: introduces runtime or unsupported parity claims.
+- README says v1 is Copilot CLI-first and docs/research-first.
+- Public docs list cloud agent, IDE, SDK, and runtime machinery as non-goals for
+  v1 unless a later plan explicitly widens scope.
+- Copilot capability claims cite GitHub documentation or changelog sources.
+- Examples are labeled illustrative.
+- No `.omx/` or OMC runtime state model is copied as a product requirement.

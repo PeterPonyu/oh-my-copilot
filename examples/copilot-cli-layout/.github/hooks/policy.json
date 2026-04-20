@@ -1,21 +1,10 @@
 {
   "version": 1,
-  "hooks": {
-    "sessionStart": [
-      {
-        "type": "command",
-        "bash": "mkdir -p .copilot-hooks && printf 'session started: %s\\n' \"$(date -u +%Y-%m-%dT%H:%M:%SZ)\" >> .copilot-hooks/session.log",
-        "cwd": ".",
-        "timeoutSec": 10
-      }
-    ],
-    "postToolUse": [
-      {
-        "type": "command",
-        "bash": "printf 'tool used: %s\\n' \"${COPILOT_TOOL_NAME:-unknown}\" >> .copilot-hooks/tools.log",
-        "cwd": ".",
-        "timeoutSec": 10
-      }
-    ]
-  }
+  "description": "Illustrative Copilot CLI hook policy for documentation-only checks. Not a runtime orchestration layer.",
+  "hooks": [
+    {
+      "event": "session_start",
+      "command": "echo 'oh-my-copilot example: keep v1 Copilot CLI-only and docs-first.'"
+    }
+  ]
 }

@@ -2,14 +2,9 @@
 applyTo: "**/*.ts,**/*.tsx"
 ---
 
-# TypeScript Example Instructions
+# TypeScript instructions
 
-This file is illustrative and only shows how path-specific instructions can be scoped.
-
-If TypeScript examples are added later:
-
-- Keep them minimal and documentation-oriented.
-- Do not introduce runtime orchestration behavior for v1.
-- Prefer explicit types for public example APIs.
-- Include comments that explain why the example exists.
-- Add tests only when an example becomes executable rather than illustrative.
+- Keep TypeScript examples minimal and dependency-free unless the task explicitly
+  asks for a runnable package.
+- Prefer clear interfaces and tests over framework-specific abstractions.
+- If a file is illustrative, say so in comments or adjacent documentation.

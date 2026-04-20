@@ -1,11 +1,8 @@
-# Repository Instructions
+# Repository instructions for Copilot CLI
 
-This illustrative repository is Copilot CLI-first and docs/research-first.
-
-When working in this repo:
-
-- Preserve the v1 boundary: no runtime framework, no forced OMC/OMX parity, and no multi-surface product claims.
-- Ground Copilot capability statements in current GitHub documentation or changelog sources.
-- Prefer small, reviewable documentation changes.
-- Keep examples understandable without implying they are production-ready.
-- If a feature has not been exercised in Copilot CLI, call it illustrative or a follow-up.
+- This is an illustrative `oh-my-copilot` layout, not a production runtime.
+- Keep v1 changes Copilot CLI-first.
+- Prefer documentation and examples over new executable machinery.
+- When discussing OMC or OMX, call them reference systems rather than parity
+  contracts.
+- Cite GitHub documentation for Copilot capability claims.
