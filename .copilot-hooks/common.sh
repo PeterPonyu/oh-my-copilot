@@ -35,7 +35,7 @@ config = {
     "log_schema": "oh-my-copilot-hook-log-v1",
     "project_slug": slug,
     "workspace_root": str(workspace_root),
-    "created_at": dt.datetime.utcnow().replace(microsecond=0).isoformat() + "Z",
+    "created_at": dt.datetime.now(dt.timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z"),
     "default_source": source_label,
     "log_files": {
         "events": ".copilot-hooks/events.jsonl",
@@ -98,7 +98,7 @@ event = {
     "schema_version": 1,
     "source": source_label,
     "event": event_name,
-    "timestamp": dt.datetime.utcnow().replace(microsecond=0).isoformat() + "Z",
+    "timestamp": dt.datetime.now(dt.timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z"),
     "cwd": os.getcwd(),
     "workspace_root": str(workspace_root),
     "project_slug": slug,

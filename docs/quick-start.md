@@ -64,6 +64,8 @@ for example `oh-my-copilot-power-pack:reviewer`.
   and troubleshooting.
 - [Usage](./usage.md) — root agents, prompts, skills, plugin routes, hooks, and
   validation matrix.
+- [Benchmark status](./benchmark-status.md) — current checked-in proof snapshot
+  and raw benchmark result links.
 - [Benchmark README](../benchmark/README.md) — quick and full local proof runs.
 - [Known limitations](./known-limitations.md) — current boundaries and honest
   gaps.

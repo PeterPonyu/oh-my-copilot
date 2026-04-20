@@ -31,4 +31,5 @@ the current repository behaves like a usable Copilot product:
 
 - live Copilot prompt checks are opt-in through environment flags
 - results are written under `benchmark/results/`
+- the current checked-in proof summary lives in [`docs/benchmark-status.md`](../docs/benchmark-status.md)
 - this is a proof harness for the current repo, not a broad model benchmark
