@@ -1,0 +1,21 @@
+{
+  "version": 1,
+  "hooks": {
+    "sessionStart": [
+      {
+        "type": "command",
+        "bash": "bash ./.copilot-hooks/session-start.sh",
+        "cwd": ".",
+        "timeoutSec": 15
+      }
+    ],
+    "postToolUse": [
+      {
+        "type": "command",
+        "bash": "bash ./.copilot-hooks/post-tool-audit.sh",
+        "cwd": ".",
+        "timeoutSec": 20
+      }
+    ]
+  }
+}
