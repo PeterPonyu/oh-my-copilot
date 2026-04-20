@@ -83,6 +83,9 @@ For benchmark-style local proof:
 ./benchmark/run_full_comparison.sh
 ```
 
+The latest checked-in local proof snapshot lives in
+[benchmark-status.md](./benchmark-status.md).
+
 ## Hooks and evidence
 
 Root hooks write local evidence under `.copilot-hooks/`:

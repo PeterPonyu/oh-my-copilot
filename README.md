@@ -19,6 +19,7 @@ Those multi-surface expansions are out of scope for v1.
 | [`docs/design-spec.md`](./docs/design-spec.md) | Product/design specification for a Copilot-native v1. |
 | [`docs/comparison-matrix.md`](./docs/comparison-matrix.md) | Side-by-side comparison of OMC, OMX, and oh-my-copilot v1. |
 | [`docs/copilot-native-mapping.md`](./docs/copilot-native-mapping.md) | Mapping from OMC/OMX concepts to Copilot CLI primitives without forced parity. |
+| [`docs/benchmark-status.md`](./docs/benchmark-status.md) | Current checked-in benchmark snapshot with durations, raw result links, and what the proof run actually established. |
 | [`docs/root-registration.md`](./docs/root-registration.md) | Source-of-truth matrix for root workspace registration, plugin reuse, and example boundaries. |
 | [`docs/v1-repo-blueprint.md`](./docs/v1-repo-blueprint.md) | Concrete repository layout and artifact roles for the public v1. |
 | [`docs/vscode-copilot-testing.md`](./docs/vscode-copilot-testing.md) | How to smoke-test the root workspace and illustrative VS Code layout. |
@@ -35,15 +36,17 @@ Those multi-surface expansions are out of scope for v1.
    [installation guide](./docs/installation.md).
 2. Use the [usage guide](./docs/usage.md) for root agents, prompts, skills,
    plugin routes, and validation commands.
-3. Read the [design spec](./docs/design-spec.md) for scope, non-goals, and the
+3. Read the [benchmark status](./docs/benchmark-status.md) to see the latest
+   local proof snapshot before trusting a surface claim.
+4. Read the [design spec](./docs/design-spec.md) for scope, non-goals, and the
    core Copilot-native design rule.
-4. Read the [Copilot CLI capability research](./research/copilot-cli-capabilities.md)
+5. Read the [Copilot CLI capability research](./research/copilot-cli-capabilities.md)
    to see what is source-backed and what remains inference.
-5. Use the [comparison matrix](./docs/comparison-matrix.md) and
+6. Use the [comparison matrix](./docs/comparison-matrix.md) and
    [native mapping](./docs/copilot-native-mapping.md) if you already know OMC or OMX.
-6. Read the [root registration guide](./docs/root-registration.md) for the root
+7. Read the [root registration guide](./docs/root-registration.md) for the root
    workspace, reusable plugin package, and example-workspace boundary.
-7. Use the [v1 blueprint](./docs/v1-repo-blueprint.md) for artifact ownership
+8. Use the [v1 blueprint](./docs/v1-repo-blueprint.md) for artifact ownership
    rules, and the [VS Code/root testing guide](./docs/vscode-copilot-testing.md)
    for smoke-test details.
 
@@ -102,7 +105,8 @@ every session start.
 Research draft created April 20, 2026. The current product direction is a small,
 usable Copilot CLI-first repository: root workspace registration is the default
 current-directory target, the plugin package remains the reusable distribution
-surface, and examples stay illustrative smoke-test material.
+surface, and examples stay illustrative smoke-test material. The latest checked-
+in proof run is summarized in [docs/benchmark-status.md](./docs/benchmark-status.md).
 
 ## Verification
 
