@@ -10,7 +10,7 @@ what is illustrative, and what still needs manual proof.
 - This repository is not a replacement runtime for GitHub Copilot CLI.
 - It does not implement OMC/OMX-style tmux worker orchestration or persistent
   custom runtime state.
-- It does not claim full feature parity with OMC or OMX. The design adapts
+- It does not claim complete OMC/OMX parity. The design adapts
   selected ideas to Copilot CLI primitives.
 
 ## Install limitations
