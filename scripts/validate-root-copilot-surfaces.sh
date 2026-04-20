@@ -60,6 +60,7 @@ required_root_files=(
   .github/skills/docs-ship/SKILL.md
   .github/skills/parity-guard/SKILL.md
   .github/hooks/hooks.json
+  .copilot-hooks/common.sh
   .copilot-hooks/session-start.sh
   .copilot-hooks/post-tool-audit.sh
 )
@@ -93,6 +94,7 @@ validate_required_files() {
   for path in "${required_root_files[@]}"; do
     require_file "$path"
   done
+  require_exec .copilot-hooks/common.sh
   require_exec .copilot-hooks/session-start.sh
   require_exec .copilot-hooks/post-tool-audit.sh
   log "all required root Copilot files exist"
@@ -254,10 +256,14 @@ if ".copilot-hooks/post-tool-audit.sh" not in serialized_post_tool:
     raise SystemExit("postToolUse hook must call .copilot-hooks/post-tool-audit.sh")
 PY
   log "root hook policy parses and calls root scripts"
+  require_contains "root hook policy is versioned" '"version"' \
+    .github/hooks/hooks.json
   require_contains "session hook logs root-workspace source" 'root-workspace|source=root' \
-    .copilot-hooks/session-start.sh
+    .copilot-hooks/session.log
   require_contains "post-tool hook logs root-workspace source" 'root-workspace|source=root' \
-    .copilot-hooks/post-tool-audit.sh
+    .copilot-hooks/tools.log
+  require_contains "root hook config uses shared schema" 'log_schema|schema_version|project_slug' \
+    .copilot-hooks/config.json
 }
 
 validate_boundary_docs() {

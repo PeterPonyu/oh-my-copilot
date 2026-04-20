@@ -276,6 +276,13 @@ That script copies the workspace to a temporary standalone directory, runs a
 minimal Copilot CLI session there, and checks that `.copilot-hooks/session.log`
 is created. Treat that as example proof, not root proof.
 
+The workspace hook scripts use the same policy as the root workspace:
+
+- create `.copilot-hooks/config.json` only if it is missing
+- append structured events to `.copilot-hooks/events.jsonl`
+- keep human-readable summaries in `.copilot-hooks/session.log` and
+  `.copilot-hooks/tools.log`
+
 ## What not to expect yet
 
 Do **not** treat this repo as already proving:

@@ -91,6 +91,19 @@ for current-directory work. Namespaced plugin agents such as
 These surfaces increase actual Copilot leverage without pretending the project
 already ships a full OMC/OMX-style runtime.
 
+## Hook and log policy
+
+Hook and log behavior is intentionally **project-local** and stable:
+
+- each project writes to its own `.copilot-hooks/`
+- `sessionStart` bootstraps `.copilot-hooks/config.json` only if it is missing
+- every hook run appends structured events to `.copilot-hooks/events.jsonl`
+- human-readable summaries continue to go to `.copilot-hooks/session.log` and
+  `.copilot-hooks/tools.log`
+
+This keeps logs separated across projects and avoids recreating hook config on
+every session start.
+
 ## Status
 
 Research draft created April 20, 2026. Root registration is the current v1
@@ -106,6 +119,7 @@ Run the lightweight docs and surface checks from the repository root:
 ./scripts/validate-doc-links.sh
 ./scripts/validate-power-surfaces.sh
 ./scripts/validate-root-copilot-surfaces.sh
+./scripts/bootstrap-copilot-power.sh
 ```
 
 If root-surface checks are folded into `validate-power-surfaces.sh`, the third
