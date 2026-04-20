@@ -1,53 +1,69 @@
-# GitHub Copilot CLI Capability Research
+# GitHub Copilot CLI Capability Notes
 
-_Last updated: April 20, 2026_
+Access date for web sources: 2026-04-20.
 
-This page summarizes current Copilot CLI primitives relevant to `oh-my-copilot`
-v1. See [references](../docs/references.md) for source URLs.
+This research note grounds the `oh-my-copilot` v1 blueprint and examples in public GitHub sources. It is evidence for a docs-first, Copilot CLI-only research repository; it is not a runtime implementation spec.
 
-## Evidence-backed capabilities
+## Evidence Summary
 
-| Capability | Evidence | v1 design implication |
+| Capability area | Source-backed status | v1 design implication |
 | --- | --- | --- |
-| Terminal-native agent | GitHub's February 25, 2026 changelog calls Copilot CLI terminal-native and GA for Copilot subscribers. | Treat CLI, not cloud/IDE/SDK, as the v1 host. |
-| Plan mode | Changelog and docs describe plan mode for analyzing requests and producing an implementation plan before code. | Map OMC/OMX planning workflows to Copilot plan mode plus instructions, not a new planner runtime. |
-| Autopilot mode | Changelog says autopilot can work autonomously for trusted tasks. | Document as a Copilot-native autonomy surface; do not wrap it in a custom v1 runtime. |
-| Built-in specialized agents | Changelog and CLI docs describe automatic delegation to specialized agents such as Explore, Task, Code Review, and Plan. | Prefer Copilot's delegation model over recreating OMC/OMX worker routing. |
-| Custom instructions | Docs cover `.github/copilot-instructions.md`, path-specific `.github/instructions/**/*.instructions.md`, `AGENTS.md`, and local instructions. | Put persistent project policy in instructions; keep long workflow-specific knowledge in skills. |
-| Custom agents | Docs describe repository-level `.github/agents`, user-level agents, slash/CLI invocation, and model-driven delegation. | Use custom agents for role-like behavior such as researcher/reviewer rather than tmux workers. |
-| Skills | Docs describe `SKILL.md` folders with optional scripts/resources and CLI skill commands. | Use skills for bounded workflows like ecosystem comparison and blueprint checking. |
-| Hooks | Docs describe hook JSON under `.github/hooks/` and shell commands at lifecycle moments. | Use hooks for validation/logging examples only; do not turn hooks into runtime orchestration. |
-| MCP | Docs describe GitHub MCP availability and adding additional MCP servers. | Treat MCP as an integration channel, not a bespoke tool bridge. |
-| Plugins | Docs describe installable bundles containing skills, hooks, agents, and MCP configuration. | Defer plugin packaging until docs and examples prove useful. |
-| Review and GitHub operations | CLI docs include examples for reviewing PR changes, creating PRs, managing issues, and using GitHub MCP. | Include review in the mapping, but keep public repo v1 as docs-first. |
-| Context/session management | Docs describe steering, queueing follow-up messages, auto-compaction, `/compact`, `/context`, and resume. | Map OMC/OMX memory/state ideas carefully; Copilot has its own session behavior. |
+| Terminal-native agent | GitHub's 2026-02-25 changelog describes Copilot CLI as a terminal-native coding agent and says it can plan, build, review, and remember across terminal sessions. | It is reasonable for v1 to choose Copilot CLI as the closest Copilot analogue to local Claude Code/Codex-style workflows. |
+| Plan and autopilot modes | The GA changelog describes plan mode and autopilot mode. The autopilot docs explain that autopilot continues through multiple steps after an initial instruction, subject to permissions and limits. | `oh-my-copilot` can discuss planning/autonomy as Copilot CLI primitives, but should not ship its own autonomous runtime in v1. |
+| Built-in specialized agents and delegation | The GA changelog and CLI usage docs describe built-in agents, custom agents, subagent delegation, and parallel/background delegation. | v1 examples can include custom-agent profiles as illustrative specialization points. |
+| Repository instructions | GitHub Docs support `.github/copilot-instructions.md`, path-specific `.github/instructions/**/*.instructions.md`, `AGENTS.md`, local instructions, and custom instruction directories. | The example layout should demonstrate these paths and avoid inventing a separate instruction loader. |
+| Skills | GitHub Docs describe skills as folders containing `SKILL.md` plus optional resources, with project locations such as `.github/skills`. | v1 examples can include minimal skill folders for repeatable documentation workflows. |
+| Custom agents | GitHub Docs describe repository-level `.github/agents/` agent profiles and CLI custom agents with `.agent.md` files. | v1 examples can include `research.agent.md` and `reviewer.agent.md`, labeled illustrative. |
+| Hooks | GitHub Docs describe hook JSON files under `.github/hooks/` and lifecycle triggers such as `sessionStart`, `preToolUse`, and `postToolUse`. | v1 can include a conservative hook example as policy/logging illustration, not as product enforcement. |
+| MCP and plugins | GitHub sources describe MCP servers and plugins as extension mechanisms; plugins can package skills, agents, hooks, MCP, and other config. | v1 should treat MCP/plugins as future-extension topics unless the plan is amended. |
+| Review/diff/undo | The GA changelog describes `/diff`, `/review`, and rewind behavior. | Public docs can mention review/diff as Copilot CLI primitives, but examples should not depend on them. |
+| Memory | The GA changelog describes session compaction, repository memory, and cross-session memory. | v1 may mention memory as a Copilot CLI capability, but should not design a separate memory subsystem. |
 
-## Inferences and constraints
+## Evidence Details
 
-- **Inference:** Copilot CLI can support an OMC/OMX-inspired workflow through
-  instructions, skills, and custom agents, but this does not mean it should copy
-  OMC/OMX runtime state machines.
-- **Constraint:** GitHub docs are the authority for current Copilot CLI paths and
-  behavior. Example files here are illustrative until verified inside Copilot CLI.
-- **Constraint:** Cloud agent and IDE behavior can share some files, but v1 docs
-  must not imply those surfaces are implemented or comprehensively researched.
+### Copilot CLI is a valid v1 host
 
-## Source-backed file/path primitives
+GitHub's February 25, 2026 changelog positions Copilot CLI as a terminal-native coding agent and says it evolved from a terminal assistant into an agentic development environment that can plan, build, review, and remember. This supports the v1 decision to focus on Copilot CLI rather than cloud agent, IDE, SDK, or multi-surface behavior.
 
-- Repository-wide custom instructions: `.github/copilot-instructions.md`.
-- Path-specific instructions: `.github/instructions/**/*.instructions.md` with
-  `applyTo` frontmatter.
-- Agent instructions: `AGENTS.md` in the repository root/current directory or
-  configured instruction directories.
-- Repository custom agents: `.github/agents/*.agent.md`.
-- Project skills: supported skill directories containing `SKILL.md`.
-- Repository hooks: `.github/hooks/*.json` for repository hook definitions.
-- Plugin manifests and components: plugin reference lists accepted manifest and
-  component paths.
-- MCP configuration: CLI/plugin reference and MCP docs describe configuration
-  files and interactive `/mcp add` setup paths.
+**Inference:** Copilot CLI is the closest direct Copilot host for local terminal workflows analogous in intent to Claude Code or Codex. This is an interpretation, not a claim that Copilot CLI matches either source system feature-for-feature.
 
-## Verification gap
+### Planning and autonomy are Copilot CLI primitives
 
-This research validates documentation claims only. It does not prove that the
-example layout in this repo has been executed in a live Copilot CLI session.
+The GA changelog identifies plan mode and autopilot mode. The autopilot concept page adds operational constraints: autopilot is best for clear tasks, can require broad permissions for best results, and should be bounded with continuation limits in unattended/programmatic contexts.
+
+**V1 wording guidance:** Say that Copilot CLI provides plan/autopilot surfaces. Do not say that `oh-my-copilot` implements its own `ralph`, `team`, `ultrawork`, or orchestration runtime in v1.
+
+### Instructions should use documented Copilot paths
+
+The custom-instructions docs support repository-wide `.github/copilot-instructions.md`, path-specific `.github/instructions/**/*.instructions.md` with `applyTo`, `AGENTS.md`, local `$HOME/.copilot/copilot-instructions.md`, and `COPILOT_CUSTOM_INSTRUCTIONS_DIRS`.
+
+**V1 wording guidance:** The example layout should use these paths directly. Do not invent a compatibility layer that loads OMC/OMX instruction files.
+
+### Skills are narrower than always-on instructions
+
+GitHub Docs describe skills as task-specific folders of instructions/scripts/resources and recommend custom instructions for guidance that should apply broadly. This supports a split between `.github/copilot-instructions.md` for always-on repository behavior and `.github/skills/*/SKILL.md` for repeatable workflows.
+
+**V1 wording guidance:** Skills in the example layout should stay small and task-specific, such as comparing ecosystems or checking the blueprint boundary.
+
+### Custom agents are specialization surfaces
+
+GitHub Docs describe custom agents as specialized Copilot profiles. CLI docs say custom agents can be created in `.github/agents/` or `~/.copilot/agents/`, and the configuration reference lists frontmatter fields and tool aliases.
+
+**V1 wording guidance:** Example custom agents may show a research role and reviewer role, but should avoid hardcoded model claims or heavy tool assumptions. Keep them illustrative until tested in Copilot CLI.
+
+### Hooks, MCP, and plugins are extension points, not v1 runtime
+
+Hooks can execute shell commands at lifecycle events. MCP servers and plugins can extend the CLI with additional tools and packaged configuration. These are strong future-extension primitives, but they can easily look like a runtime framework if overused.
+
+**V1 wording guidance:** Include only a conservative hook example under `examples/`. Treat MCP and plugins as documented future paths; do not ship plugin manifests or MCP server configs in v1 unless the approved plan changes.
+
+## Mapping Guardrails
+
+- Use "Copilot-native adaptation" instead of "equivalent" for most OMC/OMX mappings.
+- Use "illustrative" for example files that have not been run in a real Copilot CLI session.
+- Use "future extension" for cloud agent, IDE, SDK, plugin marketplace, and MCP-server packaging topics.
+- Avoid implying that OMC/OMX runtime terms such as `ralph`, `team`, or `ultrawork` are required names or modes in Copilot CLI.
+
+## Source Index
+
+See [`docs/references.md`](../docs/references.md) for the canonical citation table.
