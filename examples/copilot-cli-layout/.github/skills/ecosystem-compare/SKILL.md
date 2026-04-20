@@ -5,6 +5,8 @@ description: Compare OMC, OMX, and Copilot CLI concepts without implying parity.
 
 # Ecosystem Compare Skill
 
+This is an illustrative skill for the v1 research repo, not runtime parity machinery.
+
 Use this skill when asked to explain how an OMC or OMX workflow maps to Copilot
 CLI.
 
