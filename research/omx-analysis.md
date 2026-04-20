@@ -61,8 +61,8 @@ This note summarizes what `oh-my-copilot` should learn from `oh-my-codex`
   and fallback tmux/notification paths.
 - The source tree includes TypeScript reference runtime modules under `src/`, generated
   distribution files under `dist/`, role prompts under `prompts/`, workflow
-  skills under `skills/`, and Rust crates such as `omx-explore`, `omx-runtime`,
-  `omx-runtime-core`, `omx-mux`, and `omx-sparkshell`; these are reference-system evidence, not v1 scope.
+  skills under `skills/`, and reference-system Rust crates such as `omx-explore`,
+  `omx-runtime`, `omx-runtime-core`, `omx-mux`, and `omx-sparkshell`; these are not v1 scope.
 - The docs tree includes contracts for state, team runtime, runtime authority,
   hooks, release readiness, and QA reports, indicating a substantial reference runtime and verification architecture.
 
