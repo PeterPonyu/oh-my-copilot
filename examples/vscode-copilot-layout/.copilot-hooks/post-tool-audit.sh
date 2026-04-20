@@ -1,18 +1,19 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# VS Code hooks send JSON on stdin. This workspace hook only logs, so it
-# drains stdin and returns an explicit continue result.
-cat >/dev/null || true
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "$SCRIPT_DIR/common.sh"
 
-mkdir -p .copilot-hooks
-printf 'postToolUse: %s\n' "$(date -u +%Y-%m-%dT%H:%M:%SZ)" >> .copilot-hooks/tools.log
+HOOK_SOURCE="${HOOK_SOURCE:-example-workspace}"
+copilot_hook_capture_stdin
+copilot_hook_init_config "$HOOK_SOURCE"
+copilot_hook_log_event "postToolUse" "$HOOK_SOURCE"
+copilot_hook_append_legacy "postToolUse" "$HOOK_SOURCE" ".copilot-hooks/tools.log"
 
 if [[ -x ./.github/skills/parity-guard/check-parity-claims.sh ]]; then
   if ! ./.github/skills/parity-guard/check-parity-claims.sh . >> .copilot-hooks/tools.log 2>&1; then
-    printf 'scope warning: parity guard failed at %s\n' "$(date -u +%Y-%m-%dT%H:%M:%SZ)" >> .copilot-hooks/warnings.log
-    exit 1
+    copilot_hook_warn "parity guard reported bounded wording drift"
   fi
 fi
 
-printf '{"continue":true}\n'
+copilot_hook_finish

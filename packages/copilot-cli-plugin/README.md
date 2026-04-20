@@ -40,3 +40,27 @@ That means the strongest proof of installation is:
 3. a Copilot CLI session can see the plugin-provided skills
 
 Do not rely on `copilot plugin list` alone as the sole proof of installation.
+
+## Agent naming rule
+
+Plugin-provided agents are namespaced. For example:
+
+```bash
+copilot --agent 'oh-my-copilot-power-pack:reviewer' -p "Review this repo" -s --model auto --allow-all
+```
+
+Bare names such as `reviewer` are better reserved for root-local workspace
+aliases.
+
+## Hook and log policy
+
+Plugin hooks follow the same per-project logging contract as the root
+workspace:
+
+- create `.copilot-hooks/config.json` only if it is missing
+- append structured events to `.copilot-hooks/events.jsonl`
+- keep `.copilot-hooks/session.log` and `.copilot-hooks/tools.log`
+  human-readable
+
+This keeps logs separated by project root and makes plugin behavior easier to
+audit across repositories.

@@ -72,6 +72,22 @@ Manual Copilot proof from the root should cover:
    `.copilot-hooks/session.log` and tool use appends root-workspace evidence to
    `.copilot-hooks/tools.log`.
 
+## Hook and log policy
+
+The root workspace and example workspaces use a shared hook/log contract:
+
+- create `.copilot-hooks/config.json` only if it is missing
+- append structured events to `.copilot-hooks/events.jsonl`
+- keep human-readable summaries in `.copilot-hooks/session.log` and
+  `.copilot-hooks/tools.log`
+- keep logs local to the current project root rather than pooling them across
+  repositories
+- record warnings to `.copilot-hooks/warnings.log` instead of turning bounded
+  wording drift into a hard runtime failure
+
+The reusable plugin package uses the same schema through inline hook commands so
+its behavior remains portable after installation.
+
 ## Non-goals and guardrails
 
 Root registration does not change the v1 product boundary:

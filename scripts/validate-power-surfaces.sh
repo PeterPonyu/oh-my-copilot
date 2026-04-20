@@ -44,6 +44,7 @@ validate_vscode_layout() {
     examples/vscode-copilot-layout/.github/skills/docs-ship/SKILL.md \
     examples/vscode-copilot-layout/.github/skills/docs-ship/run-docs-checks.sh \
     examples/vscode-copilot-layout/.github/hooks/hooks.json \
+    examples/vscode-copilot-layout/.copilot-hooks/common.sh \
     examples/vscode-copilot-layout/.copilot-hooks/.gitkeep \
     examples/vscode-copilot-layout/.copilot-hooks/session-start.sh \
     examples/vscode-copilot-layout/.copilot-hooks/post-tool-audit.sh \
@@ -55,6 +56,7 @@ validate_vscode_layout() {
 
   require_exec "examples/vscode-copilot-layout/.github/skills/parity-guard/check-parity-claims.sh"
   require_exec "examples/vscode-copilot-layout/.github/skills/docs-ship/run-docs-checks.sh"
+  require_exec "examples/vscode-copilot-layout/.copilot-hooks/common.sh"
   require_exec "examples/vscode-copilot-layout/.copilot-hooks/session-start.sh"
   require_exec "examples/vscode-copilot-layout/.copilot-hooks/post-tool-audit.sh"
 
@@ -91,7 +93,8 @@ validate_cli_plugin() {
     packages/copilot-cli-plugin/skills/docs-ship/SKILL.md \
     packages/copilot-cli-plugin/skills/docs-ship/run-docs-checks.sh \
     packages/copilot-cli-plugin/scripts/log-session-start.sh \
-    packages/copilot-cli-plugin/scripts/post-tool-audit.sh
+    packages/copilot-cli-plugin/scripts/post-tool-audit.sh \
+    scripts/bootstrap-copilot-power.sh
   do
     require_file "$path"
   done
@@ -100,6 +103,7 @@ validate_cli_plugin() {
   require_exec "packages/copilot-cli-plugin/skills/docs-ship/run-docs-checks.sh"
   require_exec "packages/copilot-cli-plugin/scripts/log-session-start.sh"
   require_exec "packages/copilot-cli-plugin/scripts/post-tool-audit.sh"
+  require_exec "scripts/bootstrap-copilot-power.sh"
 
   python3 - "$ROOT/packages/copilot-cli-plugin/plugin.json" <<'PY'
 import json, pathlib, sys
@@ -110,6 +114,13 @@ if missing:
     raise SystemExit(f"missing plugin.json keys: {sorted(missing)}")
 PY
   log "plugin.json parses and includes core keys"
+  python3 - "$ROOT/packages/copilot-cli-plugin/hooks.json" <<'PY'
+import json, pathlib, sys
+data = json.loads(pathlib.Path(sys.argv[1]).read_text())
+if data.get("version") != 1:
+    raise SystemExit("hooks.json must have version: 1")
+PY
+  log "plugin hooks.json has versioned schema"
 }
 
 validate_docs_mentions() {

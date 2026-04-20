@@ -1,2 +1,5 @@
 .omx/
 **/.copilot-hooks/*.log
+**/.copilot-hooks/*.jsonl
+**/.copilot-hooks/config.json
+**/.copilot-hooks/warnings.log
