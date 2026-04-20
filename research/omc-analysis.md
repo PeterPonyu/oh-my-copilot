@@ -49,7 +49,7 @@ Copilot-v1 design inference.
   workflow knowledge with project scope at `.omc/skills/` and user scope at
   `~/.omc/skills/`.
 
-### State, hooks, monitoring, and runtime depth
+### Reference-system depth (not v1 scope)
 
 - `AGENTS.md:344-387` documents `.omc/` as OMC reference runtime storage
   for state, notes, project memory, plans, and logs, plus MCP-backed
@@ -61,7 +61,8 @@ Copilot-v1 design inference.
   `ask-user-question`, `pre-tool-use`, and `post-tool-use`.
 - The source tree includes `src/`, `bridge/`, `dist/`, `.mcp.json`, workflow
   docs, CI workflows, and benchmark tooling, showing that OMC is an implemented
-  reference runtime and plugin ecosystem rather than only documentation.
+  reference runtime and plugin ecosystem rather than only documentation; this is
+  lineage evidence, not v1 scope.
 
 ## Evidence-backed synthesis
 
@@ -72,7 +73,8 @@ OMC's durable pattern is a host-native workflow layer around Claude Code:
 3. it makes parallel/team execution visible and inspectable;
 4. it persists state and verification expectations; and
 5. it uses host-specific surfaces (`CLAUDE.md`, Claude Code skills, Claude Code
-   plugin/runtime behavior) instead of pretending every host has the same API.
+   host-specific reference runtime behavior) instead of pretending every host has
+   the same API.
 
 OMC is therefore valuable lineage for `oh-my-copilot`, but it is not a parity
 contract. Its implemented runtime surfaces are deeper than this repository's v1
@@ -90,12 +92,11 @@ research-first scope.
 - Treat skills as bounded workflow packages with clear activation contexts,
   preferably using Copilot CLI's documented skill-folder conventions.
 - Keep verification language visible in public docs even though v1 does not claim
-  a runtime verifier.
+  no runtime verifier.
 
 ### Do not transfer directly
 
-- Do not copy Claude-specific slash commands, plugin marketplace setup, `CLAUDE.md`
-  semantics, or `.omc/` runtime storage into Copilot v1.
+- Do not copy Claude-specific slash commands, plugin marketplace setup, `CLAUDE.md` semantics, or `.omc/` runtime storage into Copilot v1.
 - Do not present OMC modes such as Ralph, Ultrawork, or Team as Copilot CLI
   commands unless a later Copilot-native implementation explicitly defines and
   verifies them.

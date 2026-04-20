@@ -64,8 +64,7 @@ This note summarizes what `oh-my-copilot` should learn from `oh-my-codex`
   skills under `skills/`, and Rust crates for `omx-explore`, `omx-runtime`,
   `omx-runtime-core`, `omx-mux`, and `omx-sparkshell`.
 - The docs tree includes contracts for state, team runtime, runtime authority,
-  hooks, release readiness, and QA reports, indicating a substantial reference
-  runtime and verification architecture.
+  hooks, release readiness, and QA reports, indicating a substantial reference runtime and verification architecture.
 
 ## Evidence-backed synthesis
 
@@ -92,8 +91,7 @@ reference runtime names or assumptions.
 
 ### Do not transfer directly
 
-- Do not copy `.omx/` runtime state, tmux workers, HUD, lifecycle APIs, Rust helper
-  crates, or Codex hook machinery into `oh-my-copilot` v1.
+- Do not copy `.omx/` runtime state, tmux workers, HUD, lifecycle APIs, Rust helper crates, or Codex hook machinery into `oh-my-copilot` v1.
 - Do not present `$deep-interview`, `$ralplan`, `$team`, or `$ralph` as Copilot
   CLI commands; they are OMX workflow names unless a future Copilot-native plan
   defines equivalents.
@@ -109,5 +107,4 @@ reference runtime names or assumptions.
   source of truth for Copilot capabilities is the GitHub documentation cited in
   `docs/references.md` and summarized in `research/copilot-cli-capabilities.md`.
 - Gap: this analysis did not run OMX workflows; it inspects source and docs to
-  identify design lineage, useful vocabulary, and non-transferable reference
-  runtime boundaries.
+  identify design lineage, useful vocabulary, and non-transferable reference runtime boundaries.
