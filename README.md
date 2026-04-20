@@ -16,8 +16,9 @@ cloud agent, IDE integrations, or SDK runtimes should share one design.
 | [`docs/design-spec.md`](./docs/design-spec.md) | Product/design specification for a Copilot-native v1. |
 | [`docs/comparison-matrix.md`](./docs/comparison-matrix.md) | Side-by-side comparison of OMC, OMX, and oh-my-copilot v1. |
 | [`docs/copilot-native-mapping.md`](./docs/copilot-native-mapping.md) | Mapping from OMC/OMX concepts to Copilot CLI primitives without forced parity. |
+| [`docs/root-registration.md`](./docs/root-registration.md) | Source-of-truth matrix for root workspace registration, plugin reuse, and example boundaries. |
 | [`docs/v1-repo-blueprint.md`](./docs/v1-repo-blueprint.md) | Concrete repository layout and artifact roles for the public v1. |
-| [`docs/vscode-copilot-testing.md`](./docs/vscode-copilot-testing.md) | How to smoke-test the illustrative layout in current VS Code Copilot. |
+| [`docs/vscode-copilot-testing.md`](./docs/vscode-copilot-testing.md) | How to smoke-test the root workspace and illustrative VS Code layout. |
 | [`examples/copilot-cli-layout/`](./examples/copilot-cli-layout/) | Illustrative Copilot CLI customization layout. It is not a complete runtime. |
 | [`examples/vscode-copilot-layout/`](./examples/vscode-copilot-layout/) | Stronger VS Code Copilot workspace with handoff agents, prompt files, skills, hooks, and sample files. |
 | [`packages/copilot-cli-plugin/`](./packages/copilot-cli-plugin/) | Experimental local Copilot CLI plugin package with reusable agents, skills, hooks, and scripts. |
@@ -31,13 +32,12 @@ cloud agent, IDE integrations, or SDK runtimes should share one design.
    to see what is source-backed and what remains inference.
 3. Use the [comparison matrix](./docs/comparison-matrix.md) and
    [native mapping](./docs/copilot-native-mapping.md) if you already know OMC or OMX.
-4. Use the [v1 blueprint](./docs/v1-repo-blueprint.md) and
-   [example layout](./examples/copilot-cli-layout/) for a future implementation sketch.
-5. If you want to try the current illustrative layout in VS Code, follow the
-   [VS Code testing guide](./docs/vscode-copilot-testing.md).
-6. If you want the repo to do more than explain itself, try the
-   [VS Code power workspace](./examples/vscode-copilot-layout/) or inspect the
-   [local Copilot CLI plugin package](./packages/copilot-cli-plugin/).
+4. Read the [root registration guide](./docs/root-registration.md) to understand
+   the root workspace, reusable plugin package, and example-workspace boundary.
+5. Use the [v1 blueprint](./docs/v1-repo-blueprint.md) for the concrete file
+   layout and artifact ownership rules.
+6. If you want to test Copilot behavior, follow the
+   [VS Code and root testing guide](./docs/vscode-copilot-testing.md).
 
 ## V1 scope
 
@@ -52,8 +52,10 @@ V1 includes:
 - public design docs;
 - a comparison with OMC and OMX;
 - a Copilot-native concept mapping;
-- illustrative repository examples; and
-- lightweight documentation hygiene checks.
+- root workspace registration for instructions, agents, prompts, skills, and hooks;
+- illustrative repository examples;
+- an experimental reusable Copilot CLI plugin package; and
+- lightweight documentation and surface validation checks.
 
 V1 does **not** include:
 
@@ -62,7 +64,7 @@ V1 does **not** include:
 - a replacement for Copilot CLI;
 - forced feature parity with OMC or OMX;
 - cloud agent, IDE, SDK, or multi-surface implementation; or
-- executable product code beyond documentation hygiene scripts.
+- executable product code beyond validation helpers and bounded hook/skill scripts.
 
 ## Design principle
 
@@ -72,47 +74,46 @@ repository and path-specific instructions, custom agents, skills, hooks, MCP,
 plugins, plan/autopilot modes, and built-in review/delegation surfaces. This
 repo treats those primitives as the design substrate.
 
+## Current power surfaces
+
+The repository has three deliberately separate Copilot surfaces:
+
+| Surface | Use it when | Boundary |
+| --- | --- | --- |
+| Root workspace | You are working in the repository root and want root-local instructions, agents, prompts, skills, and hook evidence. | Recommended current-directory target; root prompt routing and root docs are canonical here. |
+| [`packages/copilot-cli-plugin/`](./packages/copilot-cli-plugin/) | You want reusable installed Copilot CLI capabilities with namespaced plugin routes. | Canonical for reusable plugin agents, skills, hooks, and plugin metadata. |
+| [`examples/`](./examples/) | You want small or VS Code-oriented smoke-test workspaces. | Illustrative only; nested examples are not root proof, especially for hooks. |
+
+Root-local aliases such as `reviewer`, `verifier`, and `research` are intended
+for current-directory work. Namespaced plugin agents such as
+`oh-my-copilot-power-pack:reviewer` remain the distinct reusable plugin route.
+
+These surfaces increase actual Copilot leverage without pretending the project
+already ships a full OMC/OMX-style runtime.
+
 ## Status
 
-Research draft created April 20, 2026. Examples are illustrative until exercised
-in a real Copilot CLI session and updated with verification notes.
-
-## Actual power surfaces
-
-This repo now includes two more practical surfaces beyond the original
-research-only backbone:
-
-- [`examples/vscode-copilot-layout/`](./examples/vscode-copilot-layout/): a
-  VS Code workspace that uses current Copilot customization features more
-  aggressively, including:
-  - custom agent handoffs;
-  - prompt files;
-  - user-invocable skills backed by scripts;
-  - bounded hooks; and
-  - sample TypeScript files for path-specific instruction testing.
-- [`packages/copilot-cli-plugin/`](./packages/copilot-cli-plugin/): an
-  experimental local Copilot CLI plugin package that bundles:
-  - custom agents;
-  - reusable skills;
-  - lightweight hooks; and
-  - shell scripts for parity checking and docs verification.
-
-These are still intentionally bounded. They increase actual Copilot leverage
-without pretending the project already ships a full OMC/OMX-style runtime.
+Research draft created April 20, 2026. Root registration is the current v1
+workspace direction: the repo root is the recommended current-directory target,
+the plugin package remains the reusable distribution surface, and examples stay
+illustrative smoke-test material.
 
 ## Verification
 
-Run the lightweight docs checks:
+Run the lightweight docs and surface checks from the repository root:
 
 ```bash
 ./scripts/validate-doc-links.sh
 ./scripts/validate-power-surfaces.sh
+./scripts/validate-root-copilot-surfaces.sh
 ```
 
-The script validates internal Markdown links and checks that external reference
-URLs are syntactically present. It intentionally avoids product runtime behavior.
+If root-surface checks are folded into `validate-power-surfaces.sh`, the third
+command is optional, but the same root instruction, agent, prompt, skill, and
+hook-routing checks should still be covered.
 
-For a current VS Code Copilot smoke test, see
+For manual Copilot smoke tests, including root-vs-plugin agent routing and hook
+evidence caveats, see
 [docs/vscode-copilot-testing.md](./docs/vscode-copilot-testing.md).
 
 ## License
