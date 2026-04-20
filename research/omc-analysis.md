@@ -60,9 +60,8 @@ Copilot-v1 design inference.
   events such as `session-start`, `stop`, `keyword-detector`,
   `ask-user-question`, `pre-tool-use`, and `post-tool-use`.
 - The source tree includes `src/`, `bridge/`, `dist/`, `.mcp.json`, workflow
-  docs, CI workflows, and benchmark tooling, showing that OMC is an implemented
-  reference runtime and plugin ecosystem rather than only documentation; this is
-  lineage evidence, not v1 scope.
+  docs, CI workflows, and benchmark tooling, showing that OMC is implemented lineage evidence,
+  not v1 scope, with a reference runtime and plugin ecosystem rather than only documentation.
 
 ## Evidence-backed synthesis
 
