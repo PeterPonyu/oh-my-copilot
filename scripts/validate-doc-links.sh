@@ -219,18 +219,45 @@ for md in root.rglob('*.md'):
         path_part = unquote(target.split('#', 1)[0])
         if not path_part:
             continue
-        resolved = (md.parent / path_part).resolve()
-        try:
-            resolved.relative_to(root)
-        except ValueError:
-            missing.append(f"{md.relative_to(root)} -> {target} escapes repository")
-            continue
-        if not resolved.exists():
-            missing.append(f"{md.relative_to(root)} -> {target}")
-if missing:
-    print('Missing internal Markdown links:', file=sys.stderr)
-    for item in missing:
-        print(f'  {item}', file=sys.stderr)
+        count = counts.get(base, 0)
+        counts[base] = count + 1
+        anchors.add(base if count == 0 else f"{base}-{count}")
+    return anchors
+
+markdown_files = [p for p in root.rglob("*.md") if ".git" not in p.relative_to(root).parts and ".omx" not in p.relative_to(root).parts]
+anchors = {p: collect_anchors(p) for p in markdown_files}
+
+for path in markdown_files:
+    text = path.read_text(encoding="utf-8")
+    for lineno, line in enumerate(text.splitlines(), 1):
+        for match in link_re.finditer(line):
+            target = match.group(2).strip()
+            if not target or target.startswith(("http://", "https://", "mailto:")):
+                continue
+            if target.startswith("#"):
+                dest = path
+                fragment = target[1:]
+            else:
+                raw_path, sep, fragment = target.partition("#")
+                raw_path = raw_path.split("?", 1)[0]
+                dest = (path.parent / unquote(raw_path)).resolve()
+                try:
+                    dest.relative_to(root)
+                except ValueError:
+                    errors.append(f"{path}:{lineno}: link escapes repository: {target}")
+                    continue
+            if not dest.exists():
+                errors.append(f"{path}:{lineno}: missing target: {target}")
+                continue
+            if fragment and dest.suffix.lower() == ".md":
+                wanted = slugify(unquote(fragment))
+                if wanted and wanted not in anchors.get(dest, set()):
+                    errors.append(f"{path}:{lineno}: missing heading '#{fragment}' in {dest.relative_to(root)}")
+
+if errors:
+    print("Internal markdown link check FAILED", file=sys.stderr)
+    for error in errors:
+        print(f"- {error}", file=sys.stderr)
     sys.exit(1)
 PY
   log "internal Markdown links resolve"
