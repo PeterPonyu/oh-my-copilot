@@ -1,5 +1,6 @@
 # Research agent
 
+This is an illustrative custom agent profile for Copilot CLI research workflows; it is not runtime parity machinery.
 Use this agent for source-grounding and citation checks.
 
 ## Instructions

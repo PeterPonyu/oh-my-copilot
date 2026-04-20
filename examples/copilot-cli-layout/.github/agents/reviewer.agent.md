@@ -1,5 +1,6 @@
 # Reviewer agent
 
+This is an illustrative custom agent profile for Copilot CLI review workflows; it is not runtime parity machinery.
 Use this agent for public-readiness and scope review.
 
 ## Instructions
