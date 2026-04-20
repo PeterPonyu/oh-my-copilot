@@ -45,6 +45,21 @@ The bootstrap script currently does four things:
 It also checks `~/.copilot/config.json` for an installed plugin entry named
 `oh-my-copilot-power-pack`.
 
+### 3. Read the install-state summary
+
+Run:
+
+```bash
+./scripts/check-install-state.sh
+```
+
+This prints a short summary after the detailed checks so you can quickly see:
+
+- which root was checked
+- which plugin manifest was used
+- which Copilot config file was inspected
+- whether the local install proof passed
+
 ## Install proof matrix
 
 | Proof | Command | Passing evidence |
@@ -53,7 +68,7 @@ It also checks `~/.copilot/config.json` for an installed plugin entry named
 | Plugin and example surface contract | `./scripts/validate-power-surfaces.sh` | Reports required plugin/root/example files and routes as present. |
 | Root Copilot registration | `./scripts/validate-root-copilot-surfaces.sh` | Reports root instructions, agents, prompts, skills, and hooks as valid. |
 | Bootstrap and plugin config | `./scripts/bootstrap-copilot-power.sh` | Prints `ok: bootstrap complete` after plugin config and validation checks. |
-| Install-state proof | `./scripts/check-install-state.sh` | Run this when the release candidate includes the dedicated install-state checker. |
+| Install-state proof | `./scripts/check-install-state.sh` | Prints `INSTALL_STATE: ok` and a short install-state summary. |
 
 ## Troubleshooting
 

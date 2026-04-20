@@ -39,6 +39,16 @@ The root route and plugin route may share intent, but they are different proof
 surfaces. Root routes prove current-directory registration; namespaced routes
 prove reusable plugin installation.
 
+## Suggested day-one usage path
+
+If you want the least confusing path, do this in order:
+
+1. `./scripts/bootstrap-copilot-power.sh`
+2. `./scripts/check-install-state.sh`
+3. ask Copilot: `What instructions are active in this repository?`
+4. use `/review-scope README.md`
+5. use `/verify README.md` or the `verifier` agent for evidence
+
 ## Validation commands
 
 Run these from the repository root:

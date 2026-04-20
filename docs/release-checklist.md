@@ -20,6 +20,8 @@ reusable plugin behavior, and keeps [`examples/`](../examples/) illustrative.
 - Update `packages/copilot-cli-plugin/plugin.json` when the reusable plugin
   package changes.
 - Use semantic-version style values for the plugin package version.
+- Update [`release-notes-template.md`](./release-notes-template.md) and fill it
+  from the actual release diff.
 - Draft release notes from merged PRs or the release branch diff. Include:
   - user-facing documentation changes;
   - bootstrap or install proof changes;

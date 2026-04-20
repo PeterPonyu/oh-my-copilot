@@ -21,6 +21,7 @@ USAGE
 
 log() { printf 'ok: %s\n' "$*"; }
 fail() { printf 'FAIL: %s\n' "$*" >&2; exit 1; }
+report() { printf '%s\n' "$*"; }
 
 while (($#)); do
   case "$1" in
@@ -161,3 +162,12 @@ ok(f"plugin config entry found in {config_path}")
 ok(f"installed plugin cache verified at {cache_path}")
 print("INSTALL_STATE: ok")
 PY
+
+report ""
+report "INSTALL_STATE_SUMMARY"
+report "====================="
+report "- Root: $ROOT"
+report "- Plugin manifest: $PLUGIN_JSON"
+report "- Copilot config: $CONFIG_PATH"
+report "- Expected plugin name: oh-my-copilot-power-pack"
+report "- Result: PASS"
