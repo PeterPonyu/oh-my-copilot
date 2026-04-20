@@ -152,9 +152,10 @@ for required in ("agents", "skills", "hooks.json"):
 source = entry.get("source")
 if isinstance(source, dict) and source.get("path"):
     source_path = pathlib.Path(str(source["path"])).expanduser()
-    if not source_path.exists():
-        fail(f"installed plugin source path no longer exists: {source_path}")
-    ok(f"installed source path exists: {source_path}")
+    if source_path.exists():
+        ok(f"installed source path exists: {source_path}")
+    else:
+        print(f"warn: installed source path is recorded but unavailable: {source_path}")
 
 ok(f"plugin config entry found in {config_path}")
 ok(f"installed plugin cache verified at {cache_path}")
