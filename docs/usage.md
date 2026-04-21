@@ -79,12 +79,16 @@ bootstrap:
 For benchmark-style local proof:
 
 ```bash
-./benchmark/quick_test.sh
-./benchmark/run_full_comparison.sh
+./benchmark/quick_test.sh --variant vanilla
+./benchmark/quick_test.sh --run-agent-smoke --variant enhanced
+./benchmark/run_full_comparison.sh --run-agent-smoke --variant enhanced
 ```
 
 The latest checked-in local proof snapshot lives in
 [benchmark-status.md](./benchmark-status.md).
+Generated benchmark runs now include an evaluation contract (`*_evaluation.json`
+and `*_evaluation.md`) so the proof can distinguish baseline `vanilla` runs
+from release-gating `enhanced` runs instead of reporting duration alone.
 
 ## Hooks and evidence
 

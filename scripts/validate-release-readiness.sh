@@ -12,7 +12,7 @@ Validates release-readiness artifacts:
   - release checklist content
   - plugin version metadata
   - validator and smoke-test script presence
-  - existing docs/power/root validation suite
+  - existing docs/power/root/benchmark validation suite
   - direct Copilot CLI smoke script when copilot is available
 USAGE
 }
@@ -63,8 +63,10 @@ for path in \
   scripts/validate-doc-links.sh \
   scripts/validate-power-surfaces.sh \
   scripts/validate-root-copilot-surfaces.sh \
+  scripts/validate-benchmark-evidence.sh \
   scripts/validate-release-readiness.sh \
   scripts/smoke-copilot-cli.sh \
+  packages/copilot-cli-plugin/skills/parity-guard/check-parity-claims.sh \
   packages/copilot-cli-plugin/plugin.json
 do
   require_file "$path"
@@ -74,8 +76,10 @@ for path in \
   scripts/validate-doc-links.sh \
   scripts/validate-power-surfaces.sh \
   scripts/validate-root-copilot-surfaces.sh \
+  scripts/validate-benchmark-evidence.sh \
   scripts/validate-release-readiness.sh \
-  scripts/smoke-copilot-cli.sh
+  scripts/smoke-copilot-cli.sh \
+  packages/copilot-cli-plugin/skills/parity-guard/check-parity-claims.sh
 do
   require_exec "$path"
 done
@@ -87,6 +91,7 @@ require_contains "release checklist keeps examples illustrative" 'examples?.*ill
 require_contains "release checklist documents versioning" 'version|semantic-version|plugin\.json' docs/release-checklist.md
 require_contains "release checklist documents release notes" 'release notes' docs/release-checklist.md
 require_contains "release checklist documents Copilot CLI smoke" 'smoke-copilot-cli\.sh|RUN_COPILOT_AGENT_SMOKE' docs/release-checklist.md
+require_contains "release checklist documents parity wording scan" 'parity-guard|check-parity-claims' docs/release-checklist.md
 
 python3 - "$ROOT/packages/copilot-cli-plugin/plugin.json" <<'PY'
 from __future__ import annotations
@@ -106,8 +111,10 @@ print(f"ok: plugin version metadata is release-shaped ({version})")
 PY
 
 (cd "$ROOT" && ./scripts/validate-doc-links.sh)
+(cd "$ROOT" && ./packages/copilot-cli-plugin/skills/parity-guard/check-parity-claims.sh .)
 (cd "$ROOT" && ./scripts/validate-power-surfaces.sh)
 (cd "$ROOT" && ./scripts/validate-root-copilot-surfaces.sh)
+(cd "$ROOT" && ./scripts/validate-benchmark-evidence.sh)
 
 if [[ "$RUN_COPILOT_SMOKE" == "1" ]]; then
   if command -v copilot >/dev/null 2>&1; then

@@ -23,3 +23,13 @@ This matrix compares design lineage, not feature parity.
 If you are looking for a working runtime, use OMC or OMX in their host contexts.
 If you are evaluating what a Copilot-native equivalent should look like, use this
 repo as a research map and blueprint.
+
+## Adjacent host note: Cursor
+
+Current first-party Cursor docs now describe CLI use of `AGENTS.md`,
+`.cursor/rules`, MCP, hooks, skills, subagents, plugins, and cloud/background
+agents. In this repository those Cursor sources are **comparison inputs only**:
+they inform sibling `oh-my-cursor` planning and boundary checks, not a fourth
+supported host column and not proof that `oh-my-copilot` is validated on
+Cursor. See [`docs/references.md`](./references.md) for the current Cursor
+source list and access dates.

@@ -14,11 +14,52 @@ Environment notes:
 
 ## Current snapshot
 
-| Run | Purpose | Total duration (s) | Result | Raw output |
-| --- | --- | ---: | --- | --- |
-| `quick-baseline` | fast validation without model-backed agent prompts | 1.92 | PASS | [`benchmark/results/quick-baseline-20260420T161903Z/`](../benchmark/results/quick-baseline-20260420T161903Z/) |
-| `quick-agent-smoke` | fast validation plus root/plugin reviewer prompt smoke | 39.45 | PASS | [`benchmark/results/quick-agent-smoke-20260420T161903Z/`](../benchmark/results/quick-agent-smoke-20260420T161903Z/) |
-| `full-agent-smoke` | full proof including bootstrap, install-state, and standalone hook proof | 127.83 | PASS | [`benchmark/results/full-agent-smoke-20260420T161903Z/`](../benchmark/results/full-agent-smoke-20260420T161903Z/) |
+| Run | Purpose | Total duration (s) | Result | Evidence score | Raw output |
+| --- | --- | ---: | --- | --- | --- |
+| `quick-baseline` | fast validation without model-backed agent prompts | 1.92 | PASS | 4/4 required checks (100%) | [`benchmark/results/quick-baseline-20260420T161903Z/`](../benchmark/results/quick-baseline-20260420T161903Z/) |
+| `quick-agent-smoke` | fast validation plus root/plugin reviewer prompt smoke | 39.45 | PASS | 4/4 required checks (100%) + `ROOT_AGENT_OK` + `PLUGIN_AGENT_OK` | [`benchmark/results/quick-agent-smoke-20260420T161903Z/`](../benchmark/results/quick-agent-smoke-20260420T161903Z/) |
+| `full-agent-smoke` | full proof including bootstrap, install-state, and standalone hook proof | 127.83 | PASS | 7/7 required checks (100%) + install/hook evidence | [`benchmark/results/full-agent-smoke-20260420T161903Z/`](../benchmark/results/full-agent-smoke-20260420T161903Z/) |
+
+## Release-blocking evaluation contract
+
+These benchmark snapshots are a **product-proof gate for Copilot CLI only**.
+They are not a broad model-quality benchmark, and passing them does not imply
+Cursor CLI plugin/package support or multi-runtime parity.
+
+- **Baseline gate (`quick-baseline`)**: `docs_validation`,
+  `power_validation`, `root_validation`, and `smoke_cli` must all pass.
+  Release-blocking threshold: **4/4 required checks = 100%**.
+- **Enhanced prompt gate (`quick-agent-smoke`)**: the same four checks must
+  pass, and `smoke_cli` must include both `ROOT_AGENT_OK` and
+  `PLUGIN_AGENT_OK` to prove root and namespaced plugin reviewer routing.
+  Release-blocking threshold: **4/4 required checks = 100% plus both prompt
+  tokens**.
+- **Enhanced end-to-end gate (`full-agent-smoke`)**: all seven checks must
+  pass, `install_state` must include `INSTALL_STATE: ok`, and
+  `standalone_hook_proof` must confirm standalone hook success. Release-
+  blocking threshold: **7/7 required checks = 100% plus install/hook proof**.
+
+`scripts/validate-benchmark-evidence.sh` enforces this contract against the
+checked-in result snapshots before release.
+
+## Evaluation contract (current policy)
+
+Benchmark runs are now expected to produce both timing output and an evaluation
+contract so the suite can distinguish `vanilla` proof from `enhanced` proof.
+
+| Profile | Vanilla threshold | Enhanced threshold | Required enhanced evidence |
+| --- | ---: | ---: | --- |
+| `quick` | 60/100 | 100/100 | `ROOT_AGENT_OK`, `PLUGIN_AGENT_OK` |
+| `full` | 70/100 | 100/100 | `ROOT_AGENT_OK`, `PLUGIN_AGENT_OK`, `INSTALL_STATE: ok`, `source=example-workspace`, `source=plugin` |
+
+Interpretation:
+
+- `vanilla` keeps the baseline validators/smoke path measurable without
+  requiring live prompt-smoke evidence.
+- `enhanced` is the stricter release-gating contract because it must exceed the
+  vanilla floor and include the prompt/hook/install evidence markers that prove
+  stronger Copilot behavior.
+- A failing threshold is release-blocking for the selected benchmark variant.
 
 ## What passed
 
@@ -42,6 +83,8 @@ The current repo is more than a static layout:
   aliases
 - benchmark-style proof runs can catch regressions in root routing, plugin
   installation, and hook evidence
+- the checked-in proof is still intentionally Copilot CLI-only rather than a
+  cross-host OMC/OMX/Cursor benchmark
 
 This is still a product proof harness, not a broad benchmark of model quality or
 an OMC/OMX runtime parity claim.
@@ -52,3 +95,5 @@ an OMC/OMX runtime parity claim.
 - live prompt smoke depends on a signed-in Copilot CLI session with model access
 - VS Code extension behavior outside the local smoke workspace still benefits
   from manual checks alongside this benchmark harness
+- any future Cursor comparison should be recorded as sibling/cross-host evidence,
+  not folded into this Copilot-only benchmark snapshot without an approved plan

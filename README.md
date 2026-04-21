@@ -19,7 +19,7 @@ Those multi-surface expansions are out of scope for v1.
 | [`docs/design-spec.md`](./docs/design-spec.md) | Product/design specification for a Copilot-native v1. |
 | [`docs/comparison-matrix.md`](./docs/comparison-matrix.md) | Side-by-side comparison of OMC, OMX, and oh-my-copilot v1. |
 | [`docs/copilot-native-mapping.md`](./docs/copilot-native-mapping.md) | Mapping from OMC/OMX concepts to Copilot CLI primitives without forced parity. |
-| [`docs/benchmark-status.md`](./docs/benchmark-status.md) | Current checked-in benchmark snapshot with durations, raw result links, and what the proof run actually established. |
+| [`docs/benchmark-status.md`](./docs/benchmark-status.md) | Current checked-in benchmark snapshot with durations, score/evaluation gates, raw result links, and what the proof run actually established. |
 | [`docs/root-registration.md`](./docs/root-registration.md) | Source-of-truth matrix for root workspace registration, plugin reuse, and example boundaries. |
 | [`docs/v1-repo-blueprint.md`](./docs/v1-repo-blueprint.md) | Concrete repository layout and artifact roles for the public v1. |
 | [`docs/vscode-copilot-testing.md`](./docs/vscode-copilot-testing.md) | How to smoke-test the root workspace and illustrative VS Code layout. |
@@ -28,7 +28,7 @@ Those multi-surface expansions are out of scope for v1.
 | [`examples/copilot-cli-layout/`](./examples/copilot-cli-layout/) | Illustrative Copilot CLI customization layout. It is not a complete runtime. |
 | [`examples/vscode-copilot-layout/`](./examples/vscode-copilot-layout/) | Stronger VS Code Copilot workspace with handoff agents, prompt files, skills, hooks, and sample files. |
 | [`packages/copilot-cli-plugin/`](./packages/copilot-cli-plugin/) | Experimental local Copilot CLI plugin package with reusable agents, skills, hooks, and scripts. |
-| [`docs/references.md`](./docs/references.md) | Source links and access dates for capability claims. |
+| [`docs/references.md`](./docs/references.md) | Source links and access dates for Copilot claims plus current OMC/OMX/Cursor comparison inputs. |
 
 ## Reading path
 
@@ -37,13 +37,16 @@ Those multi-surface expansions are out of scope for v1.
 2. Use the [usage guide](./docs/usage.md) for root agents, prompts, skills,
    plugin routes, and validation commands.
 3. Read the [benchmark status](./docs/benchmark-status.md) to see the latest
-   local proof snapshot before trusting a surface claim.
+   local Copilot proof snapshot before trusting a surface claim.
 4. Read the [design spec](./docs/design-spec.md) for scope, non-goals, and the
    core Copilot-native design rule.
 5. Read the [Copilot CLI capability research](./research/copilot-cli-capabilities.md)
    to see what is source-backed and what remains inference.
 6. Use the [comparison matrix](./docs/comparison-matrix.md) and
    [native mapping](./docs/copilot-native-mapping.md) if you already know OMC or OMX.
+   Use [references](./docs/references.md) for current Cursor comparison inputs,
+   but keep those Cursor notes sibling-scoped rather than treating them as proof
+   that this repo currently supports Cursor.
 7. Read the [root registration guide](./docs/root-registration.md) for the root
    workspace, reusable plugin package, and example-workspace boundary.
 8. Use the [v1 blueprint](./docs/v1-repo-blueprint.md) for artifact ownership
@@ -60,6 +63,7 @@ skills/hooks/MCP, and review changes from the command line.
 V1 includes:
 
 - current-source research and citations;
+- current-source comparison inputs for OMC, OMX, and Cursor boundary analysis;
 - product-facing quick-start, installation, usage, limitation, and release docs;
 - public design docs;
 - a comparison with OMC and OMX;
@@ -75,6 +79,7 @@ V1 does **not** include:
 - a tmux worker runtime;
 - a replacement for Copilot CLI;
 - forced feature parity with OMC or OMX;
+- a current supported Cursor host surface inside this repository;
 - cloud agent, IDE, SDK, or broad multi-surface implementation; or
 - executable product code beyond validation helpers and bounded hook/skill scripts.
 
@@ -114,8 +119,10 @@ Run the lightweight checks from the repository root:
 
 ```bash
 ./scripts/validate-doc-links.sh
+./packages/copilot-cli-plugin/skills/parity-guard/check-parity-claims.sh .
 ./scripts/validate-power-surfaces.sh
 ./scripts/validate-root-copilot-surfaces.sh
+./scripts/validate-benchmark-evidence.sh
 ./scripts/validate-release-readiness.sh
 ./scripts/bootstrap-copilot-power.sh
 ```
@@ -136,9 +143,14 @@ signed-in Copilot CLI session and model access are available.
 For a benchmark-style local proof run, use:
 
 ```bash
-./benchmark/quick_test.sh
-./benchmark/run_full_comparison.sh
+./benchmark/quick_test.sh --variant vanilla
+./benchmark/quick_test.sh --run-agent-smoke --variant enhanced
+./benchmark/run_full_comparison.sh --run-agent-smoke --variant enhanced
 ```
+
+Each run now writes both timing output and an evaluation contract
+(`*_evaluation.json` / `*_evaluation.md`) so enhanced prompt-smoke proof can be
+scored and release-gated separately from the vanilla baseline.
 
 For manual Copilot smoke tests, including root-vs-plugin agent routing and hook
 evidence caveats, see

@@ -1,0 +1,51 @@
+[
+  {
+    "name": "docs_validation",
+    "command": "./scripts/validate-doc-links.sh",
+    "success": true,
+    "duration_sec": 0.13,
+    "output_tail": "ok: research/omc-analysis.md has an Evidence section\nok: research/omc-analysis.md has an Inference/Assumption section\nok: research/omx-analysis.md has an Evidence section\nok: research/omx-analysis.md has an Inference/Assumption section\nok: research/copilot-cli-capabilities.md has an Evidence section\nok: research/copilot-cli-capabilities.md has an Inference/Assumption section\nok: mapping distinguishes source-backed claims from inference\nok: scope creep terms are bounded\nok: illustrative hook policy JSON is valid\nok: internal Markdown links resolve\nok: external link checks skipped (set CHECK_EXTERNAL=1 to enable)\nok: oh-my-copilot docs/research/examples validation complete"
+  },
+  {
+    "name": "power_validation",
+    "command": "./scripts/validate-power-surfaces.sh",
+    "success": true,
+    "duration_sec": 0.04,
+    "output_tail": "ok: implementer agent hands off to reviewer\nok: reviewer agent hands off to verifier\nok: VS Code hook policy uses native SessionStart event\nok: VS Code hook policy uses native PostToolUse event\nok: VS Code settings enable AGENTS.md loading\nok: VS Code settings enable skills\nok: VS Code prompt file uses a custom agent\nok: plugin.json parses and includes core keys\nok: plugin hooks.json has versioned schema\nok: README mentions VS Code layout\nok: README mentions Copilot CLI plugin package\nok: power surfaces validation complete"
+  },
+  {
+    "name": "root_validation",
+    "command": "./scripts/validate-root-copilot-surfaces.sh",
+    "success": true,
+    "duration_sec": 0.12,
+    "output_tail": "ok: root hook policy parses and calls root scripts\nok: root hook policy is versioned\nok: session hook logs root-workspace source\nok: post-tool hook logs root-workspace source\nok: root hook config uses shared schema\nok: README distinguishes root workspace from plugin/example surfaces\nok: README mentions reusable plugin package\nok: README keeps examples illustrative\nok: root registration doc states plugin canonicality\nok: root registration doc keeps examples as examples\nok: CI runs root Copilot surface validation\nok: root Copilot surface validation complete"
+  },
+  {
+    "name": "smoke_cli",
+    "command": "./scripts/smoke-copilot-cli.sh",
+    "success": true,
+    "duration_sec": 1.61,
+    "output_tail": "GitHub Copilot CLI 1.0.32.\nRun 'copilot update' to check for updates.\nok: copilot CLI version command succeeds\nok: copilot help exposes agent/plugin options\nok: copilot plugin command is available\nok: root reviewer/research/verifier agents exist\nok: plugin metadata parses for oh-my-copilot-power-pack@0.1.0\nok: installed plugin entry found in ~/.copilot/config.json\nok: model-backed agent prompt smoke skipped (set RUN_COPILOT_AGENT_SMOKE=1 to enable)\nok: Copilot CLI smoke validation complete"
+  },
+  {
+    "name": "bootstrap",
+    "command": "./scripts/bootstrap-copilot-power.sh",
+    "success": true,
+    "duration_sec": 20.56,
+    "output_tail": "ok: root registration doc keeps examples as examples\nok: CI runs root Copilot surface validation\nok: root Copilot surface validation complete\nok: standalone workspace hook proof succeeded\nlog:\nsource=example-workspace event=sessionStart timestamp=2026-04-21T03:56:09Z cwd=/tmp/vscode-copilot-layout-standalone\nsource=plugin event=sessionStart timestamp=2026-04-21T03:56:09Z cwd=/tmp/vscode-copilot-layout-standalone\nok: bootstrap complete\n\nChanges   +0 -0\nRequests  1 Premium (8s)\nTokens    \u2191 17.6k \u2022 \u2193 126 \u2022 16.9k (cached) \u2022 117 (reasoning)"
+  },
+  {
+    "name": "install_state",
+    "command": "./scripts/check-install-state.sh",
+    "success": true,
+    "duration_sec": 0.02,
+    "output_tail": "ok: installed source path exists: /home/zeyufu/Desktop/oh-my-copilot/.omx/team/execute-the-approved-plan-in-o/worktrees/worker-4/packages/copilot-cli-plugin\nok: plugin config entry found in /home/zeyufu/.copilot/config.json\nok: installed plugin cache verified at /home/zeyufu/.copilot/installed-plugins/_direct/copilot-cli-plugin\nINSTALL_STATE: ok\n\nINSTALL_STATE_SUMMARY\n=====================\n- Root: /home/zeyufu/Desktop/oh-my-copilot/.omx/team/execute-the-approved-plan-in-o/worktrees/worker-4\n- Plugin manifest: /home/zeyufu/Desktop/oh-my-copilot/.omx/team/execute-the-approved-plan-in-o/worktrees/worker-4/packages/copilot-cli-plugin/plugin.json\n- Copilot config: /home/zeyufu/.copilot/config.json\n- Expected plugin name: oh-my-copilot-power-pack\n- Result: PASS"
+  },
+  {
+    "name": "standalone_hook_proof",
+    "command": "./scripts/prove-vscode-hook-standalone.sh",
+    "success": true,
+    "duration_sec": 17.73,
+    "output_tail": "ok: standalone workspace hook proof succeeded\nlog:\nsource=example-workspace event=sessionStart timestamp=2026-04-21T03:56:28Z cwd=/tmp/vscode-copilot-layout-standalone\nsource=plugin event=sessionStart timestamp=2026-04-21T03:56:28Z cwd=/tmp/vscode-copilot-layout-standalone\n\nChanges   +0 -0\nRequests  1 Premium (6s)\nTokens    \u2191 17.6k \u2022 \u2193 83 \u2022 16.9k (cached) \u2022 74 (reasoning)"
+  }
+]
