@@ -11,7 +11,7 @@ Variant: `vanilla`
 | `docs_validation` | PASS | 0.21 | — |
 | `power_validation` | PASS | 0.07 | — |
 | `root_validation` | PASS | 0.13 | — |
-| `smoke_cli` | PASS | 1.67 | — |
+| `smoke_cli` | PASS | 1.64 | — |
 
 ## Evaluation contract
 

@@ -27,7 +27,7 @@
     "name": "smoke_cli",
     "command": "./scripts/smoke-copilot-cli.sh",
     "success": true,
-    "duration_sec": 1.67,
+    "duration_sec": 1.64,
     "output_tail": "GitHub Copilot CLI 1.0.34.\nRun 'copilot update' to check for updates.\nok: copilot CLI version command succeeds\nok: copilot help exposes agent/plugin options\nok: copilot plugin command is available\nok: root reviewer/research/verifier agents exist\nok: plugin metadata parses for oh-my-copilot-power-pack@0.1.0\nok: installed plugin entry found in ~/.copilot/config.json\nok: model-backed agent prompt smoke skipped (set RUN_COPILOT_AGENT_SMOKE=1 to enable)\nok: Copilot smoke proves route availability only; cross-host comparability is validated by separate benchmark harvest gates\nok: Copilot CLI smoke validation complete",
     "markers": []
   }

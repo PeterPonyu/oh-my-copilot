@@ -27,7 +27,7 @@
     "name": "smoke_cli",
     "command": "./scripts/smoke-copilot-cli.sh",
     "success": true,
-    "duration_sec": 23.6,
+    "duration_sec": 35.15,
     "output_tail": "GitHub Copilot CLI 1.0.34.\nRun 'copilot update' to check for updates.\nok: copilot CLI version command succeeds\nok: copilot help exposes agent/plugin options\nok: copilot plugin command is available\nok: root reviewer/research/verifier agents exist\nok: plugin metadata parses for oh-my-copilot-power-pack@0.1.0\nok: installed plugin entry found in ~/.copilot/config.json\nok: root reviewer agent prompt smoke returned ROOT_AGENT_OK\nok: namespaced plugin reviewer agent prompt smoke returned PLUGIN_AGENT_OK\nok: Copilot smoke proves route availability only; cross-host comparability is validated by separate benchmark harvest gates\nok: Copilot CLI smoke validation complete",
     "markers": [
       "ROOT_AGENT_OK",
@@ -38,8 +38,8 @@
     "name": "bootstrap",
     "command": "./scripts/bootstrap-copilot-power.sh",
     "success": true,
-    "duration_sec": 13.2,
-    "output_tail": "ok: cross-host methodology route explains comparability classes\nok: CI runs root Copilot surface validation\nok: root Copilot surface validation complete\nok: standalone workspace hook proof succeeded\nlog:\nsource=example-workspace event=sessionStart timestamp=2026-04-21T13:47:23Z cwd=/tmp/vscode-copilot-layout-standalone\nsource=plugin event=sessionStart timestamp=2026-04-21T13:47:23Z cwd=/tmp/vscode-copilot-layout-standalone\nok: bootstrap complete\n\nChanges   +0 -0\nRequests  1 Premium (10s)\nTokens    \u2191 17.7k \u2022 \u2193 159 \u2022 16.9k (cached) \u2022 150 (reasoning)",
+    "duration_sec": 12.77,
+    "output_tail": "ok: root Copilot surface validation complete\nok: standalone workspace hook proof succeeded\nlog:\nsource=example-workspace event=sessionStart timestamp=2026-04-21T14:42:47Z cwd=/tmp/vscode-copilot-layout-standalone\nsource=plugin event=sessionStart timestamp=2026-04-21T14:42:47Z cwd=/tmp/vscode-copilot-layout-standalone\nsource=example-workspace event=sessionStart timestamp=2026-04-21T14:42:49Z cwd=/tmp/vscode-copilot-layout-standalone\nsource=plugin event=sessionStart timestamp=2026-04-21T14:42:49Z cwd=/tmp/vscode-copilot-layout-standalone\nok: bootstrap complete\n\nChanges   +0 -0\nRequests  1 Premium (9s)\nTokens    \u2191 17.7k \u2022 \u2193 87 \u2022 16.9k (cached) \u2022 78 (reasoning)",
     "markers": [
       "INSTALL_STATE: ok",
       "source=example-workspace",
@@ -60,8 +60,8 @@
     "name": "standalone_hook_proof",
     "command": "./scripts/prove-vscode-hook-standalone.sh",
     "success": true,
-    "duration_sec": 13.55,
-    "output_tail": "ok: standalone workspace hook proof succeeded\nlog:\nsource=example-workspace event=sessionStart timestamp=2026-04-21T13:47:35Z cwd=/tmp/vscode-copilot-layout-standalone\nsource=plugin event=sessionStart timestamp=2026-04-21T13:47:35Z cwd=/tmp/vscode-copilot-layout-standalone\n\nChanges   +0 -0\nRequests  1 Premium (11s)\nTokens    \u2191 17.7k \u2022 \u2193 170 \u2022 16.9k (cached) \u2022 161 (reasoning)",
+    "duration_sec": 15.56,
+    "output_tail": "ok: standalone workspace hook proof succeeded\nlog:\nsource=example-workspace event=sessionStart timestamp=2026-04-21T14:42:59Z cwd=/tmp/vscode-copilot-layout-standalone\nsource=plugin event=sessionStart timestamp=2026-04-21T14:42:59Z cwd=/tmp/vscode-copilot-layout-standalone\n\nChanges   +0 -0\nRequests  1 Premium (11s)\nTokens    \u2191 17.7k \u2022 \u2193 134 \u2022 16.9k (cached) \u2022 125 (reasoning)",
     "markers": [
       "source=example-workspace",
       "source=plugin"
