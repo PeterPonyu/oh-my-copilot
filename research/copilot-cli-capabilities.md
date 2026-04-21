@@ -1,6 +1,6 @@
 # GitHub Copilot CLI Capability Notes
 
-Access date for web sources: 2026-04-20.
+Access date for web sources: 2026-04-21.
 
 This research note grounds the `oh-my-copilot` v1 blueprint and examples in public GitHub sources. It is evidence for a docs-first, Copilot CLI-only research repository; it is not a runtime implementation spec.
 
@@ -15,7 +15,7 @@ This research note grounds the `oh-my-copilot` v1 blueprint and examples in publ
 | Skills | GitHub Docs describe skills as folders containing `SKILL.md` plus optional resources, with project locations such as `.github/skills`. | v1 examples can include minimal skill folders for repeatable documentation workflows. |
 | Custom agents | GitHub Docs describe repository-level `.github/agents/` agent profiles and CLI custom agents with `.agent.md` files. | v1 examples can include `research.agent.md` and `reviewer.agent.md`, labeled illustrative. |
 | Hooks | GitHub Docs describe hook JSON files under `.github/hooks/` and lifecycle triggers such as `sessionStart`, `preToolUse`, and `postToolUse`. | v1 can include a conservative hook example as policy/logging illustration, not as product enforcement. |
-| MCP and plugins | GitHub sources describe MCP servers and plugins as extension mechanisms; plugins can package skills, agents, hooks, MCP, and other config. | v1 should treat MCP/plugins as future-extension topics unless the plan is amended. |
+| MCP and plugins | GitHub sources describe MCP servers and plugins as extension mechanisms; plugins can package skills, agents, hooks, MCP, and other config. | v1 can include a bounded local plugin package and MCP/plugin references, but should not imply marketplace distribution, runtime parity, or cross-host portability. |
 | Review/diff/undo | The GA changelog describes `/diff`, `/review`, and rewind behavior. | Public docs can mention review/diff as Copilot CLI primitives, but examples should not depend on them. |
 | Memory | The GA changelog describes session compaction, repository memory, and cross-session memory. | v1 may mention memory as a Copilot CLI capability, but should not design a separate memory subsystem. |
 
@@ -51,17 +51,21 @@ GitHub Docs describe custom agents as specialized Copilot profiles. CLI docs say
 
 **V1 wording guidance:** Example custom agents may show a research role and reviewer role, but should avoid hardcoded model claims or heavy tool assumptions. Keep them illustrative until tested in Copilot CLI.
 
-### Hooks, MCP, and plugins are extension points, not v1 runtime
+### Hooks, MCP, and plugins are extension points with bounded v1 use
 
 Hooks can execute shell commands at lifecycle events. MCP servers and plugins can extend the CLI with additional tools and packaged configuration. These are strong future-extension primitives, but they can easily look like a runtime framework if overused.
 
-**V1 wording guidance:** Include only a conservative hook example under `examples/`. Treat MCP and plugins as documented future paths; do not ship plugin manifests or MCP server configs in v1 unless the approved plan changes.
+**V1 wording guidance:** Keep hooks conservative and explicit. It is acceptable
+for v1 to ship a bounded local plugin package and plugin-related validation
+artifacts because Copilot CLI now documents plugins as a first-party extension
+surface. However, local wording should still avoid implying marketplace
+distribution, non-Copilot portability, or OMC/OMX-style runtime parity.
 
 ## Mapping Guardrails
 
 - Use "Copilot-native adaptation" instead of "equivalent" for most OMC/OMX mappings.
 - Use "illustrative" for example files that have not been run in a real Copilot CLI session.
-- Use "future extension" for cloud agent, IDE, SDK, plugin marketplace, and MCP-server packaging topics.
+- Use "future extension" for cloud agent, IDE, SDK, and multi-host/plugin-marketplace portability topics unless the release has direct proof.
 - Avoid implying that OMC/OMX runtime terms such as `ralph`, `team`, or `ultrawork` are required names or modes in Copilot CLI.
 
 ## Source Index

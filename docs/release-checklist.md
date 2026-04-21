@@ -14,6 +14,8 @@ reusable plugin behavior, and keeps [`examples/`](../examples/) illustrative.
 - Confirm new examples are labelled illustrative and are not used as root proof.
 - Confirm every capability claim is backed by repository evidence, official
   GitHub documentation, or an explicit design inference.
+- Confirm any Cursor mention stays comparison-scoped or sibling-scoped and is
+  not presented as current `oh-my-copilot` host support.
 
 ## 2. Version and release notes
 
@@ -37,8 +39,10 @@ Run these commands from the repository root:
 
 ```bash
 ./scripts/validate-doc-links.sh
+./packages/copilot-cli-plugin/skills/parity-guard/check-parity-claims.sh .
 ./scripts/validate-power-surfaces.sh
 ./scripts/validate-root-copilot-surfaces.sh
+./scripts/validate-benchmark-evidence.sh
 ./scripts/validate-release-readiness.sh
 ```
 
@@ -78,6 +82,9 @@ owned by the bootstrap/install path and should be recorded separately.
 - Open `README.md`, `docs/usage.md`, `docs/installation.md`, and
   `docs/known-limitations.md` if present; confirm the public reading path is
   coherent.
+- Open `docs/references.md` and `docs/comparison-matrix.md`; confirm access
+  dates are current and any Cursor notes remain comparison-only rather than
+  product-support claims.
 - Confirm bootstrap/install commands in the docs match the scripts in `scripts/`.
 - Confirm the root prompts and agents remain short-name aliases for root work.
 - Confirm namespaced plugin routes remain documented for reusable installed
@@ -92,8 +99,10 @@ Paste this into the release PR or release notes:
 ```text
 Release readiness evidence:
 - Docs validation: PASS/FAIL — ./scripts/validate-doc-links.sh
+- Parity wording scan: PASS/FAIL — ./packages/copilot-cli-plugin/skills/parity-guard/check-parity-claims.sh .
 - Power surface validation: PASS/FAIL — ./scripts/validate-power-surfaces.sh
 - Root surface validation: PASS/FAIL — ./scripts/validate-root-copilot-surfaces.sh
+- Benchmark evidence validation: PASS/FAIL — ./scripts/validate-benchmark-evidence.sh
 - Release readiness validation: PASS/FAIL — ./scripts/validate-release-readiness.sh
 - Copilot CLI smoke: PASS/FAIL/SKIPPED — ./scripts/smoke-copilot-cli.sh
 - Agent prompt smoke: PASS/FAIL/SKIPPED — RUN_COPILOT_AGENT_SMOKE=1 ./scripts/smoke-copilot-cli.sh

@@ -148,10 +148,10 @@ validate_blueprint_and_examples() {
 
 validate_references() {
   require_contains "references include GitHub docs or changelog URLs" 'https://(docs\.github\.com|github\.blog)' docs/references.md
-  require_contains "references include an access/current-as-of date" 'Accessed|accessed|Current as of|current as of|2026-04-20|April 20, 2026' docs/references.md
+  require_contains "references include an access/current-as-of date" 'Access date|Accessed|accessed|Current as of|current as of|2026-04-20|April 20, 2026' docs/references.md
 
   local topic
-  for topic in 'custom instructions' 'AGENTS\.md' 'skills' 'custom agents' 'hooks' 'plugins|MCP' 'Copilot CLI|agentic|autopilot|delegation'; do
+  for topic in 'custom instructions' 'AGENTS\.md' 'skills' 'custom agents' 'hooks' 'plugins|MCP' 'Copilot CLI|agentic|autopilot|delegation' 'Cursor'; do
     require_contains "references cover ${topic}" "$topic" docs/references.md
   done
 }

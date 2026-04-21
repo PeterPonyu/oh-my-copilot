@@ -31,6 +31,9 @@ what is illustrative, and what still needs manual proof.
   repository validation scripts. Prefer [references](./references.md) and
   [Copilot capability research](../research/copilot-cli-capabilities.md) over
   memory when updating claims.
+- Cursor references in this repository are comparison inputs for sibling
+  planning and boundary checks. They are not direct proof that
+  `oh-my-copilot` currently supports Cursor.
 - Examples are illustrative. They are useful for layout and smoke-test ideas but
   are not evidence that root workspace registration works.
 - Root and plugin assets intentionally overlap in places. Treat root files as the
@@ -53,3 +56,6 @@ what is illustrative, and what still needs manual proof.
 - Do not ship positive claims such as "full parity", "runtime replacement", or
   "multi-surface implementation" unless the repository has a new approved scope
   and corresponding proof.
+- Do not treat OMC/OMX/Cursor comparison language as release proof; cross-host
+  references still need host-specific validation before they become support
+  claims.
