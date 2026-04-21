@@ -11,9 +11,14 @@ reusable plugin behavior, and keeps [`examples/`](../examples/) illustrative.
   replacement runtime or OMC/OMX parity clone.
 - Confirm root workspace behavior, installed-plugin behavior, and example
   workspace behavior are described separately.
+- Confirm the root workspace, reusable plugin package, and examples are still
+  described as architectural layers with different owners, not as version tiers.
 - Confirm new examples are labelled illustrative and are not used as root proof.
 - Confirm every capability claim is backed by repository evidence, official
   GitHub documentation, or an explicit design inference.
+- Confirm any mention of Copilot CLI plan mode, autopilot mode, or built-in
+  delegation is framed as a host-product capability with GitHub citations rather
+  than as repo-owned implementation proof.
 - Confirm any Cursor mention stays comparison-scoped or sibling-scoped and is
   not presented as current `oh-my-copilot` host support.
 
@@ -83,6 +88,8 @@ owned by the bootstrap/install path and should be recorded separately.
 - Open `README.md`, `docs/usage.md`, `docs/installation.md`, and
   `docs/known-limitations.md` if present; confirm the public reading path is
   coherent.
+- Confirm the edited public docs still distinguish repository proof, host-product
+  citations, and illustrative/example-only wording.
 - Open `docs/references.md` and `docs/comparison-matrix.md`; confirm access
   dates are current and any Cursor notes remain comparison-only rather than
   product-support claims.

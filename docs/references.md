@@ -4,6 +4,17 @@ Access date for web sources: 2026-04-21.
 
 This page is the citation index for public `oh-my-copilot` v1 claims. It favors GitHub-owned sources for Copilot behavior and uses local research files for source-system synthesis.
 
+Use this page with the repo's claim/proof discipline:
+
+- repository-owned behavior should be proven with repository files, validators,
+  smoke tests, and local evidence;
+- GitHub Copilot host-product capabilities should be cited from GitHub docs or
+  changelog sources here;
+- local OMC/OMX notes should stay labelled as repository evidence plus design
+  synthesis; and
+- Cursor references remain adjacent-host comparison inputs unless a future plan
+  adds direct proof.
+
 ## GitHub Copilot CLI
 
 | Source | What it supports in v1 docs | Notes |

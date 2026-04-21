@@ -10,7 +10,8 @@ the reusable plugin package.
   `oh-my-claudecode` and `oh-my-codex` to Copilot-native primitives; it is not a
   runtime framework and does not claim OMC/OMX parity.
 - Treat the root workspace, `packages/copilot-cli-plugin/`, and `examples/` as
-  distinct surfaces with different source-of-truth roles.
+  distinct surfaces with different source-of-truth roles. Treat them as
+  architectural layers, not product-version tiers.
 - Keep reusable Copilot CLI plugin behavior canonical in
   `packages/copilot-cli-plugin/` unless a task explicitly changes root-only
   registration or example-only smoke-test assets.
@@ -36,6 +37,10 @@ the reusable plugin package.
   agents, prompts, skills, scripts, and hooks exist.
 - When editing docs or public copy, preserve CLI-first wording and clearly label
   unsupported behavior as inference, illustrative, or future work.
+- When editing docs or public copy, keep claim/proof discipline explicit:
+  repository-owned behavior needs repository evidence, Copilot host-product
+  capability claims need GitHub sources, and adjacent-host notes stay
+  comparison-scoped.
 - When editing shell scripts, use `set -euo pipefail`, quote variables, and keep
   commands runnable from the repository root.
 

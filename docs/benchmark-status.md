@@ -3,28 +3,36 @@
 This document records the current checked-in local proof snapshot for
 `oh-my-copilot`.
 
-Snapshot run timestamp: `2026-04-20T16:19:03Z` (UTC)
+Snapshot run timestamp: `2026-04-21T07:49:37Z` (UTC)
 
 Environment notes:
 
 - local repository root: `/home/zeyufu/Desktop/oh-my-copilot`
-- GitHub Copilot CLI: `1.0.32`
+- GitHub Copilot CLI: `1.0.34`
 - reusable plugin source: `packages/copilot-cli-plugin/`
 - live agent smoke enabled where noted
+- benchmark wrappers normalize transient `/.omx/team/.../worktrees/...`
+  invocation paths back to the canonical repo root before writing checked-in
+  proof artifacts
 
 ## Current snapshot
 
 | Run | Purpose | Total duration (s) | Result | Evidence score | Raw output |
 | --- | --- | ---: | --- | --- | --- |
-| `quick-baseline` | fast validation without model-backed agent prompts | 1.92 | PASS | 4/4 required checks (100%) | [`benchmark/results/quick-baseline-20260420T161903Z/`](../benchmark/results/quick-baseline-20260420T161903Z/) |
-| `quick-agent-smoke` | fast validation plus root/plugin reviewer prompt smoke | 39.45 | PASS | 4/4 required checks (100%) + `ROOT_AGENT_OK` + `PLUGIN_AGENT_OK` | [`benchmark/results/quick-agent-smoke-20260420T161903Z/`](../benchmark/results/quick-agent-smoke-20260420T161903Z/) |
-| `full-agent-smoke` | full proof including bootstrap, install-state, and standalone hook proof | 127.83 | PASS | 7/7 required checks (100%) + install/hook evidence | [`benchmark/results/full-agent-smoke-20260420T161903Z/`](../benchmark/results/full-agent-smoke-20260420T161903Z/) |
+| `quick-baseline` | fast validation without model-backed agent prompts | 1.90 | PASS | 4/4 required checks (100%) | [`benchmark/results/quick-baseline-20260421T074937Z/`](../benchmark/results/quick-baseline-20260421T074937Z/) |
+| `quick-agent-smoke` | fast validation plus root/plugin reviewer prompt smoke | 24.96 | PASS | 4/4 required checks (100%) + `ROOT_AGENT_OK` + `PLUGIN_AGENT_OK` | [`benchmark/results/quick-agent-smoke-20260421T074937Z/`](../benchmark/results/quick-agent-smoke-20260421T074937Z/) |
+| `full-agent-smoke` | full proof including bootstrap, install-state, and standalone hook proof | 57.88 | PASS | 7/7 required checks (100%) + install/hook evidence | [`benchmark/results/full-agent-smoke-20260421T074937Z/`](../benchmark/results/full-agent-smoke-20260421T074937Z/) |
 
 ## Release-blocking evaluation contract
 
 These benchmark snapshots are a **product-proof gate for Copilot CLI only**.
 They are not a broad model-quality benchmark, and passing them does not imply
 Cursor CLI plugin/package support or multi-runtime parity.
+
+They are also specifically **repository-surface proof**: they verify the root
+workspace, reusable plugin package, and example-related evidence boundaries in
+this repo. They do not re-prove every upstream Copilot CLI capability mentioned
+elsewhere in the docs.
 
 - **Baseline gate (`quick-baseline`)**: `docs_validation`,
   `power_validation`, `root_validation`, and `smoke_cli` must all pass.
@@ -41,6 +49,17 @@ Cursor CLI plugin/package support or multi-runtime parity.
 
 `scripts/validate-benchmark-evidence.sh` enforces this contract against the
 checked-in result snapshots before release.
+
+## Claim boundary for this benchmark
+
+- What this benchmark can prove: root/plugin/example routing, validator output,
+  install-state behavior, and source-labelled hook evidence captured by this
+  repository.
+- What this benchmark cannot prove by itself: broad model quality, cross-host
+  support, or upstream Copilot CLI host-product features such as plan mode,
+  autopilot mode, or built-in delegation.
+- For host-product capability claims, use the GitHub sources collected in
+  [`docs/references.md`](./references.md) in addition to any local smoke notes.
 
 ## Evaluation contract (current policy)
 
@@ -71,8 +90,10 @@ Interpretation:
 - install-state proof returned `INSTALL_STATE: ok`
 - standalone hook proof logged both `source=example-workspace` and
   `source=plugin`
-- fresh reports no longer include the prior `datetime.utcnow()` deprecation
-  warning
+- docs validation now ignores vendored `node_modules/` markdown so local site
+  installs do not create false benchmark failures
+- checked-in reports now record the canonical repo root instead of transient OMX
+  team worktree paths
 
 ## What this proves today
 
@@ -87,7 +108,9 @@ The current repo is more than a static layout:
   cross-host OMC/OMX/Cursor benchmark
 
 This is still a product proof harness, not a broad benchmark of model quality or
-an OMC/OMX runtime parity claim.
+an OMC/OMX runtime parity claim. It should also not be read as proof that this
+repository implements Copilot CLI plan/autopilot/delegation behavior; those are
+upstream host-product capabilities documented separately.
 
 ## State-management note
 

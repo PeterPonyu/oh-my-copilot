@@ -1,6 +1,6 @@
 # Root Copilot Registration
 
-_Current as of April 20, 2026._
+_Current as of April 21, 2026._
 
 This document records how the repository root is being registered as a
 first-class Copilot workspace while keeping `oh-my-copilot` deliberately
@@ -10,6 +10,9 @@ claims.
 The root registration work gives the current directory its own discoverable
 Copilot surfaces. It does not replace the reusable plugin package, and it does
 not make nested examples the source of truth for root behavior.
+
+The root workspace, reusable plugin package, and examples are architectural
+layers inside this repository, not separate product versions.
 
 ## Three surfaces, three jobs
 
@@ -30,6 +33,17 @@ not make nested examples the source of truth for root behavior.
 | Hooks | `.github/hooks/hooks.json` with `.copilot-hooks/*.sh` helpers | `packages/copilot-cli-plugin/hooks.json` and plugin scripts | Example hook policy and standalone proof script | Root hooks must produce root-workspace evidence; nested example hook behavior is not root proof. |
 | Validation | `scripts/validate-doc-links.sh`, `scripts/validate-power-surfaces.sh`, and root-surface validation | Plugin script checks | Example layout checks | Validation must catch missing root files, broken prompt/agent routing, and root/plugin/example drift. |
 
+## Claim and proof discipline
+
+- Use repository proof for repository-owned claims: files under the root,
+  validator output, benchmark snapshots, smoke-test results, and
+  `.copilot-hooks/*` evidence.
+- Use official GitHub docs/changelog sources for Copilot host-product
+  capabilities such as plan mode, autopilot mode, built-in delegation, or other
+  CLI behavior that this repo documents but does not implement.
+- Keep example behavior, design synthesis, and adjacent-host comparison clearly
+  labelled so they are not mistaken for root-workspace proof.
+
 ## Routing rules
 
 - Use root-local names such as `reviewer`, `verifier`, and `research` for
@@ -42,10 +56,13 @@ not make nested examples the source of truth for root behavior.
   scripts. They should not require changing into `packages/copilot-cli-plugin/`.
 - Hook evidence must distinguish root workspace execution from plugin execution,
   for example with `source=root-workspace` and `source=plugin` log lines.
+- Mentions of Copilot CLI plan/autopilot/delegation behavior inside root docs
+  should stay source-cited host-product framing rather than root-registration
+  proof.
 
 ## What counts as proof
 
-Automated proof from the root should include:
+Repository-owned automated proof from the root should include:
 
 ```bash
 ./scripts/validate-doc-links.sh
@@ -56,7 +73,7 @@ Automated proof from the root should include:
 If root-surface checks are folded into `validate-power-surfaces.sh`, the third
 command can be omitted, but the same checks still need to pass.
 
-Manual Copilot proof from the root should cover:
+Repository-owned manual Copilot proof from the root should cover:
 
 1. Copilot reflects root instructions when asked what repository instructions
    are active.
@@ -71,6 +88,11 @@ Manual Copilot proof from the root should cover:
 6. A root Copilot session appends root-workspace evidence to
    `.copilot-hooks/session.log` and tool use appends root-workspace evidence to
    `.copilot-hooks/tools.log`.
+
+Copilot host-product capability claims remain a separate proof lane: use
+[`docs/references.md`](./references.md) and the linked GitHub documentation when
+describing plan mode, autopilot mode, built-in delegation, or other upstream CLI
+features that are not implemented by this repository.
 
 ## Hook and log policy
 

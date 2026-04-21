@@ -7,6 +7,10 @@ implementation plan.
 For the source-of-truth matrix behind the root registration work, see
 [root registration](./root-registration.md).
 
+In this document, "v1" refers to the public repository blueprint. The root
+workspace, reusable plugin package, and example workspaces are architectural
+layers with different ownership and proof rules, not version stages.
+
 ## Target layout
 
 ```text
@@ -82,7 +86,7 @@ oh-my-copilot/
 
 | Path | Role | V1 boundary |
 | --- | --- | --- |
-| `README.md` | Public orientation and reading path | Must state docs/research-first, CLI-first scope, and the root/plugin/example split. |
+| `README.md` | Public orientation and reading path | Must state docs/research-first, CLI-first scope, the root/plugin/example split, and the repo-vs-host claim/proof rule. |
 | `AGENTS.md` | Root agent guidance | Governs the current repository root, not nested examples or installed plugins. |
 | `.github/copilot-instructions.md` | Root Copilot workspace instructions | Must preserve CLI-first and non-parity boundaries. |
 | `.github/instructions/*.instructions.md` | Path-specific root instructions | Must scope docs, scripts, and Copilot surface files explicitly. |
@@ -94,7 +98,7 @@ oh-my-copilot/
 | `docs/design-spec.md` | Canonical v1 spec | Must include non-goals and acceptance checklist. |
 | `docs/comparison-matrix.md` | Lineage comparison | Must avoid parity claims. |
 | `docs/copilot-native-mapping.md` | Concept translation | Must cite Copilot primitives and label inference. |
-| `docs/root-registration.md` | Root/plugin/example source-of-truth matrix | Must identify root as the current-directory target and plugin as reusable canonical package. |
+| `docs/root-registration.md` | Root/plugin/example source-of-truth matrix | Must identify root as the current-directory target, plugin as reusable canonical package, and examples as illustrative-only proof boundaries. |
 | `docs/vscode-copilot-testing.md` | Manual smoke-test guide | Must separate root proof from example workspace smoke tests. |
 | `docs/references.md` | Citation registry | Must be updated when claims change. |
 | `research/*.md` | Evidence base | Must separate source observations from design synthesis. |
@@ -116,6 +120,17 @@ oh-my-copilot/
 | Skills | Root `.github/skills/` wrappers | `packages/copilot-cli-plugin/skills/` | Demonstrate skill shape and scripts. |
 | Hooks | Root `.github/hooks/hooks.json` and `.copilot-hooks/` helpers | `packages/copilot-cli-plugin/hooks.json` and scripts | Standalone proof only, not root proof. |
 
+The ownership split also controls proof language:
+
+- root claims should be backed by root files, root validators, and root smoke
+  evidence;
+- plugin claims should be backed by plugin metadata, plugin validators, and
+  plugin install/smoke evidence;
+- example claims should stay illustrative unless explicitly promoted by a new
+  plan and fresh proof; and
+- Copilot host-product features such as plan/autopilot/delegation should be
+  cited as upstream CLI capabilities, not implied as repo-owned implementation.
+
 ## Future extension gates
 
 A future implementation can widen scope only with a new plan that answers:
@@ -126,6 +141,7 @@ A future implementation can widen scope only with a new plan that answers:
 3. What runtime behavior will be tested in Copilot CLI?
 4. How will the design avoid OMC/OMX parity drift?
 5. Which surface owns the change: root workspace, reusable plugin, or example?
+6. Which claims need repository proof versus host-product citations?
 
 Until that plan exists, keep this repository as a public research corpus with a
 root Copilot workspace registration surface, reusable plugin assets, and
