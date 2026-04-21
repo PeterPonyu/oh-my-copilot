@@ -2,8 +2,8 @@
   {
     "repo": "oh-my-copilot",
     "branch": "main",
-    "sha": "71cc53c",
-    "timestamp": "2026-04-21T13:47:43Z",
+    "sha": "b3156e7",
+    "timestamp": "2026-04-21T04:53:54Z",
     "sourcePath": "benchmark/results/current-full-enhanced",
     "outputDir": "benchmark/results/current-full-enhanced",
     "profile": "full",
@@ -16,7 +16,7 @@
     "comparisonClass": "observed",
     "comparabilityClass": "reporting-comparable",
     "comparabilityNote": "oh-my-copilot full/enhanced stays an observed repo-native benchmark row. It is safe for cross-host reporting, but it is not a mechanism-equivalent harness match.",
-    "harvestTimestamp": "2026-04-21T13:47:43Z",
+    "harvestTimestamp": "2026-04-21T15:26:06Z",
     "dimensions": [
       {
         "name": "docs_validation",
@@ -61,7 +61,7 @@
         "weight": 10,
         "required": true,
         "passed": true,
-        "evidence": "ok: cross-host methodology route explains comparability classes\nok: CI runs root Copilot surface validation\nok: root Copilot surface validation complete\nok: standalone workspace hook proof succeeded\nlog:\nsource=example-workspace event=sessionStart timestamp=2026-04-21T13:47:23Z cwd=/tmp/vscode-copilot-layout-standalone\nsource=plugin event=sessionStart timestamp=2026-04-21T13:47:23Z cwd=/tmp/vscode-copilot-layout-standalone\nok: bootstrap complete\n\nChanges   +0 -0\nRequests  1 Premium (10s)\nTokens    \u2191 17.7k \u2022 \u2193 159 \u2022 16.9k (cached) \u2022 150 (reasoning)"
+        "evidence": "ok: cross-host methodology route explains comparability classes\nok: CI runs root Copilot surface validation\nok: root Copilot surface validation complete\nok: standalone workspace hook proof succeeded\nlog:\nsource=example-workspace event=sessionStart timestamp=2026-04-21T15:25:08Z cwd=/tmp/vscode-copilot-layout-standalone\nsource=plugin event=sessionStart timestamp=2026-04-21T15:25:08Z cwd=/tmp/vscode-copilot-layout-standalone\nok: bootstrap complete\n\nChanges   +0 -0\nRequests  1 Premium (20s)\nTokens    \u2191 17.7k \u2022 \u2193 75 \u2022 16.9k (cached) \u2022 66 (reasoning)"
       },
       {
         "name": "install_state",
@@ -79,7 +79,7 @@
         "weight": 10,
         "required": true,
         "passed": true,
-        "evidence": "ok: standalone workspace hook proof succeeded\nlog:\nsource=example-workspace event=sessionStart timestamp=2026-04-21T13:47:35Z cwd=/tmp/vscode-copilot-layout-standalone\nsource=plugin event=sessionStart timestamp=2026-04-21T13:47:35Z cwd=/tmp/vscode-copilot-layout-standalone\n\nChanges   +0 -0\nRequests  1 Premium (11s)\nTokens    \u2191 17.7k \u2022 \u2193 170 \u2022 16.9k (cached) \u2022 161 (reasoning)"
+        "evidence": "ok: standalone workspace hook proof succeeded\nlog:\nsource=example-workspace event=sessionStart timestamp=2026-04-21T15:25:23Z cwd=/tmp/vscode-copilot-layout-standalone\nsource=plugin event=sessionStart timestamp=2026-04-21T15:25:23Z cwd=/tmp/vscode-copilot-layout-standalone\n\nChanges   +0 -0\nRequests  1 Premium (31s)\nTokens    \u2191 17.7k \u2022 \u2193 154 \u2022 16.9k (cached) \u2022 143 (reasoning)"
       },
       {
         "name": "ROOT_AGENT_OK",
@@ -109,8 +109,8 @@
   {
     "repo": "oh-my-copilot",
     "branch": "main",
-    "sha": "71cc53c",
-    "timestamp": "2026-04-21T13:46:52Z",
+    "sha": "b3156e7",
+    "timestamp": "2026-04-21T04:52:35Z",
     "sourcePath": "benchmark/results/current-quick-enhanced",
     "outputDir": "benchmark/results/current-quick-enhanced",
     "profile": "quick",
@@ -123,7 +123,7 @@
     "comparisonClass": "observed",
     "comparabilityClass": "reporting-comparable",
     "comparabilityNote": "oh-my-copilot quick/enhanced stays an observed repo-native benchmark row. It is safe for cross-host reporting, but it is not a mechanism-equivalent harness match.",
-    "harvestTimestamp": "2026-04-21T13:47:43Z",
+    "harvestTimestamp": "2026-04-21T15:26:06Z",
     "dimensions": [
       {
         "name": "docs_validation",
@@ -189,8 +189,8 @@
   {
     "repo": "oh-my-copilot",
     "branch": "main",
-    "sha": "71cc53c",
-    "timestamp": "2026-04-21T13:46:27Z",
+    "sha": "b3156e7",
+    "timestamp": "2026-04-21T04:51:55Z",
     "sourcePath": "benchmark/results/current-quick-vanilla",
     "outputDir": "benchmark/results/current-quick-vanilla",
     "profile": "quick",
@@ -203,7 +203,7 @@
     "comparisonClass": "observed",
     "comparabilityClass": "reporting-comparable",
     "comparabilityNote": "oh-my-copilot quick/vanilla stays an observed repo-native benchmark row. It is safe for cross-host reporting, but it is not a mechanism-equivalent harness match.",
-    "harvestTimestamp": "2026-04-21T13:47:43Z",
+    "harvestTimestamp": "2026-04-21T15:26:06Z",
     "dimensions": [
       {
         "name": "docs_validation",

@@ -8,10 +8,10 @@ Variant: `vanilla`
 
 | Check | Result | Duration (s) | Markers |
 | --- | --- | ---: | --- |
-| `docs_validation` | PASS | 0.21 | — |
+| `docs_validation` | PASS | 0.2 | — |
 | `power_validation` | PASS | 0.07 | — |
-| `root_validation` | PASS | 0.13 | — |
-| `smoke_cli` | PASS | 1.68 | — |
+| `root_validation` | PASS | 0.14 | — |
+| `smoke_cli` | PASS | 1.76 | — |
 
 ## Evaluation contract
 

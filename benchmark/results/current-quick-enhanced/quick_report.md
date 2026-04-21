@@ -8,10 +8,10 @@ Variant: `enhanced`
 
 | Check | Result | Duration (s) | Markers |
 | --- | --- | ---: | --- |
-| `docs_validation` | PASS | 0.2 | — |
-| `power_validation` | PASS | 0.07 | — |
+| `docs_validation` | PASS | 0.21 | — |
+| `power_validation` | PASS | 0.08 | — |
 | `root_validation` | PASS | 0.13 | — |
-| `smoke_cli` | PASS | 35.9 | `ROOT_AGENT_OK`, `PLUGIN_AGENT_OK` |
+| `smoke_cli` | PASS | 30.25 | `ROOT_AGENT_OK`, `PLUGIN_AGENT_OK` |
 
 ## Evaluation contract
 

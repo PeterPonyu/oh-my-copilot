@@ -8,13 +8,13 @@ Variant: `enhanced`
 
 | Check | Result | Duration (s) | Markers |
 | --- | --- | ---: | --- |
-| `docs_validation` | PASS | 0.2 | — |
+| `docs_validation` | PASS | 0.21 | — |
 | `power_validation` | PASS | 0.07 | — |
-| `root_validation` | PASS | 0.13 | — |
-| `smoke_cli` | PASS | 27.42 | `ROOT_AGENT_OK`, `PLUGIN_AGENT_OK` |
-| `bootstrap` | PASS | 17.1 | `INSTALL_STATE: ok`, `source=example-workspace`, `source=plugin` |
+| `root_validation` | PASS | 0.14 | — |
+| `smoke_cli` | PASS | 30.95 | `ROOT_AGENT_OK`, `PLUGIN_AGENT_OK` |
+| `bootstrap` | PASS | 24.02 | `INSTALL_STATE: ok`, `source=example-workspace`, `source=plugin` |
 | `install_state` | PASS | 0.04 | `INSTALL_STATE: ok` |
-| `standalone_hook_proof` | PASS | 13.36 | `source=example-workspace`, `source=plugin` |
+| `standalone_hook_proof` | PASS | 32.95 | `source=example-workspace`, `source=plugin` |
 
 ## Evaluation contract
 
@@ -110,13 +110,13 @@ ok: CI runs root Copilot surface validation
 ok: root Copilot surface validation complete
 ok: standalone workspace hook proof succeeded
 log:
-source=example-workspace event=sessionStart timestamp=2026-04-21T15:02:17Z cwd=/tmp/vscode-copilot-layout-standalone
-source=plugin event=sessionStart timestamp=2026-04-21T15:02:17Z cwd=/tmp/vscode-copilot-layout-standalone
+source=example-workspace event=sessionStart timestamp=2026-04-21T15:25:08Z cwd=/tmp/vscode-copilot-layout-standalone
+source=plugin event=sessionStart timestamp=2026-04-21T15:25:08Z cwd=/tmp/vscode-copilot-layout-standalone
 ok: bootstrap complete
 
 Changes   +0 -0
-Requests  1 Premium (13s)
-Tokens    ↑ 17.7k • ↓ 126 • 16.9k (cached) • 112 (reasoning)
+Requests  1 Premium (20s)
+Tokens    ↑ 17.7k • ↓ 75 • 16.9k (cached) • 66 (reasoning)
 ```
 
 ## install_state
@@ -141,10 +141,10 @@ INSTALL_STATE_SUMMARY
 ```text
 ok: standalone workspace hook proof succeeded
 log:
-source=example-workspace event=sessionStart timestamp=2026-04-21T15:02:34Z cwd=/tmp/vscode-copilot-layout-standalone
-source=plugin event=sessionStart timestamp=2026-04-21T15:02:34Z cwd=/tmp/vscode-copilot-layout-standalone
+source=example-workspace event=sessionStart timestamp=2026-04-21T15:25:23Z cwd=/tmp/vscode-copilot-layout-standalone
+source=plugin event=sessionStart timestamp=2026-04-21T15:25:23Z cwd=/tmp/vscode-copilot-layout-standalone
 
 Changes   +0 -0
-Requests  1 Premium (11s)
-Tokens    ↑ 17.7k • ↓ 132 • 16.9k (cached) • 123 (reasoning)
+Requests  1 Premium (31s)
+Tokens    ↑ 17.7k • ↓ 154 • 16.9k (cached) • 143 (reasoning)
 ```

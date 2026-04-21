@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-04-21T13:47:43Z",
+  "generatedAt": "2026-04-21T15:26:06Z",
   "generator": {
     "script": "scripts/harvest-cross-host-benchmark-data.py",
     "version": 2
@@ -21,10 +21,10 @@
       "repo": "oh-my-copilot",
       "root": "/home/zeyufu/Desktop/oh-my-copilot",
       "sourceBranch": "main",
-      "sourceSha": "71cc53c",
+      "sourceSha": "fbf84fd",
       "workspaceBranch": "main",
-      "workspaceSha": "71cc53c",
-      "harvestedAt": "2026-04-21T13:47:43Z",
+      "workspaceSha": "fbf84fd",
+      "harvestedAt": "2026-04-21T15:26:06Z",
       "historyPath": "benchmark/results/history.jsonl",
       "recordCount": 3,
       "snapshotPath": "apps/cross-host-benchmark-site/generated/copilot-snapshots.json",
@@ -35,10 +35,10 @@
       "repo": "oh-my-cursor",
       "root": "/home/zeyufu/Desktop/oh-my-cursor",
       "sourceBranch": "main",
-      "sourceSha": "21258d7",
+      "sourceSha": "ce0db00",
       "workspaceBranch": "main",
-      "workspaceSha": "e73aefd",
-      "harvestedAt": "2026-04-21T13:47:43Z",
+      "workspaceSha": "ce0db00",
+      "harvestedAt": "2026-04-21T15:26:06Z",
       "historyPath": "benchmark/results/history.jsonl",
       "recordCount": 2,
       "snapshotPath": "apps/cross-host-benchmark-site/generated/cursor-snapshots.json",
@@ -47,10 +47,10 @@
     }
   ],
   "captureSkew": {
-    "copilotTimestamp": "2026-04-21T13:47:43Z",
-    "cursorTimestamp": "2026-04-21T13:35:19Z",
-    "seconds": 744,
-    "minutes": 12.4,
+    "copilotTimestamp": "2026-04-21T04:53:54Z",
+    "cursorTimestamp": "2026-04-21T04:52:13Z",
+    "seconds": 101,
+    "minutes": 1.68,
     "comparabilityClass": "reporting-comparable",
     "comparisonPair": {
       "copilot": "full/enhanced",
