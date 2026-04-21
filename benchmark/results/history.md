@@ -2,6 +2,22 @@
 
 | Timestamp | Branch | SHA | Profile | Variant | Score | Threshold | Gate | Output |
 | --- | --- | --- | --- | --- | ---: | ---: | --- | --- |
+| `2026-04-21T13:47:43Z` | `main` | `71cc53c` | `full` | `enhanced` | 100/100 | 100/100 | PASS | `benchmark/results/current-full-enhanced` |
+| `2026-04-21T13:46:52Z` | `main` | `71cc53c` | `quick` | `enhanced` | 100/100 | 100/100 | PASS | `benchmark/results/current-quick-enhanced` |
+| `2026-04-21T13:46:27Z` | `main` | `71cc53c` | `quick` | `vanilla` | 60/100 | 60/100 | PASS | `benchmark/results/current-quick-vanilla` |
+| `2026-04-21T13:43:59Z` | `main` | `acf5ba2` | `full` | `enhanced` | 100/100 | 100/100 | PASS | `benchmark/results/current-full-enhanced` |
+| `2026-04-21T13:43:09Z` | `main` | `acf5ba2` | `quick` | `enhanced` | 100/100 | 100/100 | PASS | `benchmark/results/current-quick-enhanced` |
+| `2026-04-21T13:42:42Z` | `main` | `acf5ba2` | `quick` | `vanilla` | 60/100 | 60/100 | PASS | `benchmark/results/current-quick-vanilla` |
+| `2026-04-21T13:41:32Z` | `main` | `acf5ba2` | `full` | `enhanced` | 100/100 | 100/100 | PASS | `benchmark/results` |
+| `2026-04-21T13:40:53Z` | `main` | `acf5ba2` | `quick` | `enhanced` | 100/100 | 100/100 | PASS | `benchmark/results` |
+| `2026-04-21T13:40:30Z` | `main` | `acf5ba2` | `quick` | `vanilla` | 60/100 | 60/100 | PASS | `benchmark/results` |
+| `2026-04-21T07:54:44Z` | `main` | `516a83f` | `full` | `enhanced` | 100/100 | 100/100 | PASS | `benchmark/results/current-full-enhanced` |
+| `2026-04-21T07:53:46Z` | `main` | `516a83f` | `quick` | `enhanced` | 100/100 | 100/100 | PASS | `benchmark/results/current-quick-enhanced` |
+| `2026-04-21T07:53:21Z` | `main` | `516a83f` | `quick` | `vanilla` | 60/100 | 60/100 | PASS | `benchmark/results/current-quick-vanilla` |
+| `2026-04-21T07:49:27Z` | `main` | `516a83f` | `full` | `enhanced` | 100/100 | 100/100 | PASS | `benchmark/results/current-full-enhanced` |
+| `2026-04-21T07:48:34Z` | `main` | `516a83f` | `quick` | `enhanced` | 100/100 | 100/100 | PASS | `benchmark/results/current-quick-enhanced` |
+| `2026-04-21T07:47:51Z` | `main` | `516a83f` | `quick` | `vanilla` | 60/100 | 60/100 | PASS | `benchmark/results/current-quick-vanilla` |
+| `2026-04-21T07:47:25Z` | `main` | `516a83f` | `quick` | `vanilla` | 45/100 | 60/100 | FAIL | `benchmark/results/current-quick-vanilla` |
 | `2026-04-21T04:53:54Z` | `main` | `b3156e7` | `full` | `enhanced` | 100/100 | 100/100 | PASS | `benchmark/results/current-full-enhanced` |
 | `2026-04-21T04:52:35Z` | `main` | `b3156e7` | `quick` | `enhanced` | 100/100 | 100/100 | PASS | `benchmark/results/current-quick-enhanced` |
 | `2026-04-21T04:51:55Z` | `main` | `b3156e7` | `quick` | `vanilla` | 60/100 | 60/100 | PASS | `benchmark/results/current-quick-vanilla` |

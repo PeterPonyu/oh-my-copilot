@@ -21,6 +21,61 @@ EVIDENCE_MARKERS = (
 )
 
 
+def looks_like_repo_root(path: Path) -> bool:
+    return (
+        (path / "AGENTS.md").is_file()
+        and (path / "packages" / "copilot-cli-plugin" / "plugin.json").is_file()
+        and (path / "benchmark").is_dir()
+    )
+
+
+def collapse_omx_team_worktree(path: Path) -> Path | None:
+    parts = path.resolve().parts
+    for index, part in enumerate(parts):
+        if part != ".omx":
+            continue
+        if index + 3 >= len(parts):
+            continue
+        if parts[index + 1] != "team":
+            continue
+        if "worktrees" not in parts[index + 2 :]:
+            continue
+        candidate = Path(*parts[:index]) if index > 0 else Path(parts[0])
+        if looks_like_repo_root(candidate):
+            return candidate
+    return None
+
+
+def git_toplevel(path: Path) -> Path | None:
+    try:
+        proc = subprocess.run(
+            ["git", "rev-parse", "--show-toplevel"],
+            cwd=str(path),
+            text=True,
+            capture_output=True,
+            check=True,
+        )
+    except Exception:
+        return None
+    value = proc.stdout.strip()
+    return Path(value).resolve() if value else None
+
+
+def resolve_canonical_root(path: Path) -> Path:
+    candidate = path.resolve()
+    collapsed = collapse_omx_team_worktree(candidate)
+    if collapsed is not None:
+        return collapsed
+
+    current = candidate if candidate.is_dir() else candidate.parent
+    for probe in [current, *current.parents]:
+        if looks_like_repo_root(probe):
+            return probe
+
+    git_root = git_toplevel(current)
+    return git_root if git_root is not None else current
+
+
 @dataclass
 class CheckResult:
     name: str
@@ -275,7 +330,8 @@ def main() -> int:
     parser.add_argument("--variant", choices=["auto", "vanilla", "enhanced"], default="auto")
     args = parser.parse_args()
 
-    root = Path(args.root).resolve()
+    invocation_root = Path(args.root).resolve()
+    root = resolve_canonical_root(invocation_root)
     outdir = (root / args.output_dir).resolve()
     outdir.mkdir(parents=True, exist_ok=True)
 
@@ -320,6 +376,8 @@ def main() -> int:
         f"# Benchmark Results ({args.profile})",
         "",
         f"Root: `{root}`",
+        "",
+        f"Invocation root: `{invocation_root}`",
         "",
         f"Variant: `{evaluation.variant}`",
         "",

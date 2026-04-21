@@ -7,7 +7,7 @@
   "evidence_file": "./oh-my-copilot.evidence.json",
   "hero": {
     "headline": "State handling is part of the product proof, not hidden glue.",
-    "summary": "The repo makes plugin source-path drift, hook locality, and release-gating evidence visible through checked-in docs plus scored benchmark outputs.",
+    "summary": "The repo makes plugin source-path drift, hook locality, canonical root reporting, and release-gating evidence visible through checked-in docs plus scored benchmark outputs.",
     "evidence_refs": [
       "state_contract_doc",
       "benchmark_status_doc",
@@ -23,7 +23,7 @@
       "display_points": [
         "Canonical plugin source path stays rooted at packages/copilot-cli-plugin/ rather than transient .omx/team worktrees.",
         "Project-local hook evidence remains under .copilot-hooks/ while user-global Copilot state remains under ~/.copilot/.",
-        "State drift is release-relevant and called out separately from benchmark scoring."
+        "Benchmark wrappers now normalize transient OMX team worktree invocation paths back to the canonical repo root before writing release evidence."
       ],
       "evidence_refs": [
         "state_contract_doc",
@@ -67,7 +67,7 @@
   "scoreboard": {
     "quick_enhanced_ref": "quick_enhanced",
     "full_enhanced_ref": "full_enhanced",
-    "callout": "Current checked-in enhanced quick and full evaluations both pass at 100/100."
+    "callout": "Current checked-in enhanced quick and full evaluations both pass at 100/100, with the full install-state proof rooted at the canonical repo path."
   },
   "presentation_hints": {
     "default_focus_order": [

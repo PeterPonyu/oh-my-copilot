@@ -60,6 +60,9 @@ markers that differentiate enhanced behavior from the vanilla baseline.
 
 - live Copilot prompt checks are opt-in through environment flags
 - results are written under `benchmark/results/`
+- the benchmark wrappers normalize `/.omx/team/.../worktrees/...` invocation paths
+  back to the canonical repo root before recording release evidence, so team-mode
+  runs do not publish transient worktree roots as the product path
 - the current checked-in proof summary lives in [`docs/benchmark-status.md`](../docs/benchmark-status.md)
 - `./scripts/validate-benchmark-evidence.sh` turns the checked-in baseline/enhanced snapshots into a release-blocking validation gate
 - this is a proof harness for the current repo, not a broad model benchmark

@@ -237,7 +237,9 @@ def collect_anchors(path: pathlib.Path) -> set[str]:
 
 markdown_files = [
     p for p in root.rglob('*.md')
-    if '.git' not in p.relative_to(root).parts and '.omx' not in p.relative_to(root).parts
+    if '.git' not in p.relative_to(root).parts
+    and '.omx' not in p.relative_to(root).parts
+    and 'node_modules' not in p.relative_to(root).parts
 ]
 anchors = {p: collect_anchors(p) for p in markdown_files}
 

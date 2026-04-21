@@ -42,6 +42,7 @@ while (($#)); do
 done
 
 command -v python3 >/dev/null 2>&1 || fail "python3 not found"
+ROOT="$(python3 "$ROOT/scripts/resolve-canonical-root.py" "$ROOT")"
 
 if [[ ! -f "$CONFIG_PATH" ]]; then
   log "no ~/.copilot/config.json present; local plugin state contract is skipped in this environment"

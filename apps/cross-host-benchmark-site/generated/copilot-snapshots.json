@@ -2,8 +2,8 @@
   {
     "repo": "oh-my-copilot",
     "branch": "main",
-    "sha": "516a83f",
-    "timestamp": "2026-04-21T07:54:44Z",
+    "sha": "71cc53c",
+    "timestamp": "2026-04-21T13:47:43Z",
     "sourcePath": "benchmark/results/current-full-enhanced",
     "outputDir": "benchmark/results/current-full-enhanced",
     "profile": "full",
@@ -16,7 +16,7 @@
     "comparisonClass": "observed",
     "comparabilityClass": "reporting-comparable",
     "comparabilityNote": "oh-my-copilot full/enhanced stays an observed repo-native benchmark row. It is safe for cross-host reporting, but it is not a mechanism-equivalent harness match.",
-    "harvestTimestamp": "2026-04-21T13:30:32Z",
+    "harvestTimestamp": "2026-04-21T13:47:43Z",
     "dimensions": [
       {
         "name": "docs_validation",
@@ -34,7 +34,7 @@
         "weight": 10,
         "required": true,
         "passed": true,
-        "evidence": "ok: implementer agent hands off to reviewer\nok: reviewer agent hands off to verifier\nok: VS Code hook policy uses native SessionStart event\nok: VS Code hook policy uses native PostToolUse event\nok: VS Code settings enable AGENTS.md loading\nok: VS Code settings enable skills\nok: VS Code prompt file uses a custom agent\nok: plugin.json parses and includes core keys\nok: plugin hooks.json has versioned schema\nok: README mentions VS Code layout\nok: README mentions Copilot CLI plugin package\nok: power surfaces validation complete"
+        "evidence": "ok: VS Code settings enable AGENTS.md loading\nok: VS Code settings enable skills\nok: VS Code prompt file uses a custom agent\nok: plugin.json parses and includes core keys\nok: plugin hooks.json has versioned schema\nok: README mentions VS Code layout\nok: README mentions Copilot CLI plugin package\nok: cross-host app overview preserves isolated presentation boundary\nok: cross-host methodology route names comparability classes\nok: cross-host presentation primitives preserve repo-native warning\nok: cross-host benchmark site files exist and generated data validates\nok: power surfaces validation complete"
       },
       {
         "name": "root_validation",
@@ -43,7 +43,7 @@
         "weight": 10,
         "required": true,
         "passed": true,
-        "evidence": "ok: root hook policy parses and calls root scripts\nok: root hook policy is versioned\nok: session hook logs root-workspace source\nok: post-tool hook logs root-workspace source\nok: root hook config uses shared schema\nok: README distinguishes root workspace from plugin/example surfaces\nok: README mentions reusable plugin package\nok: README keeps examples illustrative\nok: root registration doc states plugin canonicality\nok: root registration doc keeps examples as examples\nok: CI runs root Copilot surface validation\nok: root Copilot surface validation complete"
+        "evidence": "ok: post-tool hook logs root-workspace source\nok: root hook config uses shared schema\nok: README distinguishes root workspace from plugin/example surfaces\nok: README mentions reusable plugin package\nok: README keeps examples illustrative\nok: root registration doc states plugin canonicality\nok: root registration doc keeps examples as examples\nok: cross-host app layout frames evidence-oriented presentation\nok: cross-host overview keeps repo-native benchmark wording\nok: cross-host methodology route explains comparability classes\nok: CI runs root Copilot surface validation\nok: root Copilot surface validation complete"
       },
       {
         "name": "smoke_cli",
@@ -52,7 +52,7 @@
         "weight": 10,
         "required": true,
         "passed": true,
-        "evidence": "GitHub Copilot CLI 1.0.34.\nRun 'copilot update' to check for updates.\nok: copilot CLI version command succeeds\nok: copilot help exposes agent/plugin options\nok: copilot plugin command is available\nok: root reviewer/research/verifier agents exist\nok: plugin metadata parses for oh-my-copilot-power-pack@0.1.0\nok: installed plugin entry found in ~/.copilot/config.json\nok: root reviewer agent prompt smoke returned ROOT_AGENT_OK\nok: namespaced plugin reviewer agent prompt smoke returned PLUGIN_AGENT_OK\nok: Copilot CLI smoke validation complete"
+        "evidence": "GitHub Copilot CLI 1.0.34.\nRun 'copilot update' to check for updates.\nok: copilot CLI version command succeeds\nok: copilot help exposes agent/plugin options\nok: copilot plugin command is available\nok: root reviewer/research/verifier agents exist\nok: plugin metadata parses for oh-my-copilot-power-pack@0.1.0\nok: installed plugin entry found in ~/.copilot/config.json\nok: root reviewer agent prompt smoke returned ROOT_AGENT_OK\nok: namespaced plugin reviewer agent prompt smoke returned PLUGIN_AGENT_OK\nok: Copilot smoke proves route availability only; cross-host comparability is validated by separate benchmark harvest gates\nok: Copilot CLI smoke validation complete"
       },
       {
         "name": "bootstrap",
@@ -61,7 +61,7 @@
         "weight": 10,
         "required": true,
         "passed": true,
-        "evidence": "ok: root registration doc keeps examples as examples\nok: CI runs root Copilot surface validation\nok: root Copilot surface validation complete\nok: standalone workspace hook proof succeeded\nlog:\nsource=example-workspace event=sessionStart timestamp=2026-04-21T07:54:16Z cwd=/tmp/vscode-copilot-layout-standalone\nsource=plugin event=sessionStart timestamp=2026-04-21T07:54:16Z cwd=/tmp/vscode-copilot-layout-standalone\nok: bootstrap complete\n\nChanges   +0 -0\nRequests  1 Premium (17s)\nTokens    \u2191 17.7k \u2022 \u2193 118 \u2022 16.9k (cached) \u2022 109 (reasoning)"
+        "evidence": "ok: cross-host methodology route explains comparability classes\nok: CI runs root Copilot surface validation\nok: root Copilot surface validation complete\nok: standalone workspace hook proof succeeded\nlog:\nsource=example-workspace event=sessionStart timestamp=2026-04-21T13:47:23Z cwd=/tmp/vscode-copilot-layout-standalone\nsource=plugin event=sessionStart timestamp=2026-04-21T13:47:23Z cwd=/tmp/vscode-copilot-layout-standalone\nok: bootstrap complete\n\nChanges   +0 -0\nRequests  1 Premium (10s)\nTokens    \u2191 17.7k \u2022 \u2193 159 \u2022 16.9k (cached) \u2022 150 (reasoning)"
       },
       {
         "name": "install_state",
@@ -79,7 +79,7 @@
         "weight": 10,
         "required": true,
         "passed": true,
-        "evidence": "ok: standalone workspace hook proof succeeded\nlog:\nsource=example-workspace event=sessionStart timestamp=2026-04-21T07:54:36Z cwd=/tmp/vscode-copilot-layout-standalone\nsource=plugin event=sessionStart timestamp=2026-04-21T07:54:36Z cwd=/tmp/vscode-copilot-layout-standalone\n\nChanges   +0 -0\nRequests  1 Premium (11s)\nTokens    \u2191 17.7k \u2022 \u2193 110 \u2022 16.9k (cached) \u2022 101 (reasoning)"
+        "evidence": "ok: standalone workspace hook proof succeeded\nlog:\nsource=example-workspace event=sessionStart timestamp=2026-04-21T13:47:35Z cwd=/tmp/vscode-copilot-layout-standalone\nsource=plugin event=sessionStart timestamp=2026-04-21T13:47:35Z cwd=/tmp/vscode-copilot-layout-standalone\n\nChanges   +0 -0\nRequests  1 Premium (11s)\nTokens    \u2191 17.7k \u2022 \u2193 170 \u2022 16.9k (cached) \u2022 161 (reasoning)"
       },
       {
         "name": "ROOT_AGENT_OK",
@@ -88,7 +88,7 @@
         "weight": 15,
         "required": true,
         "passed": true,
-        "evidence": "GitHub Copilot CLI 1.0.34.\nRun 'copilot update' to check for updates.\nok: copilot CLI version command succeeds\nok: copilot help exposes agent/plugin options\nok: copilot plugin command is available\nok: root reviewer/research/verifier agents exist\nok: plugin metadata parses for oh-my-copilot-power-pack@0.1.0\nok: installed plugin entry found in ~/.copilot/config.json\nok: root reviewer agent prompt smoke returned ROOT_AGENT_OK\nok: namespaced plugin reviewer agent prompt smoke returned PLUGIN_AGENT_OK\nok: Copilot CLI smoke validation complete"
+        "evidence": "GitHub Copilot CLI 1.0.34.\nRun 'copilot update' to check for updates.\nok: copilot CLI version command succeeds\nok: copilot help exposes agent/plugin options\nok: copilot plugin command is available\nok: root reviewer/research/verifier agents exist\nok: plugin metadata parses for oh-my-copilot-power-pack@0.1.0\nok: installed plugin entry found in ~/.copilot/config.json\nok: root reviewer agent prompt smoke returned ROOT_AGENT_OK\nok: namespaced plugin reviewer agent prompt smoke returned PLUGIN_AGENT_OK\nok: Copilot smoke proves route availability only; cross-host comparability is validated by separate benchmark harvest gates\nok: Copilot CLI smoke validation complete"
       },
       {
         "name": "PLUGIN_AGENT_OK",
@@ -97,7 +97,7 @@
         "weight": 15,
         "required": true,
         "passed": true,
-        "evidence": "GitHub Copilot CLI 1.0.34.\nRun 'copilot update' to check for updates.\nok: copilot CLI version command succeeds\nok: copilot help exposes agent/plugin options\nok: copilot plugin command is available\nok: root reviewer/research/verifier agents exist\nok: plugin metadata parses for oh-my-copilot-power-pack@0.1.0\nok: installed plugin entry found in ~/.copilot/config.json\nok: root reviewer agent prompt smoke returned ROOT_AGENT_OK\nok: namespaced plugin reviewer agent prompt smoke returned PLUGIN_AGENT_OK\nok: Copilot CLI smoke validation complete"
+        "evidence": "GitHub Copilot CLI 1.0.34.\nRun 'copilot update' to check for updates.\nok: copilot CLI version command succeeds\nok: copilot help exposes agent/plugin options\nok: copilot plugin command is available\nok: root reviewer/research/verifier agents exist\nok: plugin metadata parses for oh-my-copilot-power-pack@0.1.0\nok: installed plugin entry found in ~/.copilot/config.json\nok: root reviewer agent prompt smoke returned ROOT_AGENT_OK\nok: namespaced plugin reviewer agent prompt smoke returned PLUGIN_AGENT_OK\nok: Copilot smoke proves route availability only; cross-host comparability is validated by separate benchmark harvest gates\nok: Copilot CLI smoke validation complete"
       }
     ],
     "provenance": {
@@ -109,8 +109,8 @@
   {
     "repo": "oh-my-copilot",
     "branch": "main",
-    "sha": "516a83f",
-    "timestamp": "2026-04-21T07:53:46Z",
+    "sha": "71cc53c",
+    "timestamp": "2026-04-21T13:46:52Z",
     "sourcePath": "benchmark/results/current-quick-enhanced",
     "outputDir": "benchmark/results/current-quick-enhanced",
     "profile": "quick",
@@ -123,7 +123,7 @@
     "comparisonClass": "observed",
     "comparabilityClass": "reporting-comparable",
     "comparabilityNote": "oh-my-copilot quick/enhanced stays an observed repo-native benchmark row. It is safe for cross-host reporting, but it is not a mechanism-equivalent harness match.",
-    "harvestTimestamp": "2026-04-21T13:30:32Z",
+    "harvestTimestamp": "2026-04-21T13:47:43Z",
     "dimensions": [
       {
         "name": "docs_validation",
@@ -141,7 +141,7 @@
         "weight": 15,
         "required": true,
         "passed": true,
-        "evidence": "ok: implementer agent hands off to reviewer\nok: reviewer agent hands off to verifier\nok: VS Code hook policy uses native SessionStart event\nok: VS Code hook policy uses native PostToolUse event\nok: VS Code settings enable AGENTS.md loading\nok: VS Code settings enable skills\nok: VS Code prompt file uses a custom agent\nok: plugin.json parses and includes core keys\nok: plugin hooks.json has versioned schema\nok: README mentions VS Code layout\nok: README mentions Copilot CLI plugin package\nok: power surfaces validation complete"
+        "evidence": "ok: VS Code settings enable AGENTS.md loading\nok: VS Code settings enable skills\nok: VS Code prompt file uses a custom agent\nok: plugin.json parses and includes core keys\nok: plugin hooks.json has versioned schema\nok: README mentions VS Code layout\nok: README mentions Copilot CLI plugin package\nok: cross-host app overview preserves isolated presentation boundary\nok: cross-host methodology route names comparability classes\nok: cross-host presentation primitives preserve repo-native warning\nok: cross-host benchmark site files exist and generated data validates\nok: power surfaces validation complete"
       },
       {
         "name": "root_validation",
@@ -150,7 +150,7 @@
         "weight": 15,
         "required": true,
         "passed": true,
-        "evidence": "ok: root hook policy parses and calls root scripts\nok: root hook policy is versioned\nok: session hook logs root-workspace source\nok: post-tool hook logs root-workspace source\nok: root hook config uses shared schema\nok: README distinguishes root workspace from plugin/example surfaces\nok: README mentions reusable plugin package\nok: README keeps examples illustrative\nok: root registration doc states plugin canonicality\nok: root registration doc keeps examples as examples\nok: CI runs root Copilot surface validation\nok: root Copilot surface validation complete"
+        "evidence": "ok: post-tool hook logs root-workspace source\nok: root hook config uses shared schema\nok: README distinguishes root workspace from plugin/example surfaces\nok: README mentions reusable plugin package\nok: README keeps examples illustrative\nok: root registration doc states plugin canonicality\nok: root registration doc keeps examples as examples\nok: cross-host app layout frames evidence-oriented presentation\nok: cross-host overview keeps repo-native benchmark wording\nok: cross-host methodology route explains comparability classes\nok: CI runs root Copilot surface validation\nok: root Copilot surface validation complete"
       },
       {
         "name": "smoke_cli",
@@ -159,7 +159,7 @@
         "weight": 15,
         "required": true,
         "passed": true,
-        "evidence": "GitHub Copilot CLI 1.0.34.\nRun 'copilot update' to check for updates.\nok: copilot CLI version command succeeds\nok: copilot help exposes agent/plugin options\nok: copilot plugin command is available\nok: root reviewer/research/verifier agents exist\nok: plugin metadata parses for oh-my-copilot-power-pack@0.1.0\nok: installed plugin entry found in ~/.copilot/config.json\nok: root reviewer agent prompt smoke returned ROOT_AGENT_OK\nok: namespaced plugin reviewer agent prompt smoke returned PLUGIN_AGENT_OK\nok: Copilot CLI smoke validation complete"
+        "evidence": "GitHub Copilot CLI 1.0.34.\nRun 'copilot update' to check for updates.\nok: copilot CLI version command succeeds\nok: copilot help exposes agent/plugin options\nok: copilot plugin command is available\nok: root reviewer/research/verifier agents exist\nok: plugin metadata parses for oh-my-copilot-power-pack@0.1.0\nok: installed plugin entry found in ~/.copilot/config.json\nok: root reviewer agent prompt smoke returned ROOT_AGENT_OK\nok: namespaced plugin reviewer agent prompt smoke returned PLUGIN_AGENT_OK\nok: Copilot smoke proves route availability only; cross-host comparability is validated by separate benchmark harvest gates\nok: Copilot CLI smoke validation complete"
       },
       {
         "name": "ROOT_AGENT_OK",
@@ -168,7 +168,7 @@
         "weight": 20,
         "required": true,
         "passed": true,
-        "evidence": "GitHub Copilot CLI 1.0.34.\nRun 'copilot update' to check for updates.\nok: copilot CLI version command succeeds\nok: copilot help exposes agent/plugin options\nok: copilot plugin command is available\nok: root reviewer/research/verifier agents exist\nok: plugin metadata parses for oh-my-copilot-power-pack@0.1.0\nok: installed plugin entry found in ~/.copilot/config.json\nok: root reviewer agent prompt smoke returned ROOT_AGENT_OK\nok: namespaced plugin reviewer agent prompt smoke returned PLUGIN_AGENT_OK\nok: Copilot CLI smoke validation complete"
+        "evidence": "GitHub Copilot CLI 1.0.34.\nRun 'copilot update' to check for updates.\nok: copilot CLI version command succeeds\nok: copilot help exposes agent/plugin options\nok: copilot plugin command is available\nok: root reviewer/research/verifier agents exist\nok: plugin metadata parses for oh-my-copilot-power-pack@0.1.0\nok: installed plugin entry found in ~/.copilot/config.json\nok: root reviewer agent prompt smoke returned ROOT_AGENT_OK\nok: namespaced plugin reviewer agent prompt smoke returned PLUGIN_AGENT_OK\nok: Copilot smoke proves route availability only; cross-host comparability is validated by separate benchmark harvest gates\nok: Copilot CLI smoke validation complete"
       },
       {
         "name": "PLUGIN_AGENT_OK",
@@ -177,7 +177,7 @@
         "weight": 20,
         "required": true,
         "passed": true,
-        "evidence": "GitHub Copilot CLI 1.0.34.\nRun 'copilot update' to check for updates.\nok: copilot CLI version command succeeds\nok: copilot help exposes agent/plugin options\nok: copilot plugin command is available\nok: root reviewer/research/verifier agents exist\nok: plugin metadata parses for oh-my-copilot-power-pack@0.1.0\nok: installed plugin entry found in ~/.copilot/config.json\nok: root reviewer agent prompt smoke returned ROOT_AGENT_OK\nok: namespaced plugin reviewer agent prompt smoke returned PLUGIN_AGENT_OK\nok: Copilot CLI smoke validation complete"
+        "evidence": "GitHub Copilot CLI 1.0.34.\nRun 'copilot update' to check for updates.\nok: copilot CLI version command succeeds\nok: copilot help exposes agent/plugin options\nok: copilot plugin command is available\nok: root reviewer/research/verifier agents exist\nok: plugin metadata parses for oh-my-copilot-power-pack@0.1.0\nok: installed plugin entry found in ~/.copilot/config.json\nok: root reviewer agent prompt smoke returned ROOT_AGENT_OK\nok: namespaced plugin reviewer agent prompt smoke returned PLUGIN_AGENT_OK\nok: Copilot smoke proves route availability only; cross-host comparability is validated by separate benchmark harvest gates\nok: Copilot CLI smoke validation complete"
       }
     ],
     "provenance": {
@@ -189,8 +189,8 @@
   {
     "repo": "oh-my-copilot",
     "branch": "main",
-    "sha": "516a83f",
-    "timestamp": "2026-04-21T07:53:21Z",
+    "sha": "71cc53c",
+    "timestamp": "2026-04-21T13:46:27Z",
     "sourcePath": "benchmark/results/current-quick-vanilla",
     "outputDir": "benchmark/results/current-quick-vanilla",
     "profile": "quick",
@@ -203,7 +203,7 @@
     "comparisonClass": "observed",
     "comparabilityClass": "reporting-comparable",
     "comparabilityNote": "oh-my-copilot quick/vanilla stays an observed repo-native benchmark row. It is safe for cross-host reporting, but it is not a mechanism-equivalent harness match.",
-    "harvestTimestamp": "2026-04-21T13:30:32Z",
+    "harvestTimestamp": "2026-04-21T13:47:43Z",
     "dimensions": [
       {
         "name": "docs_validation",
@@ -221,7 +221,7 @@
         "weight": 15,
         "required": true,
         "passed": true,
-        "evidence": "ok: implementer agent hands off to reviewer\nok: reviewer agent hands off to verifier\nok: VS Code hook policy uses native SessionStart event\nok: VS Code hook policy uses native PostToolUse event\nok: VS Code settings enable AGENTS.md loading\nok: VS Code settings enable skills\nok: VS Code prompt file uses a custom agent\nok: plugin.json parses and includes core keys\nok: plugin hooks.json has versioned schema\nok: README mentions VS Code layout\nok: README mentions Copilot CLI plugin package\nok: power surfaces validation complete"
+        "evidence": "ok: VS Code settings enable AGENTS.md loading\nok: VS Code settings enable skills\nok: VS Code prompt file uses a custom agent\nok: plugin.json parses and includes core keys\nok: plugin hooks.json has versioned schema\nok: README mentions VS Code layout\nok: README mentions Copilot CLI plugin package\nok: cross-host app overview preserves isolated presentation boundary\nok: cross-host methodology route names comparability classes\nok: cross-host presentation primitives preserve repo-native warning\nok: cross-host benchmark site files exist and generated data validates\nok: power surfaces validation complete"
       },
       {
         "name": "root_validation",
@@ -230,7 +230,7 @@
         "weight": 15,
         "required": true,
         "passed": true,
-        "evidence": "ok: root hook policy parses and calls root scripts\nok: root hook policy is versioned\nok: session hook logs root-workspace source\nok: post-tool hook logs root-workspace source\nok: root hook config uses shared schema\nok: README distinguishes root workspace from plugin/example surfaces\nok: README mentions reusable plugin package\nok: README keeps examples illustrative\nok: root registration doc states plugin canonicality\nok: root registration doc keeps examples as examples\nok: CI runs root Copilot surface validation\nok: root Copilot surface validation complete"
+        "evidence": "ok: post-tool hook logs root-workspace source\nok: root hook config uses shared schema\nok: README distinguishes root workspace from plugin/example surfaces\nok: README mentions reusable plugin package\nok: README keeps examples illustrative\nok: root registration doc states plugin canonicality\nok: root registration doc keeps examples as examples\nok: cross-host app layout frames evidence-oriented presentation\nok: cross-host overview keeps repo-native benchmark wording\nok: cross-host methodology route explains comparability classes\nok: CI runs root Copilot surface validation\nok: root Copilot surface validation complete"
       },
       {
         "name": "smoke_cli",
@@ -239,7 +239,7 @@
         "weight": 15,
         "required": true,
         "passed": true,
-        "evidence": "GitHub Copilot CLI 1.0.34.\nRun 'copilot update' to check for updates.\nok: copilot CLI version command succeeds\nok: copilot help exposes agent/plugin options\nok: copilot plugin command is available\nok: root reviewer/research/verifier agents exist\nok: plugin metadata parses for oh-my-copilot-power-pack@0.1.0\nok: installed plugin entry found in ~/.copilot/config.json\nok: model-backed agent prompt smoke skipped (set RUN_COPILOT_AGENT_SMOKE=1 to enable)\nok: Copilot CLI smoke validation complete"
+        "evidence": "GitHub Copilot CLI 1.0.34.\nRun 'copilot update' to check for updates.\nok: copilot CLI version command succeeds\nok: copilot help exposes agent/plugin options\nok: copilot plugin command is available\nok: root reviewer/research/verifier agents exist\nok: plugin metadata parses for oh-my-copilot-power-pack@0.1.0\nok: installed plugin entry found in ~/.copilot/config.json\nok: model-backed agent prompt smoke skipped (set RUN_COPILOT_AGENT_SMOKE=1 to enable)\nok: Copilot smoke proves route availability only; cross-host comparability is validated by separate benchmark harvest gates\nok: Copilot CLI smoke validation complete"
       },
       {
         "name": "ROOT_AGENT_OK",
@@ -248,7 +248,7 @@
         "weight": 20,
         "required": false,
         "passed": false,
-        "evidence": "GitHub Copilot CLI 1.0.34.\nRun 'copilot update' to check for updates.\nok: copilot CLI version command succeeds\nok: copilot help exposes agent/plugin options\nok: copilot plugin command is available\nok: root reviewer/research/verifier agents exist\nok: plugin metadata parses for oh-my-copilot-power-pack@0.1.0\nok: installed plugin entry found in ~/.copilot/config.json\nok: model-backed agent prompt smoke skipped (set RUN_COPILOT_AGENT_SMOKE=1 to enable)\nok: Copilot CLI smoke validation complete"
+        "evidence": "GitHub Copilot CLI 1.0.34.\nRun 'copilot update' to check for updates.\nok: copilot CLI version command succeeds\nok: copilot help exposes agent/plugin options\nok: copilot plugin command is available\nok: root reviewer/research/verifier agents exist\nok: plugin metadata parses for oh-my-copilot-power-pack@0.1.0\nok: installed plugin entry found in ~/.copilot/config.json\nok: model-backed agent prompt smoke skipped (set RUN_COPILOT_AGENT_SMOKE=1 to enable)\nok: Copilot smoke proves route availability only; cross-host comparability is validated by separate benchmark harvest gates\nok: Copilot CLI smoke validation complete"
       },
       {
         "name": "PLUGIN_AGENT_OK",
@@ -257,7 +257,7 @@
         "weight": 20,
         "required": false,
         "passed": false,
-        "evidence": "GitHub Copilot CLI 1.0.34.\nRun 'copilot update' to check for updates.\nok: copilot CLI version command succeeds\nok: copilot help exposes agent/plugin options\nok: copilot plugin command is available\nok: root reviewer/research/verifier agents exist\nok: plugin metadata parses for oh-my-copilot-power-pack@0.1.0\nok: installed plugin entry found in ~/.copilot/config.json\nok: model-backed agent prompt smoke skipped (set RUN_COPILOT_AGENT_SMOKE=1 to enable)\nok: Copilot CLI smoke validation complete"
+        "evidence": "GitHub Copilot CLI 1.0.34.\nRun 'copilot update' to check for updates.\nok: copilot CLI version command succeeds\nok: copilot help exposes agent/plugin options\nok: copilot plugin command is available\nok: root reviewer/research/verifier agents exist\nok: plugin metadata parses for oh-my-copilot-power-pack@0.1.0\nok: installed plugin entry found in ~/.copilot/config.json\nok: model-backed agent prompt smoke skipped (set RUN_COPILOT_AGENT_SMOKE=1 to enable)\nok: Copilot smoke proves route availability only; cross-host comparability is validated by separate benchmark harvest gates\nok: Copilot CLI smoke validation complete"
       }
     ],
     "provenance": {

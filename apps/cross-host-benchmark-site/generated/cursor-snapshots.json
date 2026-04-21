@@ -2,8 +2,8 @@
   {
     "repo": "oh-my-cursor",
     "branch": "main",
-    "sha": "da649d0",
-    "timestamp": "2026-04-21T07:52:03Z",
+    "sha": "21258d7",
+    "timestamp": "2026-04-21T13:35:11Z",
     "sourcePath": "benchmark/results/current-baseline",
     "outputDir": "benchmark/results/current-baseline",
     "profile": "backbone",
@@ -16,7 +16,7 @@
     "comparisonClass": "observed",
     "comparabilityClass": "reporting-comparable",
     "comparabilityNote": "oh-my-cursor backbone/baseline stays an observed repo-native benchmark row. It is safe for cross-host reporting, but it is not a mechanism-equivalent harness match.",
-    "harvestTimestamp": "2026-04-21T13:30:32Z",
+    "harvestTimestamp": "2026-04-21T13:47:43Z",
     "dimensions": [
       {
         "name": "default_auth",
@@ -40,7 +40,7 @@
         "weight": 20,
         "required": true,
         "passed": true,
-        "evidence": "ok: docs/confirmed-surfaces.md\nok: docs/fallback-policy.md\nok: docs/references.md\nok: scripts/check-default-auth.sh\nok: scripts/validate-state-contract.sh\nok: scripts/smoke-cursor-agent.sh\nok: scripts/verify-backbone.sh\nok: current repo intentionally has 0 checked-in custom agents\nok: current repo intentionally has 0 checked-in prompt files\nok: current repo intentionally has 0 checked-in skill bundles\nok: current repo intentionally has 0 checked-in hook manifests\nok: surface visibility validation complete"
+        "evidence": "ok: docs/references.md\nok: docs/state-contract.md\nok: scripts/check-default-auth.sh\nok: scripts/validate-state-contract.sh\nok: scripts/smoke-cursor-agent.sh\nok: scripts/verify-backbone.sh\nok: current repo intentionally has 0 checked-in custom agents\nok: current repo intentionally has 0 checked-in prompt files\nok: current repo intentionally has 0 checked-in skill bundles\nok: current repo intentionally has 0 checked-in hook manifests\nok: positive overclaim scan stayed clean for README/AGENTS/docs/benchmark notes\nok: surface visibility validation complete"
       },
       {
         "name": "state_contract",
@@ -48,7 +48,7 @@
         "weight": 20,
         "required": true,
         "passed": true,
-        "evidence": "ok: user-level Cursor auth is stored outside the repo: /home/zeyufu/.cursor/cli-config.json\nok: cursor auth user is fuzeyu09@gmail.com\nok: cursor default model is default\nok: .gitignore blocks speculative Cursor state files\nok: Cursor state contract validation complete"
+        "evidence": "ok: .gitignore blocks speculative Cursor state files\nok: user-level Cursor auth/model state is stored outside the repo: /home/zeyufu/.cursor/cli-config.json\nok: cursor auth user is fuzeyu09@gmail.com\nok: cursor default model is default\nok: Cursor state contract validation complete"
       },
       {
         "name": "backbone_verify",
@@ -56,7 +56,7 @@
         "weight": 25,
         "required": true,
         "passed": true,
-        "evidence": "ok: AGENTS.md\nok: README.md\nok: .cursor/rules/00-repo-scope.mdc\nok: .cursor/rules/10-docs-claims.mdc\nok: docs/confirmed-surfaces.md\nok: docs/fallback-policy.md\nok: docs/references.md\nverification: repository backbone files and fallback language present"
+        "evidence": "ok: AGENTS.md\nok: README.md\nok: benchmark/README.md\nok: .cursor/rules/00-repo-scope.mdc\nok: .cursor/rules/10-docs-claims.mdc\nok: docs/confirmed-surfaces.md\nok: docs/fallback-policy.md\nok: docs/references.md\nok: docs/state-contract.md\nok: positive overclaim scan stayed clean for README/AGENTS/docs/benchmark notes\nverification: repository backbone files, claim vocabulary, and positive overclaim protections are present"
       },
       {
         "name": "CURSOR_AGENT_OK",
@@ -64,7 +64,7 @@
         "weight": 20,
         "required": false,
         "passed": false,
-        "evidence": "ok: skipped duplicate default auth check (already verified upstream)\nok: model-backed Cursor smoke skipped (set RUN_CURSOR_AGENT_SMOKE=1 to enable)\nok: Cursor CLI smoke validation complete"
+        "evidence": "ok: reusing upstream default auth/model proof (environment-gated)\nok: model-backed Cursor smoke skipped; runtime claim remains bounded until enhanced prompt proof is requested\nok: Cursor CLI smoke validation complete"
       }
     ],
     "provenance": {
@@ -76,8 +76,8 @@
   {
     "repo": "oh-my-cursor",
     "branch": "main",
-    "sha": "da649d0",
-    "timestamp": "2026-04-21T07:52:10Z",
+    "sha": "21258d7",
+    "timestamp": "2026-04-21T13:35:19Z",
     "sourcePath": "benchmark/results/current-enhanced",
     "outputDir": "benchmark/results/current-enhanced",
     "profile": "backbone",
@@ -90,7 +90,7 @@
     "comparisonClass": "observed",
     "comparabilityClass": "reporting-comparable",
     "comparabilityNote": "oh-my-cursor backbone/enhanced stays an observed repo-native benchmark row. It is safe for cross-host reporting, but it is not a mechanism-equivalent harness match.",
-    "harvestTimestamp": "2026-04-21T13:30:32Z",
+    "harvestTimestamp": "2026-04-21T13:47:43Z",
     "dimensions": [
       {
         "name": "default_auth",
@@ -114,7 +114,7 @@
         "weight": 20,
         "required": true,
         "passed": true,
-        "evidence": "ok: docs/confirmed-surfaces.md\nok: docs/fallback-policy.md\nok: docs/references.md\nok: scripts/check-default-auth.sh\nok: scripts/validate-state-contract.sh\nok: scripts/smoke-cursor-agent.sh\nok: scripts/verify-backbone.sh\nok: current repo intentionally has 0 checked-in custom agents\nok: current repo intentionally has 0 checked-in prompt files\nok: current repo intentionally has 0 checked-in skill bundles\nok: current repo intentionally has 0 checked-in hook manifests\nok: surface visibility validation complete"
+        "evidence": "ok: docs/references.md\nok: docs/state-contract.md\nok: scripts/check-default-auth.sh\nok: scripts/validate-state-contract.sh\nok: scripts/smoke-cursor-agent.sh\nok: scripts/verify-backbone.sh\nok: current repo intentionally has 0 checked-in custom agents\nok: current repo intentionally has 0 checked-in prompt files\nok: current repo intentionally has 0 checked-in skill bundles\nok: current repo intentionally has 0 checked-in hook manifests\nok: positive overclaim scan stayed clean for README/AGENTS/docs/benchmark notes\nok: surface visibility validation complete"
       },
       {
         "name": "state_contract",
@@ -122,7 +122,7 @@
         "weight": 20,
         "required": true,
         "passed": true,
-        "evidence": "ok: user-level Cursor auth is stored outside the repo: /home/zeyufu/.cursor/cli-config.json\nok: cursor auth user is fuzeyu09@gmail.com\nok: cursor default model is default\nok: .gitignore blocks speculative Cursor state files\nok: Cursor state contract validation complete"
+        "evidence": "ok: .gitignore blocks speculative Cursor state files\nok: user-level Cursor auth/model state is stored outside the repo: /home/zeyufu/.cursor/cli-config.json\nok: cursor auth user is fuzeyu09@gmail.com\nok: cursor default model is default\nok: Cursor state contract validation complete"
       },
       {
         "name": "backbone_verify",
@@ -130,7 +130,7 @@
         "weight": 25,
         "required": true,
         "passed": true,
-        "evidence": "ok: AGENTS.md\nok: README.md\nok: .cursor/rules/00-repo-scope.mdc\nok: .cursor/rules/10-docs-claims.mdc\nok: docs/confirmed-surfaces.md\nok: docs/fallback-policy.md\nok: docs/references.md\nverification: repository backbone files and fallback language present"
+        "evidence": "ok: AGENTS.md\nok: README.md\nok: benchmark/README.md\nok: .cursor/rules/00-repo-scope.mdc\nok: .cursor/rules/10-docs-claims.mdc\nok: docs/confirmed-surfaces.md\nok: docs/fallback-policy.md\nok: docs/references.md\nok: docs/state-contract.md\nok: positive overclaim scan stayed clean for README/AGENTS/docs/benchmark notes\nverification: repository backbone files, claim vocabulary, and positive overclaim protections are present"
       },
       {
         "name": "CURSOR_AGENT_OK",
@@ -138,7 +138,7 @@
         "weight": 20,
         "required": true,
         "passed": true,
-        "evidence": "ok: skipped duplicate default auth check (already verified upstream)\nok: cursor-agent prompt smoke returned CURSOR_AGENT_OK\nok: Cursor CLI smoke validation complete"
+        "evidence": "ok: reusing upstream default auth/model proof (environment-gated)\nok: cursor-agent prompt smoke returned CURSOR_AGENT_OK (environment-gated runtime proof)\nok: Cursor CLI smoke validation complete"
       }
     ],
     "provenance": {
