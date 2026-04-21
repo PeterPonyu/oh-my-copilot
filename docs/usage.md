@@ -90,7 +90,10 @@ The latest checked-in local proof snapshot lives in
 [benchmark-status.md](./benchmark-status.md).
 Generated benchmark runs now include an evaluation contract (`*_evaluation.json`
 and `*_evaluation.md`) so the proof can distinguish baseline `vanilla` runs
-from release-gating `enhanced` runs instead of reporting duration alone.
+from release-gating `enhanced` runs instead of reporting duration alone. The
+benchmark wrappers also normalize transient `/.omx/team/.../worktrees/...`
+invocation paths back to the canonical repo root before they write checked-in
+evidence.
 
 ## Hooks and evidence
 
