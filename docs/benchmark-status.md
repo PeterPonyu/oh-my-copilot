@@ -3,7 +3,9 @@
 This document records the current checked-in local proof snapshot for
 `oh-my-copilot`.
 
-Snapshot run timestamp: `2026-04-21T07:49:37Z` (UTC)
+Snapshot refresh window: `2026-04-21T13:46:27Z` to `2026-04-21T13:47:43Z` (UTC)
+
+Snapshot git SHA: `71cc53c` on `main`
 
 Environment notes:
 
@@ -19,9 +21,9 @@ Environment notes:
 
 | Run | Purpose | Total duration (s) | Result | Evidence score | Raw output |
 | --- | --- | ---: | --- | --- | --- |
-| `quick-baseline` | fast validation without model-backed agent prompts | 1.90 | PASS | 4/4 required checks (100%) | [`benchmark/results/quick-baseline-20260421T074937Z/`](../benchmark/results/quick-baseline-20260421T074937Z/) |
-| `quick-agent-smoke` | fast validation plus root/plugin reviewer prompt smoke | 24.96 | PASS | 4/4 required checks (100%) + `ROOT_AGENT_OK` + `PLUGIN_AGENT_OK` | [`benchmark/results/quick-agent-smoke-20260421T074937Z/`](../benchmark/results/quick-agent-smoke-20260421T074937Z/) |
-| `full-agent-smoke` | full proof including bootstrap, install-state, and standalone hook proof | 57.88 | PASS | 7/7 required checks (100%) + install/hook evidence | [`benchmark/results/full-agent-smoke-20260421T074937Z/`](../benchmark/results/full-agent-smoke-20260421T074937Z/) |
+| `quick-baseline` | fast validation without model-backed agent prompts | 2.02 | PASS | 4/4 required checks (100%) | [`benchmark/results/current-quick-vanilla/`](../benchmark/results/current-quick-vanilla/) |
+| `quick-agent-smoke` | fast validation plus root/plugin reviewer prompt smoke | 25.41 | PASS | 4/4 required checks (100%) + `ROOT_AGENT_OK` + `PLUGIN_AGENT_OK` | [`benchmark/results/current-quick-enhanced/`](../benchmark/results/current-quick-enhanced/) |
+| `full-agent-smoke` | full proof including bootstrap, install-state, and standalone hook proof | 50.80 | PASS | 7/7 required checks (100%) + install/hook evidence | [`benchmark/results/current-full-enhanced/`](../benchmark/results/current-full-enhanced/) |
 
 ## Release-blocking evaluation contract
 
