@@ -24,10 +24,12 @@ These checks do not require a successful plugin install:
 ./scripts/validate-doc-links.sh
 ./scripts/validate-power-surfaces.sh
 ./scripts/validate-root-copilot-surfaces.sh
+./scripts/validate-copilot-state-contract.sh
 ```
 
 They verify the docs contract, root Copilot surface inventory, plugin/example
-boundaries, prompt-to-agent routing, and root skill references.
+boundaries, prompt-to-agent routing, root skill references, and the canonical
+local plugin state contract.
 
 ## 3. Bootstrap when prerequisites are present
 
@@ -37,8 +39,9 @@ If `copilot` and `gh` are installed and authenticated for your environment, run:
 ./scripts/bootstrap-copilot-power.sh
 ```
 
-The bootstrap path installs the local plugin package and re-runs the repository
-proof scripts. If the command fails before plugin installation, check the
+The bootstrap path installs the local plugin package, repairs the canonical
+plugin source path if it drifted to a transient worktree, and re-runs the
+repository proof scripts. If the command fails before plugin installation, check the
 [installation guide](./installation.md#prerequisites) first.
 
 ## 4. Use the short root routes

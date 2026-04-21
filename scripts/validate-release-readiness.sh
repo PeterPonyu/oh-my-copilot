@@ -63,6 +63,7 @@ for path in \
   scripts/validate-doc-links.sh \
   scripts/validate-power-surfaces.sh \
   scripts/validate-root-copilot-surfaces.sh \
+  scripts/validate-copilot-state-contract.sh \
   scripts/validate-benchmark-evidence.sh \
   scripts/validate-release-readiness.sh \
   scripts/smoke-copilot-cli.sh \
@@ -76,6 +77,7 @@ for path in \
   scripts/validate-doc-links.sh \
   scripts/validate-power-surfaces.sh \
   scripts/validate-root-copilot-surfaces.sh \
+  scripts/validate-copilot-state-contract.sh \
   scripts/validate-benchmark-evidence.sh \
   scripts/validate-release-readiness.sh \
   scripts/smoke-copilot-cli.sh \
@@ -114,6 +116,7 @@ PY
 (cd "$ROOT" && ./packages/copilot-cli-plugin/skills/parity-guard/check-parity-claims.sh .)
 (cd "$ROOT" && ./scripts/validate-power-surfaces.sh)
 (cd "$ROOT" && ./scripts/validate-root-copilot-surfaces.sh)
+(cd "$ROOT" && ./scripts/validate-copilot-state-contract.sh)
 (cd "$ROOT" && ./scripts/validate-benchmark-evidence.sh)
 
 if [[ "$RUN_COPILOT_SMOKE" == "1" ]]; then

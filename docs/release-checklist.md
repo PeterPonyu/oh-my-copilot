@@ -42,6 +42,7 @@ Run these commands from the repository root:
 ./packages/copilot-cli-plugin/skills/parity-guard/check-parity-claims.sh .
 ./scripts/validate-power-surfaces.sh
 ./scripts/validate-root-copilot-surfaces.sh
+./scripts/validate-copilot-state-contract.sh
 ./scripts/validate-benchmark-evidence.sh
 ./scripts/validate-release-readiness.sh
 ```
@@ -102,6 +103,7 @@ Release readiness evidence:
 - Parity wording scan: PASS/FAIL — ./packages/copilot-cli-plugin/skills/parity-guard/check-parity-claims.sh .
 - Power surface validation: PASS/FAIL — ./scripts/validate-power-surfaces.sh
 - Root surface validation: PASS/FAIL — ./scripts/validate-root-copilot-surfaces.sh
+- Copilot state contract: PASS/FAIL — ./scripts/validate-copilot-state-contract.sh
 - Benchmark evidence validation: PASS/FAIL — ./scripts/validate-benchmark-evidence.sh
 - Release readiness validation: PASS/FAIL — ./scripts/validate-release-readiness.sh
 - Copilot CLI smoke: PASS/FAIL/SKIPPED — ./scripts/smoke-copilot-cli.sh

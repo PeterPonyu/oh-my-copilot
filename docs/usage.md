@@ -61,6 +61,7 @@ Run these from the repository root:
 ./scripts/validate-doc-links.sh
 ./scripts/validate-power-surfaces.sh
 ./scripts/validate-root-copilot-surfaces.sh
+./scripts/validate-copilot-state-contract.sh
 ```
 
 Use bootstrap when `copilot` and `gh` are available:
@@ -74,6 +75,7 @@ bootstrap:
 
 ```bash
 ./scripts/check-install-state.sh
+./scripts/validate-copilot-state-contract.sh
 ```
 
 For benchmark-style local proof:

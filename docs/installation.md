@@ -25,6 +25,7 @@ Run commands from the repository root.
 ./scripts/validate-doc-links.sh
 ./scripts/validate-power-surfaces.sh
 ./scripts/validate-root-copilot-surfaces.sh
+./scripts/validate-copilot-state-contract.sh
 ```
 
 Expected result: each command prints `ok:` lines and exits with status 0.
@@ -40,7 +41,7 @@ The bootstrap script currently does four things:
 1. verifies that `copilot` is on `PATH`;
 2. verifies that `gh` is on `PATH`;
 3. installs the local plugin package from `packages/copilot-cli-plugin`; and
-4. runs the docs, plugin/root-surface, and standalone hook proof scripts.
+4. runs the docs, plugin/root-surface, standalone hook proof scripts, and the Copilot state-contract check.
 
 It also checks `~/.copilot/config.json` for an installed plugin entry named
 `oh-my-copilot-power-pack`.
@@ -51,6 +52,7 @@ Run:
 
 ```bash
 ./scripts/check-install-state.sh
+./scripts/validate-copilot-state-contract.sh
 ```
 
 This prints a short summary after the detailed checks so you can quickly see:
@@ -69,6 +71,7 @@ This prints a short summary after the detailed checks so you can quickly see:
 | Root Copilot registration | `./scripts/validate-root-copilot-surfaces.sh` | Reports root instructions, agents, prompts, skills, and hooks as valid. |
 | Bootstrap and plugin config | `./scripts/bootstrap-copilot-power.sh` | Prints `ok: bootstrap complete` after plugin config and validation checks. |
 | Install-state proof | `./scripts/check-install-state.sh` | Prints `INSTALL_STATE: ok` and a short install-state summary. |
+| State-contract proof | `./scripts/validate-copilot-state-contract.sh` | Confirms the plugin source path is canonical and local hook/log state stays project-local. |
 
 ## Troubleshooting
 
@@ -87,7 +90,9 @@ prerequisite because the intended user workflow is GitHub/Copilot CLI centered.
 Rerun `./scripts/bootstrap-copilot-power.sh` from the repository root and inspect
 the tail of `/tmp/omc-plugin-install.out` that the script prints. Keep root
 workspace behavior and installed plugin behavior distinct when diagnosing the
-failure.
+failure. If `./scripts/check-install-state.sh` reports a transient `.omx`
+worker path, rerun bootstrap from the canonical repository root so the plugin
+source path is repaired.
 
 ### A docs or surface validator fails
 

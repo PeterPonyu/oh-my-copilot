@@ -13,6 +13,8 @@ Verifies the local oh-my-copilot Copilot CLI plugin installation state:
   - package manifest is valid
   - ~/.copilot/config.json contains the plugin entry
   - the installed plugin cache path exists and contains the expected surfaces
+  - the installed plugin source path points at the canonical root plugin path,
+    not a transient team/worktree checkout
 
 The script is read-only and safe to run after bootstrap or during release
 checks. Set COPILOT_CONFIG_PATH to override the default config path.
@@ -153,10 +155,28 @@ for required in ("agents", "skills", "hooks.json"):
 source = entry.get("source")
 if isinstance(source, dict) and source.get("path"):
     source_path = pathlib.Path(str(source["path"])).expanduser()
-    if source_path.exists():
-        ok(f"installed source path exists: {source_path}")
-    else:
-        print(f"warn: installed source path is recorded but unavailable: {source_path}")
+    source_resolved = source_path.resolve()
+    if not source_resolved.exists():
+        fail(f"installed source path is recorded but unavailable: {source_resolved}")
+    source_str = str(source_resolved)
+    if "/.omx/team/" in source_str or "/worktrees/" in source_str:
+        fail(
+            "installed plugin source path points to a transient OMX team/worktree checkout: "
+            f"{source_resolved}"
+        )
+    canonical_plugin_root = plugin_json.parent.resolve()
+    try:
+        same_source = source_resolved.samefile(canonical_plugin_root)
+    except FileNotFoundError:
+        same_source = False
+    if not same_source:
+        fail(
+            "installed plugin source path is not the canonical root plugin path: "
+            f"{source_resolved} != {canonical_plugin_root}"
+        )
+    ok(f"installed source path is canonical: {source_resolved}")
+else:
+    fail(f"{plugin_name} entry missing canonical local source.path metadata")
 
 ok(f"plugin config entry found in {config_path}")
 ok(f"installed plugin cache verified at {cache_path}")

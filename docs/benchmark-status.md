@@ -89,6 +89,16 @@ The current repo is more than a static layout:
 This is still a product proof harness, not a broad benchmark of model quality or
 an OMC/OMX runtime parity claim.
 
+## State-management note
+
+Benchmark scoring is complemented by a separate local state-contract gate:
+
+- `./scripts/check-install-state.sh`
+- `./scripts/validate-copilot-state-contract.sh`
+
+That extra gate exists because plugin source-path drift (for example toward a
+transient `.omx/team/...` worktree) is a state bug, not just a benchmark miss.
+
 ## Remaining gaps
 
 - external link validation is still skipped unless `CHECK_EXTERNAL=1`
