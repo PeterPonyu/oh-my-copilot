@@ -2,6 +2,9 @@
 
 | Timestamp | Branch | SHA | Profile | Variant | Score | Threshold | Gate | Output |
 | --- | --- | --- | --- | --- | ---: | ---: | --- | --- |
+| `2026-04-21T15:03:10Z` | `main` | `5b03b56` | `quick` | `enhanced` | 100/100 | 100/100 | PASS | `benchmark/results/current-quick-enhanced` |
+| `2026-04-21T15:02:41Z` | `main` | `5b03b56` | `full` | `enhanced` | 100/100 | 100/100 | PASS | `benchmark/results/current-full-enhanced` |
+| `2026-04-21T15:02:40Z` | `main` | `5b03b56` | `quick` | `vanilla` | 60/100 | 60/100 | PASS | `benchmark/results/current-quick-vanilla` |
 | `2026-04-21T15:01:42Z` | `main` | `93f8f84` | `quick` | `enhanced` | 100/100 | 100/100 | PASS | `benchmark/results/current-quick-enhanced` |
 | `2026-04-21T15:01:06Z` | `main` | `93f8f84` | `quick` | `vanilla` | 60/100 | 60/100 | PASS | `benchmark/results/current-quick-vanilla` |
 | `2026-04-21T15:00:58Z` | `main` | `93f8f84` | `full` | `enhanced` | 100/100 | 100/100 | PASS | `benchmark/results/current-full-enhanced` |
