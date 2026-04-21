@@ -130,7 +130,44 @@ validate_docs_mentions() {
     "$ROOT/README.md"
 }
 
+validate_cross_host_benchmark_site() {
+  local path
+  for path in \
+    scripts/harvest-cross-host-benchmark-data.py \
+    scripts/validate-cross-host-benchmark-data.py \
+    apps/cross-host-benchmark-site/package.json \
+    apps/cross-host-benchmark-site/app/layout.tsx \
+    apps/cross-host-benchmark-site/app/page.tsx \
+    apps/cross-host-benchmark-site/app/methodology/page.tsx \
+    apps/cross-host-benchmark-site/app/history/page.tsx \
+    apps/cross-host-benchmark-site/src/lib/adapters/copilot.ts \
+    apps/cross-host-benchmark-site/src/lib/adapters/cursor.ts \
+    apps/cross-host-benchmark-site/src/lib/generated.ts \
+    apps/cross-host-benchmark-site/src/lib/presentation/contracts.ts \
+    apps/cross-host-benchmark-site/src/lib/presentation/primitives.ts \
+    apps/cross-host-benchmark-site/generated/manifest.json \
+    apps/cross-host-benchmark-site/generated/copilot-snapshots.json \
+    apps/cross-host-benchmark-site/generated/cursor-snapshots.json
+  do
+    require_file "$path"
+  done
+
+  require_contains "cross-host app overview preserves isolated presentation boundary" \
+    'isolated presentation boundary|reporting-comparable|repo-native' \
+    "$ROOT/apps/cross-host-benchmark-site/app/page.tsx"
+  require_contains "cross-host methodology route names comparability classes" \
+    'reporting-comparable|outcome-comparable|not-comparable' \
+    "$ROOT/apps/cross-host-benchmark-site/app/methodology/page.tsx"
+  require_contains "cross-host presentation primitives preserve repo-native warning" \
+    'reporting-comparable|repo-native|mechanism-equivalent' \
+    "$ROOT/apps/cross-host-benchmark-site/src/lib/presentation/primitives.ts"
+
+  python3 "$ROOT/scripts/validate-cross-host-benchmark-data.py" --app-root "$ROOT/apps/cross-host-benchmark-site" >/dev/null
+  log "cross-host benchmark site files exist and generated data validates"
+}
+
 validate_vscode_layout
 validate_cli_plugin
 validate_docs_mentions
+validate_cross_host_benchmark_site
 log "power surfaces validation complete"

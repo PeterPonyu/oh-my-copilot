@@ -89,6 +89,8 @@ export const buildScoreCards = (
       scoreLabel: formatScore(run.score, run.maxScore),
       gateLabel: `${formatScore(run.thresholdScore, run.maxScore)} gate`,
       comparisonClass: run.comparisonClass,
+      comparabilityClass: run.comparabilityClass,
+      comparabilityNote: run.comparabilityNote,
       callout: summary.callout,
       deltaLabel: summary.deltaLabel,
       provenance: {
@@ -175,7 +177,13 @@ export const buildPlainLanguageSummary = (
       )} ${strongestImprovement.variant}, where ${strongestImprovement.deltaLabel} is explained against its own repo-native reference.`
     : `${displayName} starts by establishing a repo-native baseline before making any comparison claim.`;
 
-  return `${improvementFragment} ${stateConfidence.summary}`;
+  const comparabilityFragment = scoreCards.some(
+    (card) => card.comparabilityClass === "reporting-comparable",
+  )
+    ? "Cross-host reporting remains reporting-comparable and does not claim mechanism parity."
+    : "Cross-host reporting stays aligned with the declared comparability class for each row.";
+
+  return `${improvementFragment} ${comparabilityFragment} ${stateConfidence.summary}`;
 };
 
 export const buildRepoPresentation = (
@@ -222,8 +230,10 @@ const toComparisonCard = (presentation: RepoPresentationModel): ComparisonCard =
     repo: presentation.repo,
     displayName: presentation.displayName,
     headline: mostUsefulCard.callout,
-    supportingDetail: presentation.stateConfidence.summary,
+    supportingDetail: `${presentation.stateConfidence.summary} ${mostUsefulCard.comparabilityNote}`,
     deltaLabel: mostUsefulCard.deltaLabel,
+    comparabilityClass: mostUsefulCard.comparabilityClass,
+    comparabilityNote: mostUsefulCard.comparabilityNote,
   };
 };
 
@@ -232,6 +242,6 @@ export const buildComparativePresentation = (
 ): ComparativePresentationModel => ({
   mode: "repo-native",
   warning:
-    "The compare view keeps Copilot and Cursor in separate repo-native score models. It highlights within-repo gains and provenance instead of collapsing them into a fake shared total.",
+    "The compare view keeps Copilot and Cursor in separate repo-native score models. Current shared rows are reporting-comparable observations, not mechanism-equivalent totals.",
   cards: presentations.map(toComparisonCard),
 });

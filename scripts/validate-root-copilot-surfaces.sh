@@ -292,6 +292,29 @@ validate_boundary_docs() {
   fi
 }
 
+validate_cross_host_benchmark_boundary() {
+  if [[ ! -d "$ROOT/apps/cross-host-benchmark-site" ]]; then
+    log "cross-host benchmark site absent; root boundary validator skips app checks"
+    return
+  fi
+
+  require_file apps/cross-host-benchmark-site/app/layout.tsx
+  require_file apps/cross-host-benchmark-site/app/page.tsx
+  require_file apps/cross-host-benchmark-site/app/methodology/page.tsx
+  require_file apps/cross-host-benchmark-site/app/history/page.tsx
+  require_file apps/cross-host-benchmark-site/generated/manifest.json
+
+  require_contains "cross-host app layout frames evidence-oriented presentation" \
+    'benchmark evidence|Cross-host benchmark evidence|reporting-comparable' \
+    apps/cross-host-benchmark-site/app/layout.tsx
+  require_contains "cross-host overview keeps repo-native benchmark wording" \
+    'repo-native|isolated presentation boundary|reporting-comparable' \
+    apps/cross-host-benchmark-site/app/page.tsx
+  require_contains "cross-host methodology route explains comparability classes" \
+    'outcome-comparable|reporting-comparable|not-comparable' \
+    apps/cross-host-benchmark-site/app/methodology/page.tsx
+}
+
 validate_ci_wiring() {
   require_contains "CI runs root Copilot surface validation" \
     'validate-root-copilot-surfaces\.sh' .github/workflows/docs-check.yml
@@ -304,6 +327,7 @@ validate_repo() {
   validate_skills
   validate_hooks
   validate_boundary_docs
+  validate_cross_host_benchmark_boundary
   validate_ci_wiring
   log "root Copilot surface validation complete"
 }

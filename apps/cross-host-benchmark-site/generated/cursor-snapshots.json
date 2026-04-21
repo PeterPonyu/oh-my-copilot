@@ -2,8 +2,8 @@
   {
     "repo": "oh-my-cursor",
     "branch": "main",
-    "sha": "234498a",
-    "timestamp": "2026-04-21T04:51:58Z",
+    "sha": "da649d0",
+    "timestamp": "2026-04-21T07:52:03Z",
     "sourcePath": "benchmark/results/current-baseline",
     "outputDir": "benchmark/results/current-baseline",
     "profile": "backbone",
@@ -14,7 +14,9 @@
     "passed": true,
     "releaseBlocking": false,
     "comparisonClass": "observed",
-    "harvestTimestamp": "2026-04-21T07:18:32Z",
+    "comparabilityClass": "reporting-comparable",
+    "comparabilityNote": "oh-my-cursor backbone/baseline stays an observed repo-native benchmark row. It is safe for cross-host reporting, but it is not a mechanism-equivalent harness match.",
+    "harvestTimestamp": "2026-04-21T13:30:32Z",
     "dimensions": [
       {
         "name": "default_auth",
@@ -62,7 +64,7 @@
         "weight": 20,
         "required": false,
         "passed": false,
-        "evidence": "ok: cursor-agent default auth check passes\nok: model-backed Cursor smoke skipped (set RUN_CURSOR_AGENT_SMOKE=1 to enable)\nok: Cursor CLI smoke validation complete"
+        "evidence": "ok: skipped duplicate default auth check (already verified upstream)\nok: model-backed Cursor smoke skipped (set RUN_CURSOR_AGENT_SMOKE=1 to enable)\nok: Cursor CLI smoke validation complete"
       }
     ],
     "provenance": {
@@ -74,8 +76,8 @@
   {
     "repo": "oh-my-cursor",
     "branch": "main",
-    "sha": "234498a",
-    "timestamp": "2026-04-21T04:52:13Z",
+    "sha": "da649d0",
+    "timestamp": "2026-04-21T07:52:10Z",
     "sourcePath": "benchmark/results/current-enhanced",
     "outputDir": "benchmark/results/current-enhanced",
     "profile": "backbone",
@@ -86,7 +88,9 @@
     "passed": true,
     "releaseBlocking": false,
     "comparisonClass": "observed",
-    "harvestTimestamp": "2026-04-21T07:18:32Z",
+    "comparabilityClass": "reporting-comparable",
+    "comparabilityNote": "oh-my-cursor backbone/enhanced stays an observed repo-native benchmark row. It is safe for cross-host reporting, but it is not a mechanism-equivalent harness match.",
+    "harvestTimestamp": "2026-04-21T13:30:32Z",
     "dimensions": [
       {
         "name": "default_auth",
@@ -134,7 +138,7 @@
         "weight": 20,
         "required": true,
         "passed": true,
-        "evidence": "ok: cursor-agent default auth check passes\nok: cursor-agent prompt smoke returned CURSOR_AGENT_OK\nok: Cursor CLI smoke validation complete"
+        "evidence": "ok: skipped duplicate default auth check (already verified upstream)\nok: cursor-agent prompt smoke returned CURSOR_AGENT_OK\nok: Cursor CLI smoke validation complete"
       }
     ],
     "provenance": {

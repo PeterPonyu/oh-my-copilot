@@ -24,6 +24,9 @@ const copilotBundle = {
       sourcePath: "benchmark/results/history.jsonl",
       harvestedAt: "2026-04-21T05:00:00Z",
       comparisonClass: "observed",
+      comparabilityClass: "reporting-comparable",
+      comparabilityNote:
+        "oh-my-copilot quick/vanilla stays an observed repo-native benchmark row and is only reporting-comparable cross-host.",
       profile: "quick",
       variant: "vanilla",
       score: 60,
@@ -42,6 +45,9 @@ const copilotBundle = {
       sourcePath: "benchmark/results/current-quick-enhanced/quick_evaluation.json",
       harvestedAt: "2026-04-21T05:00:00Z",
       comparisonClass: "observed",
+      comparabilityClass: "reporting-comparable",
+      comparabilityNote:
+        "oh-my-copilot quick/enhanced stays an observed repo-native benchmark row and is only reporting-comparable cross-host.",
       profile: "quick",
       variant: "enhanced",
       score: 100,
@@ -60,6 +66,9 @@ const copilotBundle = {
       sourcePath: "benchmark/results/current-full-enhanced/full_evaluation.json",
       harvestedAt: "2026-04-21T05:00:00Z",
       comparisonClass: "configured-floor",
+      comparabilityClass: "reporting-comparable",
+      comparabilityNote:
+        "oh-my-copilot full/enhanced stays a repo-native benchmark row and does not claim a mechanism-equivalent Cursor harness.",
       profile: "full",
       variant: "enhanced",
       score: 100,
@@ -123,6 +132,9 @@ const cursorBundle = {
       sourcePath: "benchmark/results/current-baseline/backbone_evaluation.json",
       harvestedAt: "2026-04-21T05:00:00Z",
       comparisonClass: "observed",
+      comparabilityClass: "reporting-comparable",
+      comparabilityNote:
+        "oh-my-cursor backbone/baseline stays an observed repo-native benchmark row and is only reporting-comparable cross-host.",
       profile: "backbone",
       variant: "baseline",
       score: 100,
@@ -141,6 +153,9 @@ const cursorBundle = {
       sourcePath: "benchmark/results/current-enhanced/backbone_evaluation.json",
       harvestedAt: "2026-04-21T05:00:00Z",
       comparisonClass: "observed",
+      comparabilityClass: "reporting-comparable",
+      comparabilityNote:
+        "oh-my-cursor backbone/enhanced stays an observed repo-native benchmark row and is only reporting-comparable cross-host.",
       profile: "backbone",
       variant: "enhanced",
       score: 120,
@@ -207,6 +222,8 @@ test("copilot adapter explains configured-floor evidence without pretending it i
 
   assert.ok(fullCard);
   assert.equal(fullCard.comparisonClass, "configured-floor");
+  assert.equal(fullCard.comparabilityClass, "reporting-comparable");
+  assert.match(fullCard.comparabilityNote, /repo-native|mechanism-equivalent/i);
   assert.match(fullCard.callout, /configured vanilla floor/i);
   assert.match(fullCard.callout, /not a second observed run/i);
 });
@@ -242,7 +259,9 @@ test("comparative presentation keeps repo-native cards instead of collapsing sco
 
   assert.equal(compare.mode, "repo-native");
   assert.match(compare.warning, /separate repo-native score models/i);
+  assert.match(compare.warning, /reporting-comparable/i);
   assert.equal(compare.cards.length, 2);
   assert.match(compare.cards[0].headline + compare.cards[1].headline, /\+40/);
   assert.match(compare.cards[0].headline + compare.cards[1].headline, /\+20/);
+  assert.match(compare.cards[0].supportingDetail + compare.cards[1].supportingDetail, /reporting-comparable/i);
 });

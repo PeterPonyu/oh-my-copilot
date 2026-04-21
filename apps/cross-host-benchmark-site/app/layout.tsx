@@ -3,9 +3,9 @@ import Link from 'next/link'
 import './globals.css'
 
 export const metadata: Metadata = {
-  title: 'Cross-host benchmark presentation',
+  title: 'Cross-host benchmark evidence',
   description:
-    'Static-first presentation shell for cross-host benchmark evidence, state confidence, and process history.',
+    'Static-first presentation of cross-host benchmark evidence, repo-native scorecards, and truthful comparability metadata.',
 }
 
 const NAV_ITEMS = [
@@ -22,7 +22,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
           <header className="site-header">
             <div>
               <p className="eyebrow">cross-host benchmark</p>
-              <h1>Presentation workspace scaffold</h1>
+              <h1>Cross-host benchmark evidence</h1>
             </div>
             <nav aria-label="Primary">
               <ul className="nav-list">

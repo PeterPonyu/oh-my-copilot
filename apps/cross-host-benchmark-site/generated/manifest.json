@@ -1,41 +1,57 @@
 {
-  "generatedAt": "2026-04-21T07:18:32Z",
+  "generatedAt": "2026-04-21T13:30:32Z",
   "generator": {
     "script": "scripts/harvest-cross-host-benchmark-data.py",
-    "version": 1
+    "version": 2
   },
   "outputRoot": "/home/zeyufu/Desktop/oh-my-copilot/apps/cross-host-benchmark-site/generated",
+  "comparisonPolicy": {
+    "comparisonClass": "observed",
+    "defaultComparabilityClass": "reporting-comparable",
+    "currentPairingClass": "reporting-comparable",
+    "allowedComparabilityClasses": [
+      "outcome-comparable",
+      "reporting-comparable",
+      "not-comparable"
+    ],
+    "summary": "Cross-host benchmark rows remain observed measurements. Current Copilot/Cursor pairings are reporting-comparable by default because the repos use different repo-native harnesses."
+  },
   "repos": [
     {
       "repo": "oh-my-copilot",
       "root": "/home/zeyufu/Desktop/oh-my-copilot",
       "sourceBranch": "main",
-      "sourceSha": "b3156e7",
-      "workspaceBranch": "publish/cross-host-benchmark-site",
-      "workspaceSha": "a034e1b",
-      "harvestedAt": "2026-04-21T07:18:32Z",
+      "sourceSha": "516a83f",
+      "workspaceBranch": "main",
+      "workspaceSha": "4ab3824",
+      "harvestedAt": "2026-04-21T13:30:32Z",
       "historyPath": "benchmark/results/history.jsonl",
       "recordCount": 3,
-      "snapshotPath": "apps/cross-host-benchmark-site/generated/copilot-snapshots.json"
+      "snapshotPath": "apps/cross-host-benchmark-site/generated/copilot-snapshots.json",
+      "comparabilityClass": "reporting-comparable",
+      "comparabilityNote": "Copilot rows stay observed inside the Copilot CLI benchmark harness and are reported cross-host without claiming a mechanism-identical Cursor harness."
     },
     {
       "repo": "oh-my-cursor",
       "root": "/home/zeyufu/Desktop/oh-my-cursor",
       "sourceBranch": "main",
-      "sourceSha": "234498a",
+      "sourceSha": "da649d0",
       "workspaceBranch": "main",
-      "workspaceSha": "da649d0",
-      "harvestedAt": "2026-04-21T07:18:32Z",
+      "workspaceSha": "892adbc",
+      "harvestedAt": "2026-04-21T13:30:32Z",
       "historyPath": "benchmark/results/history.jsonl",
       "recordCount": 2,
-      "snapshotPath": "apps/cross-host-benchmark-site/generated/cursor-snapshots.json"
+      "snapshotPath": "apps/cross-host-benchmark-site/generated/cursor-snapshots.json",
+      "comparabilityClass": "reporting-comparable",
+      "comparabilityNote": "Cursor rows stay observed inside the smaller repo-native backbone harness and are reported cross-host without claiming Copilot-equivalent mechanics."
     }
   ],
   "captureSkew": {
-    "copilotTimestamp": "2026-04-21T04:53:54Z",
-    "cursorTimestamp": "2026-04-21T04:52:13Z",
-    "seconds": 101,
-    "minutes": 1.68,
+    "copilotTimestamp": "2026-04-21T07:54:44Z",
+    "cursorTimestamp": "2026-04-21T07:52:10Z",
+    "seconds": 154,
+    "minutes": 2.57,
+    "comparabilityClass": "reporting-comparable",
     "comparisonPair": {
       "copilot": "full/enhanced",
       "cursor": "backbone/enhanced"

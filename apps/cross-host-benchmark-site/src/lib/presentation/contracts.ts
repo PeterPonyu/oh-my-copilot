@@ -6,6 +6,11 @@ export type ComparisonClass =
   | "repo-native"
   | "narrative-only";
 
+export type ComparabilityClass =
+  | "outcome-comparable"
+  | "reporting-comparable"
+  | "not-comparable";
+
 export type CheckStatus = "pass" | "fail" | "warn";
 
 export type TimelineKind =
@@ -24,6 +29,8 @@ export interface ProvenanceRecord {
   sourcePath: string;
   harvestedAt: string;
   comparisonClass: ComparisonClass;
+  comparabilityClass: ComparabilityClass;
+  comparabilityNote: string;
 }
 
 export interface BenchmarkRunSnapshot extends ProvenanceRecord {
@@ -74,6 +81,8 @@ export interface RepoScoreCard {
   callout: string;
   deltaLabel: string | null;
   comparisonClass: ComparisonClass;
+  comparabilityClass: ComparabilityClass;
+  comparabilityNote: string;
   provenance: Pick<
     BenchmarkRunSnapshot,
     "branch" | "sha" | "timestamp" | "sourcePath" | "harvestedAt"
@@ -125,10 +134,61 @@ export interface ComparisonCard {
   headline: string;
   supportingDetail: string;
   deltaLabel: string | null;
+  comparabilityClass: ComparabilityClass;
+  comparabilityNote: string;
 }
 
 export interface ComparativePresentationModel {
   mode: "repo-native";
   warning: string;
   cards: ComparisonCard[];
+}
+
+export interface GeneratedManifestRepo {
+  repo: RepoId;
+  root: string;
+  sourceBranch: string;
+  sourceSha: string;
+  workspaceBranch: string;
+  workspaceSha: string;
+  harvestedAt: string;
+  historyPath: string;
+  recordCount: number;
+  snapshotPath: string;
+  comparabilityClass: ComparabilityClass;
+  comparabilityNote: string;
+}
+
+export interface GeneratedManifest {
+  generatedAt: string;
+  generator: {
+    script: string;
+    version: number;
+  };
+  outputRoot: string;
+  comparisonPolicy: {
+    comparisonClass: ComparisonClass;
+    defaultComparabilityClass: ComparabilityClass;
+    currentPairingClass: ComparabilityClass;
+    allowedComparabilityClasses: ComparabilityClass[];
+    summary: string;
+  };
+  repos: GeneratedManifestRepo[];
+  captureSkew: {
+    copilotTimestamp: string;
+    cursorTimestamp: string;
+    seconds: number;
+    minutes: number;
+    comparabilityClass: ComparabilityClass;
+    comparisonPair: {
+      copilot: string;
+      cursor: string;
+    };
+  };
+  artifacts: Array<{
+    kind: string;
+    repo: string;
+    path: string;
+    records: number;
+  }>;
 }

@@ -70,6 +70,11 @@ body a {
   gap: 1rem;
 }
 
+.card-grid {
+  display: grid;
+  gap: 1rem;
+}
+
 .check-list {
   display: grid;
   gap: 0.75rem;
@@ -98,6 +103,39 @@ p {
   line-height: 1.6;
 }
 
+.badge-row {
+  margin: 1rem 0;
+}
+
+.badge {
+  background: rgba(105, 65, 198, 0.12);
+  border-radius: 999px;
+  color: var(--accent);
+  display: inline-flex;
+  font-size: 0.875rem;
+  font-weight: 700;
+  padding: 0.25rem 0.75rem;
+}
+
+.timeline-list {
+  display: grid;
+  gap: 1rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.timeline-item {
+  border-left: 3px solid rgba(105, 65, 198, 0.2);
+  padding-left: 1rem;
+}
+
+.proof-link {
+  color: var(--foreground);
+  font-family: ui-monospace, SFMono-Regular, SFMono-Regular, Consolas, monospace;
+  font-size: 0.875rem;
+}
+
 @media (min-width: 768px) {
   .site-header {
     align-items: center;
@@ -106,6 +144,10 @@ p {
   }
 
   .two-column-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .card-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }

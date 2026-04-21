@@ -8,6 +8,12 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
+VALID_COMPARABILITY_CLASSES = (
+    'outcome-comparable',
+    'reporting-comparable',
+    'not-comparable',
+)
+
 
 def utc_now() -> str:
     return datetime.now(timezone.utc).replace(microsecond=0).isoformat().replace('+00:00', 'Z')
@@ -46,6 +52,15 @@ def latest_history_by_output_dir(entries: list[dict[str, Any]]) -> dict[str, dic
     return latest
 
 
+def comparability_note(repo_name: str, evaluation: dict[str, Any]) -> str:
+    profile = evaluation['profile']
+    variant = evaluation['variant']
+    return (
+        f"{repo_name} {profile}/{variant} stays an observed repo-native benchmark row. "
+        "It is safe for cross-host reporting, but it is not a mechanism-equivalent harness match."
+    )
+
+
 def collect_repo_harvest(repo_root: Path, repo_name: str, evaluation_glob: str) -> dict[str, Any]:
     benchmark_root = repo_root / 'benchmark' / 'results'
     history_path = benchmark_root / 'history.jsonl'
@@ -63,6 +78,7 @@ def collect_repo_harvest(repo_root: Path, repo_name: str, evaluation_glob: str) 
         if history_entry is None:
             raise SystemExit(f'missing history entry for {repo_name} output dir: {output_dir}')
 
+        current_comparability_class = 'reporting-comparable'
         records.append(
             {
                 'repo': repo_name,
@@ -79,6 +95,8 @@ def collect_repo_harvest(repo_root: Path, repo_name: str, evaluation_glob: str) 
                 'passed': evaluation['passed'],
                 'releaseBlocking': evaluation['release_blocking'],
                 'comparisonClass': 'observed',
+                'comparabilityClass': current_comparability_class,
+                'comparabilityNote': comparability_note(repo_name, evaluation),
                 'harvestTimestamp': harvested_at,
                 'dimensions': evaluation['dimensions'],
                 'provenance': {
@@ -113,14 +131,26 @@ def build_manifest(app_root: Path, copilot: dict[str, Any], cursor: dict[str, An
     latest_cursor = max(cursor['records'], key=lambda record: iso_to_dt(record['timestamp']))
     skew_seconds = abs(int((iso_to_dt(latest_copilot['timestamp']) - iso_to_dt(latest_cursor['timestamp'])).total_seconds()))
     generated_root = app_root / 'generated'
+    default_comparability_class = 'reporting-comparable'
 
     return {
         'generatedAt': utc_now(),
         'generator': {
             'script': 'scripts/harvest-cross-host-benchmark-data.py',
-            'version': 1,
+            'version': 2,
         },
         'outputRoot': str(generated_root.resolve()),
+        'comparisonPolicy': {
+            'comparisonClass': 'observed',
+            'defaultComparabilityClass': default_comparability_class,
+            'currentPairingClass': default_comparability_class,
+            'allowedComparabilityClasses': list(VALID_COMPARABILITY_CLASSES),
+            'summary': (
+                "Cross-host benchmark rows remain observed measurements. "
+                "Current Copilot/Cursor pairings are reporting-comparable by default because "
+                "the repos use different repo-native harnesses."
+            ),
+        },
         'repos': [
             {
                 'repo': copilot['repo'],
@@ -133,6 +163,11 @@ def build_manifest(app_root: Path, copilot: dict[str, Any], cursor: dict[str, An
                 'historyPath': copilot['historyPath'],
                 'recordCount': len(copilot['records']),
                 'snapshotPath': 'apps/cross-host-benchmark-site/generated/copilot-snapshots.json',
+                'comparabilityClass': default_comparability_class,
+                'comparabilityNote': (
+                    "Copilot rows stay observed inside the Copilot CLI benchmark harness and are "
+                    "reported cross-host without claiming a mechanism-identical Cursor harness."
+                ),
             },
             {
                 'repo': cursor['repo'],
@@ -145,6 +180,11 @@ def build_manifest(app_root: Path, copilot: dict[str, Any], cursor: dict[str, An
                 'historyPath': cursor['historyPath'],
                 'recordCount': len(cursor['records']),
                 'snapshotPath': 'apps/cross-host-benchmark-site/generated/cursor-snapshots.json',
+                'comparabilityClass': default_comparability_class,
+                'comparabilityNote': (
+                    "Cursor rows stay observed inside the smaller repo-native backbone harness and "
+                    "are reported cross-host without claiming Copilot-equivalent mechanics."
+                ),
             },
         ],
         'captureSkew': {
@@ -152,6 +192,7 @@ def build_manifest(app_root: Path, copilot: dict[str, Any], cursor: dict[str, An
             'cursorTimestamp': latest_cursor['timestamp'],
             'seconds': skew_seconds,
             'minutes': round(skew_seconds / 60, 2),
+            'comparabilityClass': default_comparability_class,
             'comparisonPair': {
                 'copilot': f"{latest_copilot['profile']}/{latest_copilot['variant']}",
                 'cursor': f"{latest_cursor['profile']}/{latest_cursor['variant']}",
@@ -211,6 +252,7 @@ def main() -> int:
     print('generated: apps/cross-host-benchmark-site/generated/cursor-snapshots.json')
     print('generated: apps/cross-host-benchmark-site/generated/manifest.json')
     print(f"capture-skew-seconds: {manifest['captureSkew']['seconds']}")
+    print(f"pairing-comparability-class: {manifest['comparisonPolicy']['currentPairingClass']}")
     return 0
 
 

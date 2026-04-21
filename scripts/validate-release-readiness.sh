@@ -13,6 +13,7 @@ Validates release-readiness artifacts:
   - plugin version metadata
   - validator and smoke-test script presence
   - existing docs/power/root/benchmark validation suite
+  - cross-host benchmark comparability validation
   - direct Copilot CLI smoke script when copilot is available
 USAGE
 }
@@ -65,6 +66,7 @@ for path in \
   scripts/validate-root-copilot-surfaces.sh \
   scripts/validate-copilot-state-contract.sh \
   scripts/validate-benchmark-evidence.sh \
+  scripts/validate-cross-host-benchmark-data.py \
   scripts/validate-release-readiness.sh \
   scripts/smoke-copilot-cli.sh \
   packages/copilot-cli-plugin/skills/parity-guard/check-parity-claims.sh \
@@ -118,6 +120,7 @@ PY
 (cd "$ROOT" && ./scripts/validate-root-copilot-surfaces.sh)
 (cd "$ROOT" && ./scripts/validate-copilot-state-contract.sh)
 (cd "$ROOT" && ./scripts/validate-benchmark-evidence.sh)
+(cd "$ROOT" && python3 ./scripts/validate-cross-host-benchmark-data.py --app-root ./apps/cross-host-benchmark-site)
 
 if [[ "$RUN_COPILOT_SMOKE" == "1" ]]; then
   if command -v copilot >/dev/null 2>&1; then

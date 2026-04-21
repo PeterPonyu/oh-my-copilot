@@ -156,4 +156,5 @@ else
   log "model-backed agent prompt smoke skipped (set RUN_COPILOT_AGENT_SMOKE=1 to enable)"
 fi
 
+log "Copilot smoke proves route availability only; cross-host comparability is validated by separate benchmark harvest gates"
 log "Copilot CLI smoke validation complete"
