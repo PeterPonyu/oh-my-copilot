@@ -16,7 +16,7 @@
     "comparisonClass": "observed",
     "comparabilityClass": "reporting-comparable",
     "comparabilityNote": "oh-my-cursor backbone/baseline stays an observed repo-native benchmark row. It is safe for cross-host reporting, but it is not a mechanism-equivalent harness match.",
-    "harvestTimestamp": "2026-04-21T15:26:06Z",
+    "harvestTimestamp": "2026-04-21T15:38:11Z",
     "dimensions": [
       {
         "name": "default_auth",
@@ -90,7 +90,7 @@
     "comparisonClass": "observed",
     "comparabilityClass": "reporting-comparable",
     "comparabilityNote": "oh-my-cursor backbone/enhanced stays an observed repo-native benchmark row. It is safe for cross-host reporting, but it is not a mechanism-equivalent harness match.",
-    "harvestTimestamp": "2026-04-21T15:26:06Z",
+    "harvestTimestamp": "2026-04-21T15:38:11Z",
     "dimensions": [
       {
         "name": "default_auth",

@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-04-21T15:26:06Z",
+  "generatedAt": "2026-04-21T15:38:11Z",
   "generator": {
     "script": "scripts/harvest-cross-host-benchmark-data.py",
     "version": 2
@@ -23,8 +23,8 @@
       "sourceBranch": "main",
       "sourceSha": "fbf84fd",
       "workspaceBranch": "main",
-      "workspaceSha": "fbf84fd",
-      "harvestedAt": "2026-04-21T15:26:06Z",
+      "workspaceSha": "ae77950",
+      "harvestedAt": "2026-04-21T15:38:11Z",
       "historyPath": "benchmark/results/history.jsonl",
       "recordCount": 3,
       "snapshotPath": "apps/cross-host-benchmark-site/generated/copilot-snapshots.json",
@@ -37,8 +37,8 @@
       "sourceBranch": "main",
       "sourceSha": "ce0db00",
       "workspaceBranch": "main",
-      "workspaceSha": "ce0db00",
-      "harvestedAt": "2026-04-21T15:26:06Z",
+      "workspaceSha": "de12bc0",
+      "harvestedAt": "2026-04-21T15:38:11Z",
       "historyPath": "benchmark/results/history.jsonl",
       "recordCount": 2,
       "snapshotPath": "apps/cross-host-benchmark-site/generated/cursor-snapshots.json",
