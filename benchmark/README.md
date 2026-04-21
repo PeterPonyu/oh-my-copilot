@@ -39,6 +39,7 @@ Every run now emits three artifacts:
 - `<profile>_results.json` — per-check timing and output tails
 - `<profile>_report.md` — human-readable summary including evidence markers
 - `<profile>_evaluation.{json,md}` — scorecard + release-gate contract
+- `benchmark/results/history.{jsonl,md}` — append-only local score history keyed by timestamp, branch, and git SHA
 
 The evaluation contract is intentionally variant-aware:
 

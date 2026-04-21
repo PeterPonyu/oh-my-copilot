@@ -29,6 +29,7 @@ fi
 
 tail -n 20 "$INSTALL_LOG" || true
 "$ROOT/scripts/check-install-state.sh" --root "$ROOT"
+"$ROOT/scripts/validate-copilot-state-contract.sh" --root "$ROOT"
 
 ( cd "$ROOT" && ./scripts/validate-doc-links.sh )
 ( cd "$ROOT" && ./scripts/validate-power-surfaces.sh )

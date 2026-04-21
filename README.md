@@ -20,6 +20,7 @@ Those multi-surface expansions are out of scope for v1.
 | [`docs/comparison-matrix.md`](./docs/comparison-matrix.md) | Side-by-side comparison of OMC, OMX, and oh-my-copilot v1. |
 | [`docs/copilot-native-mapping.md`](./docs/copilot-native-mapping.md) | Mapping from OMC/OMX concepts to Copilot CLI primitives without forced parity. |
 | [`docs/benchmark-status.md`](./docs/benchmark-status.md) | Current checked-in benchmark snapshot with durations, score/evaluation gates, raw result links, and what the proof run actually established. |
+| [`docs/state-contract.md`](./docs/state-contract.md) | Local plugin/cache/hook state rules that keep root installs canonical and project-local. |
 | [`docs/root-registration.md`](./docs/root-registration.md) | Source-of-truth matrix for root workspace registration, plugin reuse, and example boundaries. |
 | [`docs/v1-repo-blueprint.md`](./docs/v1-repo-blueprint.md) | Concrete repository layout and artifact roles for the public v1. |
 | [`docs/vscode-copilot-testing.md`](./docs/vscode-copilot-testing.md) | How to smoke-test the root workspace and illustrative VS Code layout. |
@@ -105,6 +106,14 @@ Hook and log behavior is intentionally **project-local** and stable:
 This keeps logs separated across projects and avoids recreating hook config on
 every session start.
 
+Plugin installation state is also treated as part of the product contract:
+
+- the installed plugin cache should live under `~/.copilot/installed-plugins/`;
+- the installed plugin `source.path` should point at the canonical root
+  `packages/copilot-cli-plugin/` path, not a transient `.omx/team/...`
+  worktree; and
+- release validation now includes an explicit state-contract check for that.
+
 ## Status
 
 Research draft created April 20, 2026. The current product direction is a small,
@@ -122,6 +131,7 @@ Run the lightweight checks from the repository root:
 ./packages/copilot-cli-plugin/skills/parity-guard/check-parity-claims.sh .
 ./scripts/validate-power-surfaces.sh
 ./scripts/validate-root-copilot-surfaces.sh
+./scripts/validate-copilot-state-contract.sh
 ./scripts/validate-benchmark-evidence.sh
 ./scripts/validate-release-readiness.sh
 ./scripts/bootstrap-copilot-power.sh

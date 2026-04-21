@@ -7,6 +7,7 @@ import os
 import subprocess
 import sys
 import time
+from datetime import datetime, timezone
 from dataclasses import dataclass, asdict
 from pathlib import Path
 
@@ -56,6 +57,22 @@ class EvaluationContract:
     dimensions: list[EvaluationDimension]
 
 
+@dataclass
+class HistoryEntry:
+    timestamp: str
+    repo: str
+    git_branch: str
+    git_sha: str
+    profile: str
+    variant: str
+    score: int
+    max_score: int
+    threshold_score: int
+    passed: bool
+    release_blocking: bool
+    output_dir: str
+
+
 def run(cmd: str, cwd: Path, env: dict[str, str]) -> CheckResult:
     start = time.time()
     proc = subprocess.run(
@@ -83,6 +100,60 @@ def determine_variant(run_agent_smoke: bool, variant_arg: str) -> str:
     if variant_arg == "auto":
         return "enhanced" if run_agent_smoke else "vanilla"
     return variant_arg
+
+
+def git_value(root: Path, *args: str) -> str:
+    proc = subprocess.run(
+        ["git", *args],
+        cwd=str(root),
+        text=True,
+        capture_output=True,
+        check=True,
+    )
+    return proc.stdout.strip()
+
+
+def record_history(root: Path, outdir: Path, evaluation: EvaluationContract) -> None:
+    history_dir = (root / "benchmark" / "results").resolve()
+    history_dir.mkdir(parents=True, exist_ok=True)
+    history_path = history_dir / "history.jsonl"
+    history_md = history_dir / "history.md"
+
+    entry = HistoryEntry(
+        timestamp=datetime.now(timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z"),
+        repo=root.name,
+        git_branch=git_value(root, "branch", "--show-current"),
+        git_sha=git_value(root, "rev-parse", "--short", "HEAD"),
+        profile=evaluation.profile,
+        variant=evaluation.variant,
+        score=evaluation.score,
+        max_score=evaluation.max_score,
+        threshold_score=evaluation.threshold_score,
+        passed=evaluation.passed,
+        release_blocking=evaluation.release_blocking,
+        output_dir=os.path.relpath(outdir, root),
+    )
+
+    with history_path.open("a", encoding="utf-8") as fh:
+        fh.write(json.dumps(asdict(entry), ensure_ascii=False) + "\n")
+
+    entries = [json.loads(line) for line in history_path.read_text(encoding="utf-8").splitlines() if line.strip()]
+    entries = sorted(entries, key=lambda item: item["timestamp"], reverse=True)
+
+    md_lines = [
+        "# Benchmark History",
+        "",
+        "| Timestamp | Branch | SHA | Profile | Variant | Score | Threshold | Gate | Output |",
+        "| --- | --- | --- | --- | --- | ---: | ---: | --- | --- |",
+    ]
+    for item in entries:
+        md_lines.append(
+            f"| `{item['timestamp']}` | `{item['git_branch']}` | `{item['git_sha']}` | "
+            f"`{item['profile']}` | `{item['variant']}` | {item['score']}/{item['max_score']} | "
+            f"{item['threshold_score']}/{item['max_score']} | "
+            f"{'PASS' if item['passed'] else 'FAIL'} | `{item['output_dir']}` |"
+        )
+    history_md.write_text("\n".join(md_lines) + "\n", encoding="utf-8")
 
 
 def build_evaluation(
@@ -319,6 +390,8 @@ def main() -> int:
             ]
         )
     )
+
+    record_history(root, outdir, evaluation)
 
     return 0 if all(r.success for r in results) and evaluation.passed else 1
 
