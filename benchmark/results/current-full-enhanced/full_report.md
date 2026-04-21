@@ -10,11 +10,11 @@ Variant: `enhanced`
 | --- | --- | ---: | --- |
 | `docs_validation` | PASS | 0.21 | — |
 | `power_validation` | PASS | 0.07 | — |
-| `root_validation` | PASS | 0.13 | — |
-| `smoke_cli` | PASS | 35.15 | `ROOT_AGENT_OK`, `PLUGIN_AGENT_OK` |
-| `bootstrap` | PASS | 12.77 | `INSTALL_STATE: ok`, `source=example-workspace`, `source=plugin` |
+| `root_validation` | PASS | 0.14 | — |
+| `smoke_cli` | PASS | 42.42 | `ROOT_AGENT_OK`, `PLUGIN_AGENT_OK` |
+| `bootstrap` | PASS | 16.92 | `INSTALL_STATE: ok`, `source=example-workspace`, `source=plugin` |
 | `install_state` | PASS | 0.04 | `INSTALL_STATE: ok` |
-| `standalone_hook_proof` | PASS | 15.56 | `source=example-workspace`, `source=plugin` |
+| `standalone_hook_proof` | PASS | 13.7 | `source=example-workspace`, `source=plugin` |
 
 ## Evaluation contract
 
@@ -105,18 +105,18 @@ ok: Copilot CLI smoke validation complete
 ## bootstrap
 
 ```text
+ok: cross-host methodology route explains comparability classes
+ok: CI runs root Copilot surface validation
 ok: root Copilot surface validation complete
 ok: standalone workspace hook proof succeeded
 log:
-source=example-workspace event=sessionStart timestamp=2026-04-21T14:42:47Z cwd=/tmp/vscode-copilot-layout-standalone
-source=plugin event=sessionStart timestamp=2026-04-21T14:42:47Z cwd=/tmp/vscode-copilot-layout-standalone
-source=example-workspace event=sessionStart timestamp=2026-04-21T14:42:49Z cwd=/tmp/vscode-copilot-layout-standalone
-source=plugin event=sessionStart timestamp=2026-04-21T14:42:49Z cwd=/tmp/vscode-copilot-layout-standalone
+source=example-workspace event=sessionStart timestamp=2026-04-21T15:00:37Z cwd=/tmp/vscode-copilot-layout-standalone
+source=plugin event=sessionStart timestamp=2026-04-21T15:00:37Z cwd=/tmp/vscode-copilot-layout-standalone
 ok: bootstrap complete
 
 Changes   +0 -0
-Requests  1 Premium (9s)
-Tokens    ↑ 17.7k • ↓ 87 • 16.9k (cached) • 78 (reasoning)
+Requests  1 Premium (13s)
+Tokens    ↑ 17.7k • ↓ 94 • 16.9k (cached) • 85 (reasoning)
 ```
 
 ## install_state
@@ -141,10 +141,12 @@ INSTALL_STATE_SUMMARY
 ```text
 ok: standalone workspace hook proof succeeded
 log:
-source=example-workspace event=sessionStart timestamp=2026-04-21T14:42:59Z cwd=/tmp/vscode-copilot-layout-standalone
-source=plugin event=sessionStart timestamp=2026-04-21T14:42:59Z cwd=/tmp/vscode-copilot-layout-standalone
+source=example-workspace event=sessionStart timestamp=2026-04-21T15:00:51Z cwd=/tmp/vscode-copilot-layout-standalone
+source=plugin event=sessionStart timestamp=2026-04-21T15:00:51Z cwd=/tmp/vscode-copilot-layout-standalone
+source=example-workspace event=sessionStart timestamp=2026-04-21T15:00:56Z cwd=/tmp/vscode-copilot-layout-standalone
+source=plugin event=sessionStart timestamp=2026-04-21T15:00:56Z cwd=/tmp/vscode-copilot-layout-standalone
 
 Changes   +0 -0
-Requests  1 Premium (11s)
-Tokens    ↑ 17.7k • ↓ 134 • 16.9k (cached) • 125 (reasoning)
+Requests  1 Premium (10s)
+Tokens    ↑ 17.7k • ↓ 118 • 16.9k (cached) • 109 (reasoning)
 ```

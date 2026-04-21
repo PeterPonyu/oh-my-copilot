@@ -11,7 +11,7 @@ Variant: `enhanced`
 | `docs_validation` | PASS | 0.2 | — |
 | `power_validation` | PASS | 0.07 | — |
 | `root_validation` | PASS | 0.13 | — |
-| `smoke_cli` | PASS | 35.72 | `ROOT_AGENT_OK`, `PLUGIN_AGENT_OK` |
+| `smoke_cli` | PASS | 35.9 | `ROOT_AGENT_OK`, `PLUGIN_AGENT_OK` |
 
 ## Evaluation contract
 
