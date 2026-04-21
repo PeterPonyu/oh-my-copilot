@@ -1,0 +1,146 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-04-21T06:46:14Z",
+  "repo": {
+    "name": "oh-my-copilot",
+    "host_surface": "GitHub Copilot CLI",
+    "product_boundary": "Copilot CLI-first, docs/research-first",
+    "path_style": "repository-relative"
+  },
+  "separation_contract": {
+    "generated_evidence_file": "benchmark/results/site/oh-my-copilot.evidence.json",
+    "curated_story_file": "benchmark/results/site/oh-my-copilot.story.json",
+    "note": "Generated proof indexes live here; presentation framing and editorial copy live in the curated story file."
+  },
+  "benchmark_evidence": {
+    "quick_enhanced": {
+      "profile": "quick",
+      "variant": "enhanced",
+      "score": 100,
+      "max_score": 100,
+      "threshold_score": 100,
+      "passed": true,
+      "release_blocking": false,
+      "expected_vanilla_score": 60,
+      "required_delta_vs_vanilla": 40,
+      "actual_delta_vs_vanilla": 40,
+      "required_dimensions": [
+        "docs_validation",
+        "power_validation",
+        "root_validation",
+        "smoke_cli",
+        "ROOT_AGENT_OK",
+        "PLUGIN_AGENT_OK"
+      ],
+      "passed_dimensions": [
+        "docs_validation",
+        "power_validation",
+        "root_validation",
+        "smoke_cli",
+        "ROOT_AGENT_OK",
+        "PLUGIN_AGENT_OK"
+      ],
+      "paths": {
+        "evaluation": "benchmark/results/current-quick-enhanced/quick_evaluation.json",
+        "report": "benchmark/results/current-quick-enhanced/quick_evaluation.md",
+        "results": "benchmark/results/current-quick-enhanced/quick_results.json"
+      }
+    },
+    "full_enhanced": {
+      "profile": "full",
+      "variant": "enhanced",
+      "score": 100,
+      "max_score": 100,
+      "threshold_score": 100,
+      "passed": true,
+      "release_blocking": false,
+      "expected_vanilla_score": 70,
+      "required_delta_vs_vanilla": 30,
+      "actual_delta_vs_vanilla": 30,
+      "required_dimensions": [
+        "docs_validation",
+        "power_validation",
+        "root_validation",
+        "smoke_cli",
+        "bootstrap",
+        "install_state",
+        "standalone_hook_proof",
+        "ROOT_AGENT_OK",
+        "PLUGIN_AGENT_OK"
+      ],
+      "passed_dimensions": [
+        "docs_validation",
+        "power_validation",
+        "root_validation",
+        "smoke_cli",
+        "bootstrap",
+        "install_state",
+        "standalone_hook_proof",
+        "ROOT_AGENT_OK",
+        "PLUGIN_AGENT_OK"
+      ],
+      "paths": {
+        "evaluation": "benchmark/results/current-full-enhanced/full_evaluation.json",
+        "report": "benchmark/results/current-full-enhanced/full_evaluation.md",
+        "results": "benchmark/results/current-full-enhanced/full_results.json"
+      }
+    }
+  },
+  "document_refs": {
+    "state_contract_doc": {
+      "path": "docs/state-contract.md",
+      "focus": [
+        "Canonical plugin source path",
+        "User-global vs project-local state",
+        "Why this is benchmark-relevant",
+        "Local validation"
+      ]
+    },
+    "benchmark_status_doc": {
+      "path": "docs/benchmark-status.md",
+      "focus": [
+        "Release-blocking evaluation contract",
+        "Evaluation contract (current policy)",
+        "State-management note",
+        "Remaining gaps"
+      ]
+    },
+    "quick_start_doc": {
+      "path": "docs/quick-start.md",
+      "focus": [
+        "Run low-friction checks",
+        "Bootstrap when prerequisites are present"
+      ]
+    },
+    "installation_doc": {
+      "path": "docs/installation.md",
+      "focus": [
+        "Prerequisites",
+        "Install path",
+        "Troubleshooting"
+      ]
+    },
+    "references_doc": {
+      "path": "docs/references.md",
+      "focus": [
+        "GitHub Copilot CLI",
+        "Cursor current-state comparison inputs"
+      ]
+    },
+    "known_limitations_doc": {
+      "path": "docs/known-limitations.md",
+      "focus": [
+        "Install limitations",
+        "Documentation limitations",
+        "Release limitations"
+      ]
+    },
+    "comparison_matrix_doc": {
+      "path": "docs/comparison-matrix.md",
+      "focus": [
+        "State philosophy",
+        "Adjacent host note: Cursor"
+      ]
+    }
+  }
+}

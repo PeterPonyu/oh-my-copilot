@@ -13,5 +13,7 @@ Current checked-in snapshot summary:
 - [`quick-baseline-20260420T161903Z/`](./quick-baseline-20260420T161903Z/)
 - [`quick-agent-smoke-20260420T161903Z/`](./quick-agent-smoke-20260420T161903Z/)
 - [`full-agent-smoke-20260420T161903Z/`](./full-agent-smoke-20260420T161903Z/)
+- [`site/`](./site/) for presentation-oriented repo artifacts that keep
+  generated evidence separate from curated interpretation
 
 Other result files in this directory may still be regenerated at any time.

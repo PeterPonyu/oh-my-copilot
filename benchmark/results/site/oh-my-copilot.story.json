@@ -1,0 +1,84 @@
+{
+  "schema_version": 1,
+  "slug": "oh-my-copilot",
+  "display_name": "oh-my-copilot",
+  "host_surface": "GitHub Copilot CLI",
+  "product_shape": "Copilot CLI-first, docs/research-first proof harness",
+  "evidence_file": "./oh-my-copilot.evidence.json",
+  "hero": {
+    "headline": "State handling is part of the product proof, not hidden glue.",
+    "summary": "The repo makes plugin source-path drift, hook locality, and release-gating evidence visible through checked-in docs plus scored benchmark outputs.",
+    "evidence_refs": [
+      "state_contract_doc",
+      "benchmark_status_doc",
+      "full_enhanced"
+    ]
+  },
+  "sections": [
+    {
+      "id": "state-management-visibility",
+      "title": "State-management visibility comes first",
+      "kind": "strength",
+      "summary": "The repo treats state as a first-class contract: canonical plugin source path, explicit user-global versus project-local split, and dedicated validation commands.",
+      "display_points": [
+        "Canonical plugin source path stays rooted at packages/copilot-cli-plugin/ rather than transient .omx/team worktrees.",
+        "Project-local hook evidence remains under .copilot-hooks/ while user-global Copilot state remains under ~/.copilot/.",
+        "State drift is release-relevant and called out separately from benchmark scoring."
+      ],
+      "evidence_refs": [
+        "state_contract_doc",
+        "benchmark_status_doc",
+        "full_enhanced"
+      ]
+    },
+    {
+      "id": "auth-and-fallback",
+      "title": "Authenticated flows and fallback paths are explicit",
+      "kind": "operating-note",
+      "summary": "Bootstrap and live prompt-smoke paths require authenticated Copilot tooling, but low-friction validators still work before install/auth succeeds.",
+      "display_points": [
+        "Bootstrap expects both copilot and gh on PATH and authenticated for the environment.",
+        "Live prompt smoke depends on a signed-in Copilot CLI session with model access.",
+        "Low-friction validation still starts with docs, root-surface, power-surface, and state-contract checks."
+      ],
+      "evidence_refs": [
+        "quick_start_doc",
+        "installation_doc",
+        "benchmark_status_doc"
+      ]
+    },
+    {
+      "id": "cursor-boundary",
+      "title": "Cursor remains a comparison input, not claimed support",
+      "kind": "boundary",
+      "summary": "Cursor sources are retained for sibling planning and cross-host comparison only. The repo keeps that boundary visible instead of presenting Cursor as a validated host.",
+      "display_points": [
+        "Cursor docs inform comparison and sibling oh-my-cursor planning only.",
+        "Release and limitation docs explicitly reject treating Cursor language as shipping proof.",
+        "Any future Cursor support would require a new approved plan and direct proof."
+      ],
+      "evidence_refs": [
+        "references_doc",
+        "known_limitations_doc",
+        "comparison_matrix_doc"
+      ]
+    }
+  ],
+  "scoreboard": {
+    "quick_enhanced_ref": "quick_enhanced",
+    "full_enhanced_ref": "full_enhanced",
+    "callout": "Current checked-in enhanced quick and full evaluations both pass at 100/100."
+  },
+  "presentation_hints": {
+    "default_focus_order": [
+      "state-management-visibility",
+      "auth-and-fallback",
+      "cursor-boundary"
+    ],
+    "badge_labels": [
+      "state-contract-visible",
+      "auth-explicit",
+      "cursor-comparison-only"
+    ]
+  }
+}
