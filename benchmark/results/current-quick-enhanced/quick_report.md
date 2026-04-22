@@ -8,10 +8,10 @@ Variant: `enhanced`
 
 | Check | Result | Duration (s) | Markers |
 | --- | --- | ---: | --- |
-| `docs_validation` | PASS | 0.2 | — |
+| `docs_validation` | PASS | 0.19 | — |
 | `power_validation` | PASS | 0.08 | `REFINEMENT_MAP_OK`, `PLUGIN_BOUNDARY_OK`, `DISCOVERABILITY_OK` |
 | `root_validation` | PASS | 0.12 | — |
-| `smoke_cli` | PASS | 65.21 | `ROOT_AGENT_OK`, `PLUGIN_AGENT_OK`, `TASK_SCENARIO_OK`, `TASK_PLAN_OK`, `TASK_COMMAND_OK` |
+| `smoke_cli` | PASS | 62.16 | `ROOT_AGENT_OK`, `PLUGIN_AGENT_OK`, `TASK_SCENARIO_OK`, `TASK_PLAN_OK`, `TASK_COMMAND_OK` |
 
 ## Evaluation contract
 

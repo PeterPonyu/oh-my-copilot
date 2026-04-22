@@ -82,7 +82,7 @@
       "weight": 10,
       "required": true,
       "passed": true,
-      "evidence": "ok: cross-host methodology route explains comparability classes\nok: CI runs root Copilot surface validation\nok: root Copilot surface validation complete\nok: standalone workspace hook proof succeeded\nlog:\nsource=example-workspace event=sessionStart timestamp=2026-04-22T04:06:27Z cwd=/tmp/vscode-copilot-layout-standalone\nsource=plugin event=sessionStart timestamp=2026-04-22T04:06:27Z cwd=/tmp/vscode-copilot-layout-standalone\nok: bootstrap complete\n\nChanges   +0 -0\nRequests  1 Premium (9s)\nTokens    \u2191 17.7k \u2022 \u2193 163 \u2022 16.9k (cached) \u2022 154 (reasoning)"
+      "evidence": "ok: cross-host methodology route explains comparability classes\nok: CI runs root Copilot surface validation\nok: root Copilot surface validation complete\nok: standalone workspace hook proof succeeded\nlog:\nsource=example-workspace event=sessionStart timestamp=2026-04-22T04:30:47Z cwd=/tmp/vscode-copilot-layout-standalone\nsource=plugin event=sessionStart timestamp=2026-04-22T04:30:47Z cwd=/tmp/vscode-copilot-layout-standalone\nok: bootstrap complete\n\nChanges   +0 -0\nRequests  1 Premium (8s)\nTokens    \u2191 17.7k \u2022 \u2193 127 \u2022 16.9k (cached) \u2022 118 (reasoning)"
     },
     {
       "name": "install_state",
@@ -100,7 +100,7 @@
       "weight": 10,
       "required": true,
       "passed": true,
-      "evidence": "ok: standalone workspace hook proof succeeded\nlog:\nsource=example-workspace event=sessionStart timestamp=2026-04-22T04:06:39Z cwd=/tmp/vscode-copilot-layout-standalone\nsource=plugin event=sessionStart timestamp=2026-04-22T04:06:39Z cwd=/tmp/vscode-copilot-layout-standalone\n\nChanges   +0 -0\nRequests  1 Premium (8s)\nTokens    \u2191 17.7k \u2022 \u2193 143 \u2022 16.9k (cached) \u2022 134 (reasoning)"
+      "evidence": "ok: standalone workspace hook proof succeeded\nlog:\nsource=example-workspace event=sessionStart timestamp=2026-04-22T04:30:58Z cwd=/tmp/vscode-copilot-layout-standalone\nsource=plugin event=sessionStart timestamp=2026-04-22T04:30:58Z cwd=/tmp/vscode-copilot-layout-standalone\n\nChanges   +0 -0\nRequests  1 Premium (8s)\nTokens    \u2191 17.7k \u2022 \u2193 111 \u2022 16.9k (cached) \u2022 102 (reasoning)"
     },
     {
       "name": "ROOT_AGENT_OK",
