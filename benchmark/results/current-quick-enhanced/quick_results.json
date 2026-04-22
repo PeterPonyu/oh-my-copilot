@@ -12,8 +12,11 @@
     "command": "./scripts/validate-power-surfaces.sh",
     "success": true,
     "duration_sec": 0.06,
-    "output_tail": "ok: VS Code settings enable AGENTS.md loading\nok: VS Code settings enable skills\nok: VS Code prompt file uses a custom agent\nok: plugin.json parses and includes core keys\nok: plugin hooks.json has versioned schema\nok: README mentions VS Code layout\nok: README mentions Copilot CLI plugin package\nok: cross-host app overview preserves isolated presentation boundary\nok: cross-host methodology route names comparability classes\nok: cross-host presentation primitives preserve repo-native warning\nok: cross-host benchmark site files exist and generated data validates\nok: power surfaces validation complete",
-    "markers": []
+    "output_tail": "ok: plugin hooks.json has versioned schema\nok: README mentions VS Code layout\nok: README mentions Copilot CLI plugin package\nok: README exposes refinement priority map\nok: README exposes plugin boundary review\nok: REFINEMENT_MAP_OK\nok: PLUGIN_BOUNDARY_OK\nok: cross-host app overview preserves isolated presentation boundary\nok: cross-host methodology route names comparability classes\nok: cross-host presentation primitives preserve repo-native warning\nok: cross-host benchmark site files exist and generated data validates\nok: power surfaces validation complete",
+    "markers": [
+      "REFINEMENT_MAP_OK",
+      "PLUGIN_BOUNDARY_OK"
+    ]
   },
   {
     "name": "root_validation",
@@ -27,7 +30,7 @@
     "name": "smoke_cli",
     "command": "./scripts/smoke-copilot-cli.sh",
     "success": true,
-    "duration_sec": 23.15,
+    "duration_sec": 22.06,
     "output_tail": "GitHub Copilot CLI 1.0.34.\nRun 'copilot update' to check for updates.\nok: copilot CLI version command succeeds\nok: copilot help exposes agent/plugin options\nok: copilot plugin command is available\nok: root reviewer/research/verifier agents exist\nok: plugin metadata parses for oh-my-copilot-power-pack@0.1.0\nok: installed plugin entry found in ~/.copilot/config.json\nok: root reviewer agent prompt smoke returned ROOT_AGENT_OK\nok: namespaced plugin reviewer agent prompt smoke returned PLUGIN_AGENT_OK\nok: Copilot smoke proves route availability only; cross-host comparability is validated by separate benchmark harvest gates\nok: Copilot CLI smoke validation complete",
     "markers": [
       "ROOT_AGENT_OK",

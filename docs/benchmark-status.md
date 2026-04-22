@@ -3,9 +3,9 @@
 This document records the current checked-in local proof snapshot for
 `oh-my-copilot`.
 
-Snapshot refresh window: `2026-04-21T13:46:27Z` to `2026-04-21T13:47:43Z` (UTC)
+Snapshot refresh window: `2026-04-22T02:42:41Z` to `2026-04-22T02:45:04Z` (UTC)
 
-Snapshot git SHA: `71cc53c` on `main`
+Snapshot git SHA: `16dbf9b` on `main`
 
 Environment notes:
 
@@ -19,11 +19,12 @@ Environment notes:
 
 ## Current snapshot
 
-| Run | Purpose | Total duration (s) | Result | Evidence score | Raw output |
-| --- | --- | ---: | --- | --- | --- |
-| `quick-baseline` | fast validation without model-backed agent prompts | 2.02 | PASS | 4/4 required checks (100%) | [`benchmark/results/current-quick-vanilla/`](../benchmark/results/current-quick-vanilla/) |
-| `quick-agent-smoke` | fast validation plus root/plugin reviewer prompt smoke | 25.41 | PASS | 4/4 required checks (100%) + `ROOT_AGENT_OK` + `PLUGIN_AGENT_OK` | [`benchmark/results/current-quick-enhanced/`](../benchmark/results/current-quick-enhanced/) |
-| `full-agent-smoke` | full proof including bootstrap, install-state, and standalone hook proof | 50.80 | PASS | 7/7 required checks (100%) + install/hook evidence | [`benchmark/results/current-full-enhanced/`](../benchmark/results/current-full-enhanced/) |
+| Run | Purpose | Result | Evaluation score | Raw output |
+| --- | --- | --- | --- | --- |
+| `quick-vanilla` | fast baseline proof without model-backed prompt smoke | PASS | **80/120** | [`benchmark/results/current-quick-vanilla/`](../benchmark/results/current-quick-vanilla/) |
+| `quick-enhanced` | fast proof plus root/plugin reviewer prompt smoke | PASS | **120/120** | [`benchmark/results/current-quick-enhanced/`](../benchmark/results/current-quick-enhanced/) |
+| `full-vanilla` | stronger end-to-end proof without live prompt-smoke markers | PASS | **80/110** | [`benchmark/results/current-full-vanilla/`](../benchmark/results/current-full-vanilla/) |
+| `full-enhanced` | full proof including bootstrap, install-state, standalone hook proof, and prompt smoke | PASS | **110/110** | [`benchmark/results/current-full-enhanced/`](../benchmark/results/current-full-enhanced/) |
 
 ## Release-blocking evaluation contract
 
@@ -36,42 +37,12 @@ workspace, reusable plugin package, and example-related evidence boundaries in
 this repo. They do not re-prove every upstream Copilot CLI capability mentioned
 elsewhere in the docs.
 
-- **Baseline gate (`quick-baseline`)**: `docs_validation`,
-  `power_validation`, `root_validation`, and `smoke_cli` must all pass.
-  Release-blocking threshold: **4/4 required checks = 100%**.
-- **Enhanced prompt gate (`quick-agent-smoke`)**: the same four checks must
-  pass, and `smoke_cli` must include both `ROOT_AGENT_OK` and
-  `PLUGIN_AGENT_OK` to prove root and namespaced plugin reviewer routing.
-  Release-blocking threshold: **4/4 required checks = 100% plus both prompt
-  tokens**.
-- **Enhanced end-to-end gate (`full-agent-smoke`)**: all seven checks must
-  pass, `install_state` must include `INSTALL_STATE: ok`, and
-  `standalone_hook_proof` must confirm standalone hook success. Release-
-  blocking threshold: **7/7 required checks = 100% plus install/hook proof**.
-
-`scripts/validate-benchmark-evidence.sh` enforces this contract against the
-checked-in result snapshots before release.
-
-## Claim boundary for this benchmark
-
-- What this benchmark can prove: root/plugin/example routing, validator output,
-  install-state behavior, and source-labelled hook evidence captured by this
-  repository.
-- What this benchmark cannot prove by itself: broad model quality, cross-host
-  support, or upstream Copilot CLI host-product features such as plan mode,
-  autopilot mode, or built-in delegation.
-- For host-product capability claims, use the GitHub sources collected in
-  [`docs/references.md`](./references.md) in addition to any local smoke notes.
-
-## Evaluation contract (current policy)
-
-Benchmark runs are now expected to produce both timing output and an evaluation
-contract so the suite can distinguish `vanilla` proof from `enhanced` proof.
+Current thresholds:
 
 | Profile | Vanilla threshold | Enhanced threshold | Required enhanced evidence |
 | --- | ---: | ---: | --- |
-| `quick` | 60/100 | 100/100 | `ROOT_AGENT_OK`, `PLUGIN_AGENT_OK` |
-| `full` | 70/100 | 100/100 | `ROOT_AGENT_OK`, `PLUGIN_AGENT_OK`, `INSTALL_STATE: ok`, `source=example-workspace`, `source=plugin` |
+| `quick` | 80/120 | 120/120 | `ROOT_AGENT_OK`, `PLUGIN_AGENT_OK` |
+| `full` | 80/110 | 110/110 | `ROOT_AGENT_OK`, `PLUGIN_AGENT_OK`, `INSTALL_STATE: ok`, `source=example-workspace`, `source=plugin` |
 
 Interpretation:
 
@@ -80,11 +51,19 @@ Interpretation:
 - `enhanced` is the stricter release-gating contract because it must exceed the
   vanilla floor and include the prompt/hook/install evidence markers that prove
   stronger Copilot behavior.
+- The baseline floors now also require the README-visible
+  [`docs/refinement-priority-map.md`](./refinement-priority-map.md) and
+  [`docs/plugin-boundary-review.md`](./plugin-boundary-review.md) links, because
+  those documents are now part of the repo-owned proof surface.
 - A failing threshold is release-blocking for the selected benchmark variant.
 
-## What passed
+`scripts/validate-benchmark-evidence.sh` enforces this contract against the
+checked-in result snapshots before release.
+
+## What passed in the current snapshot
 
 - docs validation stayed green in every run
+- power-surface validation stayed green in every run
 - root surface validation stayed green in every run
 - Copilot CLI smoke checks passed in every run
 - root reviewer prompt smoke returned `ROOT_AGENT_OK`
@@ -92,10 +71,10 @@ Interpretation:
 - install-state proof returned `INSTALL_STATE: ok`
 - standalone hook proof logged both `source=example-workspace` and
   `source=plugin`
-- docs validation now ignores vendored `node_modules/` markdown so local site
-  installs do not create false benchmark failures
-- checked-in reports now record the canonical repo root instead of transient OMX
-  team worktree paths
+- the README now exposes both the refinement-priority map and the
+  plugin-boundary review as benchmarked repo-owned discovery points
+- checked-in reports continue to record the canonical repo root instead of
+  transient OMX team worktree paths
 
 ## What this proves today
 
@@ -104,8 +83,10 @@ The current repo is more than a static layout:
 - root `AGENTS.md`, prompt, skill, and hook registration are discoverable
 - the reusable plugin package is installed and routed separately from root-local
   aliases
+- the refinement-priority map and plugin-boundary review are visible as
+  repository-owned guidance, not hidden implementation notes
 - benchmark-style proof runs can catch regressions in root routing, plugin
-  installation, and hook evidence
+  installation, hook evidence, and the visibility of newly shipped proof docs
 - the checked-in proof is still intentionally Copilot CLI-only rather than a
   cross-host OMC/OMX/Cursor benchmark
 
@@ -113,6 +94,15 @@ This is still a product proof harness, not a broad benchmark of model quality or
 an OMC/OMX runtime parity claim. It should also not be read as proof that this
 repository implements Copilot CLI plan/autopilot/delegation behavior; those are
 upstream host-product capabilities documented separately.
+
+## Improvement summaries from the current runs
+
+- `quick-vanilla`: baseline floor established at **80/120**
+- `quick-enhanced`: improved by **40** over the vanilla floor; benchmark-backed
+  uplift observed
+- `full-vanilla`: baseline floor established at **80/110**
+- `full-enhanced`: improved by **30** over the vanilla floor; benchmark-backed
+  uplift observed
 
 ## State-management note
 

@@ -1,37 +1,43 @@
-# Benchmark Results (quick)
+# Benchmark Results (full)
 
 Root: `/home/zeyufu/Desktop/oh-my-copilot`
 
 Invocation root: `/home/zeyufu/Desktop/oh-my-copilot`
 
-Variant: `enhanced`
+Variant: `vanilla`
 
 | Check | Result | Duration (s) | Markers |
 | --- | --- | ---: | --- |
 | `docs_validation` | PASS | 0.2 | — |
-| `power_validation` | PASS | 0.06 | `REFINEMENT_MAP_OK`, `PLUGIN_BOUNDARY_OK` |
+| `power_validation` | PASS | 0.07 | `REFINEMENT_MAP_OK`, `PLUGIN_BOUNDARY_OK` |
 | `root_validation` | PASS | 0.12 | — |
-| `smoke_cli` | PASS | 22.06 | `ROOT_AGENT_OK`, `PLUGIN_AGENT_OK` |
+| `smoke_cli` | PASS | 1.57 | — |
+| `bootstrap` | PASS | 14.64 | `INSTALL_STATE: ok`, `source=example-workspace`, `source=plugin`, `REFINEMENT_MAP_OK`, `PLUGIN_BOUNDARY_OK` |
+| `install_state` | PASS | 0.04 | `INSTALL_STATE: ok` |
+| `standalone_hook_proof` | PASS | 14.24 | `source=example-workspace`, `source=plugin` |
 
 ## Evaluation contract
 
 | Variant | Score | Threshold | Release gate | Vanilla floor | Required delta vs vanilla |
 | --- | ---: | ---: | --- | ---: | ---: |
-| `enhanced` | 120/120 | 120/120 | PASS | 80/120 | 40 |
+| `vanilla` | 80/110 | 80/110 | PASS | 80/110 | 30 |
 
-- Improvement summary: Enhanced evidence improved by 40 over the vanilla floor; benchmark-backed uplift observed.
+- Improvement summary: Vanilla reference run establishes the comparison floor; use an enhanced run to measure prompt-smoke uplift.
 - Investigation required: no
 
 | Dimension | Required | Passed | Weight |
 | --- | --- | --- | ---: |
-| `docs_validation` | yes | PASS | 15 |
-| `power_validation` | yes | PASS | 15 |
-| `root_validation` | yes | PASS | 15 |
-| `REFINEMENT_MAP_OK` | yes | PASS | 10 |
-| `PLUGIN_BOUNDARY_OK` | yes | PASS | 10 |
-| `smoke_cli` | yes | PASS | 15 |
-| `ROOT_AGENT_OK` | yes | PASS | 20 |
-| `PLUGIN_AGENT_OK` | yes | PASS | 20 |
+| `docs_validation` | yes | PASS | 10 |
+| `power_validation` | yes | PASS | 10 |
+| `root_validation` | yes | PASS | 10 |
+| `REFINEMENT_MAP_OK` | yes | PASS | 5 |
+| `PLUGIN_BOUNDARY_OK` | yes | PASS | 5 |
+| `smoke_cli` | yes | PASS | 10 |
+| `bootstrap` | yes | PASS | 10 |
+| `install_state` | yes | PASS | 10 |
+| `standalone_hook_proof` | yes | PASS | 10 |
+| `ROOT_AGENT_OK` | no | FAIL | 15 |
+| `PLUGIN_AGENT_OK` | no | FAIL | 15 |
 
 ## docs_validation
 
@@ -95,8 +101,54 @@ ok: copilot plugin command is available
 ok: root reviewer/research/verifier agents exist
 ok: plugin metadata parses for oh-my-copilot-power-pack@0.1.0
 ok: installed plugin entry found in ~/.copilot/config.json
-ok: root reviewer agent prompt smoke returned ROOT_AGENT_OK
-ok: namespaced plugin reviewer agent prompt smoke returned PLUGIN_AGENT_OK
+ok: model-backed agent prompt smoke skipped (set RUN_COPILOT_AGENT_SMOKE=1 to enable)
 ok: Copilot smoke proves route availability only; cross-host comparability is validated by separate benchmark harvest gates
 ok: Copilot CLI smoke validation complete
+```
+
+## bootstrap
+
+```text
+ok: cross-host methodology route explains comparability classes
+ok: CI runs root Copilot surface validation
+ok: root Copilot surface validation complete
+ok: standalone workspace hook proof succeeded
+log:
+source=example-workspace event=sessionStart timestamp=2026-04-22T02:43:53Z cwd=/tmp/vscode-copilot-layout-standalone
+source=plugin event=sessionStart timestamp=2026-04-22T02:43:53Z cwd=/tmp/vscode-copilot-layout-standalone
+ok: bootstrap complete
+
+Changes   +0 -0
+Requests  1 Premium (11s)
+Tokens    ↑ 17.7k • ↓ 56 • 1.5k (cached) • 47 (reasoning)
+```
+
+## install_state
+
+```text
+ok: installed source path is canonical: /home/zeyufu/Desktop/oh-my-copilot/packages/copilot-cli-plugin
+ok: plugin config entry found in /home/zeyufu/.copilot/config.json
+ok: installed plugin cache verified at /home/zeyufu/.copilot/installed-plugins/_direct/copilot-cli-plugin
+INSTALL_STATE: ok
+
+INSTALL_STATE_SUMMARY
+=====================
+- Root: /home/zeyufu/Desktop/oh-my-copilot
+- Plugin manifest: /home/zeyufu/Desktop/oh-my-copilot/packages/copilot-cli-plugin/plugin.json
+- Copilot config: /home/zeyufu/.copilot/config.json
+- Expected plugin name: oh-my-copilot-power-pack
+- Result: PASS
+```
+
+## standalone_hook_proof
+
+```text
+ok: standalone workspace hook proof succeeded
+log:
+source=example-workspace event=sessionStart timestamp=2026-04-22T02:44:06Z cwd=/tmp/vscode-copilot-layout-standalone
+source=plugin event=sessionStart timestamp=2026-04-22T02:44:06Z cwd=/tmp/vscode-copilot-layout-standalone
+
+Changes   +0 -0
+Requests  1 Premium (12s)
+Tokens    ↑ 17.7k • ↓ 228 • 16.9k (cached) • 219 (reasoning)
 ```
