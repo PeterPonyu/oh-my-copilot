@@ -3,7 +3,7 @@
     "name": "docs_validation",
     "command": "./scripts/validate-doc-links.sh",
     "success": true,
-    "duration_sec": 0.2,
+    "duration_sec": 0.21,
     "output_tail": "ok: research/omc-analysis.md has an Evidence section\nok: research/omc-analysis.md has an Inference/Assumption section\nok: research/omx-analysis.md has an Evidence section\nok: research/omx-analysis.md has an Inference/Assumption section\nok: research/copilot-cli-capabilities.md has an Evidence section\nok: research/copilot-cli-capabilities.md has an Inference/Assumption section\nok: mapping distinguishes source-backed claims from inference\nok: scope creep terms are bounded\nok: illustrative hook policy JSON is valid\nok: internal Markdown links resolve\nok: external link checks skipped (set CHECK_EXTERNAL=1 to enable)\nok: oh-my-copilot docs/research/examples validation complete",
     "markers": []
   },
@@ -11,7 +11,7 @@
     "name": "power_validation",
     "command": "./scripts/validate-power-surfaces.sh",
     "success": true,
-    "duration_sec": 0.07,
+    "duration_sec": 0.06,
     "output_tail": "ok: VS Code settings enable AGENTS.md loading\nok: VS Code settings enable skills\nok: VS Code prompt file uses a custom agent\nok: plugin.json parses and includes core keys\nok: plugin hooks.json has versioned schema\nok: README mentions VS Code layout\nok: README mentions Copilot CLI plugin package\nok: cross-host app overview preserves isolated presentation boundary\nok: cross-host methodology route names comparability classes\nok: cross-host presentation primitives preserve repo-native warning\nok: cross-host benchmark site files exist and generated data validates\nok: power surfaces validation complete",
     "markers": []
   },
@@ -19,7 +19,7 @@
     "name": "root_validation",
     "command": "./scripts/validate-root-copilot-surfaces.sh",
     "success": true,
-    "duration_sec": 0.14,
+    "duration_sec": 0.13,
     "output_tail": "ok: post-tool hook logs root-workspace source\nok: root hook config uses shared schema\nok: README distinguishes root workspace from plugin/example surfaces\nok: README mentions reusable plugin package\nok: README keeps examples illustrative\nok: root registration doc states plugin canonicality\nok: root registration doc keeps examples as examples\nok: cross-host app layout frames evidence-oriented presentation\nok: cross-host overview keeps repo-native benchmark wording\nok: cross-host methodology route explains comparability classes\nok: CI runs root Copilot surface validation\nok: root Copilot surface validation complete",
     "markers": []
   },
@@ -27,7 +27,7 @@
     "name": "smoke_cli",
     "command": "./scripts/smoke-copilot-cli.sh",
     "success": true,
-    "duration_sec": 1.76,
+    "duration_sec": 1.56,
     "output_tail": "GitHub Copilot CLI 1.0.34.\nRun 'copilot update' to check for updates.\nok: copilot CLI version command succeeds\nok: copilot help exposes agent/plugin options\nok: copilot plugin command is available\nok: root reviewer/research/verifier agents exist\nok: plugin metadata parses for oh-my-copilot-power-pack@0.1.0\nok: installed plugin entry found in ~/.copilot/config.json\nok: model-backed agent prompt smoke skipped (set RUN_COPILOT_AGENT_SMOKE=1 to enable)\nok: Copilot smoke proves route availability only; cross-host comparability is validated by separate benchmark harvest gates\nok: Copilot CLI smoke validation complete",
     "markers": []
   }
