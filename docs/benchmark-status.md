@@ -3,7 +3,7 @@
 This document records the current checked-in local proof snapshot for
 `oh-my-copilot`.
 
-Snapshot refresh window: `2026-04-22T03:41:22Z` to `2026-04-22T03:46:40Z` (UTC)
+Snapshot refresh window: `2026-04-22T03:53:40Z` to `2026-04-22T03:58:48Z` (UTC)
 
 Snapshot git SHA: `9ddd5f5` on `main`
 
@@ -22,9 +22,9 @@ Environment notes:
 | Run | Purpose | Result | Evaluation score | Raw output |
 | --- | --- | --- | --- | --- |
 | `quick-vanilla` | fast baseline proof without model-backed prompt smoke | PASS | **90/90** | [`benchmark/results/current-quick-vanilla/`](../benchmark/results/current-quick-vanilla/) |
-| `quick-enhanced` | fast proof plus root/plugin reviewer prompt smoke and a constrained repo task | PASS | **150/150** | [`benchmark/results/current-quick-enhanced/`](../benchmark/results/current-quick-enhanced/) |
+| `quick-enhanced` | fast proof plus root/plugin reviewer prompt smoke and a constrained repo task | PASS | **160/160** | [`benchmark/results/current-quick-enhanced/`](../benchmark/results/current-quick-enhanced/) |
 | `full-vanilla` | stronger end-to-end proof without live prompt-smoke markers | PASS | **85/85** | [`benchmark/results/current-full-vanilla/`](../benchmark/results/current-full-vanilla/) |
-| `full-enhanced` | full proof including bootstrap, install-state, standalone hook proof, prompt smoke, and a constrained repo task | PASS | **135/135** | [`benchmark/results/current-full-enhanced/`](../benchmark/results/current-full-enhanced/) |
+| `full-enhanced` | full proof including bootstrap, install-state, standalone hook proof, prompt smoke, and a constrained repo task | PASS | **145/145** | [`benchmark/results/current-full-enhanced/`](../benchmark/results/current-full-enhanced/) |
 
 ## Release-blocking evaluation contract
 
@@ -41,8 +41,8 @@ Current thresholds:
 
 | Profile | Vanilla threshold | Enhanced threshold | Required enhanced evidence |
 | --- | ---: | ---: | --- |
-| `quick` | 90/90 | 150/150 | `ROOT_AGENT_OK`, `PLUGIN_AGENT_OK`, `TASK_SCENARIO_OK`, `TASK_PLAN_OK` |
-| `full` | 85/85 | 135/135 | `ROOT_AGENT_OK`, `PLUGIN_AGENT_OK`, `TASK_SCENARIO_OK`, `TASK_PLAN_OK`, `INSTALL_STATE: ok`, `source=example-workspace`, `source=plugin` |
+| `quick` | 90/90 | 160/160 | `ROOT_AGENT_OK`, `PLUGIN_AGENT_OK`, `TASK_SCENARIO_OK`, `TASK_PLAN_OK`, `TASK_COMMAND_OK` |
+| `full` | 85/85 | 145/145 | `ROOT_AGENT_OK`, `PLUGIN_AGENT_OK`, `TASK_SCENARIO_OK`, `TASK_PLAN_OK`, `TASK_COMMAND_OK`, `INSTALL_STATE: ok`, `source=example-workspace`, `source=plugin` |
 
 Interpretation:
 
@@ -57,7 +57,7 @@ Interpretation:
   - [`docs/plugin-boundary-review.md`](./plugin-boundary-review.md)
   - their placement together in the main **Start here** path
 - Enhanced runs additionally require deterministic practical repo-task answers
-  via `TASK_SCENARIO_OK` and `TASK_PLAN_OK`.
+  via `TASK_SCENARIO_OK`, `TASK_PLAN_OK`, and `TASK_COMMAND_OK`.
 - A failing threshold is release-blocking for the selected benchmark variant.
 
 `scripts/validate-benchmark-evidence.sh` enforces this contract against the
@@ -74,6 +74,7 @@ stays synchronized with the current recorded scores and thresholds.
 - namespaced plugin reviewer prompt smoke returned `PLUGIN_AGENT_OK`
 - constrained repo-task smoke returned `TASK_SCENARIO_OK`
 - benchmark-proof drift smoke returned `TASK_PLAN_OK`
+- enhanced-command-selection smoke returned `TASK_COMMAND_OK`
 - install-state proof returned `INSTALL_STATE: ok`
 - standalone hook proof logged both `source=example-workspace` and
   `source=plugin`
@@ -107,10 +108,10 @@ upstream host-product capabilities documented separately.
 ## Improvement summaries from the current runs
 
 - `quick-vanilla`: vanilla contract established at **90/90**
-- `quick-enhanced`: improved by **60** over the vanilla floor; benchmark-backed
+- `quick-enhanced`: improved by **70** over the vanilla floor; benchmark-backed
   uplift observed
 - `full-vanilla`: vanilla contract established at **85/85**
-- `full-enhanced`: improved by **50** over the vanilla floor; benchmark-backed
+- `full-enhanced`: improved by **60** over the vanilla floor; benchmark-backed
   uplift observed
 
 ## State-management note

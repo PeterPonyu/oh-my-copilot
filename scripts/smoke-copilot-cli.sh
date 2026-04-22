@@ -192,6 +192,29 @@ run_task_plan_smoke() {
   log "task plan smoke returned TASK_PLAN_OK"
 }
 
+run_task_command_smoke() {
+  local output
+
+  output="$(
+    timeout "$TIMEOUT_SECONDS" copilot \
+      --agent reviewer \
+      --model auto \
+      --allow-all \
+      --no-color \
+      -s \
+      -p "Without editing files or running write commands, a contributor wants to refresh only the enhanced quick benchmark proof after an enhanced-only task-smoke change. Reply with exactly: TASK_COMMAND_OK ./benchmark/quick_test.sh --run-agent-smoke --variant enhanced ./scripts/validate-benchmark-evidence.sh" 2>&1
+  )" || {
+    printf '%s\n' "$output" >&2
+    fail "task command smoke failed"
+  }
+
+  printf '%s\n' "$output" | grep -Fq 'TASK_COMMAND_OK ./benchmark/quick_test.sh --run-agent-smoke --variant enhanced ./scripts/validate-benchmark-evidence.sh' || {
+    printf '%s\n' "$output" >&2
+    fail "task command smoke did not return the expected repo-task answer"
+  }
+  log "task command smoke returned TASK_COMMAND_OK"
+}
+
 if [[ "$RUN_AGENT_SMOKE" == "1" ]]; then
   run_prompt_smoke "root reviewer agent" "reviewer" "ROOT_AGENT_OK"
   if [[ "$plugin_installed" == "yes" ]]; then
@@ -201,6 +224,7 @@ if [[ "$RUN_AGENT_SMOKE" == "1" ]]; then
   fi
   run_task_smoke
   run_task_plan_smoke
+  run_task_command_smoke
 else
   log "model-backed agent prompt smoke skipped (set RUN_COPILOT_AGENT_SMOKE=1 to enable)"
 fi

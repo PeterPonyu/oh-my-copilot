@@ -1,12 +1,12 @@
 # Benchmark Evaluation (full, enhanced)
 
-- Contract score: **135/135**
-- Contract threshold: **135/135**
+- Contract score: **145/145**
+- Contract threshold: **145/145**
 - Release gate: **PASS**
 - Vanilla floor reference: **85**
-- Actual delta vs vanilla floor: **50**
-- Enhanced-only uplift budget: **50**
-- Improvement summary: Enhanced evidence improved by 50 over the vanilla floor; benchmark-backed uplift observed.
+- Actual delta vs vanilla floor: **60**
+- Enhanced-only uplift budget: **60**
+- Improvement summary: Enhanced evidence improved by 60 over the vanilla floor; benchmark-backed uplift observed.
 - Investigation required: **no**
 
 | Dimension | Required | Passed | Weight | Description |
@@ -25,3 +25,4 @@
 | `PLUGIN_AGENT_OK` | yes | PASS | 15 | namespaced plugin reviewer prompt smoke returns PLUGIN_AGENT_OK |
 | `TASK_SCENARIO_OK` | yes | PASS | 10 | agent can answer a constrained practical repo-task question |
 | `TASK_PLAN_OK` | yes | PASS | 10 | agent can choose the right validator/doc for benchmark-proof drift |
+| `TASK_COMMAND_OK` | yes | PASS | 10 | agent can choose the right enhanced benchmark command path |

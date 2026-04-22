@@ -17,6 +17,7 @@ EVIDENCE_MARKERS = (
     "PLUGIN_AGENT_OK",
     "TASK_SCENARIO_OK",
     "TASK_PLAN_OK",
+    "TASK_COMMAND_OK",
     "INSTALL_STATE: ok",
     "source=example-workspace",
     "source=plugin",
@@ -299,6 +300,7 @@ def build_evaluation(
             "PLUGIN_AGENT_OK": ("marker", "namespaced plugin reviewer prompt smoke returns PLUGIN_AGENT_OK", 20),
             "TASK_SCENARIO_OK": ("marker", "agent can answer a constrained practical repo-task question", 10),
             "TASK_PLAN_OK": ("marker", "agent can choose the right validator/doc for benchmark-proof drift", 10),
+            "TASK_COMMAND_OK": ("marker", "agent can choose the right enhanced benchmark command path", 10),
         }
     else:
         weight_map = {
@@ -316,8 +318,9 @@ def build_evaluation(
             "PLUGIN_AGENT_OK": ("marker", "namespaced plugin reviewer prompt smoke returns PLUGIN_AGENT_OK", 15),
             "TASK_SCENARIO_OK": ("marker", "agent can answer a constrained practical repo-task question", 10),
             "TASK_PLAN_OK": ("marker", "agent can choose the right validator/doc for benchmark-proof drift", 10),
+            "TASK_COMMAND_OK": ("marker", "agent can choose the right enhanced benchmark command path", 10),
         }
-    enhanced_only_names = {"ROOT_AGENT_OK", "PLUGIN_AGENT_OK", "TASK_SCENARIO_OK", "TASK_PLAN_OK"}
+    enhanced_only_names = {"ROOT_AGENT_OK", "PLUGIN_AGENT_OK", "TASK_SCENARIO_OK", "TASK_PLAN_OK", "TASK_COMMAND_OK"}
     vanilla_names = tuple(name for name in weight_map.keys() if name not in enhanced_only_names)
     active_names = tuple(weight_map.keys()) if variant == "enhanced" else vanilla_names
     required_names = active_names
@@ -360,7 +363,7 @@ def build_evaluation(
     max_score = sum(d.weight for d in dimensions)
     threshold_score = sum(d.weight for d in dimensions if d.required)
     expected_vanilla_score = sum(
-        weight for name, (_, _, weight) in weight_map.items() if name not in {"ROOT_AGENT_OK", "PLUGIN_AGENT_OK", "TASK_SCENARIO_OK", "TASK_PLAN_OK"}
+        weight for name, (_, _, weight) in weight_map.items() if name not in {"ROOT_AGENT_OK", "PLUGIN_AGENT_OK", "TASK_SCENARIO_OK", "TASK_PLAN_OK", "TASK_COMMAND_OK"}
     )
     enhanced_max_score = sum(weight for _, _, weight in weight_map.values())
     actual_delta_vs_vanilla = score - expected_vanilla_score if variant == "enhanced" else 0
