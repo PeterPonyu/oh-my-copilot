@@ -113,6 +113,12 @@ primitives are mentioned in public docs, the claim should be backed by GitHub
 sources; when this repo claims a root/plugin/example surface works, the proof
 should come from checked-in validators, smoke tests, or local evidence.
 
+The new flagship Pages rhythm is intentionally still repo-local. We now share
+visual principles with the sibling `oh-my-cursor` site, but we are **not**
+extracting a shared cross-repo design-system package yet. That stays deferred
+until repeated patterns justify the maintenance cost and can be proven without
+blurring the two repos' different proof contracts.
+
 ## Hook and log policy
 
 Hook and log behavior is intentionally **project-local** and stable:

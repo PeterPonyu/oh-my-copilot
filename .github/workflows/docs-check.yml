@@ -15,6 +15,8 @@ jobs:
         run: bash scripts/validate-doc-links.sh
       - name: Validate power surfaces
         run: bash scripts/validate-power-surfaces.sh
+      - name: Validate Pages surface
+        run: bash scripts/validate-pages-surface.sh
       - name: Validate root Copilot surfaces
         run: bash scripts/validate-root-copilot-surfaces.sh
       - name: Validate release readiness
