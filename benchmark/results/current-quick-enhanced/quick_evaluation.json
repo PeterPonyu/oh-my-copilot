@@ -9,6 +9,8 @@
   "expected_vanilla_score": 60,
   "required_delta_vs_vanilla": 40,
   "actual_delta_vs_vanilla": 40,
+  "investigation_required": false,
+  "improvement_summary": "Enhanced evidence improved by 40 over the vanilla floor; benchmark-backed uplift observed.",
   "dimensions": [
     {
       "name": "docs_validation",

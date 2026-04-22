@@ -6,6 +6,8 @@
 - Vanilla floor: **60/100**
 - Actual delta vs vanilla floor: **40**
 - Required delta vs vanilla floor: **40**
+- Improvement summary: Enhanced evidence improved by 40 over the vanilla floor; benchmark-backed uplift observed.
+- Investigation required: **no**
 
 | Dimension | Required | Passed | Weight | Description |
 | --- | --- | --- | ---: | --- |

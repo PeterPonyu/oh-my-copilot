@@ -109,6 +109,8 @@ class EvaluationContract:
     expected_vanilla_score: int
     required_delta_vs_vanilla: int
     actual_delta_vs_vanilla: int
+    investigation_required: bool
+    improvement_summary: str
     dimensions: list[EvaluationDimension]
 
 
@@ -243,6 +245,31 @@ def record_history(root: Path, outdir: Path, evaluation: EvaluationContract) -> 
     history_md.write_text(render_history_markdown(entries), encoding="utf-8")
 
 
+def summarize_improvement(
+    variant: str,
+    actual_delta_vs_vanilla: int,
+) -> tuple[bool, str]:
+    if variant != "enhanced":
+        return (
+            False,
+            "Vanilla reference run establishes the comparison floor; use an enhanced run to measure prompt-smoke uplift.",
+        )
+    if actual_delta_vs_vanilla > 0:
+        return (
+            False,
+            f"Enhanced evidence improved by {actual_delta_vs_vanilla} over the vanilla floor; benchmark-backed uplift observed.",
+        )
+    if actual_delta_vs_vanilla == 0:
+        return (
+            True,
+            "Enhanced evidence did not improve over the vanilla floor; investigate missing prompt-smoke markers before treating the refinement as effective.",
+        )
+    return (
+        True,
+        f"Enhanced evidence regressed by {-actual_delta_vs_vanilla} below the vanilla floor; investigate failing checks or markers before treating the refinement as effective.",
+    )
+
+
 def build_evaluation(
     profile: str,
     variant: str,
@@ -337,6 +364,10 @@ def build_evaluation(
     passed = score >= threshold_score and all(
         dimension.passed for dimension in dimensions if dimension.required
     )
+    investigation_required, improvement_summary = summarize_improvement(
+        variant=variant,
+        actual_delta_vs_vanilla=actual_delta_vs_vanilla,
+    )
 
     return EvaluationContract(
         profile=profile,
@@ -349,6 +380,8 @@ def build_evaluation(
         expected_vanilla_score=expected_vanilla_score,
         required_delta_vs_vanilla=required_delta_vs_vanilla,
         actual_delta_vs_vanilla=actual_delta_vs_vanilla,
+        investigation_required=investigation_required,
+        improvement_summary=improvement_summary,
         dimensions=dimensions,
     )
 
@@ -434,6 +467,9 @@ def main() -> int:
                 f"{evaluation.required_delta_vs_vanilla} |"
             ),
             "",
+            f"- Improvement summary: {evaluation.improvement_summary}",
+            f"- Investigation required: {'yes' if evaluation.investigation_required else 'no'}",
+            "",
             "| Dimension | Required | Passed | Weight |",
             "| --- | --- | --- | ---: |",
         ]
@@ -467,6 +503,8 @@ def main() -> int:
                 f"- Vanilla floor: **{evaluation.expected_vanilla_score}/{evaluation.max_score}**",
                 f"- Actual delta vs vanilla floor: **{evaluation.actual_delta_vs_vanilla}**",
                 f"- Required delta vs vanilla floor: **{evaluation.required_delta_vs_vanilla}**",
+                f"- Improvement summary: {evaluation.improvement_summary}",
+                f"- Investigation required: **{'yes' if evaluation.investigation_required else 'no'}**",
                 "",
                 "| Dimension | Required | Passed | Weight | Description |",
                 "| --- | --- | --- | ---: | --- |",

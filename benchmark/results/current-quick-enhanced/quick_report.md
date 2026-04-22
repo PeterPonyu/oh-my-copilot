@@ -8,16 +8,19 @@ Variant: `enhanced`
 
 | Check | Result | Duration (s) | Markers |
 | --- | --- | ---: | --- |
-| `docs_validation` | PASS | 0.21 | — |
-| `power_validation` | PASS | 0.08 | — |
-| `root_validation` | PASS | 0.13 | — |
-| `smoke_cli` | PASS | 30.25 | `ROOT_AGENT_OK`, `PLUGIN_AGENT_OK` |
+| `docs_validation` | PASS | 0.2 | — |
+| `power_validation` | PASS | 0.06 | — |
+| `root_validation` | PASS | 0.12 | — |
+| `smoke_cli` | PASS | 23.15 | `ROOT_AGENT_OK`, `PLUGIN_AGENT_OK` |
 
 ## Evaluation contract
 
 | Variant | Score | Threshold | Release gate | Vanilla floor | Required delta vs vanilla |
 | --- | ---: | ---: | --- | ---: | ---: |
 | `enhanced` | 100/100 | 100/100 | PASS | 60/100 | 40 |
+
+- Improvement summary: Enhanced evidence improved by 40 over the vanilla floor; benchmark-backed uplift observed.
+- Investigation required: no
 
 | Dimension | Required | Passed | Weight |
 | --- | --- | --- | ---: |

@@ -6,6 +6,8 @@
 - Vanilla floor: **60/100**
 - Actual delta vs vanilla floor: **0**
 - Required delta vs vanilla floor: **40**
+- Improvement summary: Vanilla reference run establishes the comparison floor; use an enhanced run to measure prompt-smoke uplift.
+- Investigation required: **no**
 
 | Dimension | Required | Passed | Weight | Description |
 | --- | --- | --- | ---: | --- |

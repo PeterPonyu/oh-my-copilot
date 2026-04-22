@@ -9,6 +9,8 @@
   "expected_vanilla_score": 60,
   "required_delta_vs_vanilla": 40,
   "actual_delta_vs_vanilla": 0,
+  "investigation_required": false,
+  "improvement_summary": "Vanilla reference run establishes the comparison floor; use an enhanced run to measure prompt-smoke uplift.",
   "dimensions": [
     {
       "name": "docs_validation",
