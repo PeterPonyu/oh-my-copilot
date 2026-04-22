@@ -181,15 +181,15 @@ class CopilotHistoryCleanupTests(unittest.TestCase):
                 command="./scripts/smoke-copilot-cli.sh",
                 success=True,
                 duration_sec=0.1,
-                output_tail="ROOT_AGENT_OK\nPLUGIN_AGENT_OK\nok: Copilot CLI smoke validation complete",
-                markers=["ROOT_AGENT_OK", "PLUGIN_AGENT_OK"],
+                output_tail="ROOT_AGENT_OK\nPLUGIN_AGENT_OK\nTASK_SCENARIO_OK docs/refinement-priority-map.md docs/plugin-boundary-review.md scripts/validate-benchmark-evidence.sh\nok: Copilot CLI smoke validation complete",
+                markers=["ROOT_AGENT_OK", "PLUGIN_AGENT_OK", "TASK_SCENARIO_OK"],
             ),
         ]
 
         evaluation = MODULE.build_evaluation("quick", "enhanced", results)
 
         self.assertTrue(evaluation.passed)
-        self.assertEqual(evaluation.actual_delta_vs_vanilla, 40)
+        self.assertEqual(evaluation.actual_delta_vs_vanilla, 50)
         self.assertFalse(evaluation.investigation_required)
         self.assertIn("benchmark-backed uplift observed", evaluation.improvement_summary)
 

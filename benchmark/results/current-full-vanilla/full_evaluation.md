@@ -1,11 +1,11 @@
 # Benchmark Evaluation (full, vanilla)
 
-- Score: **85/115**
-- Threshold: **85/115**
+- Score: **85/125**
+- Threshold: **85/125**
 - Release gate: **PASS**
-- Vanilla floor: **85/115**
+- Vanilla floor: **85/125**
 - Actual delta vs vanilla floor: **0**
-- Required delta vs vanilla floor: **30**
+- Required delta vs vanilla floor: **40**
 - Improvement summary: Vanilla reference run establishes the comparison floor; use an enhanced run to measure prompt-smoke uplift.
 - Investigation required: **no**
 
@@ -23,3 +23,4 @@
 | `standalone_hook_proof` | yes | PASS | 10 | standalone hook proof reports example/plugin sources |
 | `ROOT_AGENT_OK` | no | FAIL | 15 | root reviewer prompt smoke returns ROOT_AGENT_OK |
 | `PLUGIN_AGENT_OK` | no | FAIL | 15 | namespaced plugin reviewer prompt smoke returns PLUGIN_AGENT_OK |
+| `TASK_SCENARIO_OK` | no | FAIL | 10 | agent can answer a constrained practical repo-task question |

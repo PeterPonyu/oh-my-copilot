@@ -1,12 +1,12 @@
 # Benchmark Evaluation (full, enhanced)
 
-- Score: **115/115**
-- Threshold: **115/115**
+- Score: **125/125**
+- Threshold: **125/125**
 - Release gate: **PASS**
-- Vanilla floor: **85/115**
-- Actual delta vs vanilla floor: **30**
-- Required delta vs vanilla floor: **30**
-- Improvement summary: Enhanced evidence improved by 30 over the vanilla floor; benchmark-backed uplift observed.
+- Vanilla floor: **85/125**
+- Actual delta vs vanilla floor: **40**
+- Required delta vs vanilla floor: **40**
+- Improvement summary: Enhanced evidence improved by 40 over the vanilla floor; benchmark-backed uplift observed.
 - Investigation required: **no**
 
 | Dimension | Required | Passed | Weight | Description |
@@ -23,3 +23,4 @@
 | `standalone_hook_proof` | yes | PASS | 10 | standalone hook proof reports example/plugin sources |
 | `ROOT_AGENT_OK` | yes | PASS | 15 | root reviewer prompt smoke returns ROOT_AGENT_OK |
 | `PLUGIN_AGENT_OK` | yes | PASS | 15 | namespaced plugin reviewer prompt smoke returns PLUGIN_AGENT_OK |
+| `TASK_SCENARIO_OK` | yes | PASS | 10 | agent can answer a constrained practical repo-task question |

@@ -15,6 +15,7 @@ Runs direct, CLI-first Copilot smoke checks:
   - root agent files
   - plugin metadata
   - optional constrained root/plugin agent prompt invocations
+  - optional constrained repo task smoke for meaningful path-finding questions
 
 Set RUN_COPILOT_AGENT_SMOKE=1 or pass --run-agent-prompts to run model-backed
 agent prompt smoke tests. The default mode avoids network/model calls.
@@ -145,6 +146,29 @@ run_prompt_smoke() {
   log "$label prompt smoke returned $expected"
 }
 
+run_task_smoke() {
+  local output
+
+  output="$(
+    timeout "$TIMEOUT_SECONDS" copilot \
+      --agent reviewer \
+      --model auto \
+      --allow-all \
+      --no-color \
+      -s \
+      -p "Without editing files or running write commands, identify the repo's refinement priority map doc, plugin boundary review doc, and benchmark evidence validator script. Reply with exactly: TASK_SCENARIO_OK docs/refinement-priority-map.md docs/plugin-boundary-review.md scripts/validate-benchmark-evidence.sh" 2>&1
+  )" || {
+    printf '%s\n' "$output" >&2
+    fail "task scenario smoke failed"
+  }
+
+  printf '%s\n' "$output" | grep -Fq 'TASK_SCENARIO_OK docs/refinement-priority-map.md docs/plugin-boundary-review.md scripts/validate-benchmark-evidence.sh' || {
+    printf '%s\n' "$output" >&2
+    fail "task scenario smoke did not return the expected repo-task answer"
+  }
+  log "task scenario smoke returned TASK_SCENARIO_OK"
+}
+
 if [[ "$RUN_AGENT_SMOKE" == "1" ]]; then
   run_prompt_smoke "root reviewer agent" "reviewer" "ROOT_AGENT_OK"
   if [[ "$plugin_installed" == "yes" ]]; then
@@ -152,6 +176,7 @@ if [[ "$RUN_AGENT_SMOKE" == "1" ]]; then
   else
     warn "namespaced plugin reviewer prompt smoke skipped because plugin is not installed"
   fi
+  run_task_smoke
 else
   log "model-backed agent prompt smoke skipped (set RUN_COPILOT_AGENT_SMOKE=1 to enable)"
 fi

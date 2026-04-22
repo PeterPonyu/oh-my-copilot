@@ -21,10 +21,10 @@ Environment notes:
 
 | Run | Purpose | Result | Evaluation score | Raw output |
 | --- | --- | --- | --- | --- |
-| `quick-vanilla` | fast baseline proof without model-backed prompt smoke | PASS | **90/130** | [`benchmark/results/current-quick-vanilla/`](../benchmark/results/current-quick-vanilla/) |
-| `quick-enhanced` | fast proof plus root/plugin reviewer prompt smoke | PASS | **130/130** | [`benchmark/results/current-quick-enhanced/`](../benchmark/results/current-quick-enhanced/) |
-| `full-vanilla` | stronger end-to-end proof without live prompt-smoke markers | PASS | **85/115** | [`benchmark/results/current-full-vanilla/`](../benchmark/results/current-full-vanilla/) |
-| `full-enhanced` | full proof including bootstrap, install-state, standalone hook proof, and prompt smoke | PASS | **115/115** | [`benchmark/results/current-full-enhanced/`](../benchmark/results/current-full-enhanced/) |
+| `quick-vanilla` | fast baseline proof without model-backed prompt smoke | PASS | **90/140** | [`benchmark/results/current-quick-vanilla/`](../benchmark/results/current-quick-vanilla/) |
+| `quick-enhanced` | fast proof plus root/plugin reviewer prompt smoke | PASS | **140/140** | [`benchmark/results/current-quick-enhanced/`](../benchmark/results/current-quick-enhanced/) |
+| `full-vanilla` | stronger end-to-end proof without live prompt-smoke markers | PASS | **85/125** | [`benchmark/results/current-full-vanilla/`](../benchmark/results/current-full-vanilla/) |
+| `full-enhanced` | full proof including bootstrap, install-state, standalone hook proof, and prompt smoke | PASS | **125/125** | [`benchmark/results/current-full-enhanced/`](../benchmark/results/current-full-enhanced/) |
 
 ## Release-blocking evaluation contract
 
@@ -41,8 +41,8 @@ Current thresholds:
 
 | Profile | Vanilla threshold | Enhanced threshold | Required enhanced evidence |
 | --- | ---: | ---: | --- |
-| `quick` | 90/130 | 130/130 | `ROOT_AGENT_OK`, `PLUGIN_AGENT_OK` |
-| `full` | 85/115 | 115/115 | `ROOT_AGENT_OK`, `PLUGIN_AGENT_OK`, `INSTALL_STATE: ok`, `source=example-workspace`, `source=plugin` |
+| `quick` | 90/140 | 140/140 | `ROOT_AGENT_OK`, `PLUGIN_AGENT_OK`, `TASK_SCENARIO_OK` |
+| `full` | 85/125 | 125/125 | `ROOT_AGENT_OK`, `PLUGIN_AGENT_OK`, `TASK_SCENARIO_OK`, `INSTALL_STATE: ok`, `source=example-workspace`, `source=plugin` |
 
 Interpretation:
 
@@ -77,6 +77,8 @@ doc stays synchronized with the current recorded scores and thresholds.
   plugin-boundary review as benchmarked repo-owned discovery points
 - the benchmark now also proves those docs remain reachable together from the
   main **Start here** reading path instead of only existing somewhere in the repo
+- enhanced runs now include a constrained practical repo-task answer so the
+  score reflects more than route availability
 - checked-in reports continue to record the canonical repo root instead of
   transient OMX team worktree paths
 
@@ -102,11 +104,11 @@ upstream host-product capabilities documented separately.
 
 ## Improvement summaries from the current runs
 
-- `quick-vanilla`: baseline floor established at **90/130**
-- `quick-enhanced`: improved by **40** over the vanilla floor; benchmark-backed
+- `quick-vanilla`: baseline floor established at **90/140**
+- `quick-enhanced`: improved by **50** over the vanilla floor; benchmark-backed
   uplift observed
-- `full-vanilla`: baseline floor established at **85/115**
-- `full-enhanced`: improved by **30** over the vanilla floor; benchmark-backed
+- `full-vanilla`: baseline floor established at **85/125**
+- `full-enhanced`: improved by **40** over the vanilla floor; benchmark-backed
   uplift observed
 
 ## State-management note

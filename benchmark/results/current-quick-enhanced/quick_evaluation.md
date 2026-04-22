@@ -1,12 +1,12 @@
 # Benchmark Evaluation (quick, enhanced)
 
-- Score: **130/130**
-- Threshold: **130/130**
+- Score: **140/140**
+- Threshold: **140/140**
 - Release gate: **PASS**
-- Vanilla floor: **90/130**
-- Actual delta vs vanilla floor: **40**
-- Required delta vs vanilla floor: **40**
-- Improvement summary: Enhanced evidence improved by 40 over the vanilla floor; benchmark-backed uplift observed.
+- Vanilla floor: **90/140**
+- Actual delta vs vanilla floor: **50**
+- Required delta vs vanilla floor: **50**
+- Improvement summary: Enhanced evidence improved by 50 over the vanilla floor; benchmark-backed uplift observed.
 - Investigation required: **no**
 
 | Dimension | Required | Passed | Weight | Description |
@@ -20,3 +20,4 @@
 | `smoke_cli` | yes | PASS | 15 | basic Copilot CLI smoke passes |
 | `ROOT_AGENT_OK` | yes | PASS | 20 | root reviewer prompt smoke returns ROOT_AGENT_OK |
 | `PLUGIN_AGENT_OK` | yes | PASS | 20 | namespaced plugin reviewer prompt smoke returns PLUGIN_AGENT_OK |
+| `TASK_SCENARIO_OK` | yes | PASS | 10 | agent can answer a constrained practical repo-task question |

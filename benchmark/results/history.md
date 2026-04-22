@@ -2,6 +2,10 @@
 
 | Timestamp | Branch | SHA | Profile | Variant | Score | Threshold | Gate | Output |
 | --- | --- | --- | --- | --- | ---: | ---: | --- | --- |
+| `2026-04-22T03:37:30Z` | `main` | `d8eee39` | `full` | `enhanced` | 125/125 | 125/125 | PASS | `benchmark/results/current-full-enhanced` |
+| `2026-04-22T03:36:30Z` | `main` | `d8eee39` | `full` | `vanilla` | 85/125 | 85/125 | PASS | `benchmark/results/current-full-vanilla` |
+| `2026-04-22T03:36:05Z` | `main` | `d8eee39` | `quick` | `enhanced` | 140/140 | 140/140 | PASS | `benchmark/results/current-quick-enhanced` |
+| `2026-04-22T03:35:29Z` | `main` | `d8eee39` | `quick` | `vanilla` | 90/140 | 90/140 | PASS | `benchmark/results/current-quick-vanilla` |
 | `2026-04-22T03:16:13Z` | `main` | `4073846` | `full` | `enhanced` | 115/115 | 115/115 | PASS | `benchmark/results/current-full-enhanced` |
 | `2026-04-22T03:15:29Z` | `main` | `4073846` | `full` | `vanilla` | 85/115 | 85/115 | PASS | `benchmark/results/current-full-vanilla` |
 | `2026-04-22T03:15:06Z` | `main` | `4073846` | `quick` | `enhanced` | 130/130 | 130/130 | PASS | `benchmark/results/current-quick-enhanced` |
