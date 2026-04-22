@@ -1,11 +1,11 @@
 # Benchmark Evaluation (full, vanilla)
 
-- Score: **85/125**
-- Threshold: **85/125**
+- Contract score: **85/85**
+- Contract threshold: **85/85**
 - Release gate: **PASS**
-- Vanilla floor: **85/125**
+- Vanilla floor reference: **85**
 - Actual delta vs vanilla floor: **0**
-- Required delta vs vanilla floor: **40**
+- Enhanced-only uplift budget: **40**
 - Improvement summary: Vanilla reference run establishes the comparison floor; use an enhanced run to measure prompt-smoke uplift.
 - Investigation required: **no**
 
@@ -21,6 +21,3 @@
 | `bootstrap` | yes | PASS | 10 | bootstrap flow still succeeds |
 | `install_state` | yes | PASS | 10 | install-state proof returns INSTALL_STATE: ok |
 | `standalone_hook_proof` | yes | PASS | 10 | standalone hook proof reports example/plugin sources |
-| `ROOT_AGENT_OK` | no | FAIL | 15 | root reviewer prompt smoke returns ROOT_AGENT_OK |
-| `PLUGIN_AGENT_OK` | no | FAIL | 15 | namespaced plugin reviewer prompt smoke returns PLUGIN_AGENT_OK |
-| `TASK_SCENARIO_OK` | no | FAIL | 10 | agent can answer a constrained practical repo-task question |

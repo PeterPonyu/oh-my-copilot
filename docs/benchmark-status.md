@@ -3,9 +3,9 @@
 This document records the current checked-in local proof snapshot for
 `oh-my-copilot`.
 
-Snapshot refresh window: `2026-04-22T02:56:27Z` to `2026-04-22T02:59:11Z` (UTC)
+Snapshot refresh window: `2026-04-22T03:20:44Z` to `2026-04-22T03:24:42Z` (UTC)
 
-Snapshot git SHA: `4073846` on `main`
+Snapshot git SHA: `9ddd5f5` on `main`
 
 Environment notes:
 
@@ -21,10 +21,10 @@ Environment notes:
 
 | Run | Purpose | Result | Evaluation score | Raw output |
 | --- | --- | --- | --- | --- |
-| `quick-vanilla` | fast baseline proof without model-backed prompt smoke | PASS | **90/140** | [`benchmark/results/current-quick-vanilla/`](../benchmark/results/current-quick-vanilla/) |
-| `quick-enhanced` | fast proof plus root/plugin reviewer prompt smoke | PASS | **140/140** | [`benchmark/results/current-quick-enhanced/`](../benchmark/results/current-quick-enhanced/) |
-| `full-vanilla` | stronger end-to-end proof without live prompt-smoke markers | PASS | **85/125** | [`benchmark/results/current-full-vanilla/`](../benchmark/results/current-full-vanilla/) |
-| `full-enhanced` | full proof including bootstrap, install-state, standalone hook proof, and prompt smoke | PASS | **125/125** | [`benchmark/results/current-full-enhanced/`](../benchmark/results/current-full-enhanced/) |
+| `quick-vanilla` | fast baseline proof without model-backed prompt smoke | PASS | **90/90** | [`benchmark/results/current-quick-vanilla/`](../benchmark/results/current-quick-vanilla/) |
+| `quick-enhanced` | fast proof plus root/plugin reviewer prompt smoke and a constrained repo task | PASS | **140/140** | [`benchmark/results/current-quick-enhanced/`](../benchmark/results/current-quick-enhanced/) |
+| `full-vanilla` | stronger end-to-end proof without live prompt-smoke markers | PASS | **85/85** | [`benchmark/results/current-full-vanilla/`](../benchmark/results/current-full-vanilla/) |
+| `full-enhanced` | full proof including bootstrap, install-state, standalone hook proof, prompt smoke, and a constrained repo task | PASS | **125/125** | [`benchmark/results/current-full-enhanced/`](../benchmark/results/current-full-enhanced/) |
 
 ## Release-blocking evaluation contract
 
@@ -41,26 +41,28 @@ Current thresholds:
 
 | Profile | Vanilla threshold | Enhanced threshold | Required enhanced evidence |
 | --- | ---: | ---: | --- |
-| `quick` | 90/140 | 140/140 | `ROOT_AGENT_OK`, `PLUGIN_AGENT_OK`, `TASK_SCENARIO_OK` |
-| `full` | 85/125 | 125/125 | `ROOT_AGENT_OK`, `PLUGIN_AGENT_OK`, `TASK_SCENARIO_OK`, `INSTALL_STATE: ok`, `source=example-workspace`, `source=plugin` |
+| `quick` | 90/90 | 140/140 | `ROOT_AGENT_OK`, `PLUGIN_AGENT_OK`, `TASK_SCENARIO_OK` |
+| `full` | 85/85 | 125/125 | `ROOT_AGENT_OK`, `PLUGIN_AGENT_OK`, `TASK_SCENARIO_OK`, `INSTALL_STATE: ok`, `source=example-workspace`, `source=plugin` |
 
 Interpretation:
 
-- `vanilla` keeps the baseline validators/smoke path measurable without
-  requiring live prompt-smoke evidence.
+- `vanilla` now reports only the **vanilla contract ceiling** instead of mixing
+  in enhanced-only runtime/task slots.
 - `enhanced` is the stricter release-gating contract because it must exceed the
   vanilla floor and include the prompt/hook/install evidence markers that prove
   stronger Copilot behavior.
-- The baseline floors now require three repo-owned discovery layers to stay
-  visible and truthful:
+- The baseline floors require three repo-owned discovery layers to stay visible
+  and truthful:
   - [`docs/refinement-priority-map.md`](./refinement-priority-map.md)
   - [`docs/plugin-boundary-review.md`](./plugin-boundary-review.md)
   - their placement together in the main **Start here** path
+- Enhanced runs additionally require a deterministic practical repo-task answer
+  via `TASK_SCENARIO_OK`.
 - A failing threshold is release-blocking for the selected benchmark variant.
 
 `scripts/validate-benchmark-evidence.sh` enforces this contract against the
-checked-in result snapshots before release and now also checks that this status
-doc stays synchronized with the current recorded scores and thresholds.
+checked-in result snapshots before release and also checks that this status doc
+stays synchronized with the current recorded scores and thresholds.
 
 ## What passed in the current snapshot
 
@@ -70,15 +72,14 @@ doc stays synchronized with the current recorded scores and thresholds.
 - Copilot CLI smoke checks passed in every run
 - root reviewer prompt smoke returned `ROOT_AGENT_OK`
 - namespaced plugin reviewer prompt smoke returned `PLUGIN_AGENT_OK`
+- constrained repo-task smoke returned `TASK_SCENARIO_OK`
 - install-state proof returned `INSTALL_STATE: ok`
 - standalone hook proof logged both `source=example-workspace` and
   `source=plugin`
-- the README now exposes both the refinement-priority map and the
+- the README exposes both the refinement-priority map and the
   plugin-boundary review as benchmarked repo-owned discovery points
-- the benchmark now also proves those docs remain reachable together from the
+- the benchmark proves those docs remain reachable together from the
   main **Start here** reading path instead of only existing somewhere in the repo
-- enhanced runs now include a constrained practical repo-task answer so the
-  score reflects more than route availability
 - checked-in reports continue to record the canonical repo root instead of
   transient OMX team worktree paths
 
@@ -92,8 +93,8 @@ The current repo is more than a static layout:
 - the refinement-priority map and plugin-boundary review are visible as
   repository-owned guidance, not hidden implementation notes
 - benchmark-style proof runs can catch regressions in root routing, plugin
-  installation, hook evidence, and the discoverability of newly shipped proof
-  docs from the actual user entry path
+  installation, hook evidence, discoverability of shipped proof docs, and a
+  small deterministic practical repo-task answer
 - the checked-in proof is still intentionally Copilot CLI-only rather than a
   cross-host OMC/OMX/Cursor benchmark
 
@@ -104,10 +105,10 @@ upstream host-product capabilities documented separately.
 
 ## Improvement summaries from the current runs
 
-- `quick-vanilla`: baseline floor established at **90/140**
+- `quick-vanilla`: vanilla contract established at **90/90**
 - `quick-enhanced`: improved by **50** over the vanilla floor; benchmark-backed
   uplift observed
-- `full-vanilla`: baseline floor established at **85/125**
+- `full-vanilla`: vanilla contract established at **85/85**
 - `full-enhanced`: improved by **40** over the vanilla floor; benchmark-backed
   uplift observed
 
@@ -125,6 +126,8 @@ transient `.omx/team/...` worktree) is a state bug, not just a benchmark miss.
 
 - external link validation is still skipped unless `CHECK_EXTERNAL=1`
 - live prompt smoke depends on a signed-in Copilot CLI session with model access
+- the practical task layer is still deterministic and narrow; it does not yet
+  measure broader multi-step task quality
 - VS Code extension behavior outside the local smoke workspace still benefits
   from manual checks alongside this benchmark harness
 - any future Cursor comparison should be recorded as sibling/cross-host evidence,

@@ -141,7 +141,7 @@ def check_all_pass(results_rel: str, eval_rel: str, expected_count: int, label: 
     _, evaluation = load_eval(eval_rel)
     if not evaluation.get("passed"):
         fail(f"{label} evaluation is not passing in {eval_rel}")
-    ok(f"{label} score {evaluation['score']}/{evaluation['max_score']} meets release threshold {evaluation['threshold_score']}/{evaluation['max_score']}")
+    ok(f"{label} contract score {evaluation['score']}/{evaluation['max_score']} meets release threshold {evaluation['threshold_score']}/{evaluation['max_score']}")
     return {entry["name"]: entry for entry in data}, evaluation
 
 
@@ -197,8 +197,8 @@ expected_doc_snippets = [
     f"**{quick_enhanced_eval['score']}/{quick_enhanced_eval['max_score']}**",
     f"**{full_vanilla_eval['score']}/{full_vanilla_eval['max_score']}**",
     f"**{full_enhanced_eval['score']}/{full_enhanced_eval['max_score']}**",
-    f"| `quick` | {quick_vanilla_eval['threshold_score']}/{quick_vanilla_eval['max_score']} | {quick_enhanced_eval['threshold_score']}/{quick_enhanced_eval['max_score']} |",
-    f"| `full` | {full_vanilla_eval['threshold_score']}/{full_vanilla_eval['max_score']} | {full_enhanced_eval['threshold_score']}/{full_enhanced_eval['max_score']} |",
+    f"| `quick` | {quick_vanilla_eval['threshold_score']}/{quick_vanilla_eval['threshold_score']} | {quick_enhanced_eval['threshold_score']}/{quick_enhanced_eval['max_score']} |",
+    f"| `full` | {full_vanilla_eval['threshold_score']}/{full_vanilla_eval['threshold_score']} | {full_enhanced_eval['threshold_score']}/{full_enhanced_eval['max_score']} |",
 ]
 for snippet in expected_doc_snippets:
     if snippet not in benchmark_status:

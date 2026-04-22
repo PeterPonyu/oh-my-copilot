@@ -11,17 +11,18 @@ Variant: `vanilla`
 | `docs_validation` | PASS | 0.2 | — |
 | `power_validation` | PASS | 0.08 | `REFINEMENT_MAP_OK`, `PLUGIN_BOUNDARY_OK`, `DISCOVERABILITY_OK` |
 | `root_validation` | PASS | 0.12 | — |
-| `smoke_cli` | PASS | 1.56 | — |
-| `bootstrap` | PASS | 11.02 | `INSTALL_STATE: ok`, `source=example-workspace`, `source=plugin`, `REFINEMENT_MAP_OK`, `PLUGIN_BOUNDARY_OK`, `DISCOVERABILITY_OK` |
+| `smoke_cli` | PASS | 1.59 | — |
+| `bootstrap` | PASS | 12.25 | `INSTALL_STATE: ok`, `source=example-workspace`, `source=plugin`, `REFINEMENT_MAP_OK`, `PLUGIN_BOUNDARY_OK`, `DISCOVERABILITY_OK` |
 | `install_state` | PASS | 0.04 | `INSTALL_STATE: ok` |
-| `standalone_hook_proof` | PASS | 11.72 | `source=example-workspace`, `source=plugin` |
+| `standalone_hook_proof` | PASS | 9.8 | `source=example-workspace`, `source=plugin` |
 
 ## Evaluation contract
 
-| Variant | Score | Threshold | Release gate | Vanilla floor | Required delta vs vanilla |
-| --- | ---: | ---: | --- | ---: | ---: |
-| `vanilla` | 85/125 | 85/125 | PASS | 85/125 | 40 |
+| Variant | Contract score | Contract threshold | Release gate | Enhanced-only uplift budget |
+| --- | ---: | ---: | --- | ---: |
+| `vanilla` | 85/85 | 85/85 | PASS | 40 |
 
+- Variant contract score: 85/85
 - Improvement summary: Vanilla reference run establishes the comparison floor; use an enhanced run to measure prompt-smoke uplift.
 - Investigation required: no
 
@@ -37,9 +38,6 @@ Variant: `vanilla`
 | `bootstrap` | yes | PASS | 10 |
 | `install_state` | yes | PASS | 10 |
 | `standalone_hook_proof` | yes | PASS | 10 |
-| `ROOT_AGENT_OK` | no | FAIL | 15 |
-| `PLUGIN_AGENT_OK` | no | FAIL | 15 |
-| `TASK_SCENARIO_OK` | no | FAIL | 10 |
 
 ## docs_validation
 
@@ -116,13 +114,13 @@ ok: CI runs root Copilot surface validation
 ok: root Copilot surface validation complete
 ok: standalone workspace hook proof succeeded
 log:
-source=example-workspace event=sessionStart timestamp=2026-04-22T03:36:13Z cwd=/tmp/vscode-copilot-layout-standalone
-source=plugin event=sessionStart timestamp=2026-04-22T03:36:13Z cwd=/tmp/vscode-copilot-layout-standalone
+source=example-workspace event=sessionStart timestamp=2026-04-22T03:52:47Z cwd=/tmp/vscode-copilot-layout-standalone
+source=plugin event=sessionStart timestamp=2026-04-22T03:52:47Z cwd=/tmp/vscode-copilot-layout-standalone
 ok: bootstrap complete
 
 Changes   +0 -0
-Requests  1 Premium (7s)
-Tokens    ↑ 17.7k • ↓ 84 • 16.9k (cached) • 73 (reasoning)
+Requests  1 Premium (8s)
+Tokens    ↑ 17.7k • ↓ 115 • 16.9k (cached) • 106 (reasoning)
 ```
 
 ## install_state
@@ -147,10 +145,10 @@ INSTALL_STATE_SUMMARY
 ```text
 ok: standalone workspace hook proof succeeded
 log:
-source=example-workspace event=sessionStart timestamp=2026-04-22T03:36:23Z cwd=/tmp/vscode-copilot-layout-standalone
-source=plugin event=sessionStart timestamp=2026-04-22T03:36:23Z cwd=/tmp/vscode-copilot-layout-standalone
+source=example-workspace event=sessionStart timestamp=2026-04-22T03:52:58Z cwd=/tmp/vscode-copilot-layout-standalone
+source=plugin event=sessionStart timestamp=2026-04-22T03:52:58Z cwd=/tmp/vscode-copilot-layout-standalone
 
 Changes   +0 -0
-Requests  1 Premium (9s)
-Tokens    ↑ 17.7k • ↓ 91 • 16.9k (cached) • 82 (reasoning)
+Requests  1 Premium (7s)
+Tokens    ↑ 17.7k • ↓ 81 • 16.9k (cached) • 72 (reasoning)
 ```

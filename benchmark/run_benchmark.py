@@ -298,15 +298,6 @@ def build_evaluation(
             "PLUGIN_AGENT_OK": ("marker", "namespaced plugin reviewer prompt smoke returns PLUGIN_AGENT_OK", 20),
             "TASK_SCENARIO_OK": ("marker", "agent can answer a constrained practical repo-task question", 10),
         }
-        required_names = (
-            "docs_validation",
-            "power_validation",
-            "root_validation",
-            "REFINEMENT_MAP_OK",
-            "PLUGIN_BOUNDARY_OK",
-            "DISCOVERABILITY_OK",
-            "smoke_cli",
-        )
     else:
         weight_map = {
             "docs_validation": ("check", "docs validation stays green", 10),
@@ -323,24 +314,14 @@ def build_evaluation(
             "PLUGIN_AGENT_OK": ("marker", "namespaced plugin reviewer prompt smoke returns PLUGIN_AGENT_OK", 15),
             "TASK_SCENARIO_OK": ("marker", "agent can answer a constrained practical repo-task question", 10),
         }
-        required_names = (
-            "docs_validation",
-            "power_validation",
-            "root_validation",
-            "REFINEMENT_MAP_OK",
-            "PLUGIN_BOUNDARY_OK",
-            "DISCOVERABILITY_OK",
-            "smoke_cli",
-            "bootstrap",
-            "install_state",
-            "standalone_hook_proof",
-        )
-
-    if variant == "enhanced":
-        required_names = tuple(weight_map.keys())
+    enhanced_only_names = {"ROOT_AGENT_OK", "PLUGIN_AGENT_OK", "TASK_SCENARIO_OK"}
+    vanilla_names = tuple(name for name in weight_map.keys() if name not in enhanced_only_names)
+    active_names = tuple(weight_map.keys()) if variant == "enhanced" else vanilla_names
+    required_names = active_names
 
     dimensions: list[EvaluationDimension] = []
-    for name, (kind, description, weight) in weight_map.items():
+    for name in active_names:
+        kind, description, weight = weight_map[name]
         passed = False
         evidence = "(no evidence)"
         if kind == "check":
@@ -378,8 +359,9 @@ def build_evaluation(
     expected_vanilla_score = sum(
         weight for name, (_, _, weight) in weight_map.items() if name not in {"ROOT_AGENT_OK", "PLUGIN_AGENT_OK", "TASK_SCENARIO_OK"}
     )
-    actual_delta_vs_vanilla = score - expected_vanilla_score
-    required_delta_vs_vanilla = max_score - expected_vanilla_score
+    enhanced_max_score = sum(weight for _, _, weight in weight_map.values())
+    actual_delta_vs_vanilla = score - expected_vanilla_score if variant == "enhanced" else 0
+    required_delta_vs_vanilla = enhanced_max_score - expected_vanilla_score
     passed = score >= threshold_score and all(
         dimension.passed for dimension in dimensions if dimension.required
     )
@@ -476,16 +458,16 @@ def main() -> int:
             "",
             "## Evaluation contract",
             "",
-            "| Variant | Score | Threshold | Release gate | Vanilla floor | Required delta vs vanilla |",
-            "| --- | ---: | ---: | --- | ---: | ---: |",
+            "| Variant | Contract score | Contract threshold | Release gate | Enhanced-only uplift budget |",
+            "| --- | ---: | ---: | --- | ---: |",
             (
                 f"| `{evaluation.variant}` | {evaluation.score}/{evaluation.max_score} | "
                 f"{evaluation.threshold_score}/{evaluation.max_score} | "
                 f"{'PASS' if evaluation.passed else 'FAIL'} | "
-                f"{evaluation.expected_vanilla_score}/{evaluation.max_score} | "
                 f"{evaluation.required_delta_vs_vanilla} |"
             ),
             "",
+            f"- Variant contract score: {evaluation.score}/{evaluation.max_score}",
             f"- Improvement summary: {evaluation.improvement_summary}",
             f"- Investigation required: {'yes' if evaluation.investigation_required else 'no'}",
             "",
@@ -516,12 +498,12 @@ def main() -> int:
             [
                 f"# Benchmark Evaluation ({args.profile}, {evaluation.variant})",
                 "",
-                f"- Score: **{evaluation.score}/{evaluation.max_score}**",
-                f"- Threshold: **{evaluation.threshold_score}/{evaluation.max_score}**",
+                f"- Contract score: **{evaluation.score}/{evaluation.max_score}**",
+                f"- Contract threshold: **{evaluation.threshold_score}/{evaluation.max_score}**",
                 f"- Release gate: **{'PASS' if evaluation.passed else 'FAIL'}**",
-                f"- Vanilla floor: **{evaluation.expected_vanilla_score}/{evaluation.max_score}**",
+                f"- Vanilla floor reference: **{evaluation.expected_vanilla_score}**",
                 f"- Actual delta vs vanilla floor: **{evaluation.actual_delta_vs_vanilla}**",
-                f"- Required delta vs vanilla floor: **{evaluation.required_delta_vs_vanilla}**",
+                f"- Enhanced-only uplift budget: **{evaluation.required_delta_vs_vanilla}**",
                 f"- Improvement summary: {evaluation.improvement_summary}",
                 f"- Investigation required: **{'yes' if evaluation.investigation_required else 'no'}**",
                 "",
