@@ -50,14 +50,16 @@ Current thresholds:
 
 | Profile | Vanilla threshold | Enhanced threshold | Release-blocking meaning |
 | --- | ---: | ---: | --- |
-| `quick` | 80/120 | 120/120 | fail the selected proof contract |
-| `full` | 80/110 | 110/110 | fail the selected proof contract |
+| `quick` | 90/130 | 130/130 | fail the selected proof contract |
+| `full` | 85/115 | 115/115 | fail the selected proof contract |
 
 The enhanced threshold is stricter because it requires the model-backed smoke
 markers that differentiate enhanced behavior from the vanilla baseline.
 The baseline floors also require the README-visible refinement ledger and
 plugin-boundary review links because those are now part of the repo-owned proof
-surface.
+surface. They now also require those proof docs to be reachable together from
+the main **Start here** path, so the benchmark checks discoverability instead of
+mere file existence.
 
 ## Notes
 

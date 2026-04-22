@@ -1,9 +1,9 @@
 # Benchmark Evaluation (full, vanilla)
 
-- Score: **80/110**
-- Threshold: **80/110**
+- Score: **85/115**
+- Threshold: **85/115**
 - Release gate: **PASS**
-- Vanilla floor: **80/110**
+- Vanilla floor: **85/115**
 - Actual delta vs vanilla floor: **0**
 - Required delta vs vanilla floor: **30**
 - Improvement summary: Vanilla reference run establishes the comparison floor; use an enhanced run to measure prompt-smoke uplift.
@@ -16,6 +16,7 @@
 | `root_validation` | yes | PASS | 10 | root surface validation stays green |
 | `REFINEMENT_MAP_OK` | yes | PASS | 5 | README exposes the refinement-priority map |
 | `PLUGIN_BOUNDARY_OK` | yes | PASS | 5 | README exposes the plugin-boundary review |
+| `DISCOVERABILITY_OK` | yes | PASS | 5 | README Start here path exposes the key proof docs together |
 | `smoke_cli` | yes | PASS | 10 | basic Copilot CLI smoke passes |
 | `bootstrap` | yes | PASS | 10 | bootstrap flow still succeeds |
 | `install_state` | yes | PASS | 10 | install-state proof returns INSTALL_STATE: ok |

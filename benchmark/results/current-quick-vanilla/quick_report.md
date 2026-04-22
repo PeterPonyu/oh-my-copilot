@@ -9,15 +9,15 @@ Variant: `vanilla`
 | Check | Result | Duration (s) | Markers |
 | --- | --- | ---: | --- |
 | `docs_validation` | PASS | 0.2 | — |
-| `power_validation` | PASS | 0.06 | `REFINEMENT_MAP_OK`, `PLUGIN_BOUNDARY_OK` |
+| `power_validation` | PASS | 0.08 | `REFINEMENT_MAP_OK`, `PLUGIN_BOUNDARY_OK`, `DISCOVERABILITY_OK` |
 | `root_validation` | PASS | 0.12 | — |
-| `smoke_cli` | PASS | 1.56 | — |
+| `smoke_cli` | PASS | 1.59 | — |
 
 ## Evaluation contract
 
 | Variant | Score | Threshold | Release gate | Vanilla floor | Required delta vs vanilla |
 | --- | ---: | ---: | --- | ---: | ---: |
-| `vanilla` | 80/120 | 80/120 | PASS | 80/120 | 40 |
+| `vanilla` | 90/130 | 90/130 | PASS | 90/130 | 40 |
 
 - Improvement summary: Vanilla reference run establishes the comparison floor; use an enhanced run to measure prompt-smoke uplift.
 - Investigation required: no
@@ -29,6 +29,7 @@ Variant: `vanilla`
 | `root_validation` | yes | PASS | 15 |
 | `REFINEMENT_MAP_OK` | yes | PASS | 10 |
 | `PLUGIN_BOUNDARY_OK` | yes | PASS | 10 |
+| `DISCOVERABILITY_OK` | yes | PASS | 10 |
 | `smoke_cli` | yes | PASS | 15 |
 | `ROOT_AGENT_OK` | no | FAIL | 20 |
 | `PLUGIN_AGENT_OK` | no | FAIL | 20 |
@@ -56,10 +57,10 @@ ok: oh-my-copilot docs/research/examples validation complete
 ok: plugin hooks.json has versioned schema
 ok: README mentions VS Code layout
 ok: README mentions Copilot CLI plugin package
-ok: README exposes refinement priority map
-ok: README exposes plugin boundary review
+ok: README Start here section exposes refinement-priority, plugin-boundary, and benchmark-status links
 ok: REFINEMENT_MAP_OK
 ok: PLUGIN_BOUNDARY_OK
+ok: DISCOVERABILITY_OK
 ok: cross-host app overview preserves isolated presentation boundary
 ok: cross-host methodology route names comparability classes
 ok: cross-host presentation primitives preserve repo-native warning

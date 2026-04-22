@@ -8,19 +8,19 @@ Variant: `vanilla`
 
 | Check | Result | Duration (s) | Markers |
 | --- | --- | ---: | --- |
-| `docs_validation` | PASS | 0.2 | — |
-| `power_validation` | PASS | 0.07 | `REFINEMENT_MAP_OK`, `PLUGIN_BOUNDARY_OK` |
+| `docs_validation` | PASS | 0.19 | — |
+| `power_validation` | PASS | 0.08 | `REFINEMENT_MAP_OK`, `PLUGIN_BOUNDARY_OK`, `DISCOVERABILITY_OK` |
 | `root_validation` | PASS | 0.12 | — |
-| `smoke_cli` | PASS | 1.57 | — |
-| `bootstrap` | PASS | 14.64 | `INSTALL_STATE: ok`, `source=example-workspace`, `source=plugin`, `REFINEMENT_MAP_OK`, `PLUGIN_BOUNDARY_OK` |
+| `smoke_cli` | PASS | 1.55 | — |
+| `bootstrap` | PASS | 11.24 | `INSTALL_STATE: ok`, `source=example-workspace`, `source=plugin`, `REFINEMENT_MAP_OK`, `PLUGIN_BOUNDARY_OK`, `DISCOVERABILITY_OK` |
 | `install_state` | PASS | 0.04 | `INSTALL_STATE: ok` |
-| `standalone_hook_proof` | PASS | 14.24 | `source=example-workspace`, `source=plugin` |
+| `standalone_hook_proof` | PASS | 9.6 | `source=example-workspace`, `source=plugin` |
 
 ## Evaluation contract
 
 | Variant | Score | Threshold | Release gate | Vanilla floor | Required delta vs vanilla |
 | --- | ---: | ---: | --- | ---: | ---: |
-| `vanilla` | 80/110 | 80/110 | PASS | 80/110 | 30 |
+| `vanilla` | 85/115 | 85/115 | PASS | 85/115 | 30 |
 
 - Improvement summary: Vanilla reference run establishes the comparison floor; use an enhanced run to measure prompt-smoke uplift.
 - Investigation required: no
@@ -32,6 +32,7 @@ Variant: `vanilla`
 | `root_validation` | yes | PASS | 10 |
 | `REFINEMENT_MAP_OK` | yes | PASS | 5 |
 | `PLUGIN_BOUNDARY_OK` | yes | PASS | 5 |
+| `DISCOVERABILITY_OK` | yes | PASS | 5 |
 | `smoke_cli` | yes | PASS | 10 |
 | `bootstrap` | yes | PASS | 10 |
 | `install_state` | yes | PASS | 10 |
@@ -62,10 +63,10 @@ ok: oh-my-copilot docs/research/examples validation complete
 ok: plugin hooks.json has versioned schema
 ok: README mentions VS Code layout
 ok: README mentions Copilot CLI plugin package
-ok: README exposes refinement priority map
-ok: README exposes plugin boundary review
+ok: README Start here section exposes refinement-priority, plugin-boundary, and benchmark-status links
 ok: REFINEMENT_MAP_OK
 ok: PLUGIN_BOUNDARY_OK
+ok: DISCOVERABILITY_OK
 ok: cross-host app overview preserves isolated presentation boundary
 ok: cross-host methodology route names comparability classes
 ok: cross-host presentation primitives preserve repo-native warning
@@ -114,13 +115,13 @@ ok: CI runs root Copilot surface validation
 ok: root Copilot surface validation complete
 ok: standalone workspace hook proof succeeded
 log:
-source=example-workspace event=sessionStart timestamp=2026-04-22T02:43:53Z cwd=/tmp/vscode-copilot-layout-standalone
-source=plugin event=sessionStart timestamp=2026-04-22T02:43:53Z cwd=/tmp/vscode-copilot-layout-standalone
+source=example-workspace event=sessionStart timestamp=2026-04-22T03:15:15Z cwd=/tmp/vscode-copilot-layout-standalone
+source=plugin event=sessionStart timestamp=2026-04-22T03:15:15Z cwd=/tmp/vscode-copilot-layout-standalone
 ok: bootstrap complete
 
 Changes   +0 -0
-Requests  1 Premium (11s)
-Tokens    ↑ 17.7k • ↓ 56 • 1.5k (cached) • 47 (reasoning)
+Requests  1 Premium (7s)
+Tokens    ↑ 17.7k • ↓ 84 • 1.5k (cached) • 75 (reasoning)
 ```
 
 ## install_state
@@ -145,10 +146,10 @@ INSTALL_STATE_SUMMARY
 ```text
 ok: standalone workspace hook proof succeeded
 log:
-source=example-workspace event=sessionStart timestamp=2026-04-22T02:44:06Z cwd=/tmp/vscode-copilot-layout-standalone
-source=plugin event=sessionStart timestamp=2026-04-22T02:44:06Z cwd=/tmp/vscode-copilot-layout-standalone
+source=example-workspace event=sessionStart timestamp=2026-04-22T03:15:24Z cwd=/tmp/vscode-copilot-layout-standalone
+source=plugin event=sessionStart timestamp=2026-04-22T03:15:24Z cwd=/tmp/vscode-copilot-layout-standalone
 
 Changes   +0 -0
-Requests  1 Premium (12s)
-Tokens    ↑ 17.7k • ↓ 228 • 16.9k (cached) • 219 (reasoning)
+Requests  1 Premium (7s)
+Tokens    ↑ 17.7k • ↓ 72 • 16.9k (cached) • 63 (reasoning)
 ```
