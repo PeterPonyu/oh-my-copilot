@@ -15,6 +15,7 @@ from pathlib import Path
 EVIDENCE_MARKERS = (
     "ROOT_AGENT_OK",
     "PLUGIN_AGENT_OK",
+    "TASK_SCENARIO_OK",
     "INSTALL_STATE: ok",
     "source=example-workspace",
     "source=plugin",
@@ -295,6 +296,7 @@ def build_evaluation(
             "smoke_cli": ("check", "basic Copilot CLI smoke passes", 15),
             "ROOT_AGENT_OK": ("marker", "root reviewer prompt smoke returns ROOT_AGENT_OK", 20),
             "PLUGIN_AGENT_OK": ("marker", "namespaced plugin reviewer prompt smoke returns PLUGIN_AGENT_OK", 20),
+            "TASK_SCENARIO_OK": ("marker", "agent can answer a constrained practical repo-task question", 10),
         }
         required_names = (
             "docs_validation",
@@ -319,6 +321,7 @@ def build_evaluation(
             "standalone_hook_proof": ("marker", "standalone hook proof reports example/plugin sources", 10),
             "ROOT_AGENT_OK": ("marker", "root reviewer prompt smoke returns ROOT_AGENT_OK", 15),
             "PLUGIN_AGENT_OK": ("marker", "namespaced plugin reviewer prompt smoke returns PLUGIN_AGENT_OK", 15),
+            "TASK_SCENARIO_OK": ("marker", "agent can answer a constrained practical repo-task question", 10),
         }
         required_names = (
             "docs_validation",
@@ -373,7 +376,7 @@ def build_evaluation(
     max_score = sum(d.weight for d in dimensions)
     threshold_score = sum(d.weight for d in dimensions if d.required)
     expected_vanilla_score = sum(
-        weight for name, (_, _, weight) in weight_map.items() if name not in {"ROOT_AGENT_OK", "PLUGIN_AGENT_OK"}
+        weight for name, (_, _, weight) in weight_map.items() if name not in {"ROOT_AGENT_OK", "PLUGIN_AGENT_OK", "TASK_SCENARIO_OK"}
     )
     actual_delta_vs_vanilla = score - expected_vanilla_score
     required_delta_vs_vanilla = max_score - expected_vanilla_score

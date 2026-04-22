@@ -8,18 +8,18 @@ Variant: `enhanced`
 
 | Check | Result | Duration (s) | Markers |
 | --- | --- | ---: | --- |
-| `docs_validation` | PASS | 0.2 | — |
+| `docs_validation` | PASS | 0.19 | — |
 | `power_validation` | PASS | 0.08 | `REFINEMENT_MAP_OK`, `PLUGIN_BOUNDARY_OK`, `DISCOVERABILITY_OK` |
 | `root_validation` | PASS | 0.12 | — |
-| `smoke_cli` | PASS | 22.44 | `ROOT_AGENT_OK`, `PLUGIN_AGENT_OK` |
+| `smoke_cli` | PASS | 35.8 | `ROOT_AGENT_OK`, `PLUGIN_AGENT_OK`, `TASK_SCENARIO_OK` |
 
 ## Evaluation contract
 
 | Variant | Score | Threshold | Release gate | Vanilla floor | Required delta vs vanilla |
 | --- | ---: | ---: | --- | ---: | ---: |
-| `enhanced` | 130/130 | 130/130 | PASS | 90/130 | 40 |
+| `enhanced` | 140/140 | 140/140 | PASS | 90/140 | 50 |
 
-- Improvement summary: Enhanced evidence improved by 40 over the vanilla floor; benchmark-backed uplift observed.
+- Improvement summary: Enhanced evidence improved by 50 over the vanilla floor; benchmark-backed uplift observed.
 - Investigation required: no
 
 | Dimension | Required | Passed | Weight |
@@ -33,6 +33,7 @@ Variant: `enhanced`
 | `smoke_cli` | yes | PASS | 15 |
 | `ROOT_AGENT_OK` | yes | PASS | 20 |
 | `PLUGIN_AGENT_OK` | yes | PASS | 20 |
+| `TASK_SCENARIO_OK` | yes | PASS | 10 |
 
 ## docs_validation
 
@@ -88,7 +89,6 @@ ok: root Copilot surface validation complete
 ## smoke_cli
 
 ```text
-GitHub Copilot CLI 1.0.34.
 Run 'copilot update' to check for updates.
 ok: copilot CLI version command succeeds
 ok: copilot help exposes agent/plugin options
@@ -98,6 +98,7 @@ ok: plugin metadata parses for oh-my-copilot-power-pack@0.1.0
 ok: installed plugin entry found in ~/.copilot/config.json
 ok: root reviewer agent prompt smoke returned ROOT_AGENT_OK
 ok: namespaced plugin reviewer agent prompt smoke returned PLUGIN_AGENT_OK
+ok: task scenario smoke returned TASK_SCENARIO_OK
 ok: Copilot smoke proves route availability only; cross-host comparability is validated by separate benchmark harvest gates
 ok: Copilot CLI smoke validation complete
 ```

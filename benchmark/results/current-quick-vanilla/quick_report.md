@@ -8,16 +8,16 @@ Variant: `vanilla`
 
 | Check | Result | Duration (s) | Markers |
 | --- | --- | ---: | --- |
-| `docs_validation` | PASS | 0.2 | — |
+| `docs_validation` | PASS | 0.19 | — |
 | `power_validation` | PASS | 0.08 | `REFINEMENT_MAP_OK`, `PLUGIN_BOUNDARY_OK`, `DISCOVERABILITY_OK` |
 | `root_validation` | PASS | 0.12 | — |
-| `smoke_cli` | PASS | 1.59 | — |
+| `smoke_cli` | PASS | 1.57 | — |
 
 ## Evaluation contract
 
 | Variant | Score | Threshold | Release gate | Vanilla floor | Required delta vs vanilla |
 | --- | ---: | ---: | --- | ---: | ---: |
-| `vanilla` | 90/130 | 90/130 | PASS | 90/130 | 40 |
+| `vanilla` | 90/140 | 90/140 | PASS | 90/140 | 50 |
 
 - Improvement summary: Vanilla reference run establishes the comparison floor; use an enhanced run to measure prompt-smoke uplift.
 - Investigation required: no
@@ -33,6 +33,7 @@ Variant: `vanilla`
 | `smoke_cli` | yes | PASS | 15 |
 | `ROOT_AGENT_OK` | no | FAIL | 20 |
 | `PLUGIN_AGENT_OK` | no | FAIL | 20 |
+| `TASK_SCENARIO_OK` | no | FAIL | 10 |
 
 ## docs_validation
 
