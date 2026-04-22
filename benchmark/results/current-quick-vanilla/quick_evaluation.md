@@ -1,11 +1,11 @@
 # Benchmark Evaluation (quick, vanilla)
 
-- Score: **90/140**
-- Threshold: **90/140**
+- Contract score: **90/90**
+- Contract threshold: **90/90**
 - Release gate: **PASS**
-- Vanilla floor: **90/140**
+- Vanilla floor reference: **90**
 - Actual delta vs vanilla floor: **0**
-- Required delta vs vanilla floor: **50**
+- Enhanced-only uplift budget: **50**
 - Improvement summary: Vanilla reference run establishes the comparison floor; use an enhanced run to measure prompt-smoke uplift.
 - Investigation required: **no**
 
@@ -18,6 +18,3 @@
 | `PLUGIN_BOUNDARY_OK` | yes | PASS | 10 | README exposes the plugin-boundary review |
 | `DISCOVERABILITY_OK` | yes | PASS | 10 | README Start here path exposes the key proof docs together |
 | `smoke_cli` | yes | PASS | 15 | basic Copilot CLI smoke passes |
-| `ROOT_AGENT_OK` | no | FAIL | 20 | root reviewer prompt smoke returns ROOT_AGENT_OK |
-| `PLUGIN_AGENT_OK` | no | FAIL | 20 | namespaced plugin reviewer prompt smoke returns PLUGIN_AGENT_OK |
-| `TASK_SCENARIO_OK` | no | FAIL | 10 | agent can answer a constrained practical repo-task question |

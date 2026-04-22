@@ -11,14 +11,15 @@ Variant: `enhanced`
 | `docs_validation` | PASS | 0.19 | — |
 | `power_validation` | PASS | 0.08 | `REFINEMENT_MAP_OK`, `PLUGIN_BOUNDARY_OK`, `DISCOVERABILITY_OK` |
 | `root_validation` | PASS | 0.12 | — |
-| `smoke_cli` | PASS | 35.8 | `ROOT_AGENT_OK`, `PLUGIN_AGENT_OK`, `TASK_SCENARIO_OK` |
+| `smoke_cli` | PASS | 35.68 | `ROOT_AGENT_OK`, `PLUGIN_AGENT_OK`, `TASK_SCENARIO_OK` |
 
 ## Evaluation contract
 
-| Variant | Score | Threshold | Release gate | Vanilla floor | Required delta vs vanilla |
-| --- | ---: | ---: | --- | ---: | ---: |
-| `enhanced` | 140/140 | 140/140 | PASS | 90/140 | 50 |
+| Variant | Contract score | Contract threshold | Release gate | Enhanced-only uplift budget |
+| --- | ---: | ---: | --- | ---: |
+| `enhanced` | 140/140 | 140/140 | PASS | 50 |
 
+- Variant contract score: 140/140
 - Improvement summary: Enhanced evidence improved by 50 over the vanilla floor; benchmark-backed uplift observed.
 - Investigation required: no
 

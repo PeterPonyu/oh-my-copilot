@@ -15,10 +15,11 @@ Variant: `vanilla`
 
 ## Evaluation contract
 
-| Variant | Score | Threshold | Release gate | Vanilla floor | Required delta vs vanilla |
-| --- | ---: | ---: | --- | ---: | ---: |
-| `vanilla` | 90/140 | 90/140 | PASS | 90/140 | 50 |
+| Variant | Contract score | Contract threshold | Release gate | Enhanced-only uplift budget |
+| --- | ---: | ---: | --- | ---: |
+| `vanilla` | 90/90 | 90/90 | PASS | 50 |
 
+- Variant contract score: 90/90
 - Improvement summary: Vanilla reference run establishes the comparison floor; use an enhanced run to measure prompt-smoke uplift.
 - Investigation required: no
 
@@ -31,9 +32,6 @@ Variant: `vanilla`
 | `PLUGIN_BOUNDARY_OK` | yes | PASS | 10 |
 | `DISCOVERABILITY_OK` | yes | PASS | 10 |
 | `smoke_cli` | yes | PASS | 15 |
-| `ROOT_AGENT_OK` | no | FAIL | 20 |
-| `PLUGIN_AGENT_OK` | no | FAIL | 20 |
-| `TASK_SCENARIO_OK` | no | FAIL | 10 |
 
 ## docs_validation
 

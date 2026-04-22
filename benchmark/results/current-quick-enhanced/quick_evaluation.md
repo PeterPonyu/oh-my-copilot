@@ -1,11 +1,11 @@
 # Benchmark Evaluation (quick, enhanced)
 
-- Score: **140/140**
-- Threshold: **140/140**
+- Contract score: **140/140**
+- Contract threshold: **140/140**
 - Release gate: **PASS**
-- Vanilla floor: **90/140**
+- Vanilla floor reference: **90**
 - Actual delta vs vanilla floor: **50**
-- Required delta vs vanilla floor: **50**
+- Enhanced-only uplift budget: **50**
 - Improvement summary: Enhanced evidence improved by 50 over the vanilla floor; benchmark-backed uplift observed.
 - Investigation required: **no**
 
