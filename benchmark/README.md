@@ -50,11 +50,23 @@ Current thresholds:
 
 | Profile | Vanilla threshold | Enhanced threshold | Release-blocking meaning |
 | --- | ---: | ---: | --- |
-| `quick` | 60/100 | 100/100 | fail the selected proof contract |
-| `full` | 70/100 | 100/100 | fail the selected proof contract |
+| `quick` | 90/90 | 160/160 | fail the selected proof contract |
+| `full` | 85/85 | 145/145 | fail the selected proof contract |
 
 The enhanced threshold is stricter because it requires the model-backed smoke
 markers that differentiate enhanced behavior from the vanilla baseline.
+The baseline floors also require the README-visible refinement ledger and
+plugin-boundary review links because those are now part of the repo-owned proof
+surface. They now also require those proof docs to be reachable together from
+the main **Start here** path, so the benchmark checks discoverability instead of
+mere file existence. Enhanced runs now also require a constrained practical
+repo-task answer (`TASK_SCENARIO_OK`) so the score reflects more than route
+availability. Vanilla scores now report only the vanilla contract ceiling, while
+enhanced carries the extra runtime/task uplift slots. Enhanced also now requires
+a second deterministic repo-work answer (`TASK_PLAN_OK`) that chooses the right
+validator and public score-summary doc for benchmark-proof drift. It now also
+requires a third deterministic command-selection answer (`TASK_COMMAND_OK`) so
+the task layer covers what to rerun, not just what to inspect.
 
 ## Notes
 

@@ -107,6 +107,92 @@ class CopilotHistoryCleanupTests(unittest.TestCase):
         self.assertIn("`2026-04-21T14:46:41Z`", markdown)
         self.assertNotIn("`2026-04-21T14:46:15Z`", markdown)
 
+    def test_build_evaluation_flags_non_improving_enhanced_run_for_investigation(self) -> None:
+        results = [
+            MODULE.CheckResult(
+                name="docs_validation",
+                command="./scripts/validate-doc-links.sh",
+                success=True,
+                duration_sec=0.1,
+                output_tail="ok: docs validation complete",
+                markers=[],
+            ),
+            MODULE.CheckResult(
+                name="power_validation",
+                command="./scripts/validate-power-surfaces.sh",
+                success=True,
+                duration_sec=0.1,
+                output_tail="REFINEMENT_MAP_OK\nPLUGIN_BOUNDARY_OK\nDISCOVERABILITY_OK\nok: power surfaces validation complete",
+                markers=["REFINEMENT_MAP_OK", "PLUGIN_BOUNDARY_OK", "DISCOVERABILITY_OK"],
+            ),
+            MODULE.CheckResult(
+                name="root_validation",
+                command="./scripts/validate-root-copilot-surfaces.sh",
+                success=True,
+                duration_sec=0.1,
+                output_tail="ok: root Copilot surface validation complete",
+                markers=[],
+            ),
+            MODULE.CheckResult(
+                name="smoke_cli",
+                command="./scripts/smoke-copilot-cli.sh",
+                success=True,
+                duration_sec=0.1,
+                output_tail="ok: Copilot CLI smoke validation complete",
+                markers=[],
+            ),
+        ]
+
+        evaluation = MODULE.build_evaluation("quick", "enhanced", results)
+
+        self.assertFalse(evaluation.passed)
+        self.assertEqual(evaluation.actual_delta_vs_vanilla, 0)
+        self.assertTrue(evaluation.investigation_required)
+        self.assertIn("did not improve over the vanilla floor", evaluation.improvement_summary)
+
+    def test_build_evaluation_reports_positive_enhanced_uplift(self) -> None:
+        results = [
+            MODULE.CheckResult(
+                name="docs_validation",
+                command="./scripts/validate-doc-links.sh",
+                success=True,
+                duration_sec=0.1,
+                output_tail="ok: docs validation complete",
+                markers=[],
+            ),
+            MODULE.CheckResult(
+                name="power_validation",
+                command="./scripts/validate-power-surfaces.sh",
+                success=True,
+                duration_sec=0.1,
+                output_tail="REFINEMENT_MAP_OK\nPLUGIN_BOUNDARY_OK\nDISCOVERABILITY_OK\nok: power surfaces validation complete",
+                markers=["REFINEMENT_MAP_OK", "PLUGIN_BOUNDARY_OK", "DISCOVERABILITY_OK"],
+            ),
+            MODULE.CheckResult(
+                name="root_validation",
+                command="./scripts/validate-root-copilot-surfaces.sh",
+                success=True,
+                duration_sec=0.1,
+                output_tail="ok: root Copilot surface validation complete",
+                markers=[],
+            ),
+            MODULE.CheckResult(
+                name="smoke_cli",
+                command="./scripts/smoke-copilot-cli.sh",
+                success=True,
+                duration_sec=0.1,
+                output_tail="ROOT_AGENT_OK\nPLUGIN_AGENT_OK\nTASK_SCENARIO_OK docs/refinement-priority-map.md docs/plugin-boundary-review.md scripts/validate-benchmark-evidence.sh\nTASK_PLAN_OK scripts/validate-benchmark-evidence.sh docs/benchmark-status.md\nTASK_COMMAND_OK A\nok: Copilot CLI smoke validation complete",
+                markers=["ROOT_AGENT_OK", "PLUGIN_AGENT_OK", "TASK_SCENARIO_OK", "TASK_PLAN_OK", "TASK_COMMAND_OK"],
+            ),
+        ]
+
+        evaluation = MODULE.build_evaluation("quick", "enhanced", results)
+
+        self.assertTrue(evaluation.passed)
+        self.assertEqual(evaluation.actual_delta_vs_vanilla, 70)
+        self.assertFalse(evaluation.investigation_required)
+        self.assertIn("benchmark-backed uplift observed", evaluation.improvement_summary)
+
 
 if __name__ == "__main__":
     unittest.main()

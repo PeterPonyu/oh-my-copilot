@@ -4,26 +4,26 @@ Root: `/home/zeyufu/Desktop/oh-my-copilot`
 
 Invocation root: `/home/zeyufu/Desktop/oh-my-copilot`
 
-Variant: `enhanced`
+Variant: `vanilla`
 
 | Check | Result | Duration (s) | Markers |
 | --- | --- | ---: | --- |
 | `docs_validation` | PASS | 0.2 | — |
 | `power_validation` | PASS | 0.08 | `REFINEMENT_MAP_OK`, `PLUGIN_BOUNDARY_OK`, `DISCOVERABILITY_OK` |
 | `root_validation` | PASS | 0.12 | — |
-| `smoke_cli` | PASS | 70.61 | `ROOT_AGENT_OK`, `PLUGIN_AGENT_OK`, `TASK_SCENARIO_OK`, `TASK_PLAN_OK`, `TASK_COMMAND_OK` |
-| `bootstrap` | PASS | 11.14 | `INSTALL_STATE: ok`, `source=example-workspace`, `source=plugin`, `REFINEMENT_MAP_OK`, `PLUGIN_BOUNDARY_OK`, `DISCOVERABILITY_OK` |
+| `smoke_cli` | PASS | 1.59 | — |
+| `bootstrap` | PASS | 12.25 | `INSTALL_STATE: ok`, `source=example-workspace`, `source=plugin`, `REFINEMENT_MAP_OK`, `PLUGIN_BOUNDARY_OK`, `DISCOVERABILITY_OK` |
 | `install_state` | PASS | 0.04 | `INSTALL_STATE: ok` |
-| `standalone_hook_proof` | PASS | 10.94 | `source=example-workspace`, `source=plugin` |
+| `standalone_hook_proof` | PASS | 9.8 | `source=example-workspace`, `source=plugin` |
 
 ## Evaluation contract
 
 | Variant | Contract score | Contract threshold | Release gate | Enhanced-only uplift budget |
 | --- | ---: | ---: | --- | ---: |
-| `enhanced` | 145/145 | 145/145 | PASS | 60 |
+| `vanilla` | 85/85 | 85/85 | PASS | 40 |
 
-- Variant contract score: 145/145
-- Improvement summary: Enhanced evidence improved by 60 over the vanilla floor; benchmark-backed uplift observed.
+- Variant contract score: 85/85
+- Improvement summary: Vanilla reference run establishes the comparison floor; use an enhanced run to measure prompt-smoke uplift.
 - Investigation required: no
 
 | Dimension | Required | Passed | Weight |
@@ -38,11 +38,6 @@ Variant: `enhanced`
 | `bootstrap` | yes | PASS | 10 |
 | `install_state` | yes | PASS | 10 |
 | `standalone_hook_proof` | yes | PASS | 10 |
-| `ROOT_AGENT_OK` | yes | PASS | 15 |
-| `PLUGIN_AGENT_OK` | yes | PASS | 15 |
-| `TASK_SCENARIO_OK` | yes | PASS | 10 |
-| `TASK_PLAN_OK` | yes | PASS | 10 |
-| `TASK_COMMAND_OK` | yes | PASS | 10 |
 
 ## docs_validation
 
@@ -98,16 +93,15 @@ ok: root Copilot surface validation complete
 ## smoke_cli
 
 ```text
+GitHub Copilot CLI 1.0.34.
+Run 'copilot update' to check for updates.
+ok: copilot CLI version command succeeds
 ok: copilot help exposes agent/plugin options
 ok: copilot plugin command is available
 ok: root reviewer/research/verifier agents exist
 ok: plugin metadata parses for oh-my-copilot-power-pack@0.1.0
 ok: installed plugin entry found in ~/.copilot/config.json
-ok: root reviewer agent prompt smoke returned ROOT_AGENT_OK
-ok: namespaced plugin reviewer agent prompt smoke returned PLUGIN_AGENT_OK
-ok: task scenario smoke returned TASK_SCENARIO_OK
-ok: task plan smoke returned TASK_PLAN_OK
-ok: task command smoke returned TASK_COMMAND_OK
+ok: model-backed agent prompt smoke skipped (set RUN_COPILOT_AGENT_SMOKE=1 to enable)
 ok: Copilot smoke proves route availability only; cross-host comparability is validated by separate benchmark harvest gates
 ok: Copilot CLI smoke validation complete
 ```
@@ -120,13 +114,13 @@ ok: CI runs root Copilot surface validation
 ok: root Copilot surface validation complete
 ok: standalone workspace hook proof succeeded
 log:
-source=example-workspace event=sessionStart timestamp=2026-04-22T04:30:47Z cwd=/tmp/vscode-copilot-layout-standalone
-source=plugin event=sessionStart timestamp=2026-04-22T04:30:47Z cwd=/tmp/vscode-copilot-layout-standalone
+source=example-workspace event=sessionStart timestamp=2026-04-22T03:52:47Z cwd=/tmp/vscode-copilot-layout-standalone
+source=plugin event=sessionStart timestamp=2026-04-22T03:52:47Z cwd=/tmp/vscode-copilot-layout-standalone
 ok: bootstrap complete
 
 Changes   +0 -0
 Requests  1 Premium (8s)
-Tokens    ↑ 17.7k • ↓ 127 • 16.9k (cached) • 118 (reasoning)
+Tokens    ↑ 17.7k • ↓ 115 • 16.9k (cached) • 106 (reasoning)
 ```
 
 ## install_state
@@ -151,10 +145,10 @@ INSTALL_STATE_SUMMARY
 ```text
 ok: standalone workspace hook proof succeeded
 log:
-source=example-workspace event=sessionStart timestamp=2026-04-22T04:30:58Z cwd=/tmp/vscode-copilot-layout-standalone
-source=plugin event=sessionStart timestamp=2026-04-22T04:30:58Z cwd=/tmp/vscode-copilot-layout-standalone
+source=example-workspace event=sessionStart timestamp=2026-04-22T03:52:58Z cwd=/tmp/vscode-copilot-layout-standalone
+source=plugin event=sessionStart timestamp=2026-04-22T03:52:58Z cwd=/tmp/vscode-copilot-layout-standalone
 
 Changes   +0 -0
-Requests  1 Premium (8s)
-Tokens    ↑ 17.7k • ↓ 111 • 16.9k (cached) • 102 (reasoning)
+Requests  1 Premium (7s)
+Tokens    ↑ 17.7k • ↓ 81 • 16.9k (cached) • 72 (reasoning)
 ```

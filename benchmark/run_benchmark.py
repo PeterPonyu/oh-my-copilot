@@ -15,9 +15,15 @@ from pathlib import Path
 EVIDENCE_MARKERS = (
     "ROOT_AGENT_OK",
     "PLUGIN_AGENT_OK",
+    "TASK_SCENARIO_OK",
+    "TASK_PLAN_OK",
+    "TASK_COMMAND_OK",
     "INSTALL_STATE: ok",
     "source=example-workspace",
     "source=plugin",
+    "REFINEMENT_MAP_OK",
+    "PLUGIN_BOUNDARY_OK",
+    "DISCOVERABILITY_OK",
 )
 
 
@@ -109,6 +115,8 @@ class EvaluationContract:
     expected_vanilla_score: int
     required_delta_vs_vanilla: int
     actual_delta_vs_vanilla: int
+    investigation_required: bool
+    improvement_summary: str
     dimensions: list[EvaluationDimension]
 
 
@@ -243,6 +251,31 @@ def record_history(root: Path, outdir: Path, evaluation: EvaluationContract) -> 
     history_md.write_text(render_history_markdown(entries), encoding="utf-8")
 
 
+def summarize_improvement(
+    variant: str,
+    actual_delta_vs_vanilla: int,
+) -> tuple[bool, str]:
+    if variant != "enhanced":
+        return (
+            False,
+            "Vanilla reference run establishes the comparison floor; use an enhanced run to measure prompt-smoke uplift.",
+        )
+    if actual_delta_vs_vanilla > 0:
+        return (
+            False,
+            f"Enhanced evidence improved by {actual_delta_vs_vanilla} over the vanilla floor; benchmark-backed uplift observed.",
+        )
+    if actual_delta_vs_vanilla == 0:
+        return (
+            True,
+            "Enhanced evidence did not improve over the vanilla floor; investigate missing prompt-smoke markers before treating the refinement as effective.",
+        )
+    return (
+        True,
+        f"Enhanced evidence regressed by {-actual_delta_vs_vanilla} below the vanilla floor; investigate failing checks or markers before treating the refinement as effective.",
+    )
+
+
 def build_evaluation(
     profile: str,
     variant: str,
@@ -252,49 +285,49 @@ def build_evaluation(
     smoke_result = results_by_name.get("smoke_cli")
     smoke_evidence = smoke_result.output_tail if smoke_result else "(smoke_cli result missing)"
     smoke_markers = set(smoke_result.markers if smoke_result else [])
+    all_markers = {marker for result in results for marker in result.markers}
 
     if profile == "quick":
         weight_map = {
             "docs_validation": ("check", "docs validation stays green", 15),
             "power_validation": ("check", "power surface validation stays green", 15),
             "root_validation": ("check", "root surface validation stays green", 15),
+            "REFINEMENT_MAP_OK": ("marker", "README exposes the refinement-priority map", 10),
+            "PLUGIN_BOUNDARY_OK": ("marker", "README exposes the plugin-boundary review", 10),
+            "DISCOVERABILITY_OK": ("marker", "README Start here path exposes the key proof docs together", 10),
             "smoke_cli": ("check", "basic Copilot CLI smoke passes", 15),
             "ROOT_AGENT_OK": ("marker", "root reviewer prompt smoke returns ROOT_AGENT_OK", 20),
             "PLUGIN_AGENT_OK": ("marker", "namespaced plugin reviewer prompt smoke returns PLUGIN_AGENT_OK", 20),
+            "TASK_SCENARIO_OK": ("marker", "agent can answer a constrained practical repo-task question", 10),
+            "TASK_PLAN_OK": ("marker", "agent can choose the right validator/doc for benchmark-proof drift", 10),
+            "TASK_COMMAND_OK": ("marker", "agent can choose the right enhanced benchmark command path", 10),
         }
-        required_names = (
-            "docs_validation",
-            "power_validation",
-            "root_validation",
-            "smoke_cli",
-        )
     else:
         weight_map = {
             "docs_validation": ("check", "docs validation stays green", 10),
             "power_validation": ("check", "power surface validation stays green", 10),
             "root_validation": ("check", "root surface validation stays green", 10),
+            "REFINEMENT_MAP_OK": ("marker", "README exposes the refinement-priority map", 5),
+            "PLUGIN_BOUNDARY_OK": ("marker", "README exposes the plugin-boundary review", 5),
+            "DISCOVERABILITY_OK": ("marker", "README Start here path exposes the key proof docs together", 5),
             "smoke_cli": ("check", "basic Copilot CLI smoke passes", 10),
             "bootstrap": ("check", "bootstrap flow still succeeds", 10),
             "install_state": ("marker", "install-state proof returns INSTALL_STATE: ok", 10),
             "standalone_hook_proof": ("marker", "standalone hook proof reports example/plugin sources", 10),
             "ROOT_AGENT_OK": ("marker", "root reviewer prompt smoke returns ROOT_AGENT_OK", 15),
             "PLUGIN_AGENT_OK": ("marker", "namespaced plugin reviewer prompt smoke returns PLUGIN_AGENT_OK", 15),
+            "TASK_SCENARIO_OK": ("marker", "agent can answer a constrained practical repo-task question", 10),
+            "TASK_PLAN_OK": ("marker", "agent can choose the right validator/doc for benchmark-proof drift", 10),
+            "TASK_COMMAND_OK": ("marker", "agent can choose the right enhanced benchmark command path", 10),
         }
-        required_names = (
-            "docs_validation",
-            "power_validation",
-            "root_validation",
-            "smoke_cli",
-            "bootstrap",
-            "install_state",
-            "standalone_hook_proof",
-        )
-
-    if variant == "enhanced":
-        required_names = tuple(weight_map.keys())
+    enhanced_only_names = {"ROOT_AGENT_OK", "PLUGIN_AGENT_OK", "TASK_SCENARIO_OK", "TASK_PLAN_OK", "TASK_COMMAND_OK"}
+    vanilla_names = tuple(name for name in weight_map.keys() if name not in enhanced_only_names)
+    active_names = tuple(weight_map.keys()) if variant == "enhanced" else vanilla_names
+    required_names = active_names
 
     dimensions: list[EvaluationDimension] = []
-    for name, (kind, description, weight) in weight_map.items():
+    for name in active_names:
+        kind, description, weight = weight_map[name]
         passed = False
         evidence = "(no evidence)"
         if kind == "check":
@@ -311,7 +344,7 @@ def build_evaluation(
             passed = bool(result and required_markers.issubset(set(result.markers)))
             evidence = result.output_tail if result else "(result missing)"
         else:
-            passed = name in smoke_markers
+            passed = name in all_markers
             evidence = smoke_evidence
 
         dimensions.append(
@@ -330,12 +363,17 @@ def build_evaluation(
     max_score = sum(d.weight for d in dimensions)
     threshold_score = sum(d.weight for d in dimensions if d.required)
     expected_vanilla_score = sum(
-        weight for name, (_, _, weight) in weight_map.items() if name not in {"ROOT_AGENT_OK", "PLUGIN_AGENT_OK"}
+        weight for name, (_, _, weight) in weight_map.items() if name not in {"ROOT_AGENT_OK", "PLUGIN_AGENT_OK", "TASK_SCENARIO_OK", "TASK_PLAN_OK", "TASK_COMMAND_OK"}
     )
-    actual_delta_vs_vanilla = score - expected_vanilla_score
-    required_delta_vs_vanilla = max_score - expected_vanilla_score
+    enhanced_max_score = sum(weight for _, _, weight in weight_map.values())
+    actual_delta_vs_vanilla = score - expected_vanilla_score if variant == "enhanced" else 0
+    required_delta_vs_vanilla = enhanced_max_score - expected_vanilla_score
     passed = score >= threshold_score and all(
         dimension.passed for dimension in dimensions if dimension.required
+    )
+    investigation_required, improvement_summary = summarize_improvement(
+        variant=variant,
+        actual_delta_vs_vanilla=actual_delta_vs_vanilla,
     )
 
     return EvaluationContract(
@@ -349,6 +387,8 @@ def build_evaluation(
         expected_vanilla_score=expected_vanilla_score,
         required_delta_vs_vanilla=required_delta_vs_vanilla,
         actual_delta_vs_vanilla=actual_delta_vs_vanilla,
+        investigation_required=investigation_required,
+        improvement_summary=improvement_summary,
         dimensions=dimensions,
     )
 
@@ -424,15 +464,18 @@ def main() -> int:
             "",
             "## Evaluation contract",
             "",
-            "| Variant | Score | Threshold | Release gate | Vanilla floor | Required delta vs vanilla |",
-            "| --- | ---: | ---: | --- | ---: | ---: |",
+            "| Variant | Contract score | Contract threshold | Release gate | Enhanced-only uplift budget |",
+            "| --- | ---: | ---: | --- | ---: |",
             (
                 f"| `{evaluation.variant}` | {evaluation.score}/{evaluation.max_score} | "
                 f"{evaluation.threshold_score}/{evaluation.max_score} | "
                 f"{'PASS' if evaluation.passed else 'FAIL'} | "
-                f"{evaluation.expected_vanilla_score}/{evaluation.max_score} | "
                 f"{evaluation.required_delta_vs_vanilla} |"
             ),
+            "",
+            f"- Variant contract score: {evaluation.score}/{evaluation.max_score}",
+            f"- Improvement summary: {evaluation.improvement_summary}",
+            f"- Investigation required: {'yes' if evaluation.investigation_required else 'no'}",
             "",
             "| Dimension | Required | Passed | Weight |",
             "| --- | --- | --- | ---: |",
@@ -461,12 +504,14 @@ def main() -> int:
             [
                 f"# Benchmark Evaluation ({args.profile}, {evaluation.variant})",
                 "",
-                f"- Score: **{evaluation.score}/{evaluation.max_score}**",
-                f"- Threshold: **{evaluation.threshold_score}/{evaluation.max_score}**",
+                f"- Contract score: **{evaluation.score}/{evaluation.max_score}**",
+                f"- Contract threshold: **{evaluation.threshold_score}/{evaluation.max_score}**",
                 f"- Release gate: **{'PASS' if evaluation.passed else 'FAIL'}**",
-                f"- Vanilla floor: **{evaluation.expected_vanilla_score}/{evaluation.max_score}**",
+                f"- Vanilla floor reference: **{evaluation.expected_vanilla_score}**",
                 f"- Actual delta vs vanilla floor: **{evaluation.actual_delta_vs_vanilla}**",
-                f"- Required delta vs vanilla floor: **{evaluation.required_delta_vs_vanilla}**",
+                f"- Enhanced-only uplift budget: **{evaluation.required_delta_vs_vanilla}**",
+                f"- Improvement summary: {evaluation.improvement_summary}",
+                f"- Investigation required: **{'yes' if evaluation.investigation_required else 'no'}**",
                 "",
                 "| Dimension | Required | Passed | Weight | Description |",
                 "| --- | --- | --- | ---: | --- |",

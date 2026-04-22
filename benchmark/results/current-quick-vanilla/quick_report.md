@@ -8,25 +8,30 @@ Variant: `vanilla`
 
 | Check | Result | Duration (s) | Markers |
 | --- | --- | ---: | --- |
-| `docs_validation` | PASS | 0.2 | — |
-| `power_validation` | PASS | 0.07 | — |
-| `root_validation` | PASS | 0.14 | — |
-| `smoke_cli` | PASS | 1.76 | — |
+| `docs_validation` | PASS | 0.19 | — |
+| `power_validation` | PASS | 0.08 | `REFINEMENT_MAP_OK`, `PLUGIN_BOUNDARY_OK`, `DISCOVERABILITY_OK` |
+| `root_validation` | PASS | 0.12 | — |
+| `smoke_cli` | PASS | 1.57 | — |
 
 ## Evaluation contract
 
-| Variant | Score | Threshold | Release gate | Vanilla floor | Required delta vs vanilla |
-| --- | ---: | ---: | --- | ---: | ---: |
-| `vanilla` | 60/100 | 60/100 | PASS | 60/100 | 40 |
+| Variant | Contract score | Contract threshold | Release gate | Enhanced-only uplift budget |
+| --- | ---: | ---: | --- | ---: |
+| `vanilla` | 90/90 | 90/90 | PASS | 50 |
+
+- Variant contract score: 90/90
+- Improvement summary: Vanilla reference run establishes the comparison floor; use an enhanced run to measure prompt-smoke uplift.
+- Investigation required: no
 
 | Dimension | Required | Passed | Weight |
 | --- | --- | --- | ---: |
 | `docs_validation` | yes | PASS | 15 |
 | `power_validation` | yes | PASS | 15 |
 | `root_validation` | yes | PASS | 15 |
+| `REFINEMENT_MAP_OK` | yes | PASS | 10 |
+| `PLUGIN_BOUNDARY_OK` | yes | PASS | 10 |
+| `DISCOVERABILITY_OK` | yes | PASS | 10 |
 | `smoke_cli` | yes | PASS | 15 |
-| `ROOT_AGENT_OK` | no | FAIL | 20 |
-| `PLUGIN_AGENT_OK` | no | FAIL | 20 |
 
 ## docs_validation
 
@@ -48,13 +53,13 @@ ok: oh-my-copilot docs/research/examples validation complete
 ## power_validation
 
 ```text
-ok: VS Code settings enable AGENTS.md loading
-ok: VS Code settings enable skills
-ok: VS Code prompt file uses a custom agent
-ok: plugin.json parses and includes core keys
 ok: plugin hooks.json has versioned schema
 ok: README mentions VS Code layout
 ok: README mentions Copilot CLI plugin package
+ok: README Start here section exposes refinement-priority, plugin-boundary, and benchmark-status links
+ok: REFINEMENT_MAP_OK
+ok: PLUGIN_BOUNDARY_OK
+ok: DISCOVERABILITY_OK
 ok: cross-host app overview preserves isolated presentation boundary
 ok: cross-host methodology route names comparability classes
 ok: cross-host presentation primitives preserve repo-native warning
