@@ -3,7 +3,7 @@
     "name": "docs_validation",
     "command": "./scripts/validate-doc-links.sh",
     "success": true,
-    "duration_sec": 0.19,
+    "duration_sec": 0.2,
     "output_tail": "ok: research/omc-analysis.md has an Evidence section\nok: research/omc-analysis.md has an Inference/Assumption section\nok: research/omx-analysis.md has an Evidence section\nok: research/omx-analysis.md has an Inference/Assumption section\nok: research/copilot-cli-capabilities.md has an Evidence section\nok: research/copilot-cli-capabilities.md has an Inference/Assumption section\nok: mapping distinguishes source-backed claims from inference\nok: scope creep terms are bounded\nok: illustrative hook policy JSON is valid\nok: internal Markdown links resolve\nok: external link checks skipped (set CHECK_EXTERNAL=1 to enable)\nok: oh-my-copilot docs/research/examples validation complete",
     "markers": []
   },
@@ -31,13 +31,14 @@
     "name": "smoke_cli",
     "command": "./scripts/smoke-copilot-cli.sh",
     "success": true,
-    "duration_sec": 54.98,
-    "output_tail": "ok: copilot CLI version command succeeds\nok: copilot help exposes agent/plugin options\nok: copilot plugin command is available\nok: root reviewer/research/verifier agents exist\nok: plugin metadata parses for oh-my-copilot-power-pack@0.1.0\nok: installed plugin entry found in ~/.copilot/config.json\nok: root reviewer agent prompt smoke returned ROOT_AGENT_OK\nok: namespaced plugin reviewer agent prompt smoke returned PLUGIN_AGENT_OK\nok: task scenario smoke returned TASK_SCENARIO_OK\nok: task plan smoke returned TASK_PLAN_OK\nok: Copilot smoke proves route availability only; cross-host comparability is validated by separate benchmark harvest gates\nok: Copilot CLI smoke validation complete",
+    "duration_sec": 65.21,
+    "output_tail": "ok: copilot help exposes agent/plugin options\nok: copilot plugin command is available\nok: root reviewer/research/verifier agents exist\nok: plugin metadata parses for oh-my-copilot-power-pack@0.1.0\nok: installed plugin entry found in ~/.copilot/config.json\nok: root reviewer agent prompt smoke returned ROOT_AGENT_OK\nok: namespaced plugin reviewer agent prompt smoke returned PLUGIN_AGENT_OK\nok: task scenario smoke returned TASK_SCENARIO_OK\nok: task plan smoke returned TASK_PLAN_OK\nok: task command smoke returned TASK_COMMAND_OK\nok: Copilot smoke proves route availability only; cross-host comparability is validated by separate benchmark harvest gates\nok: Copilot CLI smoke validation complete",
     "markers": [
       "ROOT_AGENT_OK",
       "PLUGIN_AGENT_OK",
       "TASK_SCENARIO_OK",
-      "TASK_PLAN_OK"
+      "TASK_PLAN_OK",
+      "TASK_COMMAND_OK"
     ]
   }
 ]

@@ -9,21 +9,21 @@ Variant: `enhanced`
 | Check | Result | Duration (s) | Markers |
 | --- | --- | ---: | --- |
 | `docs_validation` | PASS | 0.19 | — |
-| `power_validation` | PASS | 0.08 | `REFINEMENT_MAP_OK`, `PLUGIN_BOUNDARY_OK`, `DISCOVERABILITY_OK` |
+| `power_validation` | PASS | 0.07 | `REFINEMENT_MAP_OK`, `PLUGIN_BOUNDARY_OK`, `DISCOVERABILITY_OK` |
 | `root_validation` | PASS | 0.12 | — |
-| `smoke_cli` | PASS | 55.59 | `ROOT_AGENT_OK`, `PLUGIN_AGENT_OK`, `TASK_SCENARIO_OK`, `TASK_PLAN_OK` |
-| `bootstrap` | PASS | 13.15 | `INSTALL_STATE: ok`, `source=example-workspace`, `source=plugin`, `REFINEMENT_MAP_OK`, `PLUGIN_BOUNDARY_OK`, `DISCOVERABILITY_OK` |
+| `smoke_cli` | PASS | 67.77 | `ROOT_AGENT_OK`, `PLUGIN_AGENT_OK`, `TASK_SCENARIO_OK`, `TASK_PLAN_OK`, `TASK_COMMAND_OK` |
+| `bootstrap` | PASS | 12.85 | `INSTALL_STATE: ok`, `source=example-workspace`, `source=plugin`, `REFINEMENT_MAP_OK`, `PLUGIN_BOUNDARY_OK`, `DISCOVERABILITY_OK` |
 | `install_state` | PASS | 0.04 | `INSTALL_STATE: ok` |
-| `standalone_hook_proof` | PASS | 10.51 | `source=example-workspace`, `source=plugin` |
+| `standalone_hook_proof` | PASS | 10.98 | `source=example-workspace`, `source=plugin` |
 
 ## Evaluation contract
 
 | Variant | Contract score | Contract threshold | Release gate | Enhanced-only uplift budget |
 | --- | ---: | ---: | --- | ---: |
-| `enhanced` | 135/135 | 135/135 | PASS | 50 |
+| `enhanced` | 145/145 | 145/145 | PASS | 60 |
 
-- Variant contract score: 135/135
-- Improvement summary: Enhanced evidence improved by 50 over the vanilla floor; benchmark-backed uplift observed.
+- Variant contract score: 145/145
+- Improvement summary: Enhanced evidence improved by 60 over the vanilla floor; benchmark-backed uplift observed.
 - Investigation required: no
 
 | Dimension | Required | Passed | Weight |
@@ -42,6 +42,7 @@ Variant: `enhanced`
 | `PLUGIN_AGENT_OK` | yes | PASS | 15 |
 | `TASK_SCENARIO_OK` | yes | PASS | 10 |
 | `TASK_PLAN_OK` | yes | PASS | 10 |
+| `TASK_COMMAND_OK` | yes | PASS | 10 |
 
 ## docs_validation
 
@@ -97,7 +98,6 @@ ok: root Copilot surface validation complete
 ## smoke_cli
 
 ```text
-ok: copilot CLI version command succeeds
 ok: copilot help exposes agent/plugin options
 ok: copilot plugin command is available
 ok: root reviewer/research/verifier agents exist
@@ -107,6 +107,7 @@ ok: root reviewer agent prompt smoke returned ROOT_AGENT_OK
 ok: namespaced plugin reviewer agent prompt smoke returned PLUGIN_AGENT_OK
 ok: task scenario smoke returned TASK_SCENARIO_OK
 ok: task plan smoke returned TASK_PLAN_OK
+ok: task command smoke returned TASK_COMMAND_OK
 ok: Copilot smoke proves route availability only; cross-host comparability is validated by separate benchmark harvest gates
 ok: Copilot CLI smoke validation complete
 ```
@@ -119,13 +120,13 @@ ok: CI runs root Copilot surface validation
 ok: root Copilot surface validation complete
 ok: standalone workspace hook proof succeeded
 log:
-source=example-workspace event=sessionStart timestamp=2026-04-22T04:00:32Z cwd=/tmp/vscode-copilot-layout-standalone
-source=plugin event=sessionStart timestamp=2026-04-22T04:00:32Z cwd=/tmp/vscode-copilot-layout-standalone
+source=example-workspace event=sessionStart timestamp=2026-04-22T04:06:27Z cwd=/tmp/vscode-copilot-layout-standalone
+source=plugin event=sessionStart timestamp=2026-04-22T04:06:27Z cwd=/tmp/vscode-copilot-layout-standalone
 ok: bootstrap complete
 
 Changes   +0 -0
-Requests  1 Premium (10s)
-Tokens    ↑ 17.7k • ↓ 190 • 16.9k (cached) • 181 (reasoning)
+Requests  1 Premium (9s)
+Tokens    ↑ 17.7k • ↓ 163 • 16.9k (cached) • 154 (reasoning)
 ```
 
 ## install_state
@@ -150,10 +151,10 @@ INSTALL_STATE_SUMMARY
 ```text
 ok: standalone workspace hook proof succeeded
 log:
-source=example-workspace event=sessionStart timestamp=2026-04-22T04:00:45Z cwd=/tmp/vscode-copilot-layout-standalone
-source=plugin event=sessionStart timestamp=2026-04-22T04:00:45Z cwd=/tmp/vscode-copilot-layout-standalone
+source=example-workspace event=sessionStart timestamp=2026-04-22T04:06:39Z cwd=/tmp/vscode-copilot-layout-standalone
+source=plugin event=sessionStart timestamp=2026-04-22T04:06:39Z cwd=/tmp/vscode-copilot-layout-standalone
 
 Changes   +0 -0
 Requests  1 Premium (8s)
-Tokens    ↑ 17.7k • ↓ 126 • 16.9k (cached) • 117 (reasoning)
+Tokens    ↑ 17.7k • ↓ 143 • 16.9k (cached) • 134 (reasoning)
 ```

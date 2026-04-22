@@ -171,7 +171,7 @@ full_enhanced, full_enhanced_eval = check_all_pass(
 )
 
 smoke_tail = quick_enhanced["smoke_cli"].get("output_tail", "")
-for token in ("ROOT_AGENT_OK", "PLUGIN_AGENT_OK", "TASK_SCENARIO_OK", "TASK_PLAN_OK"):
+for token in ("ROOT_AGENT_OK", "PLUGIN_AGENT_OK", "TASK_SCENARIO_OK", "TASK_PLAN_OK", "TASK_COMMAND_OK"):
     if token not in smoke_tail:
         fail(f"quick-enhanced is missing {token} evidence")
 ok("quick-enhanced proves root/plugin reviewer routes plus constrained repo-task answers")
