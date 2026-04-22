@@ -3,7 +3,7 @@
     "name": "docs_validation",
     "command": "./scripts/validate-doc-links.sh",
     "success": true,
-    "duration_sec": 0.19,
+    "duration_sec": 0.2,
     "output_tail": "ok: research/omc-analysis.md has an Evidence section\nok: research/omc-analysis.md has an Inference/Assumption section\nok: research/omx-analysis.md has an Evidence section\nok: research/omx-analysis.md has an Inference/Assumption section\nok: research/copilot-cli-capabilities.md has an Evidence section\nok: research/copilot-cli-capabilities.md has an Inference/Assumption section\nok: mapping distinguishes source-backed claims from inference\nok: scope creep terms are bounded\nok: illustrative hook policy JSON is valid\nok: internal Markdown links resolve\nok: external link checks skipped (set CHECK_EXTERNAL=1 to enable)\nok: oh-my-copilot docs/research/examples validation complete",
     "markers": []
   },
@@ -11,7 +11,7 @@
     "name": "power_validation",
     "command": "./scripts/validate-power-surfaces.sh",
     "success": true,
-    "duration_sec": 0.07,
+    "duration_sec": 0.08,
     "output_tail": "ok: plugin hooks.json has versioned schema\nok: README mentions VS Code layout\nok: README mentions Copilot CLI plugin package\nok: README Start here section exposes refinement-priority, plugin-boundary, and benchmark-status links\nok: REFINEMENT_MAP_OK\nok: PLUGIN_BOUNDARY_OK\nok: DISCOVERABILITY_OK\nok: cross-host app overview preserves isolated presentation boundary\nok: cross-host methodology route names comparability classes\nok: cross-host presentation primitives preserve repo-native warning\nok: cross-host benchmark site files exist and generated data validates\nok: power surfaces validation complete",
     "markers": [
       "REFINEMENT_MAP_OK",
@@ -31,7 +31,7 @@
     "name": "smoke_cli",
     "command": "./scripts/smoke-copilot-cli.sh",
     "success": true,
-    "duration_sec": 67.77,
+    "duration_sec": 70.61,
     "output_tail": "ok: copilot help exposes agent/plugin options\nok: copilot plugin command is available\nok: root reviewer/research/verifier agents exist\nok: plugin metadata parses for oh-my-copilot-power-pack@0.1.0\nok: installed plugin entry found in ~/.copilot/config.json\nok: root reviewer agent prompt smoke returned ROOT_AGENT_OK\nok: namespaced plugin reviewer agent prompt smoke returned PLUGIN_AGENT_OK\nok: task scenario smoke returned TASK_SCENARIO_OK\nok: task plan smoke returned TASK_PLAN_OK\nok: task command smoke returned TASK_COMMAND_OK\nok: Copilot smoke proves route availability only; cross-host comparability is validated by separate benchmark harvest gates\nok: Copilot CLI smoke validation complete",
     "markers": [
       "ROOT_AGENT_OK",
@@ -45,8 +45,8 @@
     "name": "bootstrap",
     "command": "./scripts/bootstrap-copilot-power.sh",
     "success": true,
-    "duration_sec": 12.85,
-    "output_tail": "ok: cross-host methodology route explains comparability classes\nok: CI runs root Copilot surface validation\nok: root Copilot surface validation complete\nok: standalone workspace hook proof succeeded\nlog:\nsource=example-workspace event=sessionStart timestamp=2026-04-22T04:06:27Z cwd=/tmp/vscode-copilot-layout-standalone\nsource=plugin event=sessionStart timestamp=2026-04-22T04:06:27Z cwd=/tmp/vscode-copilot-layout-standalone\nok: bootstrap complete\n\nChanges   +0 -0\nRequests  1 Premium (9s)\nTokens    \u2191 17.7k \u2022 \u2193 163 \u2022 16.9k (cached) \u2022 154 (reasoning)",
+    "duration_sec": 11.14,
+    "output_tail": "ok: cross-host methodology route explains comparability classes\nok: CI runs root Copilot surface validation\nok: root Copilot surface validation complete\nok: standalone workspace hook proof succeeded\nlog:\nsource=example-workspace event=sessionStart timestamp=2026-04-22T04:30:47Z cwd=/tmp/vscode-copilot-layout-standalone\nsource=plugin event=sessionStart timestamp=2026-04-22T04:30:47Z cwd=/tmp/vscode-copilot-layout-standalone\nok: bootstrap complete\n\nChanges   +0 -0\nRequests  1 Premium (8s)\nTokens    \u2191 17.7k \u2022 \u2193 127 \u2022 16.9k (cached) \u2022 118 (reasoning)",
     "markers": [
       "INSTALL_STATE: ok",
       "source=example-workspace",
@@ -70,8 +70,8 @@
     "name": "standalone_hook_proof",
     "command": "./scripts/prove-vscode-hook-standalone.sh",
     "success": true,
-    "duration_sec": 10.98,
-    "output_tail": "ok: standalone workspace hook proof succeeded\nlog:\nsource=example-workspace event=sessionStart timestamp=2026-04-22T04:06:39Z cwd=/tmp/vscode-copilot-layout-standalone\nsource=plugin event=sessionStart timestamp=2026-04-22T04:06:39Z cwd=/tmp/vscode-copilot-layout-standalone\n\nChanges   +0 -0\nRequests  1 Premium (8s)\nTokens    \u2191 17.7k \u2022 \u2193 143 \u2022 16.9k (cached) \u2022 134 (reasoning)",
+    "duration_sec": 10.94,
+    "output_tail": "ok: standalone workspace hook proof succeeded\nlog:\nsource=example-workspace event=sessionStart timestamp=2026-04-22T04:30:58Z cwd=/tmp/vscode-copilot-layout-standalone\nsource=plugin event=sessionStart timestamp=2026-04-22T04:30:58Z cwd=/tmp/vscode-copilot-layout-standalone\n\nChanges   +0 -0\nRequests  1 Premium (8s)\nTokens    \u2191 17.7k \u2022 \u2193 111 \u2022 16.9k (cached) \u2022 102 (reasoning)",
     "markers": [
       "source=example-workspace",
       "source=plugin"

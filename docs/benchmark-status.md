@@ -3,9 +3,9 @@
 This document records the current checked-in local proof snapshot for
 `oh-my-copilot`.
 
-Snapshot refresh window: `2026-04-22T03:53:40Z` to `2026-04-22T03:58:48Z` (UTC)
+Snapshot refresh window: `2026-04-22T04:17:00Z` to `2026-04-22T04:39:30Z` (UTC)
 
-Snapshot git SHA: `9ddd5f5` on `main`
+Snapshot git SHA: `20310a2` on `codex/benchmark-practical-task-smoke`
 
 Environment notes:
 
@@ -111,7 +111,7 @@ upstream host-product capabilities documented separately.
 - `quick-enhanced`: improved by **70** over the vanilla floor; benchmark-backed
   uplift observed
 - `full-vanilla`: vanilla contract established at **85/85**
-- `full-enhanced`: improved by **60** over the vanilla floor; benchmark-backed
+- `full-enhanced`: improved by **70** over the vanilla floor; benchmark-backed
   uplift observed
 
 ## State-management note

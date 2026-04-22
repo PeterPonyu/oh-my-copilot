@@ -181,7 +181,7 @@ class CopilotHistoryCleanupTests(unittest.TestCase):
                 command="./scripts/smoke-copilot-cli.sh",
                 success=True,
                 duration_sec=0.1,
-                output_tail="ROOT_AGENT_OK\nPLUGIN_AGENT_OK\nTASK_SCENARIO_OK docs/refinement-priority-map.md docs/plugin-boundary-review.md scripts/validate-benchmark-evidence.sh\nTASK_PLAN_OK scripts/validate-benchmark-evidence.sh docs/benchmark-status.md\nTASK_COMMAND_OK ./benchmark/quick_test.sh --run-agent-smoke --variant enhanced ./scripts/validate-benchmark-evidence.sh\nok: Copilot CLI smoke validation complete",
+                output_tail="ROOT_AGENT_OK\nPLUGIN_AGENT_OK\nTASK_SCENARIO_OK docs/refinement-priority-map.md docs/plugin-boundary-review.md scripts/validate-benchmark-evidence.sh\nTASK_PLAN_OK scripts/validate-benchmark-evidence.sh docs/benchmark-status.md\nTASK_COMMAND_OK A\nok: Copilot CLI smoke validation complete",
                 markers=["ROOT_AGENT_OK", "PLUGIN_AGENT_OK", "TASK_SCENARIO_OK", "TASK_PLAN_OK", "TASK_COMMAND_OK"],
             ),
         ]

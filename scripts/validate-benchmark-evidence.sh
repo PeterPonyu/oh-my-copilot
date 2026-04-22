@@ -87,6 +87,7 @@ python3 - \
 from __future__ import annotations
 import json
 import pathlib
+import subprocess
 import sys
 
 root = pathlib.Path(sys.argv[1])
@@ -204,6 +205,21 @@ for snippet in expected_doc_snippets:
     if snippet not in benchmark_status:
         fail(f"docs/benchmark-status.md is missing current evidence snippet: {snippet}")
 ok("benchmark-status.md matches the current recorded quick/full scores and thresholds")
+
+history_lines = [
+    line.strip()
+    for line in (root / "benchmark" / "results" / "history.jsonl").read_text(encoding="utf-8").splitlines()
+    if line.strip()
+]
+if not history_lines:
+    fail("benchmark/results/history.jsonl is empty")
+latest_entry = json.loads(history_lines[0])
+latest_sha = latest_entry.get("git_sha")
+if not latest_sha:
+    fail("latest benchmark history entry is missing git_sha")
+if f"Snapshot git SHA: `{latest_sha}`" not in benchmark_status:
+    fail(f"docs/benchmark-status.md does not record the latest benchmark history SHA {latest_sha}")
+ok("benchmark-status.md records the latest benchmark history SHA")
 PY
 
 (cd "$ROOT" && python3 ./scripts/validate-cross-host-benchmark-data.py --app-root ./apps/cross-host-benchmark-site)

@@ -2,6 +2,11 @@
 
 | Timestamp | Branch | SHA | Profile | Variant | Score | Threshold | Gate | Output |
 | --- | --- | --- | --- | --- | ---: | ---: | --- | --- |
+| `2026-04-22T04:31:03Z` | `codex/benchmark-practical-task-smoke` | `20310a2` | `full` | `enhanced` | 145/145 | 145/145 | PASS | `benchmark/results/current-full-enhanced` |
+| `2026-04-22T04:29:30Z` | `codex/benchmark-practical-task-smoke` | `20310a2` | `quick` | `enhanced` | 160/160 | 160/160 | PASS | `benchmark/results/current-quick-enhanced` |
+| `2026-04-22T04:25:30Z` | `codex/benchmark-practical-task-smoke` | `20310a2` | `quick` | `enhanced` | 145/160 | 160/160 | FAIL | `benchmark/results/current-quick-enhanced` |
+| `2026-04-22T04:24:04Z` | `codex/benchmark-practical-task-smoke` | `20310a2` | `full` | `enhanced` | 135/145 | 145/145 | FAIL | `benchmark/results/current-full-enhanced` |
+| `2026-04-22T04:18:54Z` | `codex/benchmark-practical-task-smoke` | `20310a2` | `quick` | `enhanced` | 135/160 | 160/160 | FAIL | `benchmark/results/current-quick-enhanced` |
 | `2026-04-22T04:06:44Z` | `main` | `2ea3e51` | `full` | `enhanced` | 145/145 | 145/145 | PASS | `benchmark/results/current-full-enhanced` |
 | `2026-04-22T04:05:12Z` | `main` | `2ea3e51` | `quick` | `enhanced` | 160/160 | 160/160 | PASS | `benchmark/results/current-quick-enhanced` |
 | `2026-04-22T04:00:50Z` | `main` | `44e00ba` | `full` | `enhanced` | 135/135 | 135/135 | PASS | `benchmark/results/current-full-enhanced` |
