@@ -18,6 +18,8 @@ EVIDENCE_MARKERS = (
     "INSTALL_STATE: ok",
     "source=example-workspace",
     "source=plugin",
+    "REFINEMENT_MAP_OK",
+    "PLUGIN_BOUNDARY_OK",
 )
 
 
@@ -279,12 +281,15 @@ def build_evaluation(
     smoke_result = results_by_name.get("smoke_cli")
     smoke_evidence = smoke_result.output_tail if smoke_result else "(smoke_cli result missing)"
     smoke_markers = set(smoke_result.markers if smoke_result else [])
+    all_markers = {marker for result in results for marker in result.markers}
 
     if profile == "quick":
         weight_map = {
             "docs_validation": ("check", "docs validation stays green", 15),
             "power_validation": ("check", "power surface validation stays green", 15),
             "root_validation": ("check", "root surface validation stays green", 15),
+            "REFINEMENT_MAP_OK": ("marker", "README exposes the refinement-priority map", 10),
+            "PLUGIN_BOUNDARY_OK": ("marker", "README exposes the plugin-boundary review", 10),
             "smoke_cli": ("check", "basic Copilot CLI smoke passes", 15),
             "ROOT_AGENT_OK": ("marker", "root reviewer prompt smoke returns ROOT_AGENT_OK", 20),
             "PLUGIN_AGENT_OK": ("marker", "namespaced plugin reviewer prompt smoke returns PLUGIN_AGENT_OK", 20),
@@ -293,6 +298,8 @@ def build_evaluation(
             "docs_validation",
             "power_validation",
             "root_validation",
+            "REFINEMENT_MAP_OK",
+            "PLUGIN_BOUNDARY_OK",
             "smoke_cli",
         )
     else:
@@ -300,6 +307,8 @@ def build_evaluation(
             "docs_validation": ("check", "docs validation stays green", 10),
             "power_validation": ("check", "power surface validation stays green", 10),
             "root_validation": ("check", "root surface validation stays green", 10),
+            "REFINEMENT_MAP_OK": ("marker", "README exposes the refinement-priority map", 5),
+            "PLUGIN_BOUNDARY_OK": ("marker", "README exposes the plugin-boundary review", 5),
             "smoke_cli": ("check", "basic Copilot CLI smoke passes", 10),
             "bootstrap": ("check", "bootstrap flow still succeeds", 10),
             "install_state": ("marker", "install-state proof returns INSTALL_STATE: ok", 10),
@@ -311,6 +320,8 @@ def build_evaluation(
             "docs_validation",
             "power_validation",
             "root_validation",
+            "REFINEMENT_MAP_OK",
+            "PLUGIN_BOUNDARY_OK",
             "smoke_cli",
             "bootstrap",
             "install_state",
@@ -338,7 +349,7 @@ def build_evaluation(
             passed = bool(result and required_markers.issubset(set(result.markers)))
             evidence = result.output_tail if result else "(result missing)"
         else:
-            passed = name in smoke_markers
+            passed = name in all_markers
             evidence = smoke_evidence
 
         dimensions.append(

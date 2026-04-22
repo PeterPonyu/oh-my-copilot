@@ -9,24 +9,29 @@ Variant: `enhanced`
 | Check | Result | Duration (s) | Markers |
 | --- | --- | ---: | --- |
 | `docs_validation` | PASS | 0.21 | — |
-| `power_validation` | PASS | 0.07 | — |
-| `root_validation` | PASS | 0.14 | — |
-| `smoke_cli` | PASS | 30.95 | `ROOT_AGENT_OK`, `PLUGIN_AGENT_OK` |
-| `bootstrap` | PASS | 24.02 | `INSTALL_STATE: ok`, `source=example-workspace`, `source=plugin` |
+| `power_validation` | PASS | 0.07 | `REFINEMENT_MAP_OK`, `PLUGIN_BOUNDARY_OK` |
+| `root_validation` | PASS | 0.13 | — |
+| `smoke_cli` | PASS | 22.99 | `ROOT_AGENT_OK`, `PLUGIN_AGENT_OK` |
+| `bootstrap` | PASS | 13.07 | `INSTALL_STATE: ok`, `source=example-workspace`, `source=plugin`, `REFINEMENT_MAP_OK`, `PLUGIN_BOUNDARY_OK` |
 | `install_state` | PASS | 0.04 | `INSTALL_STATE: ok` |
-| `standalone_hook_proof` | PASS | 32.95 | `source=example-workspace`, `source=plugin` |
+| `standalone_hook_proof` | PASS | 11.85 | `source=example-workspace`, `source=plugin` |
 
 ## Evaluation contract
 
 | Variant | Score | Threshold | Release gate | Vanilla floor | Required delta vs vanilla |
 | --- | ---: | ---: | --- | ---: | ---: |
-| `enhanced` | 100/100 | 100/100 | PASS | 70/100 | 30 |
+| `enhanced` | 110/110 | 110/110 | PASS | 80/110 | 30 |
+
+- Improvement summary: Enhanced evidence improved by 30 over the vanilla floor; benchmark-backed uplift observed.
+- Investigation required: no
 
 | Dimension | Required | Passed | Weight |
 | --- | --- | --- | ---: |
 | `docs_validation` | yes | PASS | 10 |
 | `power_validation` | yes | PASS | 10 |
 | `root_validation` | yes | PASS | 10 |
+| `REFINEMENT_MAP_OK` | yes | PASS | 5 |
+| `PLUGIN_BOUNDARY_OK` | yes | PASS | 5 |
 | `smoke_cli` | yes | PASS | 10 |
 | `bootstrap` | yes | PASS | 10 |
 | `install_state` | yes | PASS | 10 |
@@ -54,13 +59,13 @@ ok: oh-my-copilot docs/research/examples validation complete
 ## power_validation
 
 ```text
-ok: VS Code settings enable AGENTS.md loading
-ok: VS Code settings enable skills
-ok: VS Code prompt file uses a custom agent
-ok: plugin.json parses and includes core keys
 ok: plugin hooks.json has versioned schema
 ok: README mentions VS Code layout
 ok: README mentions Copilot CLI plugin package
+ok: README exposes refinement priority map
+ok: README exposes plugin boundary review
+ok: REFINEMENT_MAP_OK
+ok: PLUGIN_BOUNDARY_OK
 ok: cross-host app overview preserves isolated presentation boundary
 ok: cross-host methodology route names comparability classes
 ok: cross-host presentation primitives preserve repo-native warning
@@ -110,13 +115,13 @@ ok: CI runs root Copilot surface validation
 ok: root Copilot surface validation complete
 ok: standalone workspace hook proof succeeded
 log:
-source=example-workspace event=sessionStart timestamp=2026-04-21T15:25:08Z cwd=/tmp/vscode-copilot-layout-standalone
-source=plugin event=sessionStart timestamp=2026-04-21T15:25:08Z cwd=/tmp/vscode-copilot-layout-standalone
+source=example-workspace event=sessionStart timestamp=2026-04-22T02:44:45Z cwd=/tmp/vscode-copilot-layout-standalone
+source=plugin event=sessionStart timestamp=2026-04-22T02:44:45Z cwd=/tmp/vscode-copilot-layout-standalone
 ok: bootstrap complete
 
 Changes   +0 -0
-Requests  1 Premium (20s)
-Tokens    ↑ 17.7k • ↓ 75 • 16.9k (cached) • 66 (reasoning)
+Requests  1 Premium (10s)
+Tokens    ↑ 17.7k • ↓ 145 • 16.9k (cached) • 136 (reasoning)
 ```
 
 ## install_state
@@ -141,10 +146,10 @@ INSTALL_STATE_SUMMARY
 ```text
 ok: standalone workspace hook proof succeeded
 log:
-source=example-workspace event=sessionStart timestamp=2026-04-21T15:25:23Z cwd=/tmp/vscode-copilot-layout-standalone
-source=plugin event=sessionStart timestamp=2026-04-21T15:25:23Z cwd=/tmp/vscode-copilot-layout-standalone
+source=example-workspace event=sessionStart timestamp=2026-04-22T02:44:58Z cwd=/tmp/vscode-copilot-layout-standalone
+source=plugin event=sessionStart timestamp=2026-04-22T02:44:58Z cwd=/tmp/vscode-copilot-layout-standalone
 
 Changes   +0 -0
-Requests  1 Premium (31s)
-Tokens    ↑ 17.7k • ↓ 154 • 16.9k (cached) • 143 (reasoning)
+Requests  1 Premium (9s)
+Tokens    ↑ 17.7k • ↓ 91 • 16.9k (cached) • 82 (reasoning)
 ```

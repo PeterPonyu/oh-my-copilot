@@ -128,6 +128,12 @@ validate_docs_mentions() {
     "$ROOT/README.md" "$ROOT/docs/vscode-copilot-testing.md"
   require_contains "README mentions Copilot CLI plugin package" 'copilot-cli-plugin|plugin package|plugins/' \
     "$ROOT/README.md"
+  require_contains "README exposes refinement priority map" 'docs/refinement-priority-map\.md' \
+    "$ROOT/README.md"
+  require_contains "README exposes plugin boundary review" 'docs/plugin-boundary-review\.md' \
+    "$ROOT/README.md"
+  log "REFINEMENT_MAP_OK"
+  log "PLUGIN_BOUNDARY_OK"
 }
 
 validate_cross_host_benchmark_site() {

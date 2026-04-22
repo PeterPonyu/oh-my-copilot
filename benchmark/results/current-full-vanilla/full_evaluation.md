@@ -1,12 +1,12 @@
-# Benchmark Evaluation (full, enhanced)
+# Benchmark Evaluation (full, vanilla)
 
-- Score: **110/110**
-- Threshold: **110/110**
+- Score: **80/110**
+- Threshold: **80/110**
 - Release gate: **PASS**
 - Vanilla floor: **80/110**
-- Actual delta vs vanilla floor: **30**
+- Actual delta vs vanilla floor: **0**
 - Required delta vs vanilla floor: **30**
-- Improvement summary: Enhanced evidence improved by 30 over the vanilla floor; benchmark-backed uplift observed.
+- Improvement summary: Vanilla reference run establishes the comparison floor; use an enhanced run to measure prompt-smoke uplift.
 - Investigation required: **no**
 
 | Dimension | Required | Passed | Weight | Description |
@@ -20,5 +20,5 @@
 | `bootstrap` | yes | PASS | 10 | bootstrap flow still succeeds |
 | `install_state` | yes | PASS | 10 | install-state proof returns INSTALL_STATE: ok |
 | `standalone_hook_proof` | yes | PASS | 10 | standalone hook proof reports example/plugin sources |
-| `ROOT_AGENT_OK` | yes | PASS | 15 | root reviewer prompt smoke returns ROOT_AGENT_OK |
-| `PLUGIN_AGENT_OK` | yes | PASS | 15 | namespaced plugin reviewer prompt smoke returns PLUGIN_AGENT_OK |
+| `ROOT_AGENT_OK` | no | FAIL | 15 | root reviewer prompt smoke returns ROOT_AGENT_OK |
+| `PLUGIN_AGENT_OK` | no | FAIL | 15 | namespaced plugin reviewer prompt smoke returns PLUGIN_AGENT_OK |

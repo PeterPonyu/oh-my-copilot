@@ -122,8 +122,8 @@ class CopilotHistoryCleanupTests(unittest.TestCase):
                 command="./scripts/validate-power-surfaces.sh",
                 success=True,
                 duration_sec=0.1,
-                output_tail="ok: power surfaces validation complete",
-                markers=[],
+                output_tail="REFINEMENT_MAP_OK\nPLUGIN_BOUNDARY_OK\nok: power surfaces validation complete",
+                markers=["REFINEMENT_MAP_OK", "PLUGIN_BOUNDARY_OK"],
             ),
             MODULE.CheckResult(
                 name="root_validation",
@@ -165,8 +165,8 @@ class CopilotHistoryCleanupTests(unittest.TestCase):
                 command="./scripts/validate-power-surfaces.sh",
                 success=True,
                 duration_sec=0.1,
-                output_tail="ok: power surfaces validation complete",
-                markers=[],
+                output_tail="REFINEMENT_MAP_OK\nPLUGIN_BOUNDARY_OK\nok: power surfaces validation complete",
+                markers=["REFINEMENT_MAP_OK", "PLUGIN_BOUNDARY_OK"],
             ),
             MODULE.CheckResult(
                 name="root_validation",
