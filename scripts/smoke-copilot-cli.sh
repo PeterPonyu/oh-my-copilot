@@ -169,6 +169,29 @@ run_task_smoke() {
   log "task scenario smoke returned TASK_SCENARIO_OK"
 }
 
+run_task_plan_smoke() {
+  local output
+
+  output="$(
+    timeout "$TIMEOUT_SECONDS" copilot \
+      --agent reviewer \
+      --model auto \
+      --allow-all \
+      --no-color \
+      -s \
+      -p "Without editing files or running write commands, a benchmark contract changed and the public benchmark summary may now be stale. Which validator should be rerun first, and which public score-summary doc must stay in sync? Reply with exactly: TASK_PLAN_OK scripts/validate-benchmark-evidence.sh docs/benchmark-status.md" 2>&1
+  )" || {
+    printf '%s\n' "$output" >&2
+    fail "task plan smoke failed"
+  }
+
+  printf '%s\n' "$output" | grep -Fq 'TASK_PLAN_OK scripts/validate-benchmark-evidence.sh docs/benchmark-status.md' || {
+    printf '%s\n' "$output" >&2
+    fail "task plan smoke did not return the expected repo-task answer"
+  }
+  log "task plan smoke returned TASK_PLAN_OK"
+}
+
 if [[ "$RUN_AGENT_SMOKE" == "1" ]]; then
   run_prompt_smoke "root reviewer agent" "reviewer" "ROOT_AGENT_OK"
   if [[ "$plugin_installed" == "yes" ]]; then
@@ -177,6 +200,7 @@ if [[ "$RUN_AGENT_SMOKE" == "1" ]]; then
     warn "namespaced plugin reviewer prompt smoke skipped because plugin is not installed"
   fi
   run_task_smoke
+  run_task_plan_smoke
 else
   log "model-backed agent prompt smoke skipped (set RUN_COPILOT_AGENT_SMOKE=1 to enable)"
 fi
