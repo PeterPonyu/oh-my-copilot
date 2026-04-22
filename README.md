@@ -31,6 +31,7 @@ Public claims in this repo follow a simple proof rule:
 | [`docs/design-spec.md`](./docs/design-spec.md) | Product/design specification for the docs-first Copilot-native repository blueprint. |
 | [`docs/comparison-matrix.md`](./docs/comparison-matrix.md) | Side-by-side comparison of OMC, OMX, and oh-my-copilot v1. |
 | [`docs/copilot-native-mapping.md`](./docs/copilot-native-mapping.md) | Mapping from OMC/OMX concepts to Copilot CLI primitives without forced parity. |
+| [`docs/refinement-priority-map.md`](./docs/refinement-priority-map.md) | Evidence-ordered refinement ledger showing which OMC/OMX lessons should land as Copilot-native shipped surfaces, support tooling, or investigation items. |
 | [`docs/benchmark-status.md`](./docs/benchmark-status.md) | Current checked-in benchmark snapshot with durations, score/evaluation gates, raw result links, and what the proof run actually established. |
 | [`docs/state-contract.md`](./docs/state-contract.md) | Local plugin/cache/hook state rules that keep root installs canonical and project-local. |
 | [`docs/root-registration.md`](./docs/root-registration.md) | Source-of-truth matrix for root workspace registration, plugin reuse, and example boundaries. |
