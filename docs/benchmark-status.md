@@ -3,7 +3,7 @@
 This document records the current checked-in local proof snapshot for
 `oh-my-copilot`.
 
-Snapshot refresh window: `2026-04-22T03:20:44Z` to `2026-04-22T03:24:42Z` (UTC)
+Snapshot refresh window: `2026-04-22T03:31:04Z` to `2026-04-22T03:35:29Z` (UTC)
 
 Snapshot git SHA: `9ddd5f5` on `main`
 
