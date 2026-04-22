@@ -11,16 +11,16 @@ Variant: `enhanced`
 | `docs_validation` | PASS | 0.19 | — |
 | `power_validation` | PASS | 0.08 | `REFINEMENT_MAP_OK`, `PLUGIN_BOUNDARY_OK`, `DISCOVERABILITY_OK` |
 | `root_validation` | PASS | 0.12 | — |
-| `smoke_cli` | PASS | 35.68 | `ROOT_AGENT_OK`, `PLUGIN_AGENT_OK`, `TASK_SCENARIO_OK` |
+| `smoke_cli` | PASS | 54.98 | `ROOT_AGENT_OK`, `PLUGIN_AGENT_OK`, `TASK_SCENARIO_OK`, `TASK_PLAN_OK` |
 
 ## Evaluation contract
 
 | Variant | Contract score | Contract threshold | Release gate | Enhanced-only uplift budget |
 | --- | ---: | ---: | --- | ---: |
-| `enhanced` | 140/140 | 140/140 | PASS | 50 |
+| `enhanced` | 150/150 | 150/150 | PASS | 60 |
 
-- Variant contract score: 140/140
-- Improvement summary: Enhanced evidence improved by 50 over the vanilla floor; benchmark-backed uplift observed.
+- Variant contract score: 150/150
+- Improvement summary: Enhanced evidence improved by 60 over the vanilla floor; benchmark-backed uplift observed.
 - Investigation required: no
 
 | Dimension | Required | Passed | Weight |
@@ -35,6 +35,7 @@ Variant: `enhanced`
 | `ROOT_AGENT_OK` | yes | PASS | 20 |
 | `PLUGIN_AGENT_OK` | yes | PASS | 20 |
 | `TASK_SCENARIO_OK` | yes | PASS | 10 |
+| `TASK_PLAN_OK` | yes | PASS | 10 |
 
 ## docs_validation
 
@@ -90,7 +91,6 @@ ok: root Copilot surface validation complete
 ## smoke_cli
 
 ```text
-Run 'copilot update' to check for updates.
 ok: copilot CLI version command succeeds
 ok: copilot help exposes agent/plugin options
 ok: copilot plugin command is available
@@ -100,6 +100,7 @@ ok: installed plugin entry found in ~/.copilot/config.json
 ok: root reviewer agent prompt smoke returned ROOT_AGENT_OK
 ok: namespaced plugin reviewer agent prompt smoke returned PLUGIN_AGENT_OK
 ok: task scenario smoke returned TASK_SCENARIO_OK
+ok: task plan smoke returned TASK_PLAN_OK
 ok: Copilot smoke proves route availability only; cross-host comparability is validated by separate benchmark harvest gates
 ok: Copilot CLI smoke validation complete
 ```
