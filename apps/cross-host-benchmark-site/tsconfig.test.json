@@ -1,0 +1,21 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "noEmit": false,
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "target": "ES2022",
+    "outDir": "dist-task3",
+    "rootDir": "src",
+    "declaration": false,
+    "isolatedModules": true,
+    "jsx": "preserve"
+  },
+  "include": [
+    "src/lib/presentation/primitives.ts",
+    "src/lib/presentation/contracts.ts",
+    "src/lib/adapters/copilot.ts",
+    "src/lib/adapters/cursor.ts"
+  ],
+  "exclude": ["node_modules", ".next", "out", "app", "src/app"]
+}
