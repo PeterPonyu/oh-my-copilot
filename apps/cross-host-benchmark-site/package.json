@@ -8,7 +8,8 @@
     "build": "next build",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
-    "test": "eslint . && tsc --noEmit"
+    "pretest": "tsc --project tsconfig.test.json",
+    "test": "eslint . && tsc --noEmit && node --test test/task3.test.mjs"
   },
   "dependencies": {
     "next": "16.2.4",

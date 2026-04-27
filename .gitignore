@@ -6,3 +6,5 @@
 
 __pycache__/
 *.pyc
+apps/cross-host-benchmark-site/dist-task3/
+apps/cross-host-benchmark-site/*.tsbuildinfo

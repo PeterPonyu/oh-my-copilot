@@ -362,6 +362,13 @@ def main() -> int:
     parser.add_argument("--variant", choices=["auto", "vanilla", "enhanced"], default="auto")
     args = parser.parse_args()
 
+    if args.variant == "enhanced" and not args.run_agent_smoke:
+        parser.error(
+            "--variant enhanced requires --run-agent-smoke "
+            "(enhanced scoring activates ROOT_AGENT_OK/PLUGIN_AGENT_OK/TASK_* "
+            "markers and raises threshold_score)."
+        )
+
     invocation_root = Path(args.root).resolve()
     root = resolve_canonical_root(invocation_root)
     outdir = (root / args.output_dir).resolve()

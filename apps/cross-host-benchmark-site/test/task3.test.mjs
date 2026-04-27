@@ -1,16 +1,15 @@
-/* eslint-disable @typescript-eslint/no-require-imports */
-const test = require("node:test");
-const assert = require("node:assert/strict");
+import { test } from "node:test";
+import assert from "node:assert/strict";
 
-const {
-  buildComparativePresentation,
-} = require("../dist-task3/lib/presentation/primitives.js");
-const {
-  adaptCopilotPresentation,
-} = require("../dist-task3/lib/adapters/copilot.js");
-const {
-  adaptCursorPresentation,
-} = require("../dist-task3/lib/adapters/cursor.js");
+const { buildComparativePresentation } = await import(
+  "../dist-task3/lib/presentation/primitives.js"
+);
+const { adaptCopilotPresentation } = await import(
+  "../dist-task3/lib/adapters/copilot.js"
+);
+const { adaptCursorPresentation } = await import(
+  "../dist-task3/lib/adapters/cursor.js"
+);
 
 const copilotBundle = {
   repo: "oh-my-copilot",
