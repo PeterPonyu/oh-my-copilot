@@ -1,13 +1,14 @@
 # Copilot OAuth/free-model evidence report — 2026-04-28
 
 Updated after the Ollama sidecar was rejected for this task. The active proof
-surface is now the authenticated GitHub Copilot CLI itself, not a local model
-provider.
+surface is the authenticated GitHub Copilot CLI itself, not a local model
+provider. Per the local account evidence, Copilot verification now defaults to
+`gpt-5-mini`, the newest free/included Copilot model available here.
 
 ## Boundary checks
 
 - Copilot proof uses the real `copilot` binary with OAuth-backed GitHub Copilot
-  authentication and explicit `--model gpt-4.1`.
+  authentication and explicit `--model gpt-5-mini`.
 - The runner records `auth_backend=github_copilot_oauth`, `model_arg`, and the
   exact CLI command in each per-task `request.json`.
 - The runner rejects BYOK/local-provider overrides such as
@@ -21,27 +22,24 @@ provider.
 ## Copilot model preflight
 
 - `copilot --version` → GitHub Copilot CLI 1.0.36.
-- `copilot -p 'Reply with exactly: ok' --output-format json --allow-all-tools --model gpt-4.1` → PASS, `exitCode=0`, `premiumRequests=0`.
-- `copilot ... --model auto` → environment-gated; this local account returned
-  `402 You have no quota`, so `gpt-4.1` is the default free/included model for
-  reproducible Copilot OAuth smokes here.
-- `copilot ... --model gpt-5.4-mini` → environment-gated; this local account
-  also returned `402 You have no quota`.
+- `copilot -p 'Reply with exactly: ok' --output-format json --allow-all-tools --model gpt-5-mini` → PASS, `exitCode=0`, `premiumRequests=0`, response `ok`.
+- Earlier local Ollama/free-provider experiments are invalid for this task
+  because they do not exercise the user's authenticated Copilot account.
 
 ## Verification commands and results
 
 - `python3 -m py_compile benchmark/runs/host_client.py benchmark/runs/pilot/run_a1_pilot.py benchmark/runs/run_a1_full.py benchmark/runs/recorder.py benchmark/runs/test_copilot_oauth.py` → PASS.
 - `python3 -m unittest discover benchmark/runs -p 'test_*.py' -v` → PASS, 8 tests.
-- `python3 benchmark/runs/pilot/run_a1_pilot.py --model gpt-4.1 --limit 1 --arm both --timeout 180` → PASS.
-- `python3 benchmark/runs/run_a1_full.py --model gpt-4.1 --limit 1 --arm vanilla --timeout 180` → PASS.
+- `python3 benchmark/runs/pilot/run_a1_pilot.py --model gpt-5-mini --limit 1 --arm both --timeout 180` → PASS.
+- `python3 benchmark/runs/run_a1_full.py --model gpt-5-mini --limit 1 --arm vanilla --timeout 180` → PASS.
 
 ## New OAuth-backed Copilot run completeness
 
 |run dir|status|model|n_tasks|task_end|run_end|missing|premium|errors|
 |---|---|---|---:|---:|---:|---|---:|---:|
-|20260428T075845Z__A1__vanilla__github_copilot-cli_gpt-4.1__7e4e1ef2a54d|ok|github/copilot-cli/gpt-4.1|1|1|1|none|0|0|
-|20260428T075915Z__A1__with-omc__github_copilot-cli_gpt-4.1__c1dce149ec8a|ok|github/copilot-cli/gpt-4.1|1|1|1|none|0|0|
-|20260428T080013Z__A1-full__vanilla__github_copilot-cli_gpt-4.1__acf5e6e96883|ok|github/copilot-cli/gpt-4.1|1|1|1|none|0|0|
+|20260428T081947Z__A1__vanilla__github_copilot-cli_gpt-5-mini__332abac2862d|ok|github/copilot-cli/gpt-5-mini|1|1|1|none|0|0|
+|20260428T082119Z__A1__with-omc__github_copilot-cli_gpt-5-mini__8ab8bed4229c|ok|github/copilot-cli/gpt-5-mini|1|1|1|none|0|0|
+|20260428T082223Z__A1-full__vanilla__github_copilot-cli_gpt-5-mini__e7482a3150d5|ok|github/copilot-cli/gpt-5-mini|1|1|1|none|0|0|
 
 All three run dirs include `manifest.json`, `events.jsonl`, `summary.csv`,
 `replay.txt`, and per-task prompt/request/response artifacts.
@@ -56,6 +54,6 @@ All three run dirs include `manifest.json`, `events.jsonl`, `summary.csv`,
 
 - Full 60-task both-arm Copilot run is still environment/time gated; bounded
   OAuth smokes prove the selected model path, not a full quality comparison.
-- `--model auto` on Copilot is not used as the default here because the local
-  authenticated account currently has no auto quota; use it only when the
-  account can prove `premiumRequests=0` or acceptable quota behavior.
+- Valid Copilot evidence requires this local authenticated Copilot account and
+  the real `copilot` host CLI; local Ollama/provider evidence remains invalid
+  for Copilot host-product claims.

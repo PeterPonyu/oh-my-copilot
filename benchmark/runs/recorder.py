@@ -54,7 +54,7 @@ def _pricing_for_model(model: str) -> tuple[dict[str, float], bool]:
     """Return pricing rates and whether pricing is intentionally known.
 
     Copilot CLI evidence can include a model suffix such as
-    ``github/copilot-cli/gpt-4.1`` while billing still reports premium-request
+    ``github/copilot-cli/gpt-5-mini`` while billing still reports premium-request
     counts at the host-product layer.
     """
     if model.startswith("github/copilot-cli/"):

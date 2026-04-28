@@ -120,7 +120,7 @@ cat benchmark/runs/data/<run_dir>/per-task/<task_id>/metadata.json
 
 Copilot CLI runs are priced by `premiumRequests`, not by local token pricing.
 `github/copilot-cli` and `github/copilot-cli/<model>` use the recorder's
-premium-request proxy rate; current OAuth smoke evidence for `gpt-4.1` reports
+premium-request proxy rate; current OAuth smoke evidence for `gpt-5-mini` reports
 `premiumRequests=0` in this account.
 
 ## Event types
@@ -140,20 +140,20 @@ the OAuth-backed Copilot path.
 
 ```bash
 # bounded smoke, one task per arm, using the account-backed free/included model
-python3 benchmark/runs/pilot/run_a1_pilot.py --model gpt-4.1 --limit 1 --arm both
+python3 benchmark/runs/pilot/run_a1_pilot.py --model gpt-5-mini --limit 1 --arm both
 
 # 3-task pilot, both arms
-python3 benchmark/runs/pilot/run_a1_pilot.py --model gpt-4.1 --arm both
+python3 benchmark/runs/pilot/run_a1_pilot.py --model gpt-5-mini --arm both
 
 # 60-task A1 full, sliceable by --limit/--arm
-python3 benchmark/runs/run_a1_full.py --model gpt-4.1 --limit 5 --arm vanilla
+python3 benchmark/runs/run_a1_full.py --model gpt-5-mini --limit 5 --arm vanilla
 ```
 
-`gpt-4.1` is the default because this local OAuth account verified it as a
-zero-premium-request smoke path. `--model auto` is accepted by the CLI and may
-work for accounts with auto quota, but this local account returned `402 You have
-no quota` for `--model auto` and `--model gpt-5.4-mini` during verification.
-Cursor remains the better auto-mode proof surface in this task because
+`gpt-5-mini` is the default because this local OAuth account verified it as the
+newest free/included Copilot model with `premiumRequests=0` in bounded smokes.
+Use authenticated host-account model calls for valid evidence; local Ollama or
+other local-provider runs are invalid for Copilot host-product verification.
+Cursor remains the auto-mode proof surface in this task because
 `cursor-agent --list-models` reports `auto - Auto (current)`.
 
 The script records one run-dir per arm under `data/` and prints their paths.

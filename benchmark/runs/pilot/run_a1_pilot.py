@@ -8,9 +8,9 @@ Arms:
     ported OMC skills under ``.github/skills/`` auto-load alongside.
 
 This is NOT a Claude/Ollama approximation; the host CLI is the system under
-test.  The default model is ``gpt-4.1`` because this local authenticated
-Copilot account verified it as a zero-premium-request smoke path, while
-``--model auto`` currently returns a no-quota error in this environment.
+test.  The default model is ``gpt-5-mini`` because this local authenticated
+Copilot account verified it as the newest free/included zero-premium-request
+smoke path for valid Copilot evidence.
 """
 
 from __future__ import annotations
@@ -34,7 +34,7 @@ from benchmark.runs.host_client import (  # noqa: E402
 )
 from benchmark.runs.recorder import Recorder  # noqa: E402
 
-DEFAULT_MODEL_ARG = "gpt-4.1"
+DEFAULT_MODEL_ARG = "gpt-5-mini"
 TASKS_PATH = Path(__file__).parent / "a1_tasks.json"
 WITH_OMC_CWD = ROOT  # /home/zeyufu/Desktop/oh-my-copilot
 PREMIUM_REQUEST_BUDGET = 50  # ~ $2 cap at $0.04/request

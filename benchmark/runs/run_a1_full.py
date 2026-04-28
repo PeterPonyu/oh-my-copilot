@@ -38,7 +38,7 @@ from benchmark.runs.host_client import (  # noqa: E402
 )
 from benchmark.runs.recorder import Recorder  # noqa: E402
 
-DEFAULT_MODEL_ARG = "gpt-4.1"
+DEFAULT_MODEL_ARG = "gpt-5-mini"
 TASKS_PATH = Path(__file__).parent / "pilot" / "a1_full_tasks.json"
 WITH_OMC_CWD = ROOT  # /home/zeyufu/Desktop/oh-my-copilot
 PREMIUM_REQUEST_BUDGET = 200  # ~ $8 cap at $0.04/request

@@ -14,7 +14,7 @@ from benchmark.runs.recorder import Recorder
 
 class CopilotOAuthModeTests(unittest.TestCase):
     def test_build_copilot_command_forwards_free_oauth_model(self) -> None:
-        cmd = host_client.build_copilot_command("/bin/copilot", "hello", model="gpt-4.1")
+        cmd = host_client.build_copilot_command("/bin/copilot", "hello", model="gpt-5-mini")
 
         self.assertEqual(
             cmd,
@@ -26,7 +26,7 @@ class CopilotOAuthModeTests(unittest.TestCase):
                 "json",
                 "--allow-all-tools",
                 "--model",
-                "gpt-4.1",
+                "gpt-5-mini",
             ],
         )
 
@@ -56,34 +56,34 @@ class CopilotOAuthModeTests(unittest.TestCase):
                 "run",
                 return_value=SimpleNamespace(stdout=stdout, stderr="", returncode=0),
             ) as run:
-                out = host_client.call_copilot("hello", workdir=tmpdir, model="gpt-4.1", timeout=12)
+                out = host_client.call_copilot("hello", workdir=tmpdir, model="gpt-5-mini", timeout=12)
 
         ensure.assert_called_once_with()
         cmd = run.call_args.args[0]
         self.assertIn("--model", cmd)
-        self.assertEqual(cmd[cmd.index("--model") + 1], "gpt-4.1")
+        self.assertEqual(cmd[cmd.index("--model") + 1], "gpt-5-mini")
         self.assertEqual(out["request_body"]["auth_backend"], "github_copilot_oauth")
-        self.assertEqual(out["request_body"]["model_arg"], "gpt-4.1")
+        self.assertEqual(out["request_body"]["model_arg"], "gpt-5-mini")
         self.assertEqual(out["premium_requests"], 0)
 
     def test_pilot_cli_defaults_to_confirmed_free_model_and_both_arms(self) -> None:
         args = run_a1_pilot.parse_args([])
 
-        self.assertEqual(args.model, "gpt-4.1")
+        self.assertEqual(args.model, "gpt-5-mini")
         self.assertEqual(args.arm, "both")
-        self.assertEqual(run_a1_pilot._recorder_model(args.model), "github/copilot-cli/gpt-4.1")
+        self.assertEqual(run_a1_pilot._recorder_model(args.model), "github/copilot-cli/gpt-5-mini")
         self.assertEqual(run_a1_pilot._selected_arms(args.arm), ("vanilla", "with-omc"))
 
     def test_full_cli_supports_limit_and_single_arm(self) -> None:
-        args = run_a1_full.parse_args(["--model", "gpt-4.1", "--limit", "1", "--arm", "vanilla"])
+        args = run_a1_full.parse_args(["--model", "gpt-5-mini", "--limit", "1", "--arm", "vanilla"])
 
-        self.assertEqual(args.model, "gpt-4.1")
+        self.assertEqual(args.model, "gpt-5-mini")
         self.assertEqual(args.limit, 1)
         self.assertEqual(run_a1_full._selected_arms(args.arm), ("vanilla",))
         self.assertEqual(run_a1_full._limited_tasks([{"id": "a"}, {"id": "b"}], 1), [{"id": "a"}])
 
     def test_recorder_prices_copilot_model_suffix_as_host_product(self) -> None:
-        rec = Recorder("unit", "vanilla", "github/copilot-cli/gpt-4.1", budget_usd=1.0)
+        rec = Recorder("unit", "vanilla", "github/copilot-cli/gpt-5-mini", budget_usd=1.0)
         try:
             rec.task_start("t1", "prompt")
             rec.request("t1", {"messages": [{"role": "user", "content": "prompt"}]})
