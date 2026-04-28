@@ -15,5 +15,7 @@ Current checked-in snapshot summary:
 - [`full-agent-smoke-20260421T074937Z/`](./full-agent-smoke-20260421T074937Z/)
 - [`site/`](./site/) for presentation-oriented repo artifacts that keep
   generated evidence separate from curated interpretation
+- [`wrapper-surface-analysis-20260428.md`](./wrapper-surface-analysis-20260428.md)
+  for the current wrapper-surface benchmark interpretation and refinement notes
 
 Other result files in this directory may still be regenerated at any time.

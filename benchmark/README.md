@@ -32,6 +32,17 @@ the current repository behaves like a usable Copilot product:
 - `quick`: validators + static proof checks
 - `full`: validators + bootstrap + install-state + optional live Copilot prompt checks
 
+## Wrapper-surface analysis
+
+Use [`analyze_wrapper_surfaces.py`](./analyze_wrapper_surfaces.py) to render the
+current wrapper-surface interpretation into
+[`benchmark/results/wrapper-surface-analysis-20260428.md`](./results/wrapper-surface-analysis-20260428.md)
+and JSON beside it. This report is deliberately separate from the release-gate
+scorecard: it inventories hooks, skills, agents, prompts/instructions, plugin
+packaging, CLI model routing, run artifacts, and the refinement decision that
+future Copilot model-backed smoke must use authenticated `gpt-5-mini` evidence
+instead of Ollama/local providers.
+
 ## Evaluation contract
 
 Every run now emits three artifacts:

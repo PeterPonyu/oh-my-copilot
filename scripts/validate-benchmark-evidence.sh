@@ -52,6 +52,8 @@ require_contains() {
 
 require_file docs/benchmark-status.md
 require_file scripts/validate-cross-host-benchmark-data.py
+require_file benchmark/results/wrapper-surface-analysis-20260428.md
+require_file benchmark/results/wrapper-surface-analysis-20260428.json
 
 QUICK_VANILLA_RESULTS="benchmark/results/current-quick-vanilla/quick_results.json"
 QUICK_VANILLA_EVAL="benchmark/results/current-quick-vanilla/quick_evaluation.json"
@@ -77,6 +79,11 @@ require_contains "benchmark status rejects Cursor plugin/package overclaims" 'Cu
 require_contains "benchmark status records canonical root normalization for team worktrees" 'canonical repo root|team worktree paths' docs/benchmark-status.md
 require_contains "benchmark status mentions refinement-priority map visibility" 'refinement-priority-map' docs/benchmark-status.md
 require_contains "benchmark status mentions plugin-boundary review visibility" 'plugin-boundary-review' docs/benchmark-status.md
+require_contains "wrapper analysis records gpt-5-mini host evidence" 'gpt-5-mini' benchmark/results/wrapper-surface-analysis-20260428.md
+require_contains "wrapper analysis rejects Ollama local-provider proof" 'Ollama/local-provider runs are invalid' benchmark/results/wrapper-surface-analysis-20260428.md
+require_contains "wrapper analysis covers hook surface" '`hooks`' benchmark/results/wrapper-surface-analysis-20260428.md
+require_contains "wrapper analysis covers skill surface" '`skills`' benchmark/results/wrapper-surface-analysis-20260428.md
+require_contains "wrapper analysis covers plugin package surface" '`plugin_package`' benchmark/results/wrapper-surface-analysis-20260428.md
 
 python3 - \
   "$ROOT" \
@@ -100,6 +107,7 @@ full_vanilla_eval_rel = sys.argv[7]
 full_enhanced_results_rel = sys.argv[8]
 full_enhanced_eval_rel = sys.argv[9]
 benchmark_status = (root / "docs" / "benchmark-status.md").read_text(encoding="utf-8")
+wrapper_analysis = json.loads((root / "benchmark" / "results" / "wrapper-surface-analysis-20260428.json").read_text(encoding="utf-8"))
 
 
 def fail(msg: str) -> None:
@@ -170,6 +178,23 @@ full_enhanced, full_enhanced_eval = check_all_pass(
     7,
     "full-enhanced",
 )
+
+if wrapper_analysis.get("valid_host_model") != "copilot --model gpt-5-mini via authenticated local GitHub Copilot account":
+    fail("wrapper analysis must record authenticated gpt-5-mini host model")
+if "Ollama/local providers" not in wrapper_analysis.get("invalid_evidence", ""):
+    fail("wrapper analysis must reject Ollama/local-provider evidence")
+surfaces = {item.get("surface") for item in wrapper_analysis.get("surface_matrix", [])}
+for required_surface in ("host_cli_model", "root_agents_prompts_instructions", "skills", "hooks", "plugin_package", "run_artifacts"):
+    if required_surface not in surfaces:
+        fail(f"wrapper analysis missing surface {required_surface}")
+for required_run in (
+    "20260428T081947Z__A1__vanilla__github_copilot-cli_gpt-5-mini__332abac2862d",
+    "20260428T082119Z__A1__with-omc__github_copilot-cli_gpt-5-mini__8ab8bed4229c",
+    "20260428T082223Z__A1-full__vanilla__github_copilot-cli_gpt-5-mini__e7482a3150d5",
+):
+    if required_run not in {item.get("run_dir") for item in wrapper_analysis.get("authenticated_run_evidence", [])}:
+        fail(f"wrapper analysis missing authenticated run {required_run}")
+ok("wrapper-surface analysis records model provenance, surface coverage, and gpt-5-mini run evidence")
 
 smoke_tail = quick_enhanced["smoke_cli"].get("output_tail", "")
 for token in ("ROOT_AGENT_OK", "PLUGIN_AGENT_OK", "TASK_SCENARIO_OK", "TASK_PLAN_OK", "TASK_COMMAND_OK"):

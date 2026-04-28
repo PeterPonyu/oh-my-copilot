@@ -5,6 +5,7 @@ ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 RUN_AGENT_SMOKE="${RUN_COPILOT_AGENT_SMOKE:-0}"
 REQUIRE_INSTALLED_PLUGIN=0
 TIMEOUT_SECONDS="${COPILOT_SMOKE_TIMEOUT:-120}"
+SMOKE_MODEL="${COPILOT_SMOKE_MODEL:-gpt-5-mini}"
 
 usage() {
   cat <<'USAGE'
@@ -19,6 +20,7 @@ Runs direct, CLI-first Copilot smoke checks:
 
 Set RUN_COPILOT_AGENT_SMOKE=1 or pass --run-agent-prompts to run model-backed
 agent prompt smoke tests. The default mode avoids network/model calls.
+Model-backed smoke uses COPILOT_SMOKE_MODEL, defaulting to gpt-5-mini.
 USAGE
 }
 
@@ -129,7 +131,7 @@ run_prompt_smoke() {
   output="$(
     timeout "$TIMEOUT_SECONDS" copilot \
       --agent "$agent" \
-      --model auto \
+      --model "$SMOKE_MODEL" \
       --allow-all \
       --no-color \
       -s \
@@ -152,7 +154,7 @@ run_task_smoke() {
   output="$(
     timeout "$TIMEOUT_SECONDS" copilot \
       --agent reviewer \
-      --model auto \
+      --model "$SMOKE_MODEL" \
       --allow-all \
       --no-color \
       -s \
@@ -175,7 +177,7 @@ run_task_plan_smoke() {
   output="$(
     timeout "$TIMEOUT_SECONDS" copilot \
       --agent reviewer \
-      --model auto \
+      --model "$SMOKE_MODEL" \
       --allow-all \
       --no-color \
       -s \
@@ -198,7 +200,7 @@ run_task_command_smoke() {
   output="$(
     timeout "$TIMEOUT_SECONDS" copilot \
       --agent reviewer \
-      --model auto \
+      --model "$SMOKE_MODEL" \
       --allow-all \
       --no-color \
       -s \
@@ -216,6 +218,7 @@ run_task_command_smoke() {
 }
 
 if [[ "$RUN_AGENT_SMOKE" == "1" ]]; then
+  log "model-backed Copilot smoke uses --model $SMOKE_MODEL"
   run_prompt_smoke "root reviewer agent" "reviewer" "ROOT_AGENT_OK"
   if [[ "$plugin_installed" == "yes" ]]; then
     run_prompt_smoke "namespaced plugin reviewer agent" "oh-my-copilot-power-pack:reviewer" "PLUGIN_AGENT_OK"
