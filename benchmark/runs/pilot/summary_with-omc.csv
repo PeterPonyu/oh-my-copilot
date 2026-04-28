@@ -1,0 +1,2 @@
+run_id,benchmark,arm,model,n_tasks,total_tokens_in,total_tokens_out,total_cost_usd,wallclock_seconds,n_errors
+79d5f4f72dcf,A1,with-omc,ollama/qwen2.5-1.5b,3,250,1503,0.000000,4.487,0
