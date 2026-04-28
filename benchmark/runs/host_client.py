@@ -1,7 +1,13 @@
 """GitHub Copilot CLI invocation wrapper for the benchmark recorder.
 
 Shells out to ``copilot -p "..." --output-format json --allow-all-tools``,
-parses the NDJSON event stream, and returns a normalized dict.
+optionally forwards ``--model <model>``, parses the NDJSON event stream, and
+returns a normalized dict.
+
+This wrapper is intentionally for the OAuth-backed GitHub Copilot host product.
+It rejects BYOK/provider overrides such as ``COPILOT_PROVIDER_BASE_URL`` so
+benchmark evidence cannot silently fall back to Ollama, vLLM, or another local
+OpenAI-compatible endpoint.
 
 The cwd at invocation determines which skills are auto-loaded:
   - vanilla arm: cwd is a fresh tempdir with no ``.github/skills/``
@@ -28,6 +34,7 @@ Copilot does not expose token counts; billing is in ``premiumRequests``.
 from __future__ import annotations
 
 import json
+import os
 import shutil
 import subprocess
 import time
@@ -43,6 +50,17 @@ VISIBLE_TEXT_EVENT_TYPES = (
 
 class CopilotError(RuntimeError):
     """Raised when the copilot CLI call fails or produces no usable result."""
+
+
+BYOK_PROVIDER_ENV_VARS = (
+    "COPILOT_PROVIDER_BASE_URL",
+    "COPILOT_PROVIDER_TYPE",
+    "COPILOT_PROVIDER_API_KEY",
+    "COPILOT_PROVIDER_BEARER_TOKEN",
+    "COPILOT_PROVIDER_WIRE_API",
+    "COPILOT_PROVIDER_MODEL_ID",
+    "COPILOT_PROVIDER_WIRE_MODEL",
+)
 
 
 def _coerce_int(v: Any) -> int:
@@ -142,6 +160,33 @@ def _extract_result(events: list[dict]) -> Optional[dict]:
     return found
 
 
+def ensure_oauth_backend(env: Optional[dict[str, str]] = None) -> None:
+    """Fail if Copilot CLI would use a custom BYOK/local provider.
+
+    The benchmark is meant to prove the authenticated Copilot CLI product path.
+    A local provider override can make the run look like Copilot evidence while
+    actually using Ollama/vLLM/etc.  Treat any provider override as an invalid
+    preflight unless the caller clears it first.
+    """
+    source = os.environ if env is None else env
+    configured = [name for name in BYOK_PROVIDER_ENV_VARS if source.get(name)]
+    if configured:
+        raise CopilotError(
+            "Copilot benchmark requires OAuth-backed GitHub Copilot CLI, but "
+            "custom provider/BYOK environment is configured: "
+            + ", ".join(configured)
+            + ". Clear these variables before running the benchmark."
+        )
+
+
+def build_copilot_command(binary: str, prompt: str, model: Optional[str] = None) -> list[str]:
+    """Build the non-interactive Copilot CLI command."""
+    cmd = [binary, "-p", prompt, "--output-format", "json", "--allow-all-tools"]
+    if model:
+        cmd += ["--model", model]
+    return cmd
+
+
 def call_copilot(
     prompt: str,
     workdir: str,
@@ -165,6 +210,8 @@ def call_copilot(
       CopilotError: If the binary is missing, exits non-zero, times out,
         or never emits a ``result`` event.
     """
+    ensure_oauth_backend()
+
     binary = shutil.which("copilot")
     if binary is None:
         raise CopilotError(
@@ -172,13 +219,14 @@ def call_copilot(
             "(https://github.com/github/copilot-cli) and re-run."
         )
 
-    cmd = [binary, "-p", prompt, "--output-format", "json", "--allow-all-tools"]
+    cmd = build_copilot_command(binary, prompt, model=model)
     request_body = {
         "backend": "copilot_cli",
+        "auth_backend": "github_copilot_oauth",
         "prompt": prompt,
         "workdir": workdir,
         "cmd": cmd,
-        "model": model,
+        "model_arg": model,
     }
 
     t0 = time.time()

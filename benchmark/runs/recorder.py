@@ -41,10 +41,6 @@ PRICING: dict[str, dict[str, float]] = {
     "anthropic/claude-sonnet-4-6": {"in": 3.0, "out": 15.0, "cache_read": 0.30, "cache_write": 3.75},
     "anthropic/claude-opus-4-7": {"in": 15.0, "out": 75.0, "cache_read": 1.50, "cache_write": 18.75},
     "openai/gpt-4o-mini": {"in": 0.15, "out": 0.6},
-    "ollama/qwen3-8b": {"in": 0.0, "out": 0.0},
-    "ollama/qwen2.5-coder-7b": {"in": 0.0, "out": 0.0},
-    "ollama/qwen2.5-1.5b": {"in": 0.0, "out": 0.0},
-    "ollama/llama3.1-8b": {"in": 0.0, "out": 0.0},
     "github/copilot-cli": {"premium_request_usd": 0.04, "tokens": False},
 }
 
@@ -57,13 +53,12 @@ _UNSAFE_FS_CHARS = re.compile(r"[^A-Za-z0-9._-]+")
 def _pricing_for_model(model: str) -> tuple[dict[str, float], bool]:
     """Return pricing rates and whether pricing is intentionally known.
 
-    Local Ollama model tags are open-ended (for example
-    ``ollama/qwen2.5:7b-instruct-q8_0``), so treating only a fixed table of
-    tags as known makes new free/local models look unclassified. Any
-    ``ollama/*`` model is intentionally zero-cost for benchmark accounting.
+    Copilot CLI evidence can include a model suffix such as
+    ``github/copilot-cli/gpt-4.1`` while billing still reports premium-request
+    counts at the host-product layer.
     """
-    if model.startswith("ollama/"):
-        return {"in": 0.0, "out": 0.0, "cache_read": 0.0, "cache_write": 0.0}, True
+    if model.startswith("github/copilot-cli/"):
+        return PRICING["github/copilot-cli"], True
     rates = PRICING.get(model, {})
     return rates, model in PRICING
 
@@ -86,7 +81,8 @@ def _safe_task_dirname(task_id: str) -> str:
 def _extract_messages(payload: Any) -> tuple[Optional[str], Optional[str]]:
     """Best-effort extraction of (system_message, user_message) from a request payload.
 
-    Supports the common Anthropic / OpenAI / Ollama shapes used by this repo.
+    Supports the common Anthropic, Copilot CLI, and OpenAI-style shapes used by
+    this repo.
     """
     if not isinstance(payload, dict):
         return None, None
@@ -178,7 +174,8 @@ def _extract_assistant_text(payload: Any) -> str:
             return "\n\n".join(parts)
     if isinstance(content, str):
         return content
-    # Ollama / OpenAI-ish: {"message": {"content": "..."}} or {"choices":[{"message":{"content":...}}]}
+    # OpenAI-ish/local-provider legacy: {"message": {"content": "..."}} or
+    # {"choices":[{"message":{"content":...}}]}.
     msg = payload.get("message")
     if isinstance(msg, dict) and isinstance(msg.get("content"), str):
         return msg["content"]
@@ -291,7 +288,7 @@ class Recorder:
         if per_req_rate is not None:
             n = int(tokens.get("premium_requests", 0) or 0)
             return float(n) * float(per_req_rate)
-        # Per-million-token billing (Anthropic, OpenAI, Ollama-ish).
+        # Per-million-token billing (Anthropic/OpenAI-style models).
         cost = 0.0
         for k, v in tokens.items():
             rate = rates.get(k)

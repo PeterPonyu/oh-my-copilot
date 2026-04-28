@@ -18,7 +18,7 @@ benchmark/runs/
   data/                # output run-dirs (gitignored)
   pilot/
     a1_tasks.json      # 3 sample A1 tasks
-    run_a1_pilot.py    # 3 tasks x 2 arms x Claude Haiku 4.5
+    run_a1_pilot.py    # Copilot OAuth CLI pilot; sliceable by --limit/--arm
 ```
 
 ## Per-run directory layout
@@ -117,7 +117,11 @@ cat benchmark/runs/data/<run_dir>/per-task/<task_id>/metadata.json
 | anthropic/claude-sonnet-4-6             | 3.00 | 15.0 | 0.30       | 3.75        |
 | anthropic/claude-opus-4-7               | 15.0 | 75.0 | 1.50       | 18.75       |
 | openai/gpt-4o-mini                      | 0.15 | 0.60 | —          | —           |
-| ollama/* (qwen3-8b, qwen2.5-1.5b, ...)  | 0    | 0    | —          | —           |
+
+Copilot CLI runs are priced by `premiumRequests`, not by local token pricing.
+`github/copilot-cli` and `github/copilot-cli/<model>` use the recorder's
+premium-request proxy rate; current OAuth smoke evidence for `gpt-4.1` reports
+`premiumRequests=0` in this account.
 
 ## Event types
 
@@ -128,40 +132,47 @@ See `schema.md`. Briefly: `run_start`, `task_start`, `request`,
 
 ## Pilot
 
-The `pilot/` directory ships a tiny end-to-end demonstration that uses
-**Claude Haiku 4.5** (paid but cheap — ~$0.01 for 6 short tasks). It
-requires `ANTHROPIC_API_KEY` to be set:
+The `pilot/` directory ships a tiny end-to-end demonstration that uses the
+**authenticated GitHub Copilot CLI host product**. It is not a Claude, Ollama,
+BYOK, or local-provider approximation. The runner rejects Copilot BYOK/provider
+environment overrides such as `COPILOT_PROVIDER_BASE_URL` so evidence stays on
+the OAuth-backed Copilot path.
 
 ```bash
-export ANTHROPIC_API_KEY=sk-ant-...
-python3 benchmark/runs/pilot/run_a1_pilot.py
-```
-
-The script records two run-dirs under `data/` (one per arm) and prints
-their paths. Each run-dir is fully self-contained — `manifest.json`,
-`events.jsonl`, `summary.csv`, `replay.txt`, and a `per-task/` tree.
-
-The pilot exits with code 2 (without making any API call) if
-`ANTHROPIC_API_KEY` is not set.
-
-## Copilot CLI product proof vs local/free model proof
-
-This recorder now supports two intentionally separate benchmark families:
-
-- **Copilot CLI product proof** uses `github/copilot-cli` via `host_client.py`, invokes the real `copilot` binary, and accounts for usage as premium-request proxy cost. Use `pilot/run_a1_pilot.py` and `run_a1_full.py` when the GitHub Copilot CLI host product is the system under test.
-- **Local/free model proof** uses `ollama/<model>` via `ollama_client.py`, never invokes the `copilot` binary, records `premium_requests=0`, and is evidence for local/free task execution only. It is not Copilot host-product evidence.
-
-Local/free commands are sidecars so historical Copilot CLI runs remain comparable:
-
-```bash
-# bounded smoke, both arms, using an installed local model
-python3 benchmark/runs/pilot/run_a1_free_pilot.py --model qwen2.5:7b-instruct-q8_0 --limit 1 --arm both
+# bounded smoke, one task per arm, using the account-backed free/included model
+python3 benchmark/runs/pilot/run_a1_pilot.py --model gpt-4.1 --limit 1 --arm both
 
 # 3-task pilot, both arms
-python3 benchmark/runs/pilot/run_a1_free_pilot.py --model qwen2.5:7b-instruct-q8_0 --arm both
+python3 benchmark/runs/pilot/run_a1_pilot.py --model gpt-4.1 --arm both
 
-# 60-task A1 full, optionally sliceable by --limit/--arm
-python3 benchmark/runs/run_a1_full_free.py --model qwen2.5:7b-instruct-q8_0 --limit 5 --arm vanilla
+# 60-task A1 full, sliceable by --limit/--arm
+python3 benchmark/runs/run_a1_full.py --model gpt-4.1 --limit 5 --arm vanilla
 ```
 
-The local/free `with-omc` arm prepends compact content from the matching local `.github/skills/<skill>/SKILL.md` file and records `guidance_mode=with-local-skill-guidance` in task metadata. That label is deliberate: it does not claim Copilot CLI auto-loading occurred.
+`gpt-4.1` is the default because this local OAuth account verified it as a
+zero-premium-request smoke path. `--model auto` is accepted by the CLI and may
+work for accounts with auto quota, but this local account returned `402 You have
+no quota` for `--model auto` and `--model gpt-5.4-mini` during verification.
+Cursor remains the better auto-mode proof surface in this task because
+`cursor-agent --list-models` reports `auto - Auto (current)`.
+
+The script records one run-dir per arm under `data/` and prints their paths.
+Each run-dir is self-contained: `manifest.json`, `events.jsonl`, `summary.csv`,
+`replay.txt`, and a `per-task/` tree.
+
+## Copilot OAuth model proof vs local-provider proof
+
+This repository no longer treats local Ollama as the recommended free-model
+proof. For this benchmark task, the proof surface is:
+
+- **Copilot:** `github/copilot-cli/<model>` via the real `copilot` binary,
+  authenticated by the user's Copilot OAuth session. The runner records
+  `auth_backend=github_copilot_oauth`, forwards `--model`, rejects BYOK/local
+  provider overrides, and records Copilot's own `premiumRequests` counter.
+- **Cursor:** `cursor/auto` via the real `cursor-agent --model auto` binary,
+  authenticated by the user's Cursor session.
+
+Do not use local Ollama runs as quality evidence for Copilot or Cursor host
+products. Existing historical Ollama artifacts under ignored `data/` directories
+may remain as stale local experiments, but new proof should use the OAuth-backed
+CLI model calls above.

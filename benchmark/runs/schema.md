@@ -70,9 +70,9 @@ Plain UTF-8 markdown shaped for grep:
 ```
 
 ### `per-task/<task_id>/response.md`
-The raw assistant reply (joined text blocks for Anthropic;
-``message.content`` for Ollama; ``choices[0].message.content`` for
-OpenAI-style).
+The raw assistant reply (joined text blocks for Anthropic; Copilot CLI
+``assistant.message`` / ``assistant.message_delta`` events; OpenAI-style
+``choices[0].message.content``).
 
 ### `per-task/<task_id>/metadata.json`
 Per-task convenience view:
