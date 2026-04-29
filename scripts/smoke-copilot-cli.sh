@@ -5,6 +5,7 @@ ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 RUN_AGENT_SMOKE="${RUN_COPILOT_AGENT_SMOKE:-0}"
 REQUIRE_INSTALLED_PLUGIN=0
 TIMEOUT_SECONDS="${COPILOT_SMOKE_TIMEOUT:-120}"
+SMOKE_MODEL="${COPILOT_SMOKE_MODEL:-gpt-5-mini}"
 
 usage() {
   cat <<'USAGE'
@@ -15,9 +16,11 @@ Runs direct, CLI-first Copilot smoke checks:
   - root agent files
   - plugin metadata
   - optional constrained root/plugin agent prompt invocations
+  - optional constrained repo task smoke for meaningful path-finding questions
 
 Set RUN_COPILOT_AGENT_SMOKE=1 or pass --run-agent-prompts to run model-backed
 agent prompt smoke tests. The default mode avoids network/model calls.
+Model-backed smoke uses COPILOT_SMOKE_MODEL, defaulting to gpt-5-mini.
 USAGE
 }
 
@@ -128,7 +131,7 @@ run_prompt_smoke() {
   output="$(
     timeout "$TIMEOUT_SECONDS" copilot \
       --agent "$agent" \
-      --model auto \
+      --model "$SMOKE_MODEL" \
       --allow-all \
       --no-color \
       -s \
@@ -145,13 +148,86 @@ run_prompt_smoke() {
   log "$label prompt smoke returned $expected"
 }
 
+run_task_smoke() {
+  local output
+
+  output="$(
+    timeout "$TIMEOUT_SECONDS" copilot \
+      --agent reviewer \
+      --model "$SMOKE_MODEL" \
+      --allow-all \
+      --no-color \
+      -s \
+      -p "Without editing files or running write commands, identify the repo's refinement priority map doc, plugin boundary review doc, and benchmark evidence validator script. Reply with exactly: TASK_SCENARIO_OK docs/refinement-priority-map.md docs/plugin-boundary-review.md scripts/validate-benchmark-evidence.sh" 2>&1
+  )" || {
+    printf '%s\n' "$output" >&2
+    fail "task scenario smoke failed"
+  }
+
+  printf '%s\n' "$output" | grep -Fq 'TASK_SCENARIO_OK docs/refinement-priority-map.md docs/plugin-boundary-review.md scripts/validate-benchmark-evidence.sh' || {
+    printf '%s\n' "$output" >&2
+    fail "task scenario smoke did not return the expected repo-task answer"
+  }
+  log "task scenario smoke returned TASK_SCENARIO_OK"
+}
+
+run_task_plan_smoke() {
+  local output
+
+  output="$(
+    timeout "$TIMEOUT_SECONDS" copilot \
+      --agent reviewer \
+      --model "$SMOKE_MODEL" \
+      --allow-all \
+      --no-color \
+      -s \
+      -p "Without editing files or running write commands, a benchmark contract changed and the public benchmark summary may now be stale. Which validator should be rerun first, and which public score-summary doc must stay in sync? Reply with exactly: TASK_PLAN_OK scripts/validate-benchmark-evidence.sh docs/benchmark-status.md" 2>&1
+  )" || {
+    printf '%s\n' "$output" >&2
+    fail "task plan smoke failed"
+  }
+
+  printf '%s\n' "$output" | grep -Fq 'TASK_PLAN_OK scripts/validate-benchmark-evidence.sh docs/benchmark-status.md' || {
+    printf '%s\n' "$output" >&2
+    fail "task plan smoke did not return the expected repo-task answer"
+  }
+  log "task plan smoke returned TASK_PLAN_OK"
+}
+
+run_task_command_smoke() {
+  local output
+
+  output="$(
+    timeout "$TIMEOUT_SECONDS" copilot \
+      --agent reviewer \
+      --model "$SMOKE_MODEL" \
+      --allow-all \
+      --no-color \
+      -s \
+      -p "Without editing files or running write commands, choose the correct rerun path after an enhanced-only task-smoke change. Option A: ./benchmark/quick_test.sh --run-agent-smoke --variant enhanced && ./scripts/validate-benchmark-evidence.sh. Option B: ./benchmark/quick_test.sh --variant vanilla && ./scripts/validate-doc-links.sh. Reply with exactly: TASK_COMMAND_OK A" 2>&1
+  )" || {
+    printf '%s\n' "$output" >&2
+    fail "task command smoke failed"
+  }
+
+  printf '%s\n' "$output" | grep -Fq 'TASK_COMMAND_OK A' || {
+    printf '%s\n' "$output" >&2
+    fail "task command smoke did not return the expected repo-task answer"
+  }
+  log "task command smoke returned TASK_COMMAND_OK"
+}
+
 if [[ "$RUN_AGENT_SMOKE" == "1" ]]; then
+  log "model-backed Copilot smoke uses --model $SMOKE_MODEL"
   run_prompt_smoke "root reviewer agent" "reviewer" "ROOT_AGENT_OK"
   if [[ "$plugin_installed" == "yes" ]]; then
     run_prompt_smoke "namespaced plugin reviewer agent" "oh-my-copilot-power-pack:reviewer" "PLUGIN_AGENT_OK"
   else
     warn "namespaced plugin reviewer prompt smoke skipped because plugin is not installed"
   fi
+  run_task_smoke
+  run_task_plan_smoke
+  run_task_command_smoke
 else
   log "model-backed agent prompt smoke skipped (set RUN_COPILOT_AGENT_SMOKE=1 to enable)"
 fi

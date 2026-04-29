@@ -38,6 +38,9 @@ _QUICK_VANILLA_MARKERS = [
 _QUICK_ENHANCED_MARKERS = [
     "ROOT_AGENT_OK",
     "PLUGIN_AGENT_OK",
+    "TASK_SCENARIO_OK",
+    "TASK_PLAN_OK",
+    "TASK_COMMAND_OK",
 ]
 
 _FULL_VANILLA_CHECKS = [
@@ -59,11 +62,17 @@ _FULL_VANILLA_MARKERS = [
 _FULL_ENHANCED_MARKERS = [
     "ROOT_AGENT_OK",
     "PLUGIN_AGENT_OK",
+    "TASK_SCENARIO_OK",
+    "TASK_PLAN_OK",
+    "TASK_COMMAND_OK",
 ]
 
 ENHANCED_ONLY_NAMES = {
     "ROOT_AGENT_OK",
     "PLUGIN_AGENT_OK",
+    "TASK_SCENARIO_OK",
+    "TASK_PLAN_OK",
+    "TASK_COMMAND_OK",
 }
 
 
@@ -148,9 +157,11 @@ def _all_pass_results(profile: str, variant: str) -> list[CheckResult]:
 class ScoringInvariantsTests(unittest.TestCase):
 
     def test_vanilla_threshold_equals_sum_of_required_weights(self) -> None:
-        """For vanilla: threshold_score == sum(weights of required dims), and
-        max_score > threshold (enhanced-only markers are present as optional dims
-        contributing to max but not to the gate)."""
+        """For vanilla: threshold_score == sum(weights of required dims).
+
+        Vanilla now reports only the vanilla contract ceiling; enhanced-only
+        runtime/task dimensions are excluded from the active vanilla set.
+        """
         for profile in ("quick", "full"):
             with self.subTest(profile=profile):
                 results = _all_pass_results(profile, "vanilla")
@@ -161,10 +172,10 @@ class ScoringInvariantsTests(unittest.TestCase):
                     expected_threshold,
                     f"[{profile}] threshold_score {ev.threshold_score} != sum(required weights) {expected_threshold}",
                 )
-                self.assertGreater(
+                self.assertEqual(
                     ev.max_score,
                     ev.threshold_score,
-                    f"[{profile}] vanilla max should exceed threshold (enhanced-only dims are optional)",
+                    f"[{profile}] vanilla max should equal threshold because enhanced-only dims are inactive",
                 )
 
     def test_enhanced_threshold_strictly_greater_than_vanilla(self) -> None:
@@ -248,8 +259,7 @@ class ScoringInvariantsTests(unittest.TestCase):
         self.assertTrue(ev_missing.release_blocking, "missing docs_validation should be release_blocking")
 
     def test_dimension_required_subset_of_active(self) -> None:
-        """required dims ⊆ active dims, with equality only for enhanced variant
-        (vanilla has enhanced-only markers as optional dims)."""
+        """required dims equal active dims for each selected variant contract."""
         for profile in ("quick", "full"):
             for variant in ("vanilla", "enhanced"):
                 with self.subTest(profile=profile, variant=variant):
@@ -261,24 +271,18 @@ class ScoringInvariantsTests(unittest.TestCase):
                         required_names.issubset(active_names),
                         f"[{profile}/{variant}] required dims escape active set",
                     )
-                    if variant == "enhanced":
-                        self.assertEqual(
-                            required_names,
-                            active_names,
-                            f"[{profile}/enhanced] all active dims must be required",
-                        )
-                    else:
-                        # vanilla has at least one optional dim (the enhanced-only markers)
-                        self.assertLess(
-                            len(required_names),
-                            len(active_names),
-                            f"[{profile}/vanilla] expected at least one optional dim",
-                        )
+                    self.assertEqual(
+                        required_names,
+                        active_names,
+                        f"[{profile}/{variant}] all active dims must be required",
+                    )
 
     def test_score_max_equals_sum_dimension_weights(self) -> None:
         """score = sum(passed dim weights); max_score = sum(all active dim weights).
-        For vanilla, score < max because enhanced-only marker dims are present as
-        optional and remain unpassed when smoke isn't run."""
+
+        For vanilla, enhanced-only marker dims are absent from the active
+        dimensions, so score can equal max when the vanilla contract passes.
+        """
         for profile in ("quick", "full"):
             with self.subTest(profile=profile):
                 results = _all_pass_results(profile, "vanilla")
@@ -287,23 +291,12 @@ class ScoringInvariantsTests(unittest.TestCase):
                 expected_max = sum(d.weight for d in ev.dimensions)
                 self.assertEqual(ev.score, expected_score, f"[{profile}] score mismatch")
                 self.assertEqual(ev.max_score, expected_max, f"[{profile}] max_score mismatch")
-                # In vanilla, ROOT_AGENT_OK / PLUGIN_AGENT_OK exist as optional dims
-                # but should NOT be passed (no smoke ran).
                 vanilla_dim_names = {d.name for d in ev.dimensions}
                 for enhanced_name in ENHANCED_ONLY_NAMES:
-                    self.assertIn(
+                    self.assertNotIn(
                         enhanced_name,
                         vanilla_dim_names,
-                        f"[{profile}] enhanced-only dim {enhanced_name!r} should still be present (as optional) in vanilla dimensions",
-                    )
-                    dim = next(d for d in ev.dimensions if d.name == enhanced_name)
-                    self.assertFalse(
-                        dim.passed,
-                        f"[{profile}] enhanced-only dim {enhanced_name!r} unexpectedly passed in vanilla",
-                    )
-                    self.assertFalse(
-                        dim.required,
-                        f"[{profile}] enhanced-only dim {enhanced_name!r} should be optional in vanilla",
+                        f"[{profile}] enhanced-only dim {enhanced_name!r} should be inactive in vanilla dimensions",
                     )
 
     def test_validator_smoke_rejects_broken_doc_link(self) -> None:

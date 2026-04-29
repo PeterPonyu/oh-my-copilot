@@ -1,0 +1,155 @@
+{
+  "generated_at_utc": "2026-04-28T08:55:00Z",
+  "repo": "oh-my-copilot",
+  "valid_host_model": "copilot --model gpt-5-mini via authenticated local GitHub Copilot account",
+  "invalid_evidence": "Ollama/local providers are not valid Copilot host-product verification",
+  "score_summary": {
+    "quick_vanilla": {
+      "profile": "quick",
+      "variant": "vanilla",
+      "score": 90,
+      "max_score": 90,
+      "threshold_score": 90,
+      "passed": true
+    },
+    "quick_enhanced": {
+      "profile": "quick",
+      "variant": "enhanced",
+      "score": 160,
+      "max_score": 160,
+      "threshold_score": 160,
+      "passed": true
+    },
+    "full_vanilla": {
+      "profile": "full",
+      "variant": "vanilla",
+      "score": 85,
+      "max_score": 85,
+      "threshold_score": 85,
+      "passed": true
+    },
+    "full_enhanced": {
+      "profile": "full",
+      "variant": "enhanced",
+      "score": 145,
+      "max_score": 145,
+      "threshold_score": 145,
+      "passed": true
+    },
+    "quick_enhanced_delta_vs_vanilla_floor": 70,
+    "full_enhanced_delta_vs_vanilla_floor": 60
+  },
+  "surface_matrix": [
+    {
+      "surface": "host_cli_model",
+      "owner": "authenticated Copilot CLI",
+      "proof": [
+        "benchmark/runs/host_client.py",
+        "benchmark/runs/test_copilot_oauth.py",
+        "scripts/smoke-copilot-cli.sh"
+      ],
+      "status": "covered",
+      "refinement": "model-backed smoke defaults to gpt-5-mini, not auto or local providers"
+    },
+    {
+      "surface": "root_agents_prompts_instructions",
+      "owner": ".github/ root workspace",
+      "proof": [
+        ".github/agents",
+        ".github/prompts",
+        ".github/instructions",
+        "scripts/validate-root-copilot-surfaces.sh"
+      ],
+      "status": "covered",
+      "refinement": "keep prompt smoke tied to root reviewer/research/verifier routes"
+    },
+    {
+      "surface": "skills",
+      "owner": ".github/skills and packages/copilot-cli-plugin/skills",
+      "proof": [
+        "scripts/validate-power-surfaces.sh",
+        "scripts/validate-root-copilot-surfaces.sh"
+      ],
+      "status": "covered",
+      "refinement": "score skills through discovery and task-command questions rather than raw file count"
+    },
+    {
+      "surface": "hooks",
+      "owner": ".github/hooks and .copilot-hooks",
+      "proof": [
+        "scripts/prove-vscode-hook-standalone.sh",
+        "scripts/validate-root-copilot-surfaces.sh"
+      ],
+      "status": "covered",
+      "refinement": "full profile keeps standalone hook proof separate from model prompt proof"
+    },
+    {
+      "surface": "plugin_package",
+      "owner": "packages/copilot-cli-plugin",
+      "proof": [
+        "packages/copilot-cli-plugin/plugin.json",
+        "scripts/check-install-state.sh",
+        "scripts/validate-copilot-state-contract.sh"
+      ],
+      "status": "covered",
+      "refinement": "install-state proof must reject transient OMX/team worktree source paths"
+    },
+    {
+      "surface": "run_artifacts",
+      "owner": "benchmark/runs recorder/audit",
+      "proof": [
+        "benchmark/runs/audit_runs.py",
+        "benchmark/runs/free-model-report-20260428.md"
+      ],
+      "status": "covered",
+      "refinement": "new gpt-5-mini run dirs supersede local/Ollama experiments"
+    }
+  ],
+  "authenticated_run_evidence": [
+    {
+      "run_dir": "20260428T081947Z__A1__vanilla__github_copilot-cli_gpt-5-mini__332abac2862d",
+      "status": "ok",
+      "benchmark": "A1",
+      "arm": "vanilla",
+      "model": "github/copilot-cli/gpt-5-mini",
+      "tasks": 1,
+      "responses": 1,
+      "errors": 0,
+      "premium_requests_total": 0,
+      "wallclock_seconds": 92.282,
+      "complete_artifacts": true
+    },
+    {
+      "run_dir": "20260428T082119Z__A1__with-omc__github_copilot-cli_gpt-5-mini__8ab8bed4229c",
+      "status": "ok",
+      "benchmark": "A1",
+      "arm": "with-omc",
+      "model": "github/copilot-cli/gpt-5-mini",
+      "tasks": 1,
+      "responses": 1,
+      "errors": 0,
+      "premium_requests_total": 0,
+      "wallclock_seconds": 63.608,
+      "complete_artifacts": true
+    },
+    {
+      "run_dir": "20260428T082223Z__A1-full__vanilla__github_copilot-cli_gpt-5-mini__e7482a3150d5",
+      "status": "ok",
+      "benchmark": "A1-full",
+      "arm": "vanilla",
+      "model": "github/copilot-cli/gpt-5-mini",
+      "tasks": 1,
+      "responses": 1,
+      "errors": 0,
+      "premium_requests_total": 0,
+      "wallclock_seconds": 105.934,
+      "complete_artifacts": true
+    }
+  ],
+  "refinement_decisions": [
+    "Scores are saturated, so the next useful refinement is provenance hardening rather than raising existing thresholds blindly.",
+    "Copilot model-backed smoke wrapper defaults to gpt-5-mini so future enhanced benchmark runs match the valid host-account evidence boundary.",
+    "Keep stale/Ollama run dirs as non-authoritative archives only; reports and validators should point to OAuth-backed gpt-5-mini evidence.",
+    "A full same-task gpt-5-mini paired comparison remains a future quality-scoring milestone, not a prerequisite for this bounded wrapper proof."
+  ]
+}

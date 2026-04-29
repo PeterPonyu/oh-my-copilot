@@ -235,12 +235,21 @@ def collect_anchors(path: pathlib.Path) -> set[str]:
         anchors.add(base if count == 0 else f'{base}-{count}')
     return anchors
 
-markdown_files = [
-    p for p in root.rglob('*.md')
-    if '.git' not in p.relative_to(root).parts
-    and '.omx' not in p.relative_to(root).parts
-    and 'node_modules' not in p.relative_to(root).parts
-]
+excluded_dirs = {
+    '.git',
+    '.omx',
+    'node_modules',
+}
+
+def should_check_markdown(path: pathlib.Path) -> bool:
+    parts = path.relative_to(root).parts
+    if any(part in excluded_dirs for part in parts):
+        return False
+    # Benchmark run data is generated local evidence. Individual model
+    # responses may contain markdown-like text that is not repository docs.
+    return parts[:3] != ('benchmark', 'runs', 'data')
+
+markdown_files = [p for p in root.rglob('*.md') if should_check_markdown(p)]
 anchors = {p: collect_anchors(p) for p in markdown_files}
 
 for path in markdown_files:
