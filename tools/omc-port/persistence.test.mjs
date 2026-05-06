@@ -15,7 +15,7 @@ import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 
 const __dirname = fileURLToPath(new URL('.', import.meta.url));
-const orchestratorPath = resolve(__dirname, 'orchestrator.mjs');
+const orchestratorPath = resolve(__dirname, '..', '..', 'packages', 'copilot-cli-plugin', 'orchestrator', 'orchestrator.mjs');
 
 const tmp = mkdtempSync(join(tmpdir(), 'persist-test-'));
 

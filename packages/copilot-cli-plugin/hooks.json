@@ -30,7 +30,7 @@
         "type": "command",
         "bash": "bash packages/copilot-cli-plugin/scripts/session-end-audit.sh",
         "cwd": ".",
-        "timeoutSec": 10
+        "timeoutSec": 5
       }
     ]
   }
