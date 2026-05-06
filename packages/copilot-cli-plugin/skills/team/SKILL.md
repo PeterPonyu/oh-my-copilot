@@ -16,10 +16,10 @@ The `swarm` compatibility alias was removed in #1131.
 
 ## Usage
 
-```
-/oh-my-copilot:team N:agent-type "task description"
-/oh-my-copilot:team "task description"
-/oh-my-copilot:team ralph "task description"
+```text
+/omcp:team N:agent-type "task description"
+/omcp:team "task description"
+/omcp:team ralph "task description"
 ```
 
 ### Parameters
@@ -32,15 +32,15 @@ The `swarm` compatibility alias was removed in #1131.
 ### Examples
 
 ```bash
-/team 5:executor "fix all TypeScript errors across the project"
-/team 3:debugger "fix build errors in src/"
-/team 4:designer "implement responsive layouts for all page components"
-/team "refactor the auth module with security review"
-/team ralph "build a complete REST API for user management"
+/omcp:team 5:executor "fix all TypeScript errors across the project"
+/omcp:team 3:debugger "fix build errors in src/"
+/omcp:team 4:designer "implement responsive layouts for all page components"
+/omcp:team "refactor the auth module with security review"
+/omcp:team ralph "build a complete REST API for user management"
 # With Codex CLI workers (requires: npm install -g @openai/codex)
-/team 2:codex "review architecture and suggest improvements"
+/omcp:team 2:codex "review architecture and suggest improvements"
 # With Gemini CLI workers (requires: npm install -g @google/gemini-cli)
-/team 2:gemini "redesign the UI components"
+/omcp:team 2:gemini "redesign the UI components"
 # Mixed: Codex for backend analysis, Gemini for frontend (use /ccg instead for this)
 ```
 
@@ -189,7 +189,7 @@ The lead writes handoffs to `.omcp/handoffs/<stage-name>.md`.
 ### Resume and Cancel Semantics
 
 - **Resume:** restart from the last non-terminal stage using staged state + live task status. Read `.omcp/handoffs/` to recover stage transition context.
-- **Cancel:** `/oh-my-copilot:cancel` requests teammate shutdown, waits for responses (best effort), marks phase `cancelled` with `active=false`, captures cancellation metadata, then deletes team resources and clears/preserves Team state per policy. Handoff files in `.omcp/handoffs/` are preserved for potential resume.
+- **Cancel:** `/omcp:cancel` requests teammate shutdown, waits for responses (best effort), marks phase `cancelled` with `active=false`, captures cancellation metadata, then deletes team resources and clears/preserves Team state per policy. Handoff files in `.omcp/handoffs/` are preserved for potential resume.
 - Terminal states are `complete`, `failed`, and `cancelled`.
 
 ## Workflow
@@ -634,8 +634,8 @@ Tmux CLI workers run in dedicated tmux panes with filesystem access. They are **
 
 ### Example: Hybrid Team with CLI Workers
 
-```
-/team 3:executor "refactor auth module with security review"
+```text
+/omcp:team 3:executor "refactor auth module with security review"
 
 Task decomposition:
 #1 [codex_worker] Security review of current auth code -> output to .omcp/research/auth-security.md
@@ -758,7 +758,7 @@ When the user invokes `/team ralph`, says "team ralph", or combines both keyword
 ### Activation
 
 Team+Ralph activates when:
-1. User invokes `/team ralph "task"` or `/oh-my-copilot:team ralph "task"`
+1. User invokes `/omcp:team ralph "task"`
 2. Keyword detector finds both `team` and `ralph` in the prompt
 3. Hook detects `MAGIC KEYWORD: RALPH` alongside team context
 
@@ -786,7 +786,7 @@ state_write(mode="ralph", active=true, iteration=1, max_iterations=10, current_p
 1. Ralph outer loop starts (iteration 1)
 2. Team pipeline runs: `team-plan -> team-prd -> team-exec -> team-verify`
 3. If `team-verify` passes: Ralph runs architect verification (STANDARD tier minimum)
-4. If architect approves: both modes complete, run `/oh-my-copilot:cancel`
+4. If architect approves: both modes complete, run `/omcp:cancel`
 5. If `team-verify` fails OR architect rejects: team enters `team-fix`, then loops back to `team-exec -> team-verify`
 6. If fix loop exceeds `max_fix_loops`: Ralph increments iteration and retries the full pipeline
 7. If Ralph exceeds `max_iterations`: terminal `failed` state
@@ -833,7 +833,7 @@ This prevents duplicate teams and allows graceful recovery from lead failures.
 
 ## Cancellation
 
-The `/oh-my-copilot:cancel` skill handles team cleanup:
+The `/omcp:cancel` skill handles team cleanup:
 
 1. Read team state via `state_read(mode="team")` to get `team_name` and `linked_ralph`
 2. Send `shutdown_request` to all active teammates (from `config.json` members)
@@ -981,7 +981,7 @@ On successful completion:
    ```
    state_clear(mode="ralph")
    ```
-3. Or run `/oh-my-copilot:cancel` which handles all cleanup automatically.
+3. Or run `/omcp:cancel` which handles all cleanup automatically.
 
 **IMPORTANT:** Call `TeamDelete` only AFTER all teammates have been shut down. `TeamDelete` will fail if active members (besides the lead) still exist in the config.
 

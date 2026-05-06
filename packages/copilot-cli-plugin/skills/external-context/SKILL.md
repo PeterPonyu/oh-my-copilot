@@ -14,15 +14,15 @@ Fetch external documentation, references, and context for a query. Decomposes in
 ## Usage
 
 ```
-/oh-my-copilot:external-context <topic or question>
+/omcp:external-context <topic or question>
 ```
 
 ### Examples
 
 ```
-/oh-my-copilot:external-context What are the best practices for JWT token rotation in Node.js?
-/oh-my-copilot:external-context Compare Prisma vs Drizzle ORM for PostgreSQL
-/oh-my-copilot:external-context Latest React Server Components patterns and conventions
+/omcp:external-context What are the best practices for JWT token rotation in Node.js?
+/omcp:external-context Compare Prisma vs Drizzle ORM for PostgreSQL
+/omcp:external-context Latest React Server Components patterns and conventions
 ```
 
 ## Protocol

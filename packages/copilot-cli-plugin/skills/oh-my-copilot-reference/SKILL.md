@@ -67,7 +67,7 @@ Prefix: `oh-my-copilot:`. See `agents/*.md` for full prompts.
 
 ## Skills Registry
 
-Invoke built-in workflows via `/oh-my-copilot:<name>`.
+Invoke built-in workflows via `/omcp:<name>`.
 
 ### Workflow skills
 - `autopilot` — full autonomous execution from idea to working code

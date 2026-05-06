@@ -48,7 +48,7 @@ Most non-trivial software tasks require coordinated phases: understanding requir
 - Parallel execution is used within phases where possible (Phase 2 and Phase 4)
 - QA cycles repeat up to 5 times; if the same error persists 3 times, stop and report the fundamental issue
 - Validation requires approval from all reviewers; rejected items get fixed and re-validated
-- Cancel with `/oh-my-copilot:cancel` at any time; progress is preserved for resume
+- Cancel with `/omcp:cancel` at any time; progress is preserved for resume
 </Execution_Policy>
 
 <Steps>
@@ -85,7 +85,7 @@ Most non-trivial software tasks require coordinated phases: understanding requir
 
 6. **Phase 5 - Cleanup**: Delete all state files on successful completion
    - Remove `.omcp/state/autopilot-state.json`, `ralph-state.json`, `ultrawork-state.json`, `ultraqa-state.json`
-   - Run `/oh-my-copilot:cancel` for clean exit
+   - Run `/omcp:cancel` for clean exit
 </Steps>
 
 <Tool_Usage>
@@ -158,7 +158,7 @@ Optional settings in `.claude/omc.jsonc` (project) or `~/.config/claude-omc/conf
 
 ## Resume
 
-If autopilot was cancelled or failed, run `/oh-my-copilot:autopilot` again to resume from where it stopped.
+If autopilot was cancelled or failed, run `/omcp:autopilot` again to resume from where it stopped.
 
 ## Best Practices for Input
 
@@ -191,11 +191,11 @@ If a deep-interview spec already exists at `.omcp/specs/deep-interview-*.md`, au
 
 The recommended full pipeline chains three quality gates:
 
-```
-/deep-interview "vague idea"
+```text
+/omcp:deep-interview "vague idea"
   → Socratic Q&A → spec (ambiguity ≤ 20%)
-  → /ralplan --direct → consensus plan (Planner/Architect/Critic approved)
-  → /autopilot → skips Phase 0+1, starts at Phase 2 (Execution)
+  → /omcp:ralplan --direct → consensus plan (Planner/Architect/Critic approved)
+  → /omcp:autopilot → skips Phase 0+1, starts at Phase 2 (Execution)
 ```
 
 When autopilot detects a ralplan consensus plan (`.omcp/plans/ralplan-*.md` or `.omcp/plans/consensus-*.md`), it skips both Phase 0 (Expansion) and Phase 1 (Planning) because the plan has already been:

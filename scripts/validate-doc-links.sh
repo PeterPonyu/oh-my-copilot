@@ -252,9 +252,25 @@ def should_check_markdown(path: pathlib.Path) -> bool:
 markdown_files = [p for p in root.rglob('*.md') if should_check_markdown(p)]
 anchors = {p: collect_anchors(p) for p in markdown_files}
 
+fence_re = re.compile(r'^(\s*)(```|~~~)')
+
 for path in markdown_files:
     text = path.read_text(encoding='utf-8')
+    in_fence = False
+    fence_marker = ''
     for lineno, line in enumerate(text.splitlines(), 1):
+        match = fence_re.match(line)
+        if match:
+            marker = match.group(2)
+            if not in_fence:
+                in_fence = True
+                fence_marker = marker
+            elif line.strip().startswith(fence_marker):
+                in_fence = False
+                fence_marker = ''
+            continue
+        if in_fence:
+            continue
         for raw in link_re.findall(line):
             target = raw.strip().split()[0]
             if not target or target.startswith(('http://', 'https://', 'mailto:')):

@@ -23,11 +23,11 @@ Parse the goal from arguments. Supported formats:
 
 | Invocation | Goal Type | What to Check |
 |------------|-----------|---------------|
-| `/oh-my-copilot:ultraqa --tests` | tests | All test suites pass |
-| `/oh-my-copilot:ultraqa --build` | build | Build succeeds with exit 0 |
-| `/oh-my-copilot:ultraqa --lint` | lint | No lint errors |
-| `/oh-my-copilot:ultraqa --typecheck` | typecheck | No TypeScript errors |
-| `/oh-my-copilot:ultraqa --custom "pattern"` | custom | Custom success pattern in output |
+| `/omcp:ultraqa --tests` | tests | All test suites pass |
+| `/omcp:ultraqa --build` | build | Build succeeds with exit 0 |
+| `/omcp:ultraqa --lint` | lint | No lint errors |
+| `/omcp:ultraqa --typecheck` | typecheck | No TypeScript errors |
+| `/omcp:ultraqa --custom "pattern"` | custom | Custom success pattern in output |
 
 If no structured goal provided, interpret the argument as a custom goal.
 
@@ -105,7 +105,7 @@ Track state in `.omcp/ultraqa-state.json`:
 
 ## Cancellation
 
-User can cancel with `/oh-my-copilot:cancel` which clears the state file.
+User can cancel with `/omcp:cancel` which clears the state file.
 
 ## Important Rules
 

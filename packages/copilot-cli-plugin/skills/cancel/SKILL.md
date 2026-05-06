@@ -33,7 +33,7 @@ Automatically detects which mode is active and cancels it:
 ## Usage
 
 ```
-/oh-my-copilot:cancel
+/omcp:cancel
 ```
 
 Or say: "cancelomc", "stopomc"
@@ -103,7 +103,7 @@ fi
 
 ## Auto-Detection
 
-`/oh-my-copilot:cancel` follows the session-aware state contract:
+`/omcp:cancel` follows the session-aware state contract:
 - By default the command inspects the current session via `state_list_active` and `state_get_status`, navigating `.omcp/state/sessions/{sessionId}/…` to discover which mode is active.
 - When a session id is provided or already known, that session-scoped path is authoritative. Legacy files in `.omcp/state/*.json` are consulted only as a compatibility fallback if the session id is missing or empty.
 - Swarm is a shared SQLite/marker mode (`.omcp/state/swarm.db` / `.omcp/state/swarm-active.marker`) and is not session-scoped.
@@ -127,11 +127,11 @@ Active modes are still cancelled in dependency order:
 Use `--force` or `--all` when you need to erase every session plus legacy artifacts, e.g., to reset the workspace entirely.
 
 ```
-/oh-my-copilot:cancel --force
+/omcp:cancel --force
 ```
 
 ```
-/oh-my-copilot:cancel --all
+/omcp:cancel --all
 ```
 
 Steps under the hood:
@@ -189,7 +189,7 @@ fi
 The skill now relies on the session-aware state contract rather than hard-coded file paths:
 1. Call `state_list_active` to enumerate `.omcp/state/sessions/{sessionId}/…` and discover every active session.
 2. For each session id, call `state_get_status` to learn which mode is running (`autopilot`, `ralph`, `ultrawork`, etc.) and whether dependent modes exist.
-3. If a `session_id` was supplied to `/oh-my-copilot:cancel`, skip legacy fallback entirely and operate solely within that session path; otherwise, consult legacy files in `.omcp/state/*.json` only if the state tools report no active session. Swarm remains a shared SQLite/marker mode outside session scoping.
+3. If a `session_id` was supplied to `/omcp:cancel`, skip legacy fallback entirely and operate solely within that session path; otherwise, consult legacy files in `.omcp/state/*.json` only if the state tools report no active session. Swarm remains a shared SQLite/marker mode outside session scoping.
 4. Any cancellation logic in this doc mirrors the dependency order discovered via state tools (autopilot → ralph → …).
 
 ### 3A. Force Mode (if --force or --all)
@@ -350,7 +350,7 @@ Mode-specific subsections below describe what extra cleanup each handler perform
 
 | Mode | State Preserved | Resume Command |
 |------|-----------------|----------------|
-| Autopilot | Yes (phase, files, spec, plan, verdicts) | `/oh-my-copilot:autopilot` |
+| Autopilot | Yes (phase, files, spec, plan, verdicts) | `/omcp:autopilot` |
 | Ralph | No | N/A |
 | Ultrawork | No | N/A |
 | UltraQA | No | N/A |

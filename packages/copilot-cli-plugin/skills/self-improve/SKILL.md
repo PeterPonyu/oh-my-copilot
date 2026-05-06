@@ -357,7 +357,7 @@ When the loop exits:
    Best Score: {best_score} (baseline: {baseline})
    Improvement: {delta} ({delta_pct}%)
    ```
-5. Run `/oh-my-copilot:cancel` for clean state cleanup
+5. Run `/omcp:cancel` for clean state cleanup
 
 ---
 

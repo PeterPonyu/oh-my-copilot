@@ -5,7 +5,7 @@ agent: executor
 argument-hint: <plan-or-goal>
 ---
 
-# /autopilot
+# /omcp:autopilot
 
 Run the full autonomous execution pipeline from the user's plan or goal.
 

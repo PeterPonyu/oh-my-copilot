@@ -280,25 +280,25 @@ Present execution options via `AskUserQuestion`:
 
 1. **Ralplan → Autopilot (Recommended)**
    - Description: "3-stage pipeline: consensus-refine this spec with Planner/Architect/Critic, then execute with full autopilot. Maximum quality."
-   - Action: Invoke `[Run /omc-plan to continue the pipeline]
-<!-- TODO: P0/P1 skill omc-plan may need its slash command in commands/omc-plan.md (Wave 6) -->` with `--consensus --direct` flags and the spec file path (`spec_path` from state) as context. The `--direct` flag skips the omc-plan skill's interview phase (the deep-dive interview already gathered requirements), while `--consensus` triggers the Planner/Architect/Critic loop. When consensus completes and produces a plan in `.omcp/plans/`, invoke `[Run /autopilot to continue the pipeline]
-<!-- TODO: P0/P1 skill autopilot may need its slash command in commands/autopilot.md (Wave 6) -->` with the consensus plan as Phase 0+1 output — autopilot skips both Expansion and Planning, starting directly at Phase 2 (Execution).
+   - Action: Invoke `[Run /omc-plan to continue the pipeline]`
+with `--consensus --direct` flags and the spec file path (`spec_path` from state) as context. The `--direct` flag skips the omc-plan skill's interview phase (the deep-dive interview already gathered requirements), while `--consensus` triggers the Planner/Architect/Critic loop. When consensus completes and produces a plan in `.omcp/plans/`, invoke `[Run /omcp:autopilot to continue the pipeline]`
+with the consensus plan as Phase 0+1 output — autopilot skips both Expansion and Planning, starting directly at Phase 2 (Execution).
    - Pipeline: `deep-dive spec → omc-plan --consensus --direct → autopilot execution`
 
 2. **Execute with autopilot (skip ralplan)**
    - Description: "Full autonomous pipeline — planning, parallel implementation, QA, validation. Faster but without consensus refinement."
-   - Action: Invoke `[Run /autopilot to continue the pipeline]
-<!-- TODO: P0/P1 skill autopilot may need its slash command in commands/autopilot.md (Wave 6) -->` with the spec file path as context. The spec replaces autopilot's Phase 0 — autopilot starts at Phase 1 (Planning).
+   - Action: Invoke `[Run /omcp:autopilot to continue the pipeline]`
+with the spec file path as context. The spec replaces autopilot's Phase 0 — autopilot starts at Phase 1 (Planning).
 
 3. **Execute with ralph**
    - Description: "Persistence loop with architect verification — keeps working until all acceptance criteria pass."
-   - Action: Invoke `[Run /ralph to continue the pipeline]
-<!-- TODO: P0/P1 skill ralph may need its slash command in commands/ralph.md (Wave 6) -->` with the spec file path as the task definition.
+   - Action: Invoke `[Run /omcp:ralph to continue the pipeline]`
+with the spec file path as the task definition.
 
 4. **Execute with team**
    - Description: "N coordinated parallel agents — fastest execution for large specs."
-   - Action: Invoke `[Run /team to continue the pipeline]
-<!-- TODO: P0/P1 skill team may need its slash command in commands/team.md (Wave 6) -->` with the spec file path as the shared plan.
+   - Action: Invoke `[Run /omcp:team to continue the pipeline]`
+with the spec file path as the shared plan.
 
 5. **Refine further**
    - Description: "Continue interviewing to improve clarity (current: {score}%)."
@@ -474,7 +474,7 @@ Deep-dive's output (`.omcp/specs/deep-dive-{slug}.md`) feeds into the standard o
     → Planner/Architect/Critic consensus
     → Plan: .omcp/plans/ralplan-*.md
 
-  → /autopilot (plan as input, skip Phase 0+1)
+  → /omcp:autopilot (plan as input, skip Phase 0+1)
     → Execution → QA → Validation
     → Working code
 ```

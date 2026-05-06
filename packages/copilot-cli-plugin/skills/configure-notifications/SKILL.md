@@ -247,9 +247,9 @@ You can also set these via environment variables:
   OMC_TELEGRAM_BOT_TOKEN=123456789:ABCdefGHI...
   OMC_TELEGRAM_CHAT_ID=123456789
 
-To reconfigure: /oh-my-copilot:configure-notifications telegram
-To configure Discord: /oh-my-copilot:configure-notifications discord
-To configure Slack: /oh-my-copilot:configure-notifications slack
+To reconfigure: /omcp:configure-notifications telegram
+To configure Discord: /omcp:configure-notifications discord
+To configure Slack: /omcp:configure-notifications slack
 ```
 
 ### Environment Variable Alternative
@@ -489,9 +489,9 @@ You can also set these via environment variables:
   OMC_DISCORD_WEBHOOK_URL=https://discord.com/api/webhooks/...
   OMC_DISCORD_MENTION=<@1465264645320474637>
 
-To reconfigure: /oh-my-copilot:configure-notifications discord
-To configure Telegram: /oh-my-copilot:configure-notifications telegram
-To configure Slack: /oh-my-copilot:configure-notifications slack
+To reconfigure: /omcp:configure-notifications discord
+To configure Telegram: /omcp:configure-notifications telegram
+To configure Slack: /omcp:configure-notifications slack
 ```
 
 ### Environment Variable Alternative
@@ -736,9 +736,9 @@ You can also set these via environment variables:
   OMC_SLACK_WEBHOOK_URL=https://hooks.slack.com/services/...
   OMC_SLACK_MENTION=<@U1234567890>
 
-To reconfigure: /oh-my-copilot:configure-notifications slack
-To configure Discord: /oh-my-copilot:configure-notifications discord
-To configure Telegram: /oh-my-copilot:configure-notifications telegram
+To reconfigure: /omcp:configure-notifications slack
+To configure Discord: /omcp:configure-notifications discord
+To configure Telegram: /omcp:configure-notifications telegram
 ```
 
 ### Environment Variable Alternative
@@ -937,7 +937,7 @@ Offer to send a test notification with the new template.
 
 ## Related
 
-- `/oh-my-copilot:configure-openclaw` — Configure OpenClaw gateway integration
+- `/omcp:configure-openclaw` — Configure OpenClaw gateway integration
 
 ---
 

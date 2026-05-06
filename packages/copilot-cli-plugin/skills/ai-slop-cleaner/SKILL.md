@@ -119,9 +119,9 @@ In review mode:
 
 ## Usage
 
-- `/oh-my-copilot:ai-slop-cleaner <target>`
-- `/oh-my-copilot:ai-slop-cleaner <target> --review`
-- `/oh-my-copilot:ai-slop-cleaner <file-a> <file-b> <file-c>`
+- `/omcp:ai-slop-cleaner <target>`
+- `/omcp:ai-slop-cleaner <target> --review`
+- `/omcp:ai-slop-cleaner <file-a> <file-b> <file-c>`
 - From Ralph: run the cleaner on the Ralph session's changed files only, then return to Ralph for post-cleanup regression verification
 
 ## Good Fits

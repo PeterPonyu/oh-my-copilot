@@ -5,7 +5,7 @@ agent: executor
 argument-hint: <task>
 ---
 
-# /ralph
+# /omcp:ralph
 
 Run the persistence loop workflow until the user's task is fully complete.
 

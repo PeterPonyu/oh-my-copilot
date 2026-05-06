@@ -12,15 +12,15 @@ Use OMC's canonical advisor skill to route a prompt through the local Claude, Co
 ## Usage
 
 ```bash
-/oh-my-copilot:ask <claude|codex|gemini> <question or task>
+/omcp:ask <claude|codex|gemini> <question or task>
 ```
 
 Examples:
 
 ```bash
-/oh-my-copilot:ask codex "review this patch from a security perspective"
-/oh-my-copilot:ask gemini "suggest UX improvements for this flow"
-/oh-my-copilot:ask claude "draft an implementation plan for issue #123"
+/omcp:ask codex "review this patch from a security perspective"
+/omcp:ask gemini "suggest UX improvements for this flow"
+/omcp:ask claude "draft an implementation plan for issue #123"
 ```
 
 ## Routing

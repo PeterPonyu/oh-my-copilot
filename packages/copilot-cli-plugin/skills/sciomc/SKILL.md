@@ -23,20 +23,20 @@ Research is a multi-stage workflow that decomposes complex research goals into p
 ## Usage Examples
 
 ```
-/oh-my-copilot:sciomc <goal>                    # Standard research with user checkpoints
-/oh-my-copilot:sciomc AUTO: <goal>              # Fully autonomous until complete
-/oh-my-copilot:sciomc status                    # Check current research session status
-/oh-my-copilot:sciomc resume                    # Resume interrupted research session
-/oh-my-copilot:sciomc list                      # List all research sessions
-/oh-my-copilot:sciomc report <session-id>       # Generate report for session
+/omcp:sciomc <goal>                    # Standard research with user checkpoints
+/omcp:sciomc AUTO: <goal>              # Fully autonomous until complete
+/omcp:sciomc status                    # Check current research session status
+/omcp:sciomc resume                    # Resume interrupted research session
+/omcp:sciomc list                      # List all research sessions
+/omcp:sciomc report <session-id>       # Generate report for session
 ```
 
 ### Quick Examples
 
 ```
-/oh-my-copilot:sciomc What are the performance characteristics of different sorting algorithms?
-/oh-my-copilot:sciomc AUTO: Analyze authentication patterns in this codebase
-/oh-my-copilot:sciomc How does the error handling work across the API layer?
+/omcp:sciomc What are the performance characteristics of different sorting algorithms?
+/omcp:sciomc AUTO: Analyze authentication patterns in this codebase
+/omcp:sciomc How does the error handling work across the API layer?
 ```
 
 ## Research Protocol
@@ -137,12 +137,12 @@ Pending stages: {{PENDING_STAGES}}
 1. **Max Iterations:** 10 (configurable)
 2. **Continue until:** Promise tag emitted OR max iterations
 3. **State tracking:** Persist after each stage completion
-4. **Cancellation:** `/oh-my-copilot:cancel` or "stop", "cancel"
+4. **Cancellation:** `/omcp:cancel` or "stop", "cancel"
 
 ### AUTO Mode Example
 
 ```
-/oh-my-copilot:sciomc AUTO: Comprehensive security analysis of the authentication system
+/omcp:sciomc AUTO: Comprehensive security analysis of the authentication system
 
 [Decomposition]
 - Stage 1 (LOW): Enumerate auth-related files
@@ -273,12 +273,12 @@ Batch 2: Stages 6-7 (parallel)
 
 | Command | Action |
 |---------|--------|
-| `/oh-my-copilot:sciomc status` | Show current session progress |
-| `/oh-my-copilot:sciomc resume` | Resume most recent interrupted session |
-| `/oh-my-copilot:sciomc resume <session-id>` | Resume specific session |
-| `/oh-my-copilot:sciomc list` | List all sessions with status |
-| `/oh-my-copilot:sciomc report <session-id>` | Generate/regenerate report |
-| `/oh-my-copilot:sciomc cancel` | Cancel current session (preserves state) |
+| `/omcp:sciomc status` | Show current session progress |
+| `/omcp:sciomc resume` | Resume most recent interrupted session |
+| `/omcp:sciomc resume <session-id>` | Resume specific session |
+| `/omcp:sciomc list` | List all sessions with status |
+| `/omcp:sciomc report <session-id>` | Generate/regenerate report |
+| `/omcp:sciomc cancel` | Cancel current session (preserves state) |
 
 ## Tag Extraction
 
@@ -473,7 +473,7 @@ Optional settings in `.claude/settings.json`:
 ## Cancellation
 
 ```
-/oh-my-copilot:cancel
+/omcp:cancel
 ```
 
 Or say: "stop research", "cancel research", "abort"

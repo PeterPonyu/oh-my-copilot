@@ -7,8 +7,8 @@ is a concrete run from idea to artifact.
 
 **Stage 1 — Spec (deep-interview)**
 
-```
-/deep-interview "build me a CLI that watches markdown files and hot-reloads a preview"
+```text
+/omcp:deep-interview "build me a CLI that watches markdown files and hot-reloads a preview"
 ```
 
 The plugin asks Socratic clarifying questions until ambiguity drops below the
@@ -27,8 +27,8 @@ The skill records the spec→plan transition stub via
 
 **Stage 2 — Plan (ralplan)**
 
-```
-/ralplan
+```text
+/omcp:ralplan
 ```
 
 Planner + Architect + Critic run a consensus loop against the spec. The
@@ -38,8 +38,8 @@ transition. `mcp__omcp__pipeline_state` reads the current chain.
 
 **Stage 3 — Artifact (autopilot)**
 
-```
-/autopilot
+```text
+/omcp:autopilot
 ```
 
 Autopilot executes parallel ralph + ultrawork loops until working code lands
@@ -57,6 +57,10 @@ See [`docs/orchestration.md`](docs/orchestration.md) for the full MCP tool
 surface, hook events, resume semantics, and failure modes. See
 [`docs/state-management.md`](docs/state-management.md) for the
 `pipeline-state.json` schema.
+
+When using the installed plugin inside a Copilot CLI session, invoke plugin
+slash commands in their namespaced form (for example `/omcp:ralplan`) as the
+command itself, not as trailing text in a longer sentence.
 
 ---
 

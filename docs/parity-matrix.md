@@ -145,11 +145,11 @@ MCP server source: `packages/copilot-cli-plugin/mcp-server/`. Build with
 
 | OMC command | Status | oh-my-copilot path | Notes |
 | --- | --- | --- | --- |
-| /autopilot | PORTED | `commands/autopilot.md` | Full port |
-| /deep-interview | PORTED | `commands/deep-interview.md` | Full port |
-| /ralph | PORTED | `commands/ralph.md` | Full port |
-| /ralplan | PORTED | `commands/ralplan.md` | Full port |
-| /team | PORTED | `commands/team.md` | Full port |
+| /autopilot | PORTED | `commands/autopilot.md` | Invoke as `/omcp:autopilot` in Copilot CLI |
+| /deep-interview | PORTED | `commands/deep-interview.md` | Invoke as `/omcp:deep-interview` in Copilot CLI |
+| /ralph | PORTED | `commands/ralph.md` | Invoke as `/omcp:ralph` in Copilot CLI |
+| /ralplan | PORTED | `commands/ralplan.md` | Invoke as `/omcp:ralplan` in Copilot CLI |
+| /team | PORTED | `commands/team.md` | Invoke as `/omcp:team` in Copilot CLI |
 
 All 5 slash commands are ported.
 

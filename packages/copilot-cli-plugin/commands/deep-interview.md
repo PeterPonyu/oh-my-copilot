@@ -5,7 +5,7 @@ agent: planner
 argument-hint: <vague-idea>
 ---
 
-# /deep-interview
+# /omcp:deep-interview
 
 Run the Socratic deep-interview workflow over the user's idea.
 
