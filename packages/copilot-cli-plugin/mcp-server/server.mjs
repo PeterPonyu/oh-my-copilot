@@ -13,7 +13,14 @@ import {
   stateGetStatus,
   stateListActive,
 } from "./state-store.mjs";
-import { notepadRead, notepadWrite } from "./notepad-store.mjs";
+import {
+  notepadRead,
+  notepadWrite,
+  notepadWritePriority,
+  notepadWriteWorking,
+  notepadPrune,
+  notepadStats,
+} from "./notepad-store.mjs";
 import { planList } from "./plan-store.mjs";
 import {
   projectMemoryRead,
@@ -139,6 +146,60 @@ server.setRequestHandler(ListToolsRequestSchema, async () => ({
           },
         },
         required: ["entry"],
+      },
+    },
+    {
+      name: "notepad_write_priority",
+      description:
+        "Append a 'priority' lane entry to .omcp/notepad.md. Priority entries are preserved by default in notepad_prune (use them for permanent reminders).",
+      inputSchema: {
+        type: "object",
+        properties: {
+          entry: { type: "string", description: "Text to append" },
+        },
+        required: ["entry"],
+      },
+    },
+    {
+      name: "notepad_write_working",
+      description:
+        "Append a 'working' lane entry to .omcp/notepad.md. Working entries are pruned by default (use them for in-progress scratchpad).",
+      inputSchema: {
+        type: "object",
+        properties: {
+          entry: { type: "string", description: "Text to append" },
+        },
+        required: ["entry"],
+      },
+    },
+    {
+      name: "notepad_prune",
+      description:
+        "Drop entries older than maxAgeDays from the notepad. By default targets manual+working lanes only (priority lane is preserved). Pass {lane} to target a single lane explicitly.",
+      inputSchema: {
+        type: "object",
+        properties: {
+          maxAgeDays: {
+            type: "number",
+            description: "Age threshold in days (default: 7). Entries older than this are removed.",
+          },
+          lane: {
+            type: "string",
+            enum: ["manual", "working", "priority"],
+            description: "If set, only this lane is considered. Otherwise, manual+working are pruned and priority is preserved.",
+          },
+        },
+        required: [],
+      },
+    },
+    {
+      name: "notepad_stats",
+      description:
+        "Return notepad lane counts plus oldest/newest timestamps. Returns {total, byLane: {manual, working, priority}, oldest, newest, unparseable}.",
+      inputSchema: {
+        type: "object",
+        properties: {},
+        required: [],
       },
     },
     {
@@ -289,6 +350,25 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
       }
       case "notepad_write": {
         result = await notepadWrite({ entry: args.entry, priority: args.priority });
+        break;
+      }
+      case "notepad_write_priority": {
+        result = await notepadWritePriority({ entry: args?.entry });
+        break;
+      }
+      case "notepad_write_working": {
+        result = await notepadWriteWorking({ entry: args?.entry });
+        break;
+      }
+      case "notepad_prune": {
+        result = await notepadPrune({
+          maxAgeDays: args?.maxAgeDays,
+          lane: args?.lane,
+        });
+        break;
+      }
+      case "notepad_stats": {
+        result = await notepadStats();
         break;
       }
       case "plan_list": {
