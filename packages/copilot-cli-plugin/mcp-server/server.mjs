@@ -43,6 +43,13 @@ import {
   wikiIngest,
   wikiLint,
 } from "./wiki-store.mjs";
+import {
+  sharedMemoryWrite,
+  sharedMemoryRead,
+  sharedMemoryList,
+  sharedMemoryDelete,
+  sharedMemoryCleanup,
+} from "./shared-memory-store.mjs";
 import { readStage, transitionRecord } from "../orchestrator/orchestrator.mjs";
 
 const server = new Server(
@@ -439,6 +446,74 @@ server.setRequestHandler(ListToolsRequestSchema, async () => ({
       },
     },
     {
+      name: "shared_memory_write",
+      description:
+        "Append a coordination message to .omcp/shared-memory/<channel>.jsonl. Used by team workers to broadcast findings/questions/answers to peers.",
+      inputSchema: {
+        type: "object",
+        properties: {
+          channel: { type: "string", description: "Channel id (1-64 chars, alphanumeric/dash/underscore)" },
+          kind: {
+            type: "string",
+            enum: ["task_assigned", "task_done", "finding", "question", "answer", "blocker", "note"],
+          },
+          payload: { description: "Message body (any JSON-serializable value)" },
+          from: { type: "string", description: "Sender id (e.g. worker-1)" },
+          to: { type: "string", description: "Recipient id or '*' for broadcast" },
+        },
+        required: ["channel", "kind"],
+      },
+    },
+    {
+      name: "shared_memory_read",
+      description:
+        "Read messages from a shared-memory channel with optional filters. Returns {channel, events}.",
+      inputSchema: {
+        type: "object",
+        properties: {
+          channel: { type: "string", description: "Channel id" },
+          kind: { type: "string", description: "Filter by kind" },
+          from: { type: "string", description: "Filter by sender id" },
+          since: { type: "string", description: "Return only events with ts > since (ISO-8601)" },
+          limit: { type: "number", description: "Cap to last N matching events" },
+        },
+        required: ["channel"],
+      },
+    },
+    {
+      name: "shared_memory_list",
+      description:
+        "List all shared-memory channels with last_seen, last_kind, and last_from from the registry.",
+      inputSchema: {
+        type: "object",
+        properties: {},
+        required: [],
+      },
+    },
+    {
+      name: "shared_memory_delete",
+      description: "Remove a shared-memory channel (jsonl file + meta entry).",
+      inputSchema: {
+        type: "object",
+        properties: {
+          channel: { type: "string", description: "Channel id" },
+        },
+        required: ["channel"],
+      },
+    },
+    {
+      name: "shared_memory_cleanup",
+      description:
+        "Purge channels whose last_seen is older than maxAgeDays (default 1). Returns {ok, removed: [...channels]}. Idempotent.",
+      inputSchema: {
+        type: "object",
+        properties: {
+          maxAgeDays: { type: "number", description: "Age threshold in days (default: 1)" },
+        },
+        required: [],
+      },
+    },
+    {
       name: "plan_list",
       description: "Enumerate all plan files in .omcp/plans/*.md",
       inputSchema: {
@@ -573,6 +648,38 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
       }
       case "wiki_lint": {
         result = await wikiLint();
+        break;
+      }
+      case "shared_memory_write": {
+        result = await sharedMemoryWrite({
+          channel: args?.channel,
+          kind: args?.kind,
+          payload: args?.payload,
+          from: args?.from,
+          to: args?.to,
+        });
+        break;
+      }
+      case "shared_memory_read": {
+        result = await sharedMemoryRead({
+          channel: args?.channel,
+          kind: args?.kind,
+          from: args?.from,
+          since: args?.since,
+          limit: args?.limit,
+        });
+        break;
+      }
+      case "shared_memory_list": {
+        result = await sharedMemoryList();
+        break;
+      }
+      case "shared_memory_delete": {
+        result = await sharedMemoryDelete({ channel: args?.channel });
+        break;
+      }
+      case "shared_memory_cleanup": {
+        result = await sharedMemoryCleanup({ maxAgeDays: args?.maxAgeDays });
         break;
       }
       case "trace_write": {
