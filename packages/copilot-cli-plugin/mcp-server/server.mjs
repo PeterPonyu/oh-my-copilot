@@ -15,6 +15,12 @@ import {
 } from "./state-store.mjs";
 import { notepadRead, notepadWrite } from "./notepad-store.mjs";
 import { planList } from "./plan-store.mjs";
+import {
+  projectMemoryRead,
+  projectMemoryWrite,
+  projectMemoryAddNote,
+  projectMemoryAddDirective,
+} from "./project-memory-store.mjs";
 import { readStage, transitionRecord } from "../orchestrator/orchestrator.mjs";
 
 const server = new Server(
@@ -136,6 +142,79 @@ server.setRequestHandler(ListToolsRequestSchema, async () => ({
       },
     },
     {
+      name: "project_memory_read",
+      description:
+        "Read .omcp/project-memory.json. Returns {version, notes, directives, facts}. Filter by {kind: 'notes'|'directives'|'facts'}, by {tag} (notes only), or cap by {limit} (last N entries).",
+      inputSchema: {
+        type: "object",
+        properties: {
+          kind: {
+            type: "string",
+            enum: ["notes", "directives", "facts"],
+            description: "If set, return only this section",
+          },
+          tag: {
+            type: "string",
+            description: "Filter notes by tag (notes have a tags[] array)",
+          },
+          limit: {
+            type: "number",
+            description: "Return only the last N notes/directives",
+          },
+        },
+        required: [],
+      },
+    },
+    {
+      name: "project_memory_write",
+      description:
+        "Merge keys into .omcp/project-memory.json facts map. Pass {facts: {key: value, ...}} to set/overwrite; pass null/undefined values to delete keys.",
+      inputSchema: {
+        type: "object",
+        properties: {
+          facts: {
+            type: "object",
+            description: "Key-value facts to merge. null deletes a key.",
+          },
+        },
+        required: ["facts"],
+      },
+    },
+    {
+      name: "project_memory_add_note",
+      description:
+        "Append a timestamped note to .omcp/project-memory.json with optional tags. Returns the assigned note id.",
+      inputSchema: {
+        type: "object",
+        properties: {
+          text: { type: "string", description: "Note text" },
+          tags: {
+            type: "array",
+            items: { type: "string" },
+            description: "Optional tags for filtering",
+          },
+        },
+        required: ["text"],
+      },
+    },
+    {
+      name: "project_memory_add_directive",
+      description:
+        "Append a directive (rule/preference/policy) to .omcp/project-memory.json. Scope is 'permanent' (default) or 'session'.",
+      inputSchema: {
+        type: "object",
+        properties: {
+          text: { type: "string", description: "Directive text" },
+          scope: {
+            type: "string",
+            enum: ["session", "permanent"],
+            description: "Lifetime scope (default: permanent)",
+          },
+        },
+        required: ["text"],
+      },
+    },
+    {
       name: "plan_list",
       description: "Enumerate all plan files in .omcp/plans/*.md",
       inputSchema: {
@@ -214,6 +293,32 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
       }
       case "plan_list": {
         result = await planList();
+        break;
+      }
+      case "project_memory_read": {
+        result = await projectMemoryRead({
+          kind: args?.kind,
+          tag: args?.tag,
+          limit: args?.limit,
+        });
+        break;
+      }
+      case "project_memory_write": {
+        result = await projectMemoryWrite({ facts: args?.facts });
+        break;
+      }
+      case "project_memory_add_note": {
+        result = await projectMemoryAddNote({
+          text: args?.text,
+          tags: args?.tags,
+        });
+        break;
+      }
+      case "project_memory_add_directive": {
+        result = await projectMemoryAddDirective({
+          text: args?.text,
+          scope: args?.scope,
+        });
         break;
       }
       case "pipeline_record_transition": {
