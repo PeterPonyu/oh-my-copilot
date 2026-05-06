@@ -28,6 +28,12 @@ import {
   projectMemoryAddNote,
   projectMemoryAddDirective,
 } from "./project-memory-store.mjs";
+import {
+  traceWrite,
+  traceTimeline,
+  traceSummary,
+  traceListSessions,
+} from "./trace-store.mjs";
 import { readStage, transitionRecord } from "../orchestrator/orchestrator.mjs";
 
 const server = new Server(
@@ -276,6 +282,69 @@ server.setRequestHandler(ListToolsRequestSchema, async () => ({
       },
     },
     {
+      name: "trace_write",
+      description:
+        "Append an evidence-driven trace event to .omcp/traces/<session_id>.jsonl. Used by debugger/tracer agents and the postToolUse hook (on tool failures) to build a causal log across a session.",
+      inputSchema: {
+        type: "object",
+        properties: {
+          kind: {
+            type: "string",
+            enum: ["tool_failure", "tool_call", "hypothesis", "evidence", "outcome", "note"],
+            description: "Event kind (drives summary aggregation)",
+          },
+          text: { type: "string", description: "Free-form description of the event" },
+          hypothesis: { type: "string", description: "Hypothesis text (kind=hypothesis)" },
+          evidence: { type: "string", description: "Evidence text (kind=evidence)" },
+          outcome: { type: "string", description: "Outcome text (kind=outcome)" },
+          tool: { type: "string", description: "Tool name (kind=tool_call/tool_failure)" },
+          exit_code: { type: "number", description: "Exit code (kind=tool_failure)" },
+          stderr_snippet: { type: "string", description: "First N chars of stderr (kind=tool_failure)" },
+          session_id: { type: "string", description: "Trace session id (default: 'default')" },
+        },
+        required: ["kind"],
+      },
+    },
+    {
+      name: "trace_summary",
+      description:
+        "Aggregate trace events for a session: per-kind counts, first/last timestamps, latest outcome, and the list of hypotheses logged.",
+      inputSchema: {
+        type: "object",
+        properties: {
+          session_id: { type: "string", description: "Trace session id (default: 'default')" },
+        },
+        required: [],
+      },
+    },
+    {
+      name: "trace_timeline",
+      description:
+        "Return ordered trace events for a session. Optional {kind} filter and {limit} for last-N slicing.",
+      inputSchema: {
+        type: "object",
+        properties: {
+          session_id: { type: "string", description: "Trace session id (default: 'default')" },
+          kind: {
+            type: "string",
+            enum: ["tool_failure", "tool_call", "hypothesis", "evidence", "outcome", "note"],
+            description: "Filter to one event kind",
+          },
+          limit: { type: "number", description: "Return only the last N matching events" },
+        },
+        required: [],
+      },
+    },
+    {
+      name: "trace_list_sessions",
+      description: "List all trace session ids present in .omcp/traces/.",
+      inputSchema: {
+        type: "object",
+        properties: {},
+        required: [],
+      },
+    },
+    {
       name: "plan_list",
       description: "Enumerate all plan files in .omcp/plans/*.md",
       inputSchema: {
@@ -373,6 +442,26 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
       }
       case "plan_list": {
         result = await planList();
+        break;
+      }
+      case "trace_write": {
+        result = await traceWrite(args ?? {});
+        break;
+      }
+      case "trace_summary": {
+        result = await traceSummary({ session_id: args?.session_id });
+        break;
+      }
+      case "trace_timeline": {
+        result = await traceTimeline({
+          session_id: args?.session_id,
+          kind: args?.kind,
+          limit: args?.limit,
+        });
+        break;
+      }
+      case "trace_list_sessions": {
+        result = await traceListSessions();
         break;
       }
       case "project_memory_read": {
