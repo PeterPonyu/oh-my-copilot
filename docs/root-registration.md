@@ -24,6 +24,9 @@ layers inside this repository, not separate product versions.
 
 ## Root registration inventory
 
+Enumerated intentional differences between root and plugin copies live in
+[`plugin-root-divergence-registry.md`](./plugin-root-divergence-registry.md).
+
 | Capability | Root registration | Plugin source | Example source | Boundary |
 | --- | --- | --- | --- | --- |
 | Instructions | `AGENTS.md`, `.github/copilot-instructions.md`, `.github/instructions/*.instructions.md` | Plugin skill/agent instructions only | Example workspace instructions | Root instructions govern the current repo; example instructions govern only their workspace roots. |

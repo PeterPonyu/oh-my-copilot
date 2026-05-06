@@ -19,6 +19,26 @@ The docs and root-surface validation scripts are useful even before `copilot` or
 
 Run commands from the repository root.
 
+### Install only the Copilot CLI plugin (no bootstrap)
+
+If `copilot` is already on `PATH` and you only want the reusable plugin package
+without running the full bootstrap pipeline:
+
+```bash
+copilot plugin install "$(pwd)/packages/copilot-cli-plugin"
+```
+
+Use an absolute path instead of `$(pwd)` when running from another working directory.
+
+Upstream references for manifest shape and plugin behavior:
+
+- [About plugins for GitHub Copilot CLI](https://docs.github.com/copilot/concepts/agents/copilot-cli/about-cli-plugins)
+- [Creating a plugin for GitHub Copilot CLI](https://docs.github.com/en/copilot/how-tos/copilot-cli/customize-copilot/plugins-creating)
+- [GitHub Copilot CLI plugin reference](https://docs.github.com/en/copilot/reference/copilot-cli-reference/cli-plugin-reference)
+
+Full verification (docs validators, root surfaces, hook proofs) still lives in
+[`bootstrap-copilot-power.sh`](../scripts/bootstrap-copilot-power.sh); see below.
+
 ### 1. Validate the checkout
 
 ```bash
@@ -93,6 +113,13 @@ workspace behavior and installed plugin behavior distinct when diagnosing the
 failure. If `./scripts/check-install-state.sh` reports a transient `.omx`
 worker path, rerun bootstrap from the canonical repository root so the plugin
 source path is repaired.
+
+### `~/.copilot/config.json` is unreadable JSON
+
+If `./scripts/validate-copilot-state-contract.sh` fails while claiming Copilot
+config JSON cannot be parsed, repair or temporarily remove the file so Copilot
+CLI can regenerate valid metadata (`bootstrap-copilot-power.sh` expects sane
+install-state reads).
 
 ### A docs or surface validator fails
 

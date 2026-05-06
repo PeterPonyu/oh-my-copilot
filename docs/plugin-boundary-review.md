@@ -7,6 +7,8 @@ support infrastructure.
 
 Use it alongside:
 
+- [`docs/plugin-root-divergence-registry.md`](./plugin-root-divergence-registry.md)
+  (enumerated intentional drift between `packages/copilot-cli-plugin/` and root `.github/`)
 - [`docs/root-registration.md`](./root-registration.md)
 - [`docs/benchmark-status.md`](./benchmark-status.md)
 - [`docs/refinement-priority-map.md`](./refinement-priority-map.md)
