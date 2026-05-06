@@ -96,7 +96,7 @@ durably written to disk so that the state file never points to a missing file.
 ### Via MCP tool
 
 ```
-mcp__oh-my-copilot__pipeline_state
+mcp__omcp__pipeline_state
 ```
 
 The MCP server calls `readStage(stateDir)` and returns the parsed object.
@@ -122,7 +122,7 @@ const state2 = readStage('/custom/dir');      // explicit directory
 ### Via MCP tool
 
 ```
-mcp__oh-my-copilot__pipeline_record_transition
+mcp__omcp__pipeline_record_transition
 ```
 
 Arguments: `{ from, to, artifact, stateDir? }`.

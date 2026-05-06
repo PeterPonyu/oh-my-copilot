@@ -38,7 +38,7 @@ the loop closes and the spec file is written. The slug is derived from the
 first 5 words of the idea.
 
 **Transition recorded:** `spec → plan` stub written to pipeline-state.json via
-`mcp__oh-my-copilot__pipeline_record_transition`.
+`mcp__omcp__pipeline_record_transition`.
 
 ### Stage 2 — ralplan (plan)
 
@@ -189,7 +189,7 @@ At any point during a pipeline run you can inspect the current state:
 
 ```bash
 # Via MCP tool (inside a Copilot CLI session)
-mcp__oh-my-copilot__pipeline_state "build-me-a-cli"
+mcp__omcp__pipeline_state "build-me-a-cli"
 
 # Or read the file directly
 cat .omc/state/pipeline-state.json
@@ -213,7 +213,7 @@ the last completed stage:
 
 No data is lost. The spec and plan files on disk are the source of truth;
 pipeline-state.json is derived from them and can be reconstructed by re-running
-`mcp__oh-my-copilot__pipeline_record_transition` for each completed stage.
+`mcp__omcp__pipeline_record_transition` for each completed stage.
 
 ---
 

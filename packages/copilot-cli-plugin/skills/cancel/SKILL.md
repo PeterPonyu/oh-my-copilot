@@ -45,7 +45,7 @@ The state management tools (`state_clear`, `state_read`, `state_write`, `state_l
 any state tool, you MUST first load all of them via `ToolSearch`:
 
 ```
-ToolSearch(query="select:mcp__oh-my-copilot__state_clear <!-- TODO: MCP tool state_clear not in v1 server -->,mcp__oh-my-copilot__state_read,mcp__oh-my-copilot__state_write,mcp__oh-my-copilot__state_list_active <!-- TODO: MCP tool state_list_active not in v1 server -->,mcp__oh-my-copilot__state_get_status <!-- TODO: MCP tool state_get_status not in v1 server -->")
+ToolSearch(query="select:mcp__omcp__state_clear <!-- TODO: MCP tool state_clear not in v1 server -->,mcp__omcp__state_read,mcp__omcp__state_write,mcp__omcp__state_list_active <!-- TODO: MCP tool state_list_active not in v1 server -->,mcp__omcp__state_get_status <!-- TODO: MCP tool state_get_status not in v1 server -->")
 ```
 
 If `state_clear` is unavailable or fails, use this **bash fallback** as an **emergency

@@ -225,11 +225,11 @@ function applyTaskCalls(body, replacements) {
 }
 
 function applyMcpTools(body, replacements) {
-  // mcp__plugin_oh-my-claudecode_t__<tool>  ->  mcp__oh-my-copilot__<tool>
+  // mcp__plugin_oh-my-claudecode_t__<tool>  ->  mcp__omcp__<tool>
   // Emit TODO marker if tool is outside V1_MCP_TOOLS.
   const re = /mcp__plugin_oh-my-claudecode_t__([a-zA-Z0-9_]+)/g;
   return replaceWithLineTracking(body, re, replacements, (m, tool) => {
-    const out = `mcp__oh-my-copilot__${tool}`;
+    const out = `mcp__omcp__${tool}`;
     if (V1_MCP_TOOLS.has(tool)) {
       return out;
     }

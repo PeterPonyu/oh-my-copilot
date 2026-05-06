@@ -51,7 +51,7 @@ unless explicitly listed above.
 |---|---|---|
 | `Skill("oh-my-claudecode:<X>")` mid-flow | English-prose handoff: `[Run /<X> to continue the pipeline]` (markdown link-text style). The slash command file lives at `commands/<X>.md` (Wave 6). | If `<X>` is not yet ported / lives in P1, translator emits `<!-- TODO: P0/P1 skill <X> may need its slash command in commands/<X>.md (Wave 6) -->` adjacent and continues. |
 | `Task(subagent_type="oh-my-claudecode:<Y>", model=<M>)` | Prose dispatch: `[Delegate to the <Y> agent]`. Copilot's auto-delegation picks up the agent named in `packages/copilot-cli-plugin/agents/<Y>.agent.md`. The model tier (`opus`/`sonnet`/`haiku`) is **dropped** with a comment because Copilot has no model-tier field today. | If `<Y>` is not in the v1 agent port list, translator FAILS LOUD (exit code 3). Forces explicit decision; no silent dispatch to a non-existent agent. |
-| `mcp__plugin_oh-my-claudecode_t__<tool>` (e.g. `state_read`, `notepad_write`) | `mcp__oh-my-copilot__<tool>` (matches Wave 3 server name). | If `<tool>` is not in Wave 3 v1 surface (`state_read`, `state_write`, `state_list`, `notepad_read`, `notepad_write`, `plan_list`), translator emits `<!-- TODO: MCP tool <tool> not in v1 server -->` adjacent. |
+| `mcp__plugin_oh-my-claudecode_t__<tool>` (e.g. `state_read`, `notepad_write`) | `mcp__omcp__<tool>` (matches Wave 3 server name). | If `<tool>` is not in Wave 3 v1 surface (`state_read`, `state_write`, `state_list`, `notepad_read`, `notepad_write`, `plan_list`), translator emits `<!-- TODO: MCP tool <tool> not in v1 server -->` adjacent. |
 
 **Bonus rule** (commentary cleanup): occurrences of the literal namespace string
 `oh-my-claudecode:` outside primitive call-sites are rewritten to `oh-my-copilot:`

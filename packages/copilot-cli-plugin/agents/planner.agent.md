@@ -67,9 +67,9 @@ argument-hint: "<task or goal to plan>"
     - Explore the codebase for codebase context questions.
     - Delegate to the `document-specialist` agent for external documentation needs.
     - Use Write to save plans to `.omc/plans/{name}.md`.
-    - Use `mcp__oh-my-copilot__state_write` to persist plan state.
-    - Use `mcp__oh-my-copilot__notepad_write` to log planning decisions.
-    - Use `mcp__oh-my-copilot__plan_list` to enumerate existing plans before creating new ones.
+    - Use `mcp__omcp__state_write` to persist plan state.
+    - Use `mcp__omcp__notepad_write` to log planning decisions.
+    - Use `mcp__omcp__plan_list` to enumerate existing plans before creating new ones.
   </Tool_Usage>
 
   <Execution_Policy>

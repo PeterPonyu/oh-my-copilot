@@ -75,7 +75,7 @@ copilot plugin list
 Verify skills are visible in a session:
 
 ```bash
-copilot --agent 'oh-my-copilot-power-pack:reviewer' -p "ping" -s --model auto --allow-all
+copilot --agent 'omcp:reviewer' -p "ping" -s --model auto --allow-all
 ```
 
 ---
@@ -173,7 +173,7 @@ RUN_COPILOT_AGENT_SMOKE=1 bash scripts/smoke-copilot-cli.sh
 To remove the plugin:
 
 ```bash
-copilot plugin uninstall oh-my-copilot-power-pack
+copilot plugin uninstall omcp
 ```
 
 Then remove the cache entry manually if it persists:

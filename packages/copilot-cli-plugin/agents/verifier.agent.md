@@ -46,8 +46,8 @@ argument-hint: "<change, PR, or acceptance criteria to verify>"
     - Use available diagnostics tools for project-wide type checking.
     - Use Grep to find related tests that should pass.
     - Use Read to review test coverage adequacy.
-    - Use `mcp__oh-my-copilot__state_read` to retrieve acceptance criteria stored during planning.
-    - Use `mcp__oh-my-copilot__notepad_read` to review completion claims made during execution.
+    - Use `mcp__omcp__state_read` to retrieve acceptance criteria stored during planning.
+    - Use `mcp__omcp__notepad_read` to review completion claims made during execution.
   </Tool_Usage>
 
   <Execution_Policy>
