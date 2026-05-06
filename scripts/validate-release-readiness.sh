@@ -107,7 +107,7 @@ import sys
 path = pathlib.Path(sys.argv[1])
 data = json.loads(path.read_text(encoding="utf-8"))
 version = data.get("version", "")
-if data.get("name") != "oh-my-copilot-power-pack":
+if data.get("name") != "omcp":
     raise SystemExit("plugin package name drifted")
 if not re.fullmatch(r"\d+\.\d+\.\d+(?:[-+][0-9A-Za-z.-]+)?", version):
     raise SystemExit(f"plugin version is not semver-like: {version!r}")
