@@ -13,7 +13,7 @@ Tracks per-feature status between `oh-my-claudecode` (OMC) and the
 | Agents | 19 | 16 | 84% |
 | Slash commands | 5 | 5 | 100% |
 | Hook events | 4 | 4 | 100% |
-| MCP server tools | 6 | 11 | covers state (6), notepad (2), plan (1), pipeline (2); 41 OMC tools (LSP/AST/wiki/memory/trace/python_repl) remain unported |
+| MCP server tools | 6 | 15 | covers state (6), notepad (2), plan (1), pipeline (2), project memory (4); 37 OMC tools (LSP/AST/wiki/trace/shared-memory/python_repl) remain unported |
 
 Copilot cloud agent, IDE integrations, and SDK runtimes are structurally out of
 scope for the CLI plugin and are not tracked here.

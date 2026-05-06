@@ -35,7 +35,7 @@ matrix.
 | Skills | 39 | 42 | covers OMC v1 surface plus omcp-specific additions |
 | Slash commands | 5 | 5 | 1:1 mapping |
 | Hook events | 4 | 4 | maps to all hook events Copilot CLI v1.0.42 exposes |
-| MCP server tools | 6 | 11 | covers state (6), notepad (2), plan (1), and pipeline (2) — 41 OMC tools (LSP/AST/wiki/memory/trace) remain unported |
+| MCP server tools | 6 | 15 | covers state (6), notepad (2), plan (1), pipeline (2), project memory (4) — 37 OMC tools (LSP/AST/wiki/trace/shared-memory/python_repl) remain unported |
 
 ## Start here
 
