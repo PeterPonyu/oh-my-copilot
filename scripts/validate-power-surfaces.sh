@@ -190,8 +190,124 @@ validate_cross_host_benchmark_site() {
   log "cross-host benchmark site files exist and generated data validates"
 }
 
+validate_manifest_counts() {
+  # Per Critic A8: derive expected agent/skill/command/hook/mcp counts dynamically
+  # from plugin.json rather than hard-coding magic numbers.
+  python3 - "$ROOT/packages/copilot-cli-plugin/plugin.json" <<'PY'
+from __future__ import annotations
+import json
+import pathlib
+import sys
+
+plugin_json = pathlib.Path(sys.argv[1]).resolve()
+plugin_root = plugin_json.parent
+data = json.loads(plugin_json.read_text(encoding="utf-8"))
+
+
+def fail(msg: str) -> None:
+    raise SystemExit(f"FAIL: manifest count — {msg}")
+
+
+def ok(msg: str) -> None:
+    print(f"ok: {msg}")
+
+
+# --- Agents: count *.agent.md files under the agents path ---
+agents_rel = data.get("agents", "agents")
+agents_dir = plugin_root / str(agents_rel)
+if not agents_dir.is_dir():
+    fail(f"agents directory missing: {agents_dir}")
+agent_files = list(agents_dir.glob("*.agent.md"))
+if len(agent_files) < 15:
+    fail(
+        f"expected >=15 agent files in {agents_rel}, found {len(agent_files)}: "
+        + ", ".join(sorted(f.name for f in agent_files))
+    )
+ok(f"manifest agents count {len(agent_files)} >= 15")
+
+# --- Skills: count subdirs containing SKILL.md ---
+skills_value = data.get("skills", [])
+if isinstance(skills_value, str):
+    skills_roots = [skills_value]
+elif isinstance(skills_value, list):
+    skills_roots = [str(s) for s in skills_value]
+else:
+    fail("skills field must be a string or list")
+
+skill_count = 0
+for skills_rel in skills_roots:
+    skills_dir = plugin_root / skills_rel
+    if not skills_dir.is_dir():
+        fail(f"skills directory missing: {skills_dir}")
+    skill_count += sum(1 for _ in skills_dir.glob("*/SKILL.md"))
+
+if skill_count < 30:
+    fail(f"expected >=30 skill subdirs with SKILL.md across skills paths, found {skill_count}")
+ok(f"manifest skills count {skill_count} >= 30")
+
+# --- Commands: count *.md files under the commands path (if present) ---
+commands_rel = data.get("commands")
+if commands_rel:
+    commands_dir = plugin_root / str(commands_rel)
+    if commands_dir.is_dir():
+        command_files = list(commands_dir.glob("*.md"))
+        if len(command_files) < 3:
+            fail(f"expected >=3 command files in {commands_rel}, found {len(command_files)}")
+        ok(f"manifest commands count {len(command_files)} >= 3")
+    else:
+        fail(f"commands directory missing: {commands_dir}")
+else:
+    ok("no commands path in plugin.json; count check skipped")
+
+# --- Hooks: parse hooks.json and count event keys ---
+hooks_value = data.get("hooks")
+if not hooks_value:
+    fail("hooks field missing from plugin.json")
+hooks_path = plugin_root / str(hooks_value)
+if not hooks_path.is_file():
+    fail(f"hooks file missing: {hooks_path}")
+hooks_data = json.loads(hooks_path.read_text(encoding="utf-8"))
+hook_events = hooks_data.get("hooks", {})
+if not isinstance(hook_events, dict):
+    fail("hooks.json must have object key: hooks")
+if len(hook_events) < 4:
+    fail(f"expected >=4 hook event keys in hooks.json, found {len(hook_events)}: {sorted(hook_events)}")
+ok(f"manifest hook events count {len(hook_events)} >= 4")
+
+# --- MCP servers: accept inline object/list OR string path to a config file ---
+mcp_servers = data.get("mcpServers")
+if mcp_servers is not None:
+    if isinstance(mcp_servers, str):
+        # String form: path to a .mcp.json file (relative to plugin root)
+        mcp_path = (plugin_root / mcp_servers).resolve()
+        if not mcp_path.exists():
+            fail(f"mcpServers points to {mcp_servers} which does not exist at {mcp_path}")
+        try:
+            mcp_data = json.loads(mcp_path.read_text())
+        except Exception as e:
+            fail(f"mcpServers config file is not valid JSON: {e}")
+        servers = mcp_data.get("mcpServers")
+        if not isinstance(servers, dict) or len(servers) < 1:
+            fail("referenced mcpServers config has no servers; expected at least one")
+        ok(f"manifest mcpServers (via {mcp_servers}) count {len(servers)} >= 1")
+    elif isinstance(mcp_servers, (dict, list)):
+        count = len(mcp_servers)
+        if count < 1:
+            fail("mcpServers is present but empty; expected at least one server entry")
+        ok(f"manifest mcpServers count {count} >= 1")
+    else:
+        fail("mcpServers must be a string path, object, or list")
+else:
+    ok("no mcpServers in plugin.json; MCP count check skipped")
+
+print("ok: manifest counts validated — agents/skills/hooks meet minimum thresholds")
+PY
+  log "validate counts match manifest"
+}
+
 validate_vscode_layout
 validate_cli_plugin
 validate_docs_mentions
 validate_cross_host_benchmark_site
+validate_manifest_counts
 log "power surfaces validation complete"

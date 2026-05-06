@@ -1,0 +1,31 @@
+# policy-patterns.txt — Wave 2 deny-list for pre-tool-policy-gate.sh
+#
+# Format: one ERE (extended regex) pattern per line.
+# Blank lines and lines starting with # are ignored.
+#
+# LIMITATIONS (regex-only, no AST stage in v1):
+#   - Variable indirection ($CRED, ${!VAR}) is NOT detected
+#   - Base64-decoded payloads are NOT decoded before matching
+#   - eval-wrapped strings are NOT unwrapped before matching
+# Treat as a best-effort trip-wire, not a security boundary.
+
+# AWS access key (IAM key ID format)
+AKIA[0-9A-Z]{16}
+
+# GCP key prefix — illustrative pattern
+gcp_[a-z0-9-]+
+
+# SSH private key exfiltration
+cat[[:space:]]+~/\.ssh/id_
+
+# AWS credentials exfiltration
+cat[[:space:]]+~/\.aws/credentials
+
+# GCloud config exfiltration
+cat[[:space:]]+~/\.config/gcloud/
+
+# Destructive root delete
+rm[[:space:]]+-rf[[:space:]]+/
+
+# Fork bomb
+:\(\)\{[[:space:]]*:\|:&[[:space:]]*\};:

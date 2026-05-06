@@ -1,19 +1,76 @@
 # oh-my-copilot CLI Plugin
 
+## Quick walkthrough — spec → plan → working code
+
+This plugin wires three orchestration skills into an end-to-end pipeline. Here
+is a concrete run from idea to artifact.
+
+**Stage 1 — Spec (deep-interview)**
+
+```
+/deep-interview "build me a CLI that watches markdown files and hot-reloads a preview"
+```
+
+The plugin asks Socratic clarifying questions until ambiguity drops below the
+gate threshold, then writes the agreed spec to
+`.omc/specs/deep-interview-<slug>.md` with frontmatter:
+
+```yaml
+produced-by: deep-interview
+produced-at: 2026-05-06T10:00:00Z
+pipeline-stage: spec
+```
+
+The skill records the spec→plan transition stub via
+`mcp__oh-my-copilot__pipeline_record_transition`. State is flushed to
+`.omc/state/pipeline-state.json`.
+
+**Stage 2 — Plan (ralplan)**
+
+```
+/ralplan
+```
+
+Planner + Architect + Critic run a consensus loop against the spec. The
+agreed plan is written to `.omc/plans/<slug>-plan.md` (`pipeline-stage: plan`).
+`mcp__oh-my-copilot__pipeline_record_transition` records the plan→artifact
+transition. `mcp__oh-my-copilot__pipeline_state` reads the current chain.
+
+**Stage 3 — Artifact (autopilot)**
+
+```
+/autopilot
+```
+
+Autopilot executes parallel ralph + ultrawork loops until working code lands
+in the scratch directory (`pipeline-stage: artifact`). The full chain is
+visible in `.omc/state/pipeline-state.json` at any point during execution.
+
+**Install and build**
+
+```bash
+copilot plugin install /path/to/oh-my-copilot/packages/copilot-cli-plugin
+bash packages/copilot-cli-plugin/mcp-server/build.sh
+```
+
+See [`docs/orchestration.md`](docs/orchestration.md) for the full MCP tool
+surface, hook events, resume semantics, and failure modes. See
+[`docs/state-management.md`](docs/state-management.md) for the
+`pipeline-state.json` schema.
+
+---
+
 This package is an **experimental local Copilot CLI plugin** for turning parts
 of the research repo into reusable Copilot CLI power surfaces.
-
-It bundles:
-
-- custom agents
-- reusable skills with shell scripts
-- lightweight hooks
 
 It is still intentionally bounded:
 
 - no tmux worker runtime
-- no OMC/OMX parity claim
 - no separate memory subsystem
+- Copilot cloud agent, IDE integrations, and SDK runtimes are out of scope
+
+On the Copilot CLI surface this plugin achieves OMC-shaped parity. See
+[`docs/parity-matrix.md`](../../docs/parity-matrix.md) for the full matrix.
 
 ## Suggested local test
 
@@ -64,3 +121,16 @@ workspace:
 
 This keeps logs separated by project root and makes plugin behavior easier to
 audit across repositories.
+
+## Plugin inventory
+
+| Dimension | Count |
+| --- | --- |
+| Agents | 16 |
+| Skills | 36 |
+| Slash commands | 5 |
+| Hook events | 4 |
+| MCP server tools | 8 |
+
+See [`docs/parity-matrix.md`](../../docs/parity-matrix.md) for per-item status
+and the full OMC ↔ oh-my-copilot coverage breakdown.

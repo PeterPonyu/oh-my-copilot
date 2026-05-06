@@ -8,7 +8,10 @@ the reusable plugin package.
 
 - Preserve the project boundary: `oh-my-copilot` adapts lessons from
   `oh-my-claudecode` and `oh-my-codex` to Copilot-native primitives; it is not a
-  runtime framework and does not claim OMC/OMX parity.
+  runtime framework. Copilot cloud agent, IDE integrations, and SDK runtimes are
+  out of scope. The Copilot CLI plugin delivers OMC-shaped parity for agents
+  (16), skills (36), slash commands (5), hooks (4 events), and MCP server
+  (6 tools) — see `docs/parity-matrix.md`.
 - Treat the root workspace, `packages/copilot-cli-plugin/`, and `examples/` as
   distinct surfaces with different source-of-truth roles. Treat them as
   architectural layers, not product-version tiers.

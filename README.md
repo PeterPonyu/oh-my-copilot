@@ -5,13 +5,13 @@ feel ready for practical GitHub Copilot CLI work: clear instructions, short root
 agents, reusable plugin assets, validation scripts, and docs that explain what is
 safe to trust.
 
-V1 is intentionally **Copilot CLI-first** and **docs/research-first**. It is not
-a runtime framework, not an [`oh-my-claudecode`](./research/omc-analysis.md) or
-[`oh-my-codex`](./research/omx-analysis.md) parity clone, and not a claim that
-Copilot cloud agent, IDE integrations, or SDK runtimes share one implementation.
-Those multi-surface expansions are out of scope for v1. Here, "v1" names the
-public docs-first repository blueprint; it does **not** turn the root workspace,
-reusable plugin package, and examples into version tiers.
+V1 is intentionally **Copilot CLI-first** and **docs/research-first**. Copilot
+cloud agent, IDE integrations, and SDK runtimes are out of scope — those
+host-product surfaces are not addressed here. The Copilot CLI surface achieves
+OMC-shaped parity for agents, skills, hooks, slash commands, and MCP server (see
+`docs/parity-matrix.md`). Here, "v1" names the public docs-first repository
+blueprint; it does **not** turn the root workspace, reusable plugin package, and
+examples into version tiers.
 
 Public claims in this repo follow a simple proof rule:
 
@@ -22,6 +22,20 @@ Public claims in this repo follow a simple proof rule:
   and
 - examples, design synthesis, and adjacent-host comparison notes should stay
   labelled as illustrative, inferred, or sibling-scoped.
+
+## Parity status
+
+The Copilot CLI plugin achieves OMC-shaped parity across all major CLI surfaces.
+See [`docs/parity-matrix.md`](./docs/parity-matrix.md) for the full per-feature
+matrix.
+
+| Surface | OMC | oh-my-copilot | Status |
+| --- | --- | --- | --- |
+| Agents | 19 | 16 | 84% ported |
+| Skills | 39 | 36 | 92% ported |
+| Slash commands | 5 | 5 | 100% ported |
+| Hook events | 4 | 4 | 100% ported |
+| MCP server tools | 6 | 6 | 100% ported |
 
 ## Start here
 
