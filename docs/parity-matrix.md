@@ -125,9 +125,19 @@ root.
 | list_directory | PORTED | List directory contents |
 | search_files | PORTED | Search files by pattern or content |
 | get_diagnostics | PORTED | Return LSP-style diagnostics for a file |
+| pipeline_record_transition | PORTED | Record a spec→plan or plan→artifact transition in pipeline-state.json |
+| pipeline_state | PORTED | Read the current pipeline state for a slug |
 
 MCP server source: `packages/copilot-cli-plugin/mcp-server/`. Build with
 `bash packages/copilot-cli-plugin/mcp-server/build.sh`.
+
+---
+
+## Orchestration
+
+| Feature | Status | Reference | Notes |
+| --- | --- | --- | --- |
+| Orchestration (spec → plan → artifact pipeline) | PORTED | [`packages/copilot-cli-plugin/docs/orchestration.md`](../packages/copilot-cli-plugin/docs/orchestration.md) | 8-tool MCP surface; 2 pipeline tools (`pipeline_record_transition`, `pipeline_state`); pipeline-state.json schema documented in [state-management.md](../packages/copilot-cli-plugin/docs/state-management.md) |
 
 ---
 
