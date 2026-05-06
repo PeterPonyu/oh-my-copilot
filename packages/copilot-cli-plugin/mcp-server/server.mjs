@@ -8,6 +8,7 @@ import {
 import { stateRead, stateWrite, stateList } from "./state-store.mjs";
 import { notepadRead, notepadWrite } from "./notepad-store.mjs";
 import { planList } from "./plan-store.mjs";
+import { readStage, transitionRecord } from "../orchestrator/orchestrator.mjs";
 
 const server = new Server(
   { name: "oh-my-copilot", version: "0.1.0" },
@@ -87,6 +88,28 @@ server.setRequestHandler(ListToolsRequestSchema, async () => ({
         required: [],
       },
     },
+    {
+      name: "pipeline_record_transition",
+      description: "Record a pipeline stage transition in .omc/state/pipeline-state.json",
+      inputSchema: {
+        type: "object",
+        properties: {
+          from: { type: "string", description: "Previous stage (null string or stage name)" },
+          to: { type: "string", description: "New stage name (spec, plan, artifact)" },
+          artifact_path: { type: "string", description: "Absolute path to the artifact just written" },
+        },
+        required: ["from", "to", "artifact_path"],
+      },
+    },
+    {
+      name: "pipeline_state",
+      description: "Read the current pipeline state from .omc/state/pipeline-state.json",
+      inputSchema: {
+        type: "object",
+        properties: {},
+        required: [],
+      },
+    },
   ],
 }));
 
@@ -118,6 +141,16 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
       }
       case "plan_list": {
         result = await planList();
+        break;
+      }
+      case "pipeline_record_transition": {
+        const from = args.from === "null" ? null : args.from;
+        transitionRecord({ from, to: args.to, artifact: args.artifact_path });
+        result = { ok: true, recorded_at: new Date().toISOString() };
+        break;
+      }
+      case "pipeline_state": {
+        result = readStage();
         break;
       }
       default:

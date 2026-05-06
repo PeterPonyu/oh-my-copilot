@@ -18,6 +18,8 @@ When this skill produces an output file (spec / plan / artifact), it MUST emit Y
 
 Output target: `.omc/plans/<slug>.md`. The smoke test at `scripts/smoke-copilot-cli.sh` asserts this chain end-to-end.
 
+**Pipeline transition recording**: After writing the output artifact, call the `mcp__oh-my-copilot__pipeline_record_transition` tool with `from: "spec"`, `to: "plan"`, `artifact_path: "<absolute-path-to-the-artifact-just-written>"`. For ralplan, `from: "spec", to: "plan"`. This records the transition in `.omc/state/pipeline-state.json` so subsequent stages and the smoke test can verify the chain.
+
 # Ralplan (Consensus Planning Alias)
 
 Ralplan is a shorthand alias for `/oh-my-copilot:omc-plan --consensus`. It triggers iterative planning with Planner, Architect, and Critic agents until consensus is reached, with **RALPLAN-DR structured deliberation** (short mode by default, deliberate mode for high-risk work).

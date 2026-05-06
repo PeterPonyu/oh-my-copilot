@@ -18,6 +18,8 @@ When this skill produces an output file (spec / plan / artifact), it MUST emit Y
 
 Output target is whatever working code autopilot writes. The smoke test at `scripts/smoke-copilot-cli.sh` asserts this chain end-to-end.
 
+**Pipeline transition recording**: After writing the output artifact, call the `mcp__oh-my-copilot__pipeline_record_transition` tool with `from: "plan"`, `to: "artifact"`, `artifact_path: "<absolute-path-to-the-artifact-just-written>"`. For autopilot, `from: "plan", to: "artifact"`. This records the transition in `.omc/state/pipeline-state.json` so subsequent stages and the smoke test can verify the chain.
+
 <Purpose>
 Autopilot takes a brief product idea and autonomously handles the full lifecycle: requirements analysis, technical design, planning, parallel implementation, QA cycling, and multi-perspective validation. It produces working, verified code from a 2-3 line description.
 </Purpose>
