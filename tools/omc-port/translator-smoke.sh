@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # translator-smoke.sh -- determinism + idempotency smoke for translate-omc-skill.mjs
 #
-# For each fixture in translate-test-fixtures/:
+# For each fixture in test-fixtures/:
 #   1. Translate input -> tmp dir
 #   2. Diff produced SKILL.md vs expected-output/SKILL.md
 #   3. Diff produced _omc-port-diff.md vs expected-diff.md (if expected exists)
@@ -12,7 +12,7 @@ set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 TRANSLATOR="$SCRIPT_DIR/translate-omc-skill.mjs"
-FIXTURES_DIR="$SCRIPT_DIR/translate-test-fixtures"
+FIXTURES_DIR="$SCRIPT_DIR/test-fixtures"
 
 if [[ ! -f "$TRANSLATOR" ]]; then
   echo "smoke: translator not found at $TRANSLATOR" >&2

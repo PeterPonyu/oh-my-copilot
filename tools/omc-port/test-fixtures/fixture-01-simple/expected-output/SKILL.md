@@ -5,7 +5,7 @@ argument-hint: "<topic>"
 ---
 
 <!-- omc-port-translated: v1 -->
-<!-- source: packages/copilot-cli-plugin/scripts/translate-test-fixtures/fixture-01-simple/input/SKILL.md | wave: 4.5 -->
+<!-- source: tools/omc-port/test-fixtures/fixture-01-simple/input/SKILL.md | wave: 4.5 -->
 This skill demonstrates the translator. First it calls [Run /planner to continue the pipeline]
 <!-- TODO: P0/P1 skill planner may need its slash command in commands/planner.md (Wave 6) --> to plan the work.
 

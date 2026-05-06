@@ -274,15 +274,29 @@ if len(hook_events) < 4:
     fail(f"expected >=4 hook event keys in hooks.json, found {len(hook_events)}: {sorted(hook_events)}")
 ok(f"manifest hook events count {len(hook_events)} >= 4")
 
-# --- MCP servers: assert at least one mcpServers entry (if present) ---
+# --- MCP servers: accept inline object/list OR string path to a config file ---
 mcp_servers = data.get("mcpServers")
 if mcp_servers is not None:
-    if not isinstance(mcp_servers, (dict, list)):
-        fail("mcpServers must be an object or list")
-    count = len(mcp_servers) if isinstance(mcp_servers, dict) else len(mcp_servers)
-    if count < 1:
-        fail("mcpServers is present but empty; expected at least one server entry")
-    ok(f"manifest mcpServers count {count} >= 1")
+    if isinstance(mcp_servers, str):
+        # String form: path to a .mcp.json file (relative to plugin root)
+        mcp_path = (plugin_root / mcp_servers).resolve()
+        if not mcp_path.exists():
+            fail(f"mcpServers points to {mcp_servers} which does not exist at {mcp_path}")
+        try:
+            mcp_data = json.loads(mcp_path.read_text())
+        except Exception as e:
+            fail(f"mcpServers config file is not valid JSON: {e}")
+        servers = mcp_data.get("mcpServers")
+        if not isinstance(servers, dict) or len(servers) < 1:
+            fail("referenced mcpServers config has no servers; expected at least one")
+        ok(f"manifest mcpServers (via {mcp_servers}) count {len(servers)} >= 1")
+    elif isinstance(mcp_servers, (dict, list)):
+        count = len(mcp_servers)
+        if count < 1:
+            fail("mcpServers is present but empty; expected at least one server entry")
+        ok(f"manifest mcpServers count {count} >= 1")
+    else:
+        fail("mcpServers must be a string path, object, or list")
 else:
     ok("no mcpServers in plugin.json; MCP count check skipped")
 

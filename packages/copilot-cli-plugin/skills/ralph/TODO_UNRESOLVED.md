@@ -1,6 +1,6 @@
 # ralph port — UNRESOLVED (Wave 5 P0)
 
-The translator (`scripts/translate-omc-skill.mjs`) exited code 3 when porting
+The translator (`tools/omc-port/translate-omc-skill.mjs`) exited code 3 when porting
 `references/oh-my-claudecode/skills/ralph/SKILL.md` because that source instructs
 the model to invoke a primitive that is **not in the v1 agent list**:
 
@@ -21,7 +21,7 @@ We do NOT invent agent names or hand-author SKILL.md content.
 ## Resolution path (out of scope for Wave 5)
 A later wave can decide to either:
 1. Add `ai-slop-cleaner` as a recognized skill primitive in
-   `translate-omc-skill.mjs`, OR
+   `tools/omc-port/translate-omc-skill.mjs`, OR
 2. Port `ai-slop-cleaner` as a sibling skill first, then re-run the ralph
    translation, OR
 3. Hand-author a translator pre-pass that strips ai-slop-cleaner references

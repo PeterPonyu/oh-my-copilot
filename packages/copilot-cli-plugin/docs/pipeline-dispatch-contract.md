@@ -2,7 +2,7 @@
 
 Authoritative reference for translating oh-my-claudecode (OMC) skills, agents, and
 slash-command bodies to oh-my-copilot (OMX) Copilot CLI shape. This document is the
-single source of truth that `scripts/translate-omc-skill.mjs` implements.
+single source of truth that `tools/omc-port/translate-omc-skill.mjs` implements.
 
 This is **structural translation, not string substitution**. Copilot CLI has no
 `Skill()` callable and no `Task(subagent_type=...)` callable. Copilot dispatches
