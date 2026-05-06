@@ -1,0 +1,11 @@
+{
+  "name": "oh-my-copilot-mcp-server",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": { "node": ">=18" },
+  "bin": { "oh-my-copilot-mcp": "./server.mjs" },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.18.0"
+  }
+}
