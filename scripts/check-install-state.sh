@@ -95,8 +95,13 @@ except json.JSONDecodeError as exc:
     fail(f"plugin manifest is not valid JSON: {exc}")
 
 plugin_name = manifest.get("name")
-if plugin_name != "oh-my-copilot-power-pack":
-    fail(f"unexpected plugin name: {plugin_name!r}")
+if not plugin_name or not isinstance(plugin_name, str):
+    fail("plugin manifest missing name")
+if not re.fullmatch(r"[a-z0-9]+(?:-[a-z0-9]+)*", plugin_name):
+    fail(
+        "plugin name must be a lowercase kebab-case Copilot CLI plugin id "
+        f"(see packages/copilot-cli-plugin/plugin.json): {plugin_name!r}"
+    )
 if not manifest.get("version"):
     fail("plugin manifest missing version")
 
@@ -160,6 +165,26 @@ for required in ("agents", "skills", "hooks.json"):
     if not (cache_path / required).exists():
         fail(f"installed plugin cache missing {required}: {cache_path / required}")
 
+allowed_cache_entries = {
+    "README.md",
+    "agents",
+    "hooks.json",
+    "plugin.json",
+    "scripts",
+    "skills",
+}
+actual_cache_entries = {item.name for item in cache_path.iterdir()}
+extra_cache_entries = sorted(actual_cache_entries - allowed_cache_entries)
+if extra_cache_entries:
+    fail(
+        "installed plugin cache contains non-runtime/development entries: "
+        + ", ".join(extra_cache_entries)
+    )
+
+for forbidden in (".git", ".github", ".omc", ".omx", "apps", "benchmark", "docs", "examples", "research"):
+    if (cache_path / forbidden).exists():
+        fail(f"installed plugin cache should not include {forbidden}: {cache_path / forbidden}")
+
 source = entry.get("source")
 if isinstance(source, dict) and source.get("path"):
     source_path = pathlib.Path(str(source["path"])).expanduser()
@@ -197,5 +222,6 @@ report "====================="
 report "- Root: $ROOT"
 report "- Plugin manifest: $PLUGIN_JSON"
 report "- Copilot config: $CONFIG_PATH"
-report "- Expected plugin name: oh-my-copilot-power-pack"
+EXPECTED_NAME="$(python3 -c 'import json, pathlib, sys; print(json.loads(pathlib.Path(sys.argv[1]).read_text(encoding="utf-8"))["name"])' "$PLUGIN_JSON")"
+report "- Expected plugin name: $EXPECTED_NAME"
 report "- Result: PASS"

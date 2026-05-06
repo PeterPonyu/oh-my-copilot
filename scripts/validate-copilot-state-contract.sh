@@ -43,6 +43,11 @@ done
 
 command -v python3 >/dev/null 2>&1 || fail "python3 not found"
 ROOT="$(python3 "$ROOT/scripts/resolve-canonical-root.py" "$ROOT")"
+PLUGIN_JSON="$ROOT/packages/copilot-cli-plugin/plugin.json"
+[[ -f "$PLUGIN_JSON" ]] || fail "missing plugin manifest: $PLUGIN_JSON"
+export OMC_CLI_PLUGIN_ID="$(
+  python3 -c 'import json, pathlib, sys; print(json.loads(pathlib.Path(sys.argv[1]).read_text(encoding="utf-8"))["name"])' "$PLUGIN_JSON"
+)"
 
 if [[ ! -f "$CONFIG_PATH" ]]; then
   log "no ~/.copilot/config.json present; local plugin state contract is skipped in this environment"
@@ -53,11 +58,16 @@ installed_plugin_present="$(python3 - "$CONFIG_PATH" <<'PY'
 from __future__ import annotations
 
 import json
+import os
 import pathlib
 import re
 import sys
 
 config_path = pathlib.Path(sys.argv[1]).expanduser().resolve()
+expected_name = os.environ.get("OMC_CLI_PLUGIN_ID", "")
+if not expected_name:
+    print("FAIL: OMC_CLI_PLUGIN_ID is not set", file=sys.stderr)
+    sys.exit(2)
 json_text = re.sub(r"(?m)^\s*//.*$", "", config_path.read_text(encoding="utf-8"))
 try:
     cfg = json.loads(json_text)
@@ -66,7 +76,7 @@ except json.JSONDecodeError as exc:
     sys.exit(2)
 
 entry = next(
-    (item for item in cfg.get("installedPlugins", []) if item.get("name") == "oh-my-copilot-power-pack"),
+    (item for item in cfg.get("installedPlugins", []) if item.get("name") == expected_name),
     None,
 )
 print("yes" if entry else "no")
@@ -85,6 +95,7 @@ python3 - "$ROOT" "$CONFIG_PATH" <<'PY'
 from __future__ import annotations
 
 import json
+import os
 import pathlib
 import re
 import sys
@@ -112,8 +123,11 @@ def parse_json(path: pathlib.Path, label: str) -> dict:
 
 
 cfg = parse_json(config_path, "Copilot config")
+expected_name = os.environ.get("OMC_CLI_PLUGIN_ID", "")
+if not expected_name:
+    fail("OMC_CLI_PLUGIN_ID is not set")
 entry = next(
-    (item for item in cfg.get("installedPlugins", []) if item.get("name") == "oh-my-copilot-power-pack"),
+    (item for item in cfg.get("installedPlugins", []) if item.get("name") == expected_name),
     None,
 )
 if not entry:

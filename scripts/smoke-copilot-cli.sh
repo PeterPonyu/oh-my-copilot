@@ -53,6 +53,10 @@ while (($#)); do
   esac
 done
 
+ROOT="$(cd "$ROOT" && pwd)"
+PLUGIN_JSON="$ROOT/packages/copilot-cli-plugin/plugin.json"
+[[ -f "$PLUGIN_JSON" ]] || fail "missing plugin manifest: $PLUGIN_JSON"
+
 command -v copilot >/dev/null 2>&1 || fail "copilot CLI not found"
 command -v python3 >/dev/null 2>&1 || fail "python3 is required"
 
@@ -70,7 +74,7 @@ for agent in research reviewer verifier; do
 done
 log "root reviewer/research/verifier agents exist"
 
-python3 - "$ROOT/packages/copilot-cli-plugin/plugin.json" <<'PY'
+python3 - "$PLUGIN_JSON" <<'PY'
 from __future__ import annotations
 import json
 import pathlib
@@ -79,34 +83,49 @@ import sys
 
 path = pathlib.Path(sys.argv[1])
 data = json.loads(path.read_text(encoding="utf-8"))
-if data.get("name") != "oh-my-copilot-power-pack":
-    raise SystemExit("plugin name must be oh-my-copilot-power-pack")
+name = data.get("name")
+if not name or not isinstance(name, str):
+    raise SystemExit("plugin manifest missing name")
+if not re.fullmatch(r"[a-z0-9]+(?:-[a-z0-9]+)*", name):
+    raise SystemExit(f"plugin name must be a kebab-case Copilot CLI plugin id: {name!r}")
 version = data.get("version", "")
 if not re.fullmatch(r"\d+\.\d+\.\d+(?:[-+][0-9A-Za-z.-]+)?", version):
     raise SystemExit(f"plugin version must look semver-like: {version!r}")
 for key in ("agents", "skills", "hooks"):
     if key not in data:
         raise SystemExit(f"missing plugin key: {key}")
-print(f"ok: plugin metadata parses for {data['name']}@{version}")
+print(f"ok: plugin metadata parses for {name}@{version}")
 PY
 
+export OMC_CLI_PLUGIN_ID="$(
+  python3 -c 'import json, pathlib, sys; print(json.loads(pathlib.Path(sys.argv[1]).read_text(encoding="utf-8"))["name"])' "$PLUGIN_JSON"
+)"
+
 plugin_installed="$(
-  python3 - <<'PY'
+  python3 <<'PY'
 from __future__ import annotations
 import json
+import os
 import pathlib
+import re
 
+expected = os.environ.get("OMC_CLI_PLUGIN_ID", "")
+if not expected:
+    print("no")
+    raise SystemExit(0)
 cfg = pathlib.Path.home() / ".copilot" / "config.json"
 if not cfg.exists():
     print("no")
-    raise SystemExit
+    raise SystemExit(0)
 try:
-    data = json.loads(cfg.read_text(encoding="utf-8"))
+    raw = cfg.read_text(encoding="utf-8")
+    json_text = re.sub(r"(?m)^\s*//.*$", "", raw)
+    data = json.loads(json_text)
 except Exception:
     print("no")
-    raise SystemExit
+    raise SystemExit(0)
 for entry in data.get("installedPlugins", []):
-    if entry.get("name") == "oh-my-copilot-power-pack":
+    if entry.get("name") == expected:
         print("yes")
         break
 else:
@@ -221,7 +240,7 @@ if [[ "$RUN_AGENT_SMOKE" == "1" ]]; then
   log "model-backed Copilot smoke uses --model $SMOKE_MODEL"
   run_prompt_smoke "root reviewer agent" "reviewer" "ROOT_AGENT_OK"
   if [[ "$plugin_installed" == "yes" ]]; then
-    run_prompt_smoke "namespaced plugin reviewer agent" "oh-my-copilot-power-pack:reviewer" "PLUGIN_AGENT_OK"
+    run_prompt_smoke "namespaced plugin reviewer agent" "${OMC_CLI_PLUGIN_ID}:reviewer" "PLUGIN_AGENT_OK"
   else
     warn "namespaced plugin reviewer prompt smoke skipped because plugin is not installed"
   fi
