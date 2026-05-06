@@ -28,4 +28,5 @@ jobs:
       - name: Run mcp-server tests
         run: |
           cd packages/copilot-cli-plugin/mcp-server
+          npm install --omit=dev
           npm test

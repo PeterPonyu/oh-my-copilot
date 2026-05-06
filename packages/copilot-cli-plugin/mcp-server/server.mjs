@@ -34,6 +34,15 @@ import {
   traceSummary,
   traceListSessions,
 } from "./trace-store.mjs";
+import {
+  wikiAdd,
+  wikiRead,
+  wikiList,
+  wikiQuery,
+  wikiDelete,
+  wikiIngest,
+  wikiLint,
+} from "./wiki-store.mjs";
 import { readStage, transitionRecord } from "../orchestrator/orchestrator.mjs";
 
 const server = new Server(
@@ -345,6 +354,91 @@ server.setRequestHandler(ListToolsRequestSchema, async () => ({
       },
     },
     {
+      name: "wiki_add",
+      description:
+        "Create or overwrite a wiki entry at .omcp/wiki/<slug>.md with title and body. Slug is auto-derived from title if not given.",
+      inputSchema: {
+        type: "object",
+        properties: {
+          title: { type: "string", description: "Human-readable title" },
+          body: { type: "string", description: "Markdown body" },
+          tags: { type: "array", items: { type: "string" }, description: "Tags for filtering" },
+          slug: { type: "string", description: "Override slug (default: derived from title)" },
+        },
+        required: ["title", "body"],
+      },
+    },
+    {
+      name: "wiki_read",
+      description: "Read a wiki entry by slug. Returns {exists, slug, title, tags, body, mtime}.",
+      inputSchema: {
+        type: "object",
+        properties: {
+          slug: { type: "string", description: "Entry slug" },
+        },
+        required: ["slug"],
+      },
+    },
+    {
+      name: "wiki_list",
+      description: "List wiki entries (slug, title, tags, mtime), optionally filtered by tag.",
+      inputSchema: {
+        type: "object",
+        properties: {
+          tag: { type: "string", description: "Filter to entries with this tag" },
+        },
+        required: [],
+      },
+    },
+    {
+      name: "wiki_query",
+      description:
+        "Substring search across wiki title/tags/body. Returns top {k} entries scored by hit count (title=3pts, tag=2pts, body=N hits capped at 10).",
+      inputSchema: {
+        type: "object",
+        properties: {
+          q: { type: "string", description: "Query string (case-insensitive)" },
+          k: { type: "number", description: "Top-K results (default: 5)" },
+        },
+        required: ["q"],
+      },
+    },
+    {
+      name: "wiki_delete",
+      description: "Delete a wiki entry by slug (file + index entry).",
+      inputSchema: {
+        type: "object",
+        properties: {
+          slug: { type: "string", description: "Entry slug to remove" },
+        },
+        required: ["slug"],
+      },
+    },
+    {
+      name: "wiki_ingest",
+      description:
+        "Import an external markdown file as a wiki entry. Title is taken from the first H1 line, falling back to the source path. Optional explicit slug and tags.",
+      inputSchema: {
+        type: "object",
+        properties: {
+          path: { type: "string", description: "Source file path (relative or absolute)" },
+          slug: { type: "string", description: "Override slug (default: derived from title)" },
+          tags: { type: "array", items: { type: "string" }, description: "Tags for the new entry" },
+        },
+        required: ["path"],
+      },
+    },
+    {
+      name: "wiki_lint",
+      description:
+        "Verify wiki integrity. Returns {orphans, untracked}: index entries missing files, and files missing from index.",
+      inputSchema: {
+        type: "object",
+        properties: {},
+        required: [],
+      },
+    },
+    {
       name: "plan_list",
       description: "Enumerate all plan files in .omcp/plans/*.md",
       inputSchema: {
@@ -442,6 +536,43 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
       }
       case "plan_list": {
         result = await planList();
+        break;
+      }
+      case "wiki_add": {
+        result = await wikiAdd({
+          title: args?.title,
+          body: args?.body,
+          tags: args?.tags,
+          slug: args?.slug,
+        });
+        break;
+      }
+      case "wiki_read": {
+        result = await wikiRead({ slug: args?.slug });
+        break;
+      }
+      case "wiki_list": {
+        result = await wikiList({ tag: args?.tag });
+        break;
+      }
+      case "wiki_query": {
+        result = await wikiQuery({ q: args?.q, k: args?.k });
+        break;
+      }
+      case "wiki_delete": {
+        result = await wikiDelete({ slug: args?.slug });
+        break;
+      }
+      case "wiki_ingest": {
+        result = await wikiIngest({
+          path: args?.path,
+          slug: args?.slug,
+          tags: args?.tags,
+        });
+        break;
+      }
+      case "wiki_lint": {
+        result = await wikiLint();
         break;
       }
       case "trace_write": {
