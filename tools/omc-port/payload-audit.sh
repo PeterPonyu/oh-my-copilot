@@ -76,6 +76,11 @@ classify() {
     (( dev_count++ )) || true
     return
   fi
+  if [[ "$base" == ".keep" ]]; then
+    printf "DEV  | %-60s  %s\n" "$rel_path" ".keep placeholder; remove once dir has real content"
+    (( dev_count++ )) || true
+    return
+  fi
 
   printf "SHIP | %-60s  %s\n" "$rel_path" ""
   (( ship_count++ )) || true

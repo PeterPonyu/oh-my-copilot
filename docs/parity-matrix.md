@@ -13,7 +13,7 @@ Tracks per-feature status between `oh-my-claudecode` (OMC) and the
 | Agents | 19 | 16 | 84% |
 | Slash commands | 5 | 5 | 100% |
 | Hook events | 4 | 4 | 100% |
-| MCP server tools | 6 | 6 | 100% |
+| MCP server tools | 6 | 8 | 100% (+2 pipeline tools beyond OMC base) |
 
 Copilot cloud agent, IDE integrations, and SDK runtimes are structurally out of
 scope for the CLI plugin and are not tracked here.

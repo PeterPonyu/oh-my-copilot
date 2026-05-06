@@ -11,7 +11,7 @@ import { planList } from "./plan-store.mjs";
 import { readStage, transitionRecord } from "../orchestrator/orchestrator.mjs";
 
 const server = new Server(
-  { name: "oh-my-copilot", version: "0.1.0" },
+  { name: "omcp", version: "0.5.0" },
   { capabilities: { tools: {} } }
 );
 
