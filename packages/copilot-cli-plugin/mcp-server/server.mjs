@@ -5,7 +5,14 @@ import {
   CallToolRequestSchema,
   ListToolsRequestSchema,
 } from "@modelcontextprotocol/sdk/types.js";
-import { stateRead, stateWrite, stateList } from "./state-store.mjs";
+import {
+  stateRead,
+  stateWrite,
+  stateList,
+  stateClear,
+  stateGetStatus,
+  stateListActive,
+} from "./state-store.mjs";
 import { notepadRead, notepadWrite } from "./notepad-store.mjs";
 import { planList } from "./plan-store.mjs";
 import { readStage, transitionRecord } from "../orchestrator/orchestrator.mjs";
@@ -43,6 +50,55 @@ server.setRequestHandler(ListToolsRequestSchema, async () => ({
     {
       name: "state_list",
       description: "List all keys present in .omcp/state/",
+      inputSchema: {
+        type: "object",
+        properties: {},
+        required: [],
+      },
+    },
+    {
+      name: "state_clear",
+      description:
+        "Write a 30-second cancel tombstone for an orchestration mode (writes to .omcp/state/<mode>-state.json). Pass {mode, session_id} for orchestration cancellation, or {key} to overwrite an arbitrary state key with a tombstone.",
+      inputSchema: {
+        type: "object",
+        properties: {
+          mode: {
+            type: "string",
+            description: "Orchestration mode (ralph, autopilot, team, ralplan, etc.) — writes <mode>-state.json",
+          },
+          key: {
+            type: "string",
+            description: "Explicit state key (used when no mode is supplied)",
+          },
+          session_id: {
+            type: "string",
+            description: "Session id to record on the tombstone",
+          },
+          cancelTtl: {
+            type: "number",
+            description: "Cancel-signal TTL in seconds (default: 30)",
+          },
+        },
+        required: [],
+      },
+    },
+    {
+      name: "state_get_status",
+      description:
+        "Read the orchestration status for a mode. Returns {mode, exists, active, session_id, started_at, last_seen, cancelled?, in_grace_period?}.",
+      inputSchema: {
+        type: "object",
+        properties: {
+          mode: { type: "string", description: "Orchestration mode" },
+        },
+        required: ["mode"],
+      },
+    },
+    {
+      name: "state_list_active",
+      description:
+        "List orchestration modes currently active (state file exists with active=true). Returns {active: [{mode, session_id, started_at, last_seen}]}.",
       inputSchema: {
         type: "object",
         properties: {},
@@ -129,6 +185,23 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
       }
       case "state_list": {
         result = await stateList();
+        break;
+      }
+      case "state_clear": {
+        result = await stateClear({
+          key: args?.key,
+          mode: args?.mode,
+          session_id: args?.session_id,
+          cancelTtl: args?.cancelTtl,
+        });
+        break;
+      }
+      case "state_get_status": {
+        result = await stateGetStatus({ mode: args?.mode });
+        break;
+      }
+      case "state_list_active": {
+        result = await stateListActive();
         break;
       }
       case "notepad_read": {

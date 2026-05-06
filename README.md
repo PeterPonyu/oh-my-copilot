@@ -31,11 +31,11 @@ matrix.
 
 | Surface | OMC | oh-my-copilot | Status |
 | --- | --- | --- | --- |
-| Agents | 19 | 16 | 84% ported |
-| Skills | 39 | 36 | 92% ported |
-| Slash commands | 5 | 5 | 100% ported |
-| Hook events | 4 | 4 | 100% ported |
-| MCP server tools | 6 | 6 | 100% ported |
+| Agents | 19 | 21 | covers OMC v1 surface plus 2 omcp-specific (reviewer, research) |
+| Skills | 39 | 42 | covers OMC v1 surface plus omcp-specific additions |
+| Slash commands | 5 | 5 | 1:1 mapping |
+| Hook events | 4 | 4 | maps to all hook events Copilot CLI v1.0.42 exposes |
+| MCP server tools | 6 | 11 | covers state (6), notepad (2), plan (1), and pipeline (2) — 41 OMC tools (LSP/AST/wiki/memory/trace) remain unported |
 
 ## Start here
 

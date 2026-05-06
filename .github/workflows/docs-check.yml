@@ -11,6 +11,10 @@ jobs:
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
       - name: Validate docs-first research repository
         run: bash scripts/validate-doc-links.sh
       - name: Validate power surfaces
@@ -21,3 +25,7 @@ jobs:
         run: bash scripts/validate-root-copilot-surfaces.sh
       - name: Validate release readiness
         run: bash scripts/validate-release-readiness.sh
+      - name: Run mcp-server tests
+        run: |
+          cd packages/copilot-cli-plugin/mcp-server
+          npm test
