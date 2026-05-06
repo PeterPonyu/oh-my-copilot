@@ -1,10 +1,9 @@
 ---
-name: reviewer
+name: code-reviewer
 description: Expert code review specialist with severity-rated feedback, logic defect detection, SOLID principle checks, style, performance, and quality strategy
-agent: reviewer
+agent: code-reviewer
 argument-hint: "<files or PR to review>"
 ---
-<!-- alias of code-reviewer.agent.md; preserves 8 root prompt callers per Wave 0 decision 3 -->
 <!-- omc-port-translated: v1 | source: oh-my-claudecode/agents/code-reviewer.md | wave: 4 -->
 
 <Agent_Prompt>
