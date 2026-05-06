@@ -77,7 +77,7 @@ function isError(resp) {
   return resp?.result?.isError === true;
 }
 
-test("integration: tools/list returns all 30 registered tools with valid schemas", async (t) => {
+test("integration: tools/list returns all 35 registered tools with valid schemas", async (t) => {
   const cwd = mkdtempSync(join(tmpdir(), "omcp-int-"));
   const client = new StdioClient(cwd);
   t.after(async () => {
@@ -87,7 +87,7 @@ test("integration: tools/list returns all 30 registered tools with valid schemas
 
   const resp = await client.send("tools/list");
   const tools = resp.result.tools;
-  assert.equal(tools.length, 30, `expected 30 tools, got ${tools.length}`);
+  assert.equal(tools.length, 35, `expected 35 tools, got ${tools.length}`);
 
   for (const tool of tools) {
     assert.ok(tool.name, "tool must have a name");
@@ -102,11 +102,46 @@ test("integration: tools/list returns all 30 registered tools with valid schemas
     "project_memory_read", "project_memory_write", "project_memory_add_note", "project_memory_add_directive",
     "trace_write", "trace_summary", "trace_timeline", "trace_list_sessions",
     "wiki_add", "wiki_read", "wiki_list", "wiki_query", "wiki_delete", "wiki_ingest", "wiki_lint",
+    "shared_memory_write", "shared_memory_read", "shared_memory_list", "shared_memory_delete", "shared_memory_cleanup",
     "plan_list", "pipeline_record_transition", "pipeline_state",
   ];
   for (const name of required) {
     assert.ok(names.includes(name), `missing required tool: ${name}`);
   }
+});
+
+test("integration: shared memory round-trip", async (t) => {
+  const cwd = mkdtempSync(join(tmpdir(), "omcp-int-"));
+  const client = new StdioClient(cwd);
+  t.after(async () => {
+    await client.close();
+    rmSync(cwd, { recursive: true, force: true });
+  });
+
+  await client.callTool("shared_memory_write", { channel: "alpha", kind: "task_assigned", from: "leader", to: "worker-1", payload: { task: "review" } });
+  await client.callTool("shared_memory_write", { channel: "alpha", kind: "finding", from: "worker-1", payload: { line: 42 } });
+  await client.callTool("shared_memory_write", { channel: "alpha", kind: "task_done", from: "worker-1" });
+
+  const all = unwrap(await client.callTool("shared_memory_read", { channel: "alpha" }));
+  assert.equal(all.events.length, 3);
+
+  const findings = unwrap(await client.callTool("shared_memory_read", { channel: "alpha", kind: "finding" }));
+  assert.equal(findings.events.length, 1);
+  assert.equal(findings.events[0].payload.line, 42);
+
+  const list = unwrap(await client.callTool("shared_memory_list", {}));
+  assert.equal(list.channels.length, 1);
+  assert.equal(list.channels[0].channel, "alpha");
+  assert.equal(list.channels[0].last_kind, "task_done");
+
+  const cleanup = unwrap(await client.callTool("shared_memory_cleanup", { maxAgeDays: 999 }));
+  assert.deepEqual(cleanup.removed, []);
+
+  const del = unwrap(await client.callTool("shared_memory_delete", { channel: "alpha" }));
+  assert.equal(del.ok, true);
+
+  const post = unwrap(await client.callTool("shared_memory_list", {}));
+  assert.equal(post.channels.length, 0);
 });
 
 test("integration: state round-trip via real MCP transport", async (t) => {
