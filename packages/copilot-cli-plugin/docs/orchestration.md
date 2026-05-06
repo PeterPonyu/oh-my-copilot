@@ -1,25 +1,26 @@
-# oh-my-copilot — Orchestration
+# omcp — Orchestration
 
-This document covers the 3-stage pipeline, the 8-tool MCP surface, slash
-commands, hooks, resume semantics, and failure modes for the
-`oh-my-copilot` Copilot CLI plugin.
+This is the runtime usage doc for the **omcp** Copilot CLI plugin. It covers
+the 3-stage pipeline, the 8-tool MCP surface, the 5 slash commands, the 4 hook
+events, and the resume + failure semantics.
 
-Related: [state-management.md](state-management.md)
+Related: [state-management.md](state-management.md) for the pipeline-state
+schema, read/write paths, concurrency model, and examples.
 
 ---
 
 ## What this plugin orchestrates
 
-The plugin coordinates a **spec → plan → artifact** pipeline via an
-orchestrator module backed by an 8-tool MCP server. Each stage is driven by
-a dedicated skill, emits a file with provenance frontmatter, and records its
-transition in `.omcp/state/pipeline-state.json` so the chain is resumable and
-inspectable at any point.
+The plugin coordinates a **spec → plan → artifact** pipeline through three
+stage skills, an orchestrator module, and an 8-tool MCP server. Each stage
+writes a file with provenance frontmatter and records its transition in
+`.omcp/state/pipeline-state.json` so the chain is resumable and inspectable
+at any point.
 
-The three skills (`deep-interview`, `ralplan`, `autopilot`) are stateless
-individually — shared state is the pipeline-state file and the provenance
-frontmatter on every output file. The orchestrator only reads and writes state;
-it does not call external services.
+The three stage skills (`deep-interview`, `ralplan`, `autopilot`) are
+stateless individually. Shared state is the pipeline-state file plus the
+provenance frontmatter on every output file. The orchestrator only reads and
+writes state; it does not call external services.
 
 ---
 
@@ -27,216 +28,225 @@ it does not call external services.
 
 ### Stage 1 — deep-interview (spec)
 
-**Consumes:** a free-text idea or problem statement from the user.
-
-**Produces:** `.omcp/specs/deep-interview-<slug>.md` — a structured spec with
-full provenance frontmatter.
-
-**How it works:** The skill runs a Socratic question loop, gating on a
-numerical ambiguity score. When the score drops below the configured threshold
-the loop closes and the spec file is written. The slug is derived from the
-first 5 words of the idea.
-
-**Transition recorded:** `spec → plan` stub written to pipeline-state.json via
-`mcp__omcp__pipeline_record_transition`.
+- **Consumes:** a free-text idea or problem statement from the user.
+- **Produces:** `.omcp/specs/deep-interview-<slug>.md` — a structured spec
+  with provenance frontmatter.
+- **How it works:** Socratic question loop, gated on a numerical ambiguity
+  score. The loop closes and the spec file is written when ambiguity drops
+  below the configured threshold.
+- **Transition recorded:** `null → spec` via
+  `mcp__omcp__pipeline_record_transition`.
 
 ### Stage 2 — ralplan (plan)
 
-**Consumes:** the spec file at `.omcp/specs/deep-interview-<slug>.md`.
-
-**Produces:** `.omcp/plans/<slug>-plan.md` — a consensus plan with full
-provenance frontmatter.
-
-**How it works:** Planner + Architect + Critic agents run a consensus loop
-against the spec. The loop exits when all three agents agree or a maximum
-iteration count is reached. The highest-scoring plan is written to disk.
-
-**Transition recorded:** `plan → artifact` stub written to pipeline-state.json.
+- **Consumes:** the spec written by deep-interview.
+- **Produces:** `.omcp/plans/<slug>-plan.md` — a consensus plan with
+  provenance frontmatter.
+- **How it works:** Planner + Architect + Critic agents run a consensus
+  loop against the spec. Loop exits when all three approve or a max
+  iteration count is reached.
+- **Transition recorded:** `spec → plan`.
 
 ### Stage 3 — autopilot (artifact)
 
-**Consumes:** the plan file at `.omcp/plans/<slug>-plan.md`.
-
-**Produces:** working code in the scratch directory, with a manifest at
-`.omcp/artifacts/<slug>-manifest.md` (`pipeline-stage: artifact`).
-
-**How it works:** Autopilot runs parallel ralph + ultrawork loops, delegating
-tasks from the plan to executor agents. Each loop reports completion status
-back to the orchestrator. The artifact manifest is written when all tasks
-reach the done state.
+- **Consumes:** the plan written by ralplan.
+- **Produces:** working code in the project tree, with a manifest at
+  `.omcp/artifacts/<slug>-manifest.md`.
+- **How it works:** parallel ralph + ultrawork loops, delegating tasks
+  from the plan to executor agents.
+- **Transition recorded:** `plan → artifact`.
 
 ---
 
 ## Provenance frontmatter contract
 
-Every file produced by a pipeline stage carries this frontmatter block:
+Every file produced by a pipeline stage carries this block:
 
 ```yaml
 ---
 produced-by: <skill-name>         # deep-interview | ralplan | autopilot
 produced-at: <ISO-8601 timestamp>
 pipeline-stage: <stage>           # spec | plan | artifact
-pipeline-slug: <slug>             # shared across all 3 stages for one run
 ---
 ```
 
 Downstream stages read `pipeline-stage` to verify they are consuming the
-correct output type. If the frontmatter is missing or the stage does not match,
-the skill aborts with a clear error message rather than silently processing a
-wrong file.
-
----
-
-## Pipeline state file
-
-`.omcp/state/pipeline-state.json` holds the full chain for a run:
-
-```json
-{
-  "slug": "<slug>",
-  "started-at": "<ISO-8601>",
-  "stages": {
-    "spec":     { "status": "done",    "path": ".omcp/specs/...",    "completed-at": "..." },
-    "plan":     { "status": "done",    "path": ".omcp/plans/...",    "completed-at": "..." },
-    "artifact": { "status": "running", "path": ".omcp/artifacts/...", "completed-at": null  }
-  },
-  "transitions": [
-    { "from": "spec",  "to": "plan",     "recorded-at": "..." },
-    { "from": "plan",  "to": "artifact", "recorded-at": "..." }
-  ]
-}
-```
-
-See [state-management.md](state-management.md) for the full schema, field
-definitions, and versioning policy.
+correct output type. If the frontmatter is missing or the stage does not
+match, the skill aborts with a clear error rather than silently processing
+a wrong file.
 
 ---
 
 ## MCP tool surface (8 tools)
 
-| Tool | Signature | Role |
-| --- | --- | --- |
-| `read_file` | `(path: string) → string` | Read file contents from the project tree |
-| `write_file` | `(path: string, content: string) → void` | Write or overwrite a file |
-| `run_command` | `(cmd: string, cwd?: string) → {stdout, stderr, exit}` | Execute a shell command |
-| `list_directory` | `(path: string) → string[]` | List directory contents |
-| `search_files` | `(pattern: string, dir?: string) → match[]` | Search files by pattern or content |
-| `get_diagnostics` | `(path: string) → diagnostic[]` | Return LSP-style diagnostics for a file |
-| `pipeline_record_transition` | `(slug: string, from: stage, to: stage) → void` | Record a stage transition in pipeline-state.json |
-| `pipeline_state` | `(slug: string) → PipelineState` | Read the current pipeline state for a slug |
+Server name: `omcp` (from `.mcp.json`). Tools appear to the model as
+`mcp__omcp__<tool>`. Source code: `mcp-server/server.mjs`. Build runtime
+deps with `bash mcp-server/build.sh`.
 
-The first 6 tools are the base MCP surface. The last 2 (`pipeline_record_transition`
-and `pipeline_state`) are the pipeline-specific tools added in US-006.
+| Tool | Inputs | Output | Role |
+|---|---|---|---|
+| `state_read` | `key: string` | `{ value: any \| null, exists: bool }` | Read JSON from `.omcp/state/<key>.json` |
+| `state_write` | `key: string, value: any` | `{ ok: bool, path: string }` | Atomic write (temp file + rename) to `.omcp/state/<key>.json` |
+| `state_list` | — | `{ keys: string[] }` | List every JSON key currently in `.omcp/state/` |
+| `notepad_read` | `tail?: number` | `{ content: string }` | Read `.omcp/notepad.md` (optionally last N lines) |
+| `notepad_write` | `entry: string, priority?: "manual"\|"working"\|"priority"` | `{ ok: bool }` | Append a timestamped entry to `.omcp/notepad.md` |
+| `plan_list` | — | `{ plans: { path, slug, title }[] }` | Enumerate `.omcp/plans/*.md` |
+| `pipeline_record_transition` | `from: string\|null, to: string, artifact_path: string` | `{ ok: bool, recorded_at: string }` | Append a transition to `.omcp/state/pipeline-state.json` |
+| `pipeline_state` | — | `{ stages: [...], transitions: [...] }` | Read the current pipeline state |
 
-MCP server source: `mcp-server/`. Build with `bash mcp-server/build.sh`.
-
----
-
-## Slash commands
-
-| Command | Wraps | Args |
-| --- | --- | --- |
-| `/deep-interview` | `skills/deep-interview/` | `"<idea or problem statement>"` — free text |
-| `/ralplan` | `skills/ralplan/` | optional `--spec <path>` to override spec file |
-| `/autopilot` | `skills/autopilot/` | optional `--plan <path>` to override plan file |
-| `/ralph` | `skills/ralph/` | `"<task>"` — single ralph loop without pipeline tracking |
-| `/team` | `skills/team/` | `"<task>"` — N coordinated agents on shared task list |
+Notes:
+- `state_*` keys are JSON filenames; `..`, `/`, and leading-dot keys are
+  rejected to prevent path traversal.
+- `pipeline_record_transition` calls `orchestrator.mjs::transitionRecord`
+  internally and writes through the same atomic temp-file-then-rename path.
+- `pipeline_state` takes no arguments — it always reads the single state
+  file at `.omcp/state/pipeline-state.json`.
 
 ---
 
-## Hooks
+## Slash commands (5)
 
-| Event | Script | What it does |
-| --- | --- | --- |
-| `sessionStart` | `hooks/session-start.sh` | Bootstraps `.copilot-hooks/config.json` if missing; writes session-start event to `events.jsonl` |
-| `preToolUse` | `hooks/pre-tool-use.sh` | Policy gate — checks tool call against `scripts/policy-patterns.txt`; blocks and logs if a pattern matches |
-| `postToolUse` | `hooks/post-tool-use.sh` | Appends structured event to `events.jsonl` with tool name, args summary, and exit status |
-| `sessionStop` | `hooks/session-stop.sh` | Writes human-readable session summary to `session.log`; flushes any pending pipeline state |
+Copilot CLI namespaces every plugin command. Type the namespaced form:
+
+| Command | Wraps | Argument hint |
+|---|---|---|
+| `/omcp:deep-interview` | `skills/deep-interview/` | `<vague-idea>` |
+| `/omcp:ralplan` | `skills/ralplan/` | `[--deliberate] <goal>` |
+| `/omcp:autopilot` | `skills/autopilot/` | `<plan-or-goal>` |
+| `/omcp:ralph` | `skills/ralph/` | `<task>` (single ralph loop, no pipeline tracking) |
+| `/omcp:team` | `skills/team/` | `<n> <task>` (N coordinated agents) |
+
+Each command file has a 4-field YAML frontmatter (`name`, `description`,
+`agent`, `argument-hint`). The `agent:` field resolves within the omcp
+plugin namespace, e.g. `agent: planner` resolves to
+`agents/planner.agent.md`.
+
+---
+
+## Hooks (4 events)
+
+Hook scripts live at `scripts/` (sibling of `mcp-server/`). All four
+sourced from `.copilot-hooks/common.sh` for consistent stdin capture and
+event-log emission.
+
+| Event | Script | Timeout (s) | Purpose |
+|---|---|---|---|
+| `sessionStart` | `scripts/log-session-start.sh` | 5 | Append a `sessionStart` event to `.copilot-hooks/events.jsonl` and `session.log` |
+| `preToolUse` | `scripts/pre-tool-policy-gate.sh` | 5 | Regex deny-list policy gate; reads `scripts/policy-patterns.txt`, blocks calls that match secret-leak / destructive-bash patterns |
+| `postToolUse` | `scripts/post-tool-audit.sh` | 5 | Append a `postToolUse` event with tool name and exit context to `events.jsonl` and `tools.log` |
+| `sessionEnd` | `scripts/session-end-audit.sh` | 5 | Append a closing `sessionEnd` event to `events.jsonl` and `session.log` |
+
+The hook stdin contract is documented in `tools/omc-port/historical/wave-0-decisions.md` (Decision 1) — payload arrives as JSON on stdin via the
+`copilot_hook_capture_stdin` helper.
 
 ---
 
 ## End-to-end example
 
+Install:
+
 ```bash
-# 1. Install the plugin and build the MCP server
-copilot plugin install /path/to/oh-my-copilot/packages/copilot-cli-plugin
-bash packages/copilot-cli-plugin/mcp-server/build.sh
-
-# 2. Start a Copilot CLI session and run the pipeline
-/deep-interview "build me a CLI that watches markdown files and hot-reloads a preview"
-# → plugin asks clarifying questions, writes .omcp/specs/deep-interview-build-me-a-cli.md
-# → records spec→plan transition in .omcp/state/pipeline-state.json
-
-/ralplan
-# → Planner + Architect + Critic consensus loop
-# → writes .omcp/plans/build-me-a-cli-plan.md
-# → records plan→artifact transition
-
-/autopilot
-# → parallel ralph + ultrawork execution
-# → produces working code in scratch dir
-# → writes .omcp/artifacts/build-me-a-cli-manifest.md
+copilot plugin install PeterPonyu/oh-my-copilot:packages/copilot-cli-plugin
+bash ~/.copilot/installed-plugins/_direct/PeterPonyu--oh-my-copilot--packages-copilot-cli-plugin/mcp-server/build.sh
 ```
 
-After all three stages complete, `.omcp/state/pipeline-state.json` shows all
-three stages as `"status": "done"`.
+Run the pipeline (inside an interactive `copilot` session):
+
+```text
+/omcp:deep-interview "build me a CLI that watches markdown files and hot-reloads a preview"
+# → asks Socratic clarifying questions, writes
+#   .omcp/specs/deep-interview-build-me-a-cli.md
+# → records null→spec transition in .omcp/state/pipeline-state.json
+
+/omcp:ralplan
+# → Planner + Architect + Critic consensus loop reads the spec
+# → writes .omcp/plans/build-me-a-cli-plan.md
+# → records spec→plan transition
+
+/omcp:autopilot
+# → parallel ralph + ultrawork execution against the plan
+# → produces working code in the project tree
+# → writes .omcp/artifacts/build-me-a-cli-manifest.md
+# → records plan→artifact transition
+```
+
+After all three stages complete, `.omcp/state/pipeline-state.json`
+shows three completed stages and three transitions.
 
 ---
 
-## Reading the state mid-run
+## Reading state mid-run
 
-At any point during a pipeline run you can inspect the current state:
+```text
+# Inside a Copilot CLI session, the model can call:
+mcp__omcp__pipeline_state          # no args, reads .omcp/state/pipeline-state.json
+mcp__omcp__state_list              # all state keys
+mcp__omcp__plan_list               # all plans
 
-```bash
-# Via MCP tool (inside a Copilot CLI session)
-mcp__omcp__pipeline_state "build-me-a-cli"
-
-# Or read the file directly
-cat .omcp/state/pipeline-state.json
+# From a shell:
+cat .omcp/state/pipeline-state.json | jq .
 ```
 
-The `stages` object shows which stages are `done`, `running`, or `pending`.
-The `transitions` array shows the recorded handoffs with timestamps.
+The `stages[]` array shows which stages have completed (and where their
+artifacts live). The `transitions[]` array shows the recorded handoffs in
+order with timestamps. See [state-management.md](state-management.md)
+for the full schema.
 
 ---
 
 ## Resume semantics
 
 If Copilot CLI exits mid-pipeline (crash, timeout, user interrupt), the
-pipeline-state.json file persists on disk. The next session can resume from
-the last completed stage:
+pipeline-state file persists on disk. The next session resumes from the
+last completed stage:
 
-- If `spec` is `done` and `plan` is `pending`, run `/ralplan` directly.
-- If `plan` is `done` and `artifact` is `pending`, run `/autopilot` directly.
-- Each skill reads pipeline-state.json on startup and skips stages already
-  marked `done`.
+- If `spec` is recorded but `plan` is not, run `/omcp:ralplan` directly.
+- If `plan` is recorded but `artifact` is not, run `/omcp:autopilot`
+  directly.
+- Each stage skill reads pipeline-state.json on startup and skips
+  transitions already recorded.
 
-No data is lost. The spec and plan files on disk are the source of truth;
-pipeline-state.json is derived from them and can be reconstructed by re-running
-`mcp__omcp__pipeline_record_transition` for each completed stage.
+The spec, plan, and artifact files on disk are the source of truth.
+The pipeline-state file is derived from them and can be reconstructed
+by re-running `pipeline_record_transition` for each completed stage.
 
 ---
 
 ## Failure modes
 
-**Stage tool call fails (e.g. `write_file` returns an error):**
-The orchestrator catches the error, leaves the transition un-recorded, and
-returns a user-visible error message. The pipeline-state.json is NOT updated
-for the failed transition — the stage remains `running` (or reverts to its
-pre-call status). Re-running the same skill safely retries from the beginning
-of that stage.
+**Stage tool call fails (e.g. `state_write` returns an error):**
+The orchestrator catches the error and leaves the transition un-recorded.
+The pipeline-state file is NOT updated. Re-running the same skill safely
+retries from the beginning of that stage.
 
 **Consensus loop in ralplan does not converge:**
-After the maximum iteration count the highest-scoring plan is written and the
-transition is recorded. A warning is appended to the plan frontmatter:
-`consensus-warning: max-iterations-reached`.
+After the maximum iteration count, the highest-scoring plan is written
+and the transition is recorded. A warning is appended to the plan
+frontmatter: `consensus-warning: max-iterations-reached`.
 
 **Autopilot task left incomplete:**
-Individual task failures within autopilot are logged to the artifact manifest
-under `failed-tasks`. The overall stage is still marked `done` if the majority
-of tasks succeeded. Retry by re-running `/autopilot --plan <path>`.
+Individual task failures within autopilot are logged to the artifact
+manifest under `failed-tasks`. The overall stage is still marked
+recorded if the majority of tasks succeeded. Retry by re-running
+`/omcp:autopilot` (it picks up incomplete tasks from the plan).
 
-**pipeline-state.json is corrupted or missing:**
-Each skill gracefully degrades: it writes its output file and emits a warning
-that the state could not be updated. The user can manually recreate the state
-file or ignore it — the output files are the authoritative artifacts.
+**`pipeline-state.json` is corrupted or missing:**
+Each skill gracefully degrades: it writes its output file and emits a
+warning that the state could not be updated. The output files are
+authoritative; the state file is regenerated on the next successful
+transition record.
+
+**preToolUse policy gate blocks a legitimate call:**
+The gate's regex deny-list lives at `scripts/policy-patterns.txt`. Edit
+to remove or refine the offending pattern. Documented limitations:
+variable indirection (`$CRED`), base64-decoded payloads, and
+`eval`-wrapped strings are not detected by the regex-only filter.
+
+---
+
+## See also
+
+- [state-management.md](state-management.md) — schema, read/write paths, concurrency
+- `../mcp-server/README.md` — MCP server installation and tool reference
+- `../README.md` — plugin overview and quick walkthrough
+- `../../../tools/omc-port/dispatch-contract.md` — translator contract for porting OMC skills (dev-only)
