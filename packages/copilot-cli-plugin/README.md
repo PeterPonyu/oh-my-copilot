@@ -22,7 +22,7 @@ pipeline-stage: spec
 ```
 
 The skill records the spec→plan transition stub via
-`mcp__oh-my-copilot__pipeline_record_transition`. State is flushed to
+`mcp__omcp__pipeline_record_transition`. State is flushed to
 `.omc/state/pipeline-state.json`.
 
 **Stage 2 — Plan (ralplan)**
@@ -33,8 +33,8 @@ The skill records the spec→plan transition stub via
 
 Planner + Architect + Critic run a consensus loop against the spec. The
 agreed plan is written to `.omc/plans/<slug>-plan.md` (`pipeline-stage: plan`).
-`mcp__oh-my-copilot__pipeline_record_transition` records the plan→artifact
-transition. `mcp__oh-my-copilot__pipeline_state` reads the current chain.
+`mcp__omcp__pipeline_record_transition` records the plan→artifact
+transition. `mcp__omcp__pipeline_state` reads the current chain.
 
 **Stage 3 — Artifact (autopilot)**
 
@@ -103,7 +103,7 @@ Do not rely on `copilot plugin list` alone as the sole proof of installation.
 Plugin-provided agents are namespaced. For example:
 
 ```bash
-copilot --agent 'oh-my-copilot-power-pack:reviewer' -p "Review this repo" -s --model auto --allow-all
+copilot --agent 'omcp:reviewer' -p "Review this repo" -s --model auto --allow-all
 ```
 
 Bare names such as `reviewer` are better reserved for root-local workspace

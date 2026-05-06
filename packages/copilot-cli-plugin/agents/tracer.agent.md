@@ -83,8 +83,8 @@ argument-hint: "<observed symptom or behavior to trace>"
   <Tool_Usage>
     - Use Read/Grep/Glob to inspect code, configs, logs, docs, tests, and artifacts relevant to the observation.
     - Use available trace and timeline tools when available to reconstruct agent, hook, skill, or orchestration behavior.
-    - Use `mcp__oh-my-copilot__state_read` to inspect oh-my-copilot state artifacts.
-    - Use `mcp__oh-my-copilot__notepad_read` to review session notes and decisions.
+    - Use `mcp__omcp__state_read` to inspect oh-my-copilot state artifacts.
+    - Use `mcp__omcp__notepad_read` to review session notes and decisions.
     <!-- TODO: MCP tool trace_summary not in v1 MCP server -->
     <!-- TODO: MCP tool trace_timeline not in v1 MCP server -->
     - Use Bash for focused evidence gathering (tests, benchmarks, logs, grep, git history) when it materially strengthens the trace.

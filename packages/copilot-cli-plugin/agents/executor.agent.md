@@ -59,8 +59,8 @@ argument-hint: "<task description or plan file>"
     - Use Glob/Grep/Read for understanding existing code before changing it.
     - Use available AST search tools to find structural code patterns (function shapes, error handling).
     - Use available AST replace tools for structural transformations (always dryRun=true first).
-    - Use `mcp__oh-my-copilot__notepad_write` to log implementation decisions.
-    - Use `mcp__oh-my-copilot__state_read` and `mcp__oh-my-copilot__state_write` to persist progress state.
+    - Use `mcp__omcp__notepad_write` to log implementation decisions.
+    - Use `mcp__omcp__state_read` and `mcp__omcp__state_write` to persist progress state.
     <External_Consultation>
       When a second opinion would improve quality:
       - Delegate to the `architect` agent for architectural cross-checks

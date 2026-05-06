@@ -23,7 +23,7 @@ The script is idempotent — it skips `npm install` if `node_modules/` is alread
 | `notepad_write` | `(entry: string, priority?: "manual"\|"working"\|"priority") → { ok: bool }` | Append timestamped entry | `.omc/notepad.md` |
 | `plan_list` | `() → { plans: { path: string, slug: string, title: string }[] }` | Enumerate plan files | `.omc/plans/` |
 
-Tools appear in the MCP namespace as `mcp__oh-my-copilot__<tool_name>`.
+Tools appear in the MCP namespace as `mcp__omcp__<tool_name>`.
 
 ## Storage Roots
 

@@ -22,7 +22,7 @@ When this skill produces an output file (spec / plan / artifact), it MUST emit Y
 
 Output target: `.omc/specs/<slug>.md`. The smoke test at `scripts/smoke-copilot-cli.sh` asserts this chain end-to-end.
 
-**Pipeline transition recording**: After writing the output artifact, call the `mcp__oh-my-copilot__pipeline_record_transition` tool with `from: "null"`, `to: "spec"`, `artifact_path: "<absolute-path-to-the-artifact-just-written>"`. For deep-interview, `from: null, to: "spec"`. This records the transition in `.omc/state/pipeline-state.json` so subsequent stages and the smoke test can verify the chain.
+**Pipeline transition recording**: After writing the output artifact, call the `mcp__omcp__pipeline_record_transition` tool with `from: "null"`, `to: "spec"`, `artifact_path: "<absolute-path-to-the-artifact-just-written>"`. For deep-interview, `from: null, to: "spec"`. This records the transition in `.omc/state/pipeline-state.json` so subsequent stages and the smoke test can verify the chain.
 
 <Purpose>
 Deep Interview implements Ouroboros-inspired Socratic questioning with mathematical ambiguity scoring. It replaces vague ideas with crystal-clear specifications by asking targeted questions that expose hidden assumptions, measuring clarity across weighted dimensions, and refusing to proceed until ambiguity drops below the resolved threshold for this run. The output feeds into a 3-stage pipeline: **deep-interview → ralplan (consensus refinement) → autopilot (execution)**, ensuring maximum clarity at every stage.

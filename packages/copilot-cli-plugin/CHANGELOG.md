@@ -4,6 +4,17 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.3.0] - 2026-05-06
+
+### Changed
+- **BREAKING**: Plugin renamed from `oh-my-copilot-power-pack` to `omcp`. Slash commands and agents are now namespaced as `omcp:<name>` (e.g. `/omcp:deep-interview`, `--agent omcp:planner`).
+- **BREAKING**: MCP server name in `.mcp.json` renamed from `oh-my-copilot` to `omcp`. Tools now appear to the model as `mcp__omcp__state_read`, `mcp__omcp__pipeline_record_transition`, etc.
+- All in-plugin references updated: SKILL.md instructions, agent prompts, dispatch translator (`tools/omc-port/translate-omc-skill.mjs`), translator test fixtures, plugin docs.
+
+### Migration
+- Reinstall: `copilot plugin uninstall oh-my-copilot-power-pack` then `copilot plugin install PeterPonyu/oh-my-copilot:packages/copilot-cli-plugin`.
+- Pre-existing `.omc/state/pipeline-state.json` files remain compatible — the file path is unchanged and the schema is identical.
+
 ## [0.2.0] - 2026-05-06
 
 ### Added
@@ -18,4 +29,4 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Added
 - Initial plugin shape: 3 agents (`agents/`), 6 skills (`skills/`), and 2 hook events (`hooks.json`).
-- Core scaffolding for `oh-my-copilot-power-pack` derived from oh-my-copilot.
+- Core scaffolding for `omcp` derived from oh-my-copilot.

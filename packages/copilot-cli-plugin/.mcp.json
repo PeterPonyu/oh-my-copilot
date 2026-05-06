@@ -1,8 +1,10 @@
 {
   "mcpServers": {
-    "oh-my-copilot": {
+    "omcp": {
       "command": "node",
-      "args": ["./mcp-server/server.mjs"],
+      "args": [
+        "./mcp-server/server.mjs"
+      ],
       "transport": "stdio"
     }
   }
