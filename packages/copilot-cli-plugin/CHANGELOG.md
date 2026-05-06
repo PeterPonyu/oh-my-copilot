@@ -4,6 +4,23 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [Unreleased]
+
+### Added (Wave A, PR #18)
+- 5 agents ported from OMC: `analyst`, `code-simplifier`, `designer`, `explore`, `git-master`. Agent count 16 → 21.
+- 8 skills ported from OMC: `ccg`, `deepinit`, `omc-doctor`, `omc-reference` (since renamed), `omc-setup`, `omc-teams` (since renamed), `wiki`, `writer-memory`. Skill count 35 → 43.
+
+### Changed (Wave B-0, this PR)
+- **Skill renames** for namespace coherence inside the `/omcp:` prefix:
+  - `omc-teams` → `cli-teams` (body header rewritten to "CLI Teams Skill"; distinguishes process-based tmux workers from the in-Copilot `/omcp:team` skill)
+  - `oh-my-copilot-reference` → `reference` (canonical omcp catalog; the duplicate `omc-reference` Wave A port was deleted in favor of this one)
+- **`omc-doctor` and `omc-setup` retained as-is.** Body audit confirmed both are genuinely OMC-flavored (diagnose/install OMC alongside omcp), so the `omc-` prefix is honest. They function as cross-host interop skills, not omcp-native ones.
+- Cross-references updated in `cancel/SKILL.md`, `omc-doctor/SKILL.md`, and `docs/parity-matrix.md`.
+- Translator audit-log artifacts (`.omcp/state/_omc-port-translations.jsonl` written inside each ported skill dir) removed.
+
+### Removed
+- `skills/omc-reference/` (duplicate of `oh-my-copilot-reference`, kept the latter).
+
 ## [0.5.0] - 2026-05-06
 
 ### Fixed

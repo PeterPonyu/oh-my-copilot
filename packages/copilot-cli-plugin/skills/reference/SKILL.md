@@ -1,18 +1,18 @@
 ---
-name: omc-reference
-description: OMC agent catalog, available tools, team pipeline routing, commit protocol, and skills registry. Auto-loads when delegating to agents, using OMC tools, orchestrating teams, making commits, or invoking skills.
+name: reference
+description: omcp agent catalog, available tools, team pipeline routing, commit protocol, and skills registry. Auto-loads when delegating to agents, using omcp tools, orchestrating teams, making commits, or invoking skills.
 user-invocable: false
 ---
 
 <!-- omc-port-translated: v1 -->
 <!-- source: references/oh-my-claudecode/skills/omc-reference/SKILL.md | wave: 4.5 -->
-# OMC Reference
+# omcp Reference
 
-Use this built-in reference when you need detailed OMC catalog information that does not need to live in every `CLAUDE.md` session.
+Use this built-in reference when you need detailed omcp catalog information that does not need to live in every `AGENTS.md` session.
 
 ## Agent Catalog
 
-Prefix: `oh-my-copilot:`. See `agents/*.md` for full prompts.
+Prefix: `omcp:`. See `agents/*.md` for full prompts.
 
 - `explore` (haiku) — fast codebase search and mapping
 - `analyst` (opus) — requirements clarity and hidden constraints
