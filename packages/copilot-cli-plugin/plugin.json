@@ -1,7 +1,7 @@
 {
   "name": "omcp",
   "description": "oh-my-copilot (omcp): orchestration plugin for GitHub Copilot CLI.",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "author": {
     "name": "Zeyu Fu"
   },

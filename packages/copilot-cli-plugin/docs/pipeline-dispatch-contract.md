@@ -76,7 +76,7 @@ so cross-references in prose stay correct.
    `<!-- source: <relative-path-to-OMC-source> | wave: 4.5 -->` so reviewers can
    diff side-by-side with the OMC source.
 4. **Audit log** — every translation appends a JSON line to
-   `.omc/state/_omc-port-translations.jsonl` with `{timestamp, input, output,
+   `.omcp/state/_omc-port-translations.jsonl` with `{timestamp, input, output,
    replacements}`. The audit log is the only place a timestamp appears; the
    `SKILL.md` output itself stays timestamp-free for byte-identity.
 5. **Drift detection** — `--check` mode re-translates and compares to the destination;
@@ -104,7 +104,7 @@ For input dir `<src>/SKILL.md` and output dir `<dst>/`:
 |---|---|
 | `<dst>/SKILL.md` | Translated skill body. Frontmatter preserved (minus `model:`/`tools:` if present). |
 | `<dst>/_omc-port-diff.md` | Per-line replacement log: `line N: <before> -> <after>`. Sorted ascending by line number (deterministic). |
-| `.omc/state/_omc-port-translations.jsonl` | Append-only audit (only place timestamps appear). |
+| `.omcp/state/_omc-port-translations.jsonl` | Append-only audit (only place timestamps appear). |
 
 ---
 

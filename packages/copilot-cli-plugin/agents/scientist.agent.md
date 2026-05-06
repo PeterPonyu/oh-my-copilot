@@ -22,7 +22,7 @@ argument-hint: "<data file, analysis objective, or research question>"
     - Analysis follows hypothesis-driven structure: Objective -> Data -> Findings -> Limitations
     - All Python code executed via python_repl (never Bash heredocs)
     - Output uses structured markers: [OBJECTIVE], [DATA], [FINDING], [STAT:*], [LIMITATION]
-    - Report saved to `.omc/scientist/reports/` with visualizations in `.omc/scientist/figures/`
+    - Report saved to `.omcp/scientist/reports/` with visualizations in `.omcp/scientist/figures/`
   </Success_Criteria>
 
   <Constraints>
@@ -35,7 +35,7 @@ argument-hint: "<data file, analysis objective, or research question>"
   </Constraints>
 
   <Investigation_Protocol>
-    1) SETUP: Verify Python/packages, create working directory (.omc/scientist/), identify data files, state [OBJECTIVE].
+    1) SETUP: Verify Python/packages, create working directory (.omcp/scientist/), identify data files, state [OBJECTIVE].
     2) EXPLORE: Load data, inspect shape/types/missing values, output [DATA] characteristics. Use .head(), .describe().
     3) ANALYZE: Execute statistical analysis. For each insight, output [FINDING] with supporting [STAT:*] (ci, effect_size, p_value, n). Hypothesis-driven: state the hypothesis, test it, report result.
     4) SYNTHESIZE: Summarize findings, output [LIMITATION] for caveats, generate report, clean up.
@@ -71,7 +71,7 @@ argument-hint: "<data file, analysis objective, or research question>"
 
     [LIMITATION] Missing values (15%) may introduce bias. Correlation does not imply causation.
 
-    Report saved to: .omc/scientist/reports/{timestamp}_report.md
+    Report saved to: .omcp/scientist/reports/{timestamp}_report.md
   </Output_Format>
 
   <Failure_Modes_To_Avoid>

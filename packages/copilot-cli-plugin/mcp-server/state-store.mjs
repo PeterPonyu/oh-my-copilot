@@ -3,7 +3,7 @@ import { existsSync } from "node:fs";
 import { join, resolve } from "node:path";
 import { randomBytes } from "node:crypto";
 
-const STATE_DIR = ".omc/state";
+const STATE_DIR = ".omcp/state";
 
 function stateDir() {
   return resolve(process.cwd(), STATE_DIR);

@@ -76,7 +76,7 @@ User: "/team 3:executor fix all TypeScript errors"
                       -> SendMessage(shutdown_request) to each teammate
                       <- SendMessage(shutdown_response, approve: true)
                       -> TeamDelete("fix-ts-errors")
-                      -> rm .omc/state/team-state.json
+                      -> rm .omcp/state/team-state.json
 ```
 
 **Storage layout (managed by Claude Code):**
@@ -155,7 +155,7 @@ When transitioning between stages, important context — decisions made, alterna
 
 **Each completing stage MUST produce a handoff document before transitioning.**
 
-The lead writes handoffs to `.omc/handoffs/<stage-name>.md`.
+The lead writes handoffs to `.omcp/handoffs/<stage-name>.md`.
 
 #### Handoff Format
 
@@ -172,7 +172,7 @@ The lead writes handoffs to `.omc/handoffs/<stage-name>.md`.
 
 1. **Lead reads previous handoff BEFORE spawning next stage's agents.** The handoff content is included in the next stage's agent spawn prompts, ensuring agents start with full context.
 2. **Handoffs accumulate.** The verify stage can read all prior handoffs (plan → prd → exec) for full decision history.
-3. **On team cancellation, handoffs survive** in `.omc/handoffs/` for session resume. They are not deleted by `TeamDelete`.
+3. **On team cancellation, handoffs survive** in `.omcp/handoffs/` for session resume. They are not deleted by `TeamDelete`.
 4. **Handoffs are lightweight.** 10-20 lines max. They capture decisions and rationale, not full specifications (those live in deliverable files like DESIGN.md).
 
 #### Example
@@ -188,8 +188,8 @@ The lead writes handoffs to `.omc/handoffs/<stage-name>.md`.
 
 ### Resume and Cancel Semantics
 
-- **Resume:** restart from the last non-terminal stage using staged state + live task status. Read `.omc/handoffs/` to recover stage transition context.
-- **Cancel:** `/oh-my-copilot:cancel` requests teammate shutdown, waits for responses (best effort), marks phase `cancelled` with `active=false`, captures cancellation metadata, then deletes team resources and clears/preserves Team state per policy. Handoff files in `.omc/handoffs/` are preserved for potential resume.
+- **Resume:** restart from the last non-terminal stage using staged state + live task status. Read `.omcp/handoffs/` to recover stage transition context.
+- **Cancel:** `/oh-my-copilot:cancel` requests teammate shutdown, waits for responses (best effort), marks phase `cancelled` with `active=false`, captures cancellation metadata, then deletes team resources and clears/preserves Team state per policy. Handoff files in `.omcp/handoffs/` are preserved for potential resume.
 - Terminal states are `complete`, `failed`, and `cancelled`.
 
 ## Workflow
@@ -433,7 +433,7 @@ When all real tasks (non-internal) are completed or failed:
      "team_name": "fix-ts-errors"
    }
    ```
-5. **Clean OMC state** -- Remove `.omc/state/team-state.json`
+5. **Clean OMC state** -- Remove `.omcp/state/team-state.json`
 6. **Report summary** -- Present results to the user
 
 ## Agent Preamble
@@ -638,7 +638,7 @@ Tmux CLI workers run in dedicated tmux panes with filesystem access. They are **
 /team 3:executor "refactor auth module with security review"
 
 Task decomposition:
-#1 [codex_worker] Security review of current auth code -> output to .omc/research/auth-security.md
+#1 [codex_worker] Security review of current auth code -> output to .omcp/research/auth-security.md
 #2 [codex_worker] Refactor auth/login.ts and auth/session.ts (uses #1 findings)
 #3 [claude_worker:designer] Redesign auth UI components (login form, session indicator)
 #4 [claude_worker] Update auth tests + fix integration issues
@@ -815,7 +815,7 @@ This prevents duplicate teams and allows graceful recovery from lead failures.
 
 | Aspect | Team (Native) | Swarm (Legacy SQLite) |
 |--------|--------------|----------------------|
-| **Storage** | JSON files in `~/.claude/teams/` and `~/.claude/tasks/` | SQLite in `.omc/state/swarm.db` |
+| **Storage** | JSON files in `~/.claude/teams/` and `~/.claude/tasks/` | SQLite in `.omcp/state/swarm.db` |
 | **Dependencies** | `better-sqlite3` not needed | Requires `better-sqlite3` npm package |
 | **Task claiming** | `TaskUpdate(owner + in_progress)` -- lead pre-assigns | SQLite IMMEDIATE transaction -- atomic |
 | **Race conditions** | Possible if two agents claim same task (mitigate by pre-assigning) | None (SQLite transactions) |
@@ -858,8 +858,8 @@ When `OMC_RUNTIME_V2=1` is set, the team runtime uses an event-driven architectu
 
 - **No done.json**: Task completion is detected via CLI API lifecycle transitions (claim-task, transition-task-status)
 - **Snapshot-based monitoring**: Each poll cycle takes a point-in-time snapshot of tasks and workers, computes deltas, and emits events
-- **Event log**: All team events are appended to `.omc/state/team/{teamName}/events.jsonl`
-- **Worker status files**: Workers write status to `.omc/state/team/{teamName}/workers/{name}/status.json`
+- **Event log**: All team events are appended to `.omcp/state/team/{teamName}/events.jsonl`
+- **Worker status files**: Workers write status to `.omcp/state/team/{teamName}/workers/{name}/status.json`
 - **Preserved**: Sentinel gate (blocks premature completion), circuit breaker (dead worker detection), failure sidecars
 
 The v2 runtime is feature-flagged and can be enabled per-session. The legacy v1 runtime remains the default.
@@ -991,7 +991,7 @@ MCP workers can operate in isolated git worktrees to prevent file conflicts betw
 
 ### How It Works
 
-1. **Worktree creation**: Before spawning a worker, call `createWorkerWorktree(teamName, workerName, repoRoot)` to create an isolated worktree at `.omc/worktrees/{team}/{worker}` with branch `omc-team/{teamName}/{workerName}`.
+1. **Worktree creation**: Before spawning a worker, call `createWorkerWorktree(teamName, workerName, repoRoot)` to create an isolated worktree at `.omcp/worktrees/{team}/{worker}` with branch `omc-team/{teamName}/{workerName}`.
 
 2. **Worker isolation**: Pass the worktree path as the `workingDirectory` in the worker's `BridgeConfig`. The worker operates exclusively in its own worktree.
 

@@ -24,7 +24,7 @@ const STAGE_ORDER = [null, 'spec', 'plan', 'artifact', null];
  * @param {string} stateDir - directory containing pipeline-state.json
  * @returns {{ stages: Array, transitions: Array }}
  */
-export function readStage(stateDir = '.omc/state') {
+export function readStage(stateDir = '.omcp/state') {
   const dest = join(stateDir, PIPELINE_FILE);
   if (!existsSync(dest)) {
     return { stages: [], transitions: [] };
@@ -58,7 +58,7 @@ export function nextStage(currentStage) {
  * Atomically record a pipeline stage transition.
  * @param {{ from: string|null, to: string, artifact: string, stateDir?: string }} opts
  */
-export function transitionRecord({ from, to, artifact, stateDir = '.omc/state' }) {
+export function transitionRecord({ from, to, artifact, stateDir = '.omcp/state' }) {
   // Ensure directory exists
   if (!existsSync(stateDir)) {
     mkdirSync(stateDir, { recursive: true });

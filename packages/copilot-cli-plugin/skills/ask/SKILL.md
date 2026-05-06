@@ -49,7 +49,7 @@ gemini --version
 `omc ask` writes artifacts to:
 
 ```text
-.omc/artifacts/ask/<provider>-<slug>-<timestamp>.md
+.omcp/artifacts/ask/<provider>-<slug>-<timestamp>.md
 ```
 
 Task: {{ARGUMENTS}}

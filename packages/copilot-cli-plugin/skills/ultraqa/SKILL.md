@@ -89,7 +89,7 @@ Output progress each cycle:
 
 ## State Tracking
 
-Track state in `.omc/ultraqa-state.json`:
+Track state in `.omcp/ultraqa-state.json`:
 ```json
 {
   "active": true,
@@ -123,7 +123,7 @@ When goal is met OR max cycles reached OR exiting early:
 
 ```bash
 # Delete ultraqa state file
-rm -f .omc/state/ultraqa-state.json
+rm -f .omcp/state/ultraqa-state.json
 ```
 
 This ensures clean state for future sessions. Stale state files with `active: false` should not be left behind.

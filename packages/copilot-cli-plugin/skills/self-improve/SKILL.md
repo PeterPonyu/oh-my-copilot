@@ -32,9 +32,9 @@ You are the **loop controller** for the self-improvement system. You manage the 
 
 Self-improve artifacts live under a resolved root returned by `scripts/resolve-paths.mjs`.
 
-- New runs default to `.omc/self-improve/topics/default/`.
-- When the user provides a topic or slug, use `.omc/self-improve/topics/{topic_slug}/`.
-- Legacy single-track state at `.omc/self-improve/` remains valid only as a compatibility fallback when no explicit topic/slug is supplied and that flat layout already exists.
+- New runs default to `.omcp/self-improve/topics/default/`.
+- When the user provides a topic or slug, use `.omcp/self-improve/topics/{topic_slug}/`.
+- Legacy single-track state at `.omcp/self-improve/` remains valid only as a compatibility fallback when no explicit topic/slug is supplied and that flat layout already exists.
 
 Treat `<self-improve-root>/` below as that resolved root:
 
@@ -60,7 +60,7 @@ Treat `<self-improve-root>/` below as that resolved root:
     └── progress.png           # Generated chart
 ```
 
-OMC mode lifecycle: `.omc/state/sessions/{sessionId}/self-improve-state.json`
+OMC mode lifecycle: `.omcp/state/sessions/{sessionId}/self-improve-state.json`
 
 ---
 

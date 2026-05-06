@@ -18,10 +18,10 @@ The state file records:
 ## File Location
 
 ```
-.omc/state/pipeline-state.json
+.omcp/state/pipeline-state.json
 ```
 
-The path is workspace-relative. `stateDir` defaults to `.omc/state` in all
+The path is workspace-relative. `stateDir` defaults to `.omcp/state` in all
 orchestrator functions. Pass an explicit `stateDir` when running tests or
 operating on a non-default workspace root.
 
@@ -100,14 +100,14 @@ mcp__omcp__pipeline_state
 ```
 
 The MCP server calls `readStage(stateDir)` and returns the parsed object.
-No arguments are required when the default `.omc/state` directory is used.
+No arguments are required when the default `.omcp/state` directory is used.
 
 ### Via orchestrator directly
 
 ```javascript
 import { readStage } from './orchestrator.mjs';
 
-const state = readStage();                    // uses default .omc/state
+const state = readStage();                    // uses default .omcp/state
 const state2 = readStage('/custom/dir');      // explicit directory
 // state = { stages: [...], transitions: [...] }
 ```
@@ -135,13 +135,13 @@ import { transitionRecord } from './orchestrator.mjs';
 transitionRecord({
   from: null,
   to: 'spec',
-  artifact: '/workspace/.omc/artifacts/spec.md',
+  artifact: '/workspace/.omcp/artifacts/spec.md',
 });
 
 transitionRecord({
   from: 'spec',
   to: 'plan',
-  artifact: '/workspace/.omc/artifacts/plan.md',
+  artifact: '/workspace/.omcp/artifacts/plan.md',
 });
 ```
 
@@ -166,7 +166,7 @@ State is stored on disk, not in memory. The file persists across:
 - Separate `node` invocations.
 - Host shell session restarts (as long as the workspace directory is preserved).
 
-Any process that can read `.omc/state/pipeline-state.json` can resume the
+Any process that can read `.omcp/state/pipeline-state.json` can resume the
 pipeline from the last recorded transition without any handshake with the
 process that wrote the state.
 
@@ -215,15 +215,15 @@ import { transitionRecord } from './orchestrator.mjs';
 transitionRecord({
   from: null,
   to: 'spec',
-  artifact: '.omc/artifacts/spec.md',
+  artifact: '.omcp/artifacts/spec.md',
 });
 ```
 
 ### Record subsequent transitions
 
 ```javascript
-transitionRecord({ from: 'spec',   to: 'plan',     artifact: '.omc/artifacts/plan.md' });
-transitionRecord({ from: 'plan',   to: 'artifact', artifact: '.omc/artifacts/output.md' });
+transitionRecord({ from: 'spec',   to: 'plan',     artifact: '.omcp/artifacts/plan.md' });
+transitionRecord({ from: 'plan',   to: 'artifact', artifact: '.omcp/artifacts/output.md' });
 ```
 
 ### Read current pipeline state
@@ -244,7 +244,7 @@ console.log(`Next stage: ${upcoming ?? '(pipeline complete)'}`);
 ### Inspect state from shell
 
 ```sh
-cat .omc/state/pipeline-state.json | node -e "
+cat .omcp/state/pipeline-state.json | node -e "
   const d = JSON.parse(require('fs').readFileSync('/dev/stdin','utf8'));
   console.log('stages:',      d.stages.map(s => s.name));
   console.log('transitions:', d.transitions.length);

@@ -16,9 +16,9 @@ When this skill produces an output file (spec / plan / artifact), it MUST emit Y
 - `produced-at: <ISO-8601 UTC timestamp>`
 - `pipeline-stage: plan`
 
-Output target: `.omc/plans/<slug>.md`. The smoke test at `scripts/smoke-copilot-cli.sh` asserts this chain end-to-end.
+Output target: `.omcp/plans/<slug>.md`. The smoke test at `scripts/smoke-copilot-cli.sh` asserts this chain end-to-end.
 
-**Pipeline transition recording**: After writing the output artifact, call the `mcp__omcp__pipeline_record_transition` tool with `from: "spec"`, `to: "plan"`, `artifact_path: "<absolute-path-to-the-artifact-just-written>"`. For ralplan, `from: "spec", to: "plan"`. This records the transition in `.omc/state/pipeline-state.json` so subsequent stages and the smoke test can verify the chain.
+**Pipeline transition recording**: After writing the output artifact, call the `mcp__omcp__pipeline_record_transition` tool with `from: "spec"`, `to: "plan"`, `artifact_path: "<absolute-path-to-the-artifact-just-written>"`. For ralplan, `from: "spec", to: "plan"`. This records the transition in `.omcp/state/pipeline-state.json` so subsequent stages and the smoke test can verify the chain.
 
 # Ralplan (Consensus Planning Alias)
 
