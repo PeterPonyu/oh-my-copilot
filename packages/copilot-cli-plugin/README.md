@@ -13,7 +13,7 @@ is a concrete run from idea to artifact.
 
 The plugin asks Socratic clarifying questions until ambiguity drops below the
 gate threshold, then writes the agreed spec to
-`.omc/specs/deep-interview-<slug>.md` with frontmatter:
+`.omcp/specs/deep-interview-<slug>.md` with frontmatter:
 
 ```yaml
 produced-by: deep-interview
@@ -23,7 +23,7 @@ pipeline-stage: spec
 
 The skill records the spec→plan transition stub via
 `mcp__omcp__pipeline_record_transition`. State is flushed to
-`.omc/state/pipeline-state.json`.
+`.omcp/state/pipeline-state.json`.
 
 **Stage 2 — Plan (ralplan)**
 
@@ -32,7 +32,7 @@ The skill records the spec→plan transition stub via
 ```
 
 Planner + Architect + Critic run a consensus loop against the spec. The
-agreed plan is written to `.omc/plans/<slug>-plan.md` (`pipeline-stage: plan`).
+agreed plan is written to `.omcp/plans/<slug>-plan.md` (`pipeline-stage: plan`).
 `mcp__omcp__pipeline_record_transition` records the plan→artifact
 transition. `mcp__omcp__pipeline_state` reads the current chain.
 
@@ -44,7 +44,7 @@ transition. `mcp__omcp__pipeline_state` reads the current chain.
 
 Autopilot executes parallel ralph + ultrawork loops until working code lands
 in the scratch directory (`pipeline-stage: artifact`). The full chain is
-visible in `.omc/state/pipeline-state.json` at any point during execution.
+visible in `.omcp/state/pipeline-state.json` at any point during execution.
 
 **Install and build**
 

@@ -6,7 +6,8 @@
 #   - filename ending in .test.mjs
 #   - dir name: test-fixtures, tests, __tests__
 #   - filename matching *-fixture-*
-#   - _omc-port-diff.md is PORT-TIME provenance; ships (useful at runtime)
+#   - _omc-port-diff.md is PORT-TIME provenance; lives in tools/omc-port/diffs/
+#   - TODO_UNRESOLVED.md marks an unresolved port; lives in tools/omc-port/unresolved/
 
 set -euo pipefail
 
@@ -63,10 +64,16 @@ classify() {
       ;;
   esac
 
-  # _omc-port-diff.md: port-time provenance, ships (useful for debugging)
+  # _omc-port-diff.md and TODO_UNRESOLVED.md are dev-only port-time artifacts.
+  # They belong in tools/omc-port/{diffs,unresolved}/, not in the installed plugin.
   if [[ "$base" == "_omc-port-diff.md" ]]; then
-    printf "SHIP | %-60s  %s\n" "$rel_path" "port provenance (optional, ships)"
-    (( ship_count++ )) || true
+    printf "DEV  | %-60s  %s\n" "$rel_path" "port-time diff (move to tools/omc-port/diffs/)"
+    (( dev_count++ )) || true
+    return
+  fi
+  if [[ "$base" == "TODO_UNRESOLVED.md" ]]; then
+    printf "DEV  | %-60s  %s\n" "$rel_path" "unresolved port marker (move to tools/omc-port/unresolved/)"
+    (( dev_count++ )) || true
     return
   fi
 

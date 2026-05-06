@@ -11,4 +11,4 @@ Run the Socratic deep-interview workflow over the user's idea.
 
 The skill at `skills/deep-interview/SKILL.md` defines the full procedure. Invoke that skill with the user's input as the initial idea.
 
-Iterate Q&A until ambiguity drops below 20%, then write a spec to `.omc/specs/deep-interview-<slug>.md` and offer execution bridge options.
+Iterate Q&A until ambiguity drops below 20%, then write a spec to `.omcp/specs/deep-interview-<slug>.md` and offer execution bridge options.

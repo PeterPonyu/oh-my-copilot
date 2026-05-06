@@ -19,7 +19,7 @@ server.setRequestHandler(ListToolsRequestSchema, async () => ({
   tools: [
     {
       name: "state_read",
-      description: "Read a JSON value from .omc/state/<key>.json",
+      description: "Read a JSON value from .omcp/state/<key>.json",
       inputSchema: {
         type: "object",
         properties: {
@@ -30,7 +30,7 @@ server.setRequestHandler(ListToolsRequestSchema, async () => ({
     },
     {
       name: "state_write",
-      description: "Atomically write a JSON value to .omc/state/<key>.json",
+      description: "Atomically write a JSON value to .omcp/state/<key>.json",
       inputSchema: {
         type: "object",
         properties: {
@@ -42,7 +42,7 @@ server.setRequestHandler(ListToolsRequestSchema, async () => ({
     },
     {
       name: "state_list",
-      description: "List all keys present in .omc/state/",
+      description: "List all keys present in .omcp/state/",
       inputSchema: {
         type: "object",
         properties: {},
@@ -51,7 +51,7 @@ server.setRequestHandler(ListToolsRequestSchema, async () => ({
     },
     {
       name: "notepad_read",
-      description: "Read .omc/notepad.md, optionally limiting to the last N lines",
+      description: "Read .omcp/notepad.md, optionally limiting to the last N lines",
       inputSchema: {
         type: "object",
         properties: {
@@ -65,7 +65,7 @@ server.setRequestHandler(ListToolsRequestSchema, async () => ({
     },
     {
       name: "notepad_write",
-      description: "Append a timestamped entry to .omc/notepad.md",
+      description: "Append a timestamped entry to .omcp/notepad.md",
       inputSchema: {
         type: "object",
         properties: {
@@ -81,7 +81,7 @@ server.setRequestHandler(ListToolsRequestSchema, async () => ({
     },
     {
       name: "plan_list",
-      description: "Enumerate all plan files in .omc/plans/*.md",
+      description: "Enumerate all plan files in .omcp/plans/*.md",
       inputSchema: {
         type: "object",
         properties: {},
@@ -90,7 +90,7 @@ server.setRequestHandler(ListToolsRequestSchema, async () => ({
     },
     {
       name: "pipeline_record_transition",
-      description: "Record a pipeline stage transition in .omc/state/pipeline-state.json",
+      description: "Record a pipeline stage transition in .omcp/state/pipeline-state.json",
       inputSchema: {
         type: "object",
         properties: {
@@ -103,7 +103,7 @@ server.setRequestHandler(ListToolsRequestSchema, async () => ({
     },
     {
       name: "pipeline_state",
-      description: "Read the current pipeline state from .omc/state/pipeline-state.json",
+      description: "Read the current pipeline state from .omcp/state/pipeline-state.json",
       inputSchema: {
         type: "object",
         properties: {},

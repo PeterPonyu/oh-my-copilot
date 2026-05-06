@@ -2,7 +2,7 @@ import { readFile, readdir } from "node:fs/promises";
 import { existsSync } from "node:fs";
 import { join, resolve, basename } from "node:path";
 
-const PLANS_DIR = ".omc/plans";
+const PLANS_DIR = ".omcp/plans";
 
 function plansDir() {
   return resolve(process.cwd(), PLANS_DIR);

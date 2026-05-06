@@ -4,6 +4,17 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.4.0] - 2026-05-06
+
+### Changed
+- **Workspace state path renamed**: `.omc/` -> `.omcp/`. The orchestrator default `stateDir` is now `.omcp/state`; all SKILL.md, agent, doc, and command references updated to write to `.omcp/specs/`, `.omcp/plans/`, `.omcp/state/`, and `.omcp/notepad.md`. Existing `.omc/` workspaces remain readable if you point the orchestrator at the old path explicitly.
+- **Payload minimization (round 2)**: 29 `_omc-port-diff.md` files moved from `packages/copilot-cli-plugin/skills/*/` to `tools/omc-port/diffs/<skill>/_omc-port-diff.md`. 2 `TODO_UNRESOLVED.md` markers moved from `skills/git-master/` and `skills/ralph/` to `tools/omc-port/unresolved/<skill>/`. The empty `skills/git-master/` directory was removed.
+- `tools/omc-port/payload-audit.sh` now flags both file kinds as DEV-ONLY so future regressions are caught.
+- `docs/parity-matrix.md`: skill count corrected from 36 -> 35 (git-master demoted to SKIPPED with v2 marker).
+
+### Migration
+- Reinstall: `copilot plugin uninstall omcp` then `copilot plugin install PeterPonyu/oh-my-copilot:packages/copilot-cli-plugin`.
+
 ## [0.3.0] - 2026-05-06
 
 ### Changed
@@ -13,7 +24,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Migration
 - Reinstall: `copilot plugin uninstall oh-my-copilot-power-pack` then `copilot plugin install PeterPonyu/oh-my-copilot:packages/copilot-cli-plugin`.
-- Pre-existing `.omc/state/pipeline-state.json` files remain compatible — the file path is unchanged and the schema is identical.
+- Pre-existing `.omcp/state/pipeline-state.json` files remain compatible — the file path is unchanged and the schema is identical.
 
 ## [0.2.0] - 2026-05-06
 
@@ -23,7 +34,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - `.mcp.json` skeleton declaring the `oh-my-copilot` MCP server entry, pointing to the forthcoming Wave 3 `mcp-server/server.mjs`.
 
 ### Notes
-- Manifest expansion to support full OMC parity port (per `.omc/plans/omc-parity-consensus-plan.md`).
+- Manifest expansion to support full OMC parity port (per `.omcp/plans/omc-parity-consensus-plan.md`).
 
 ## [0.1.0] - earlier
 

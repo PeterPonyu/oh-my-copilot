@@ -38,7 +38,7 @@ Complex tasks often fail silently: partial implementations get declared "done", 
 </Why_This_Exists>
 
 <PRD_Mode>
-By default, ralph operates in PRD mode. A scaffold `prd.json` is auto-generated when ralph starts if none exists. Active transient PRD state is session-scoped at `.omc/state/sessions/{sessionId}/prd.json` when a session ID is available; legacy project-level `prd.json` / `.omc/prd.json` files are read as startup migration inputs.
+By default, ralph operates in PRD mode. A scaffold `prd.json` is auto-generated when ralph starts if none exists. Active transient PRD state is session-scoped at `.omcp/state/sessions/{sessionId}/prd.json` when a session ID is available; legacy project-level `prd.json` / `.omcp/prd.json` files are read as startup migration inputs.
 
 **Startup gate:** Ralph always initializes and validates `prd.json` at startup. Legacy `--no-prd` text is sanitized from the prompt for backward compatibility, but it no longer bypasses PRD creation or validation.
 
@@ -57,7 +57,7 @@ By default, ralph operates in PRD mode. A scaffold `prd.json` is auto-generated 
 
 <Steps>
 1. **PRD Setup** (first iteration only):
-   a. Check the active PRD file surfaced in the Ralph continuation context. In session-scoped runs this is `.omc/state/sessions/{sessionId}/prd.json`; legacy project-level `prd.json` / `.omc/prd.json` files may be copied there at startup for backward compatibility.
+   a. Check the active PRD file surfaced in the Ralph continuation context. In session-scoped runs this is `.omcp/state/sessions/{sessionId}/prd.json`; legacy project-level `prd.json` / `.omcp/prd.json` files may be copied there at startup for backward compatibility.
    b. If no legacy PRD exists, the system has auto-generated a scaffold at the active PRD path.
    c. **CRITICAL: Refine the scaffold.** The auto-generated PRD has generic acceptance criteria ("Implementation is complete", etc.). You MUST replace these with task-specific criteria:
       - Analyze the original task and break it into right-sized user stories (each completable in one iteration)

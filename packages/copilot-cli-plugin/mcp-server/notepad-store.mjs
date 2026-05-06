@@ -2,7 +2,7 @@ import { readFile, appendFile, mkdir } from "node:fs/promises";
 import { existsSync } from "node:fs";
 import { resolve, dirname } from "node:path";
 
-const NOTEPAD_FILE = ".omc/notepad.md";
+const NOTEPAD_FILE = ".omcp/notepad.md";
 
 function notepadPath() {
   return resolve(process.cwd(), NOTEPAD_FILE);

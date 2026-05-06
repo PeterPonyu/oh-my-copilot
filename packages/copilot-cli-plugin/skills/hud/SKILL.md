@@ -163,7 +163,7 @@ When agents are running, the HUD shows detailed information on separate lines:
 
 HUD config is stored in `~/.claude/settings.json` under the `omcHud` key (or your custom config directory if `CLAUDE_CONFIG_DIR` is set).
 
-Legacy config location (deprecated): `~/.claude/.omc/hud-config.json`
+Legacy config location (deprecated): `~/.claude/.omcp/hud-config.json`
 
 ## Manual Configuration
 

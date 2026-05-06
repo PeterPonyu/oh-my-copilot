@@ -9,7 +9,7 @@ Tracks per-feature status between `oh-my-claudecode` (OMC) and the
 
 | Dimension | OMC total | oh-my-copilot | Coverage |
 | --- | --- | --- | --- |
-| Skills | 39 | 36 | 92% |
+| Skills | 39 | 35 | 90% |
 | Agents | 19 | 16 | 84% |
 | Slash commands | 5 | 5 | 100% |
 | Hook events | 4 | 4 | 100% |
@@ -37,7 +37,7 @@ scope for the CLI plugin and are not tracked here.
 | deepinit | SKIPPED | — | OMC-specific worktree init; Copilot CLI uses AGENTS.md natively |
 | docs-ship | PORTED | `skills/docs-ship/` | Full port |
 | external-context | PORTED | `skills/external-context/` | Full port |
-| git-master | PORTED | `skills/git-master/` | Full port |
+| git-master | SKIPPED | — | No OMC source skill exists; placeholder dir removed (port marker tracked at `tools/omc-port/unresolved/git-master/`) |
 | hud | PORTED | `skills/hud/` | Full port |
 | init | SKIPPED | — | Covered by Copilot CLI native AGENTS.md bootstrap |
 | iterate-loop | PORTED | `skills/iterate-loop/` | Full port |

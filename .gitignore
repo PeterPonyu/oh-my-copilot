@@ -1,5 +1,6 @@
 .omx/
 .omc/
+.omcp/
 .cursor/hooks/state/
 **/.copilot-hooks/*.log
 **/.copilot-hooks/*.jsonl

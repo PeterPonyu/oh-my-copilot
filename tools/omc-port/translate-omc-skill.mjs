@@ -63,7 +63,7 @@ const V1_AGENTS = new Set([
   "research",
 ]);
 
-const AUDIT_LOG_PATH_FROM_REPO_ROOT = ".omc/state/_omc-port-translations.jsonl";
+const AUDIT_LOG_PATH_FROM_REPO_ROOT = ".omcp/state/_omc-port-translations.jsonl";
 
 // ---------------------------------------------------------------------------
 // Argument parsing

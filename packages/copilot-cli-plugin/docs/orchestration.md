@@ -13,7 +13,7 @@ Related: [state-management.md](state-management.md)
 The plugin coordinates a **spec → plan → artifact** pipeline via an
 orchestrator module backed by an 8-tool MCP server. Each stage is driven by
 a dedicated skill, emits a file with provenance frontmatter, and records its
-transition in `.omc/state/pipeline-state.json` so the chain is resumable and
+transition in `.omcp/state/pipeline-state.json` so the chain is resumable and
 inspectable at any point.
 
 The three skills (`deep-interview`, `ralplan`, `autopilot`) are stateless
@@ -29,7 +29,7 @@ it does not call external services.
 
 **Consumes:** a free-text idea or problem statement from the user.
 
-**Produces:** `.omc/specs/deep-interview-<slug>.md` — a structured spec with
+**Produces:** `.omcp/specs/deep-interview-<slug>.md` — a structured spec with
 full provenance frontmatter.
 
 **How it works:** The skill runs a Socratic question loop, gating on a
@@ -42,9 +42,9 @@ first 5 words of the idea.
 
 ### Stage 2 — ralplan (plan)
 
-**Consumes:** the spec file at `.omc/specs/deep-interview-<slug>.md`.
+**Consumes:** the spec file at `.omcp/specs/deep-interview-<slug>.md`.
 
-**Produces:** `.omc/plans/<slug>-plan.md` — a consensus plan with full
+**Produces:** `.omcp/plans/<slug>-plan.md` — a consensus plan with full
 provenance frontmatter.
 
 **How it works:** Planner + Architect + Critic agents run a consensus loop
@@ -55,10 +55,10 @@ iteration count is reached. The highest-scoring plan is written to disk.
 
 ### Stage 3 — autopilot (artifact)
 
-**Consumes:** the plan file at `.omc/plans/<slug>-plan.md`.
+**Consumes:** the plan file at `.omcp/plans/<slug>-plan.md`.
 
 **Produces:** working code in the scratch directory, with a manifest at
-`.omc/artifacts/<slug>-manifest.md` (`pipeline-stage: artifact`).
+`.omcp/artifacts/<slug>-manifest.md` (`pipeline-stage: artifact`).
 
 **How it works:** Autopilot runs parallel ralph + ultrawork loops, delegating
 tasks from the plan to executor agents. Each loop reports completion status
@@ -89,16 +89,16 @@ wrong file.
 
 ## Pipeline state file
 
-`.omc/state/pipeline-state.json` holds the full chain for a run:
+`.omcp/state/pipeline-state.json` holds the full chain for a run:
 
 ```json
 {
   "slug": "<slug>",
   "started-at": "<ISO-8601>",
   "stages": {
-    "spec":     { "status": "done",    "path": ".omc/specs/...",    "completed-at": "..." },
-    "plan":     { "status": "done",    "path": ".omc/plans/...",    "completed-at": "..." },
-    "artifact": { "status": "running", "path": ".omc/artifacts/...", "completed-at": null  }
+    "spec":     { "status": "done",    "path": ".omcp/specs/...",    "completed-at": "..." },
+    "plan":     { "status": "done",    "path": ".omcp/plans/...",    "completed-at": "..." },
+    "artifact": { "status": "running", "path": ".omcp/artifacts/...", "completed-at": null  }
   },
   "transitions": [
     { "from": "spec",  "to": "plan",     "recorded-at": "..." },
@@ -164,21 +164,21 @@ bash packages/copilot-cli-plugin/mcp-server/build.sh
 
 # 2. Start a Copilot CLI session and run the pipeline
 /deep-interview "build me a CLI that watches markdown files and hot-reloads a preview"
-# → plugin asks clarifying questions, writes .omc/specs/deep-interview-build-me-a-cli.md
-# → records spec→plan transition in .omc/state/pipeline-state.json
+# → plugin asks clarifying questions, writes .omcp/specs/deep-interview-build-me-a-cli.md
+# → records spec→plan transition in .omcp/state/pipeline-state.json
 
 /ralplan
 # → Planner + Architect + Critic consensus loop
-# → writes .omc/plans/build-me-a-cli-plan.md
+# → writes .omcp/plans/build-me-a-cli-plan.md
 # → records plan→artifact transition
 
 /autopilot
 # → parallel ralph + ultrawork execution
 # → produces working code in scratch dir
-# → writes .omc/artifacts/build-me-a-cli-manifest.md
+# → writes .omcp/artifacts/build-me-a-cli-manifest.md
 ```
 
-After all three stages complete, `.omc/state/pipeline-state.json` shows all
+After all three stages complete, `.omcp/state/pipeline-state.json` shows all
 three stages as `"status": "done"`.
 
 ---
@@ -192,7 +192,7 @@ At any point during a pipeline run you can inspect the current state:
 mcp__omcp__pipeline_state "build-me-a-cli"
 
 # Or read the file directly
-cat .omc/state/pipeline-state.json
+cat .omcp/state/pipeline-state.json
 ```
 
 The `stages` object shows which stages are `done`, `running`, or `pending`.
