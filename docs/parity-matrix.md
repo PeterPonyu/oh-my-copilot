@@ -43,7 +43,7 @@ scope for the CLI plugin and are not tracked here.
 | iterate-loop | PORTED | `skills/iterate-loop/` | Full port |
 | learner | PORTED | `skills/learner/` | Full port |
 | mcp-setup | PORTED | `skills/mcp-setup/` | Full port |
-| oh-my-copilot-reference | PORTED | `skills/oh-my-copilot-reference/` | Copilot-native equivalent of omc-reference |
+| reference | PORTED | `skills/reference/` | Copilot-native equivalent of reference |
 | parity-guard | PORTED | `skills/parity-guard/` | Full port |
 | plan | PORTED | `skills/plan/` | Full port |
 | project-session-manager | PORTED | `skills/project-session-manager/` | Full port |
@@ -82,7 +82,7 @@ scope for the CLI plugin and are not tracked here.
 | explorer | DEFERRED | — | Merged into research agent for v1 |
 | omc-doctor | SKIPPED | — | OMC-internal diagnostics; no CLI equivalent |
 | omc-setup | SKIPPED | — | OMC-internal installer; Copilot CLI uses native plugin install |
-| omc-teams | SKIPPED | — | tmux worker runtime; out of scope |
+| cli-teams | SKIPPED | — | tmux worker runtime; out of scope |
 | planner | PORTED | `agents/planner.agent.md` | Full port |
 | qa-tester | PORTED | `agents/qa-tester.agent.md` | Full port |
 | research | PORTED | `agents/research.agent.md` | Full port |
@@ -94,7 +94,7 @@ scope for the CLI plugin and are not tracked here.
 | verifier | PORTED | `agents/verifier.agent.md` | Full port |
 | writer | PORTED | `agents/writer.agent.md` | Full port |
 
-**Skipped (3):** `designer`, `omc-doctor`, `omc-setup`, `omc-teams` — host-internal or runtime-dependent.
+**Skipped (3):** `designer`, `omc-doctor`, `omc-setup`, `cli-teams` — host-internal or runtime-dependent.
 **Deferred (1):** `explorer` — merged into `research` for v1.
 
 Note: OMC agent count is 19 per consensus plan denominator; oh-my-copilot has 16 ported.
@@ -170,7 +170,7 @@ The following items are explicitly deferred to v2:
   equivalent introspection hooks.
 - **omc-setup port** — OMC's guided installer; Copilot CLI uses native plugin
   install commands.
-- **omc-teams port** — OMC's tmux worker runtime; structurally out of scope
+- **cli-teams port** — OMC's tmux worker runtime; structurally out of scope
   for Copilot CLI plugin model.
 - **ccg (Claude-Codex-Gemini) port** — requires Codex CLI and Gemini CLI
   runtimes to be available alongside Copilot CLI.
