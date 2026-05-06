@@ -234,3 +234,88 @@ fi
 
 log "Copilot smoke proves route availability only; cross-host comparability is validated by separate benchmark harvest gates"
 log "Copilot CLI smoke validation complete"
+
+# ---------------------------------------------------------------------------
+# Wave 7 — E2E pipeline provenance smoke
+# Sources e2e-pipeline-fixture.sh then either:
+#   (a) runs a live deep-interview → ralplan → autopilot chain via Copilot CLI, or
+#   (b) creates a synthetic chain and asserts against it (CI-friendly path).
+# ---------------------------------------------------------------------------
+
+E2E_FIXTURE_SCRIPT="$ROOT/scripts/e2e-pipeline-fixture.sh"
+[[ -f "$E2E_FIXTURE_SCRIPT" ]] || fail "e2e-pipeline-fixture.sh not found at $E2E_FIXTURE_SCRIPT"
+# shellcheck source=scripts/e2e-pipeline-fixture.sh
+source "$E2E_FIXTURE_SCRIPT"
+
+WORK=$(mktemp -d -t omc-smoke-XXXXXX)
+trap 'rm -rf "$WORK"' EXIT
+
+if command -v copilot >/dev/null 2>&1 && [[ "$plugin_installed" == "yes" ]] && [[ "$RUN_AGENT_SMOKE" == "1" ]]; then
+  # --- Live path: Copilot CLI present + plugin installed + agent smoke enabled ---
+  log "Wave 7: running live deep-interview → ralplan → autopilot pipeline"
+
+  prompt_file=$(e2e_pipeline_setup "$WORK")
+  log "Wave 7: vague prompt at $prompt_file"
+
+  spec_out_dir="$WORK/omc/specs"
+  plan_out_dir="$WORK/omc/plans"
+  artifact_dir="$WORK/scratch"
+  mkdir -p "$spec_out_dir" "$plan_out_dir" "$artifact_dir"
+
+  # Step 1: deep-interview → spec
+  timeout "$TIMEOUT_SECONDS" copilot \
+    --agent "oh-my-copilot-power-pack:deep-interview" \
+    --model "$SMOKE_MODEL" \
+    --allow-all \
+    --no-color \
+    -s \
+    -p "$(cat "$prompt_file")" 2>&1 | tee "$WORK/deep-interview.log" || fail "Wave 7: deep-interview step failed"
+
+  # Step 2: ralplan → plan
+  timeout "$TIMEOUT_SECONDS" copilot \
+    --agent "oh-my-copilot-power-pack:ralplan" \
+    --model "$SMOKE_MODEL" \
+    --allow-all \
+    --no-color \
+    -s \
+    -p "refine the spec produced by deep-interview" 2>&1 | tee "$WORK/ralplan.log" || fail "Wave 7: ralplan step failed"
+
+  # Step 3: autopilot → artifact
+  timeout "$TIMEOUT_SECONDS" copilot \
+    --agent "oh-my-copilot-power-pack:autopilot" \
+    --model "$SMOKE_MODEL" \
+    --allow-all \
+    --no-color \
+    -s \
+    -p "implement the plan produced by ralplan" 2>&1 | tee "$WORK/autopilot.log" || fail "Wave 7: autopilot step failed"
+
+  # Locate outputs (prefer WORK-relative then repo-relative)
+  spec_file=$(ls -1 "$spec_out_dir"/*.md .omc/specs/*.md 2>/dev/null | head -1)
+  plan_file=$(ls -1 "$plan_out_dir"/*.md .omc/plans/*.md 2>/dev/null | head -1)
+  artifact=$(find "$artifact_dir" scratch/ -type f \( -name '*.ts' -o -name '*.py' -o -name '*.js' \) 2>/dev/null | head -1)
+
+  e2e_pipeline_assert_chain "$spec_file" "$plan_file" "$artifact" \
+    || { rm -rf "$WORK"; fail "Wave 7: provenance assertion failed"; }
+
+else
+  # --- CI / no-Copilot path ---
+  if ! command -v copilot >/dev/null 2>&1; then
+    warn "Wave 7: copilot CLI not installed — skipping live pipeline run; verifying assertions against synthetic fixture"
+  elif [[ "$plugin_installed" != "yes" ]]; then
+    warn "Wave 7: plugin not installed — skipping live pipeline run; verifying assertions against synthetic fixture"
+  else
+    warn "Wave 7: RUN_COPILOT_AGENT_SMOKE not set — skipping live pipeline run; verifying assertions against synthetic fixture"
+  fi
+
+  # Build synthetic chain that satisfies all assertions
+  e2e_pipeline_synthetic_chain "$WORK"
+
+  spec_file="$WORK/spec.md"
+  plan_file="$WORK/plan.md"
+  artifact="$WORK/artifact.ts"
+
+  e2e_pipeline_assert_chain "$spec_file" "$plan_file" "$artifact" \
+    || { rm -rf "$WORK"; fail "Wave 7: synthetic provenance assertion failed"; }
+fi
+
+log "Wave 7: E2E provenance smoke complete"

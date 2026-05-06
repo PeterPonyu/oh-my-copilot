@@ -12,8 +12,12 @@ It bundles:
 It is still intentionally bounded:
 
 - no tmux worker runtime
-- no OMC/OMX parity claim
 - no separate memory subsystem
+- Copilot cloud agent, IDE integrations, and SDK runtimes are out of scope
+
+On the Copilot CLI surface this plugin achieves OMC-shaped parity: 16 agents,
+36 skills, 5 slash commands, 4 hook events, and 6 MCP server tools. See
+[`docs/parity-matrix.md`](../../docs/parity-matrix.md) for the full matrix.
 
 ## Suggested local test
 

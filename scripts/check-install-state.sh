@@ -4,6 +4,31 @@ set -euo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 CONFIG_PATH="${COPILOT_CONFIG_PATH:-$HOME/.copilot/config.json}"
 
+# Uniqueness signature (Wave 9 coverage matrix):
+#   Checks that copilot CLI is in PATH, plugin.json name/version are correct,
+#   installedPlugins entry exists at matching version, cache_path contains
+#   agents/skills/hooks.json surfaces, source.path resolves to the canonical
+#   plugin root (not a .omx/team/ or /worktrees/ path), and emits the
+#   INSTALL_STATE: ok sentinel that validate-benchmark-evidence.sh depends on.
+#
+# Overlap with smoke-copilot-cli.sh:
+#   smoke-copilot-cli.sh also parses plugin.json name/version/keys inline via
+#   Python. The cache-surface (agents/, skills/, hooks.json) and version-match
+#   assertions here are NOT present in smoke-copilot-cli.sh.
+#
+# Overlap with validate-copilot-state-contract.sh:
+#   validate-copilot-state-contract.sh calls this script as a sub-process and
+#   adds: (a) cache_path is under ~/.copilot/installed-plugins, (b) source.path
+#   is exactly the canonical plugin root, (c) .copilot-hooks/config.json
+#   workspace_root matches the repo root. Those three assertions are NOT
+#   duplicated here — they are additive in the state-contract script.
+#
+# Merge candidate (after matrix sign-off):
+#   Absorb validate-copilot-state-contract.sh's three additive assertions into
+#   this script (e.g. as --check-state-contract flag), then delete
+#   validate-copilot-state-contract.sh. The INSTALL_STATE: ok sentinel must be
+#   preserved in the merged script.
+
 usage() {
   cat <<'USAGE'
 Usage: scripts/check-install-state.sh [--root PATH] [--config PATH]

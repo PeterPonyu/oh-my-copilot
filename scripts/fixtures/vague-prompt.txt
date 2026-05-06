@@ -1,0 +1,5 @@
+build me a CLI tool that watches a markdown file and re-renders it to HTML on save,
+with a configurable output path.
+
+The tool should accept --input and --output flags, debounce rapid saves by 300 ms,
+and print a timestamped line to stdout each time a render completes.
