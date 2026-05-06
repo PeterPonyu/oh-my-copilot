@@ -5,7 +5,7 @@ agent: planner
 argument-hint: "[--deliberate] <goal>"
 ---
 
-# /ralplan
+# /omcp:ralplan
 
 Run the consensus planning workflow over the user's goal.
 

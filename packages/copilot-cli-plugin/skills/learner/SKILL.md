@@ -8,7 +8,7 @@ level: 7
 <!-- source: references/oh-my-claudecode/skills/learner/SKILL.md | wave: 4.5 -->
 # Learner Skill
 
-> Deprecated compatibility alias: use `/oh-my-copilot:skillify` for new skill extraction workflows. This file remains for internal implementation/history and compatibility.
+> Deprecated compatibility alias: use `/omcp:skillify` for new skill extraction workflows. This file remains for internal implementation/history and compatibility.
 
 This is a Level 7 (self-improving) skill. It has two distinct sections:
 - **Expertise**: Domain knowledge about what makes a good skill. Updated automatically as patterns are discovered.
@@ -166,5 +166,5 @@ If code helps, show it - but as illustration of the principle, not copy-paste ma
 
 ## Related Commands
 
-- /oh-my-copilot:note - Save quick notes that survive compaction (less formal than skills)
-- /oh-my-copilot:ralph - Start a development loop with learning capture
+- /omcp:note - Save quick notes that survive compaction (less formal than skills)
+- /omcp:ralph - Start a development loop with learning capture

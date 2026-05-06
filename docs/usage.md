@@ -42,6 +42,17 @@ The root route and plugin route may share intent, but they are different proof
 surfaces. Root routes prove current-directory registration; namespaced routes
 prove reusable plugin installation.
 
+Installed plugin slash commands are namespaced too. Use the command itself as a
+standalone slash invocation, not as trailing prose inside a longer sentence:
+
+| Plugin slash command | Purpose |
+| --- | --- |
+| `/omcp:deep-interview` | Write a spec from a vague idea. |
+| `/omcp:ralplan` | Run the consensus planning loop. |
+| `/omcp:autopilot` | Execute the plan/artifact pipeline. |
+| `/omcp:ralph` | Run the sequential execution loop. |
+| `/omcp:team` | Run the coordinated parallel-execution workflow. |
+
 ## Suggested day-one usage path
 
 If you want the least confusing path, do this in order:

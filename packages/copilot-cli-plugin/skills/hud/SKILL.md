@@ -19,16 +19,16 @@ Note: All `~/.claude/...` paths in this guide respect `CLAUDE_CONFIG_DIR` when t
 
 | Command | Description |
 |---------|-------------|
-| `/oh-my-copilot:hud` | Show current HUD status (auto-setup if needed) |
-| `/oh-my-copilot:hud setup` | Install/repair HUD statusline |
-| `/oh-my-copilot:hud minimal` | Switch to minimal display |
-| `/oh-my-copilot:hud focused` | Switch to focused display (default) |
-| `/oh-my-copilot:hud full` | Switch to full display |
-| `/oh-my-copilot:hud status` | Show detailed HUD status |
+| `/omcp:hud` | Show current HUD status (auto-setup if needed) |
+| `/omcp:hud setup` | Install/repair HUD statusline |
+| `/omcp:hud minimal` | Switch to minimal display |
+| `/omcp:hud focused` | Switch to focused display (default) |
+| `/omcp:hud full` | Switch to full display |
+| `/omcp:hud status` | Show detailed HUD status |
 
 ## Auto-Setup
 
-When you run `/oh-my-copilot:hud` or `/oh-my-copilot:hud setup`, the system will automatically:
+When you run `/omcp:hud` or `/omcp:hud setup`, the system will automatically:
 1. Check if `~/.claude/hud/omc-hud.mjs` exists
 2. Check if `statusLine` is configured in `~/.claude/settings.json`
 3. If missing, create the HUD wrapper script and configure settings
@@ -235,11 +235,11 @@ When `safeMode` is `true` (default), the HUD strips ANSI codes and uses ASCII-on
 ## Troubleshooting
 
 If the HUD is not showing:
-1. Run `/oh-my-copilot:hud setup` to auto-install and configure
+1. Run `/omcp:hud setup` to auto-install and configure
 2. Restart Claude Code after setup completes
-3. If still not working, run `/oh-my-copilot:omc-doctor` for full diagnostics
+3. If still not working, run `/omcp:omc-doctor` for full diagnostics
 
-**Legacy string format migration:** Older OMC versions wrote `statusLine` as a plain string (e.g., `"~/.claude/hud/omc-hud.mjs"`). Modern Claude Code (v2.1+) requires an object format. Running the installer or `/oh-my-copilot:hud setup` will auto-migrate legacy strings to the correct object format:
+**Legacy string format migration:** Older OMC versions wrote `statusLine` as a plain string (e.g., `"~/.claude/hud/omc-hud.mjs"`). Modern Claude Code (v2.1+) requires an object format. Running the installer or `/omcp:hud setup` will auto-migrate legacy strings to the correct object format:
 ```json
 {
   "statusLine": {

@@ -105,7 +105,7 @@ By default, ralph operates in PRD mode. A scaffold `prd.json` is auto-generated 
      4. The list of files changed during the ralph session for context
    - Ralph floor: always at least STANDARD, even for small changes
    - The selected reviewer verifies against the SPECIFIC acceptance criteria from prd.json, not vague "is it done?"
-   - **On APPROVAL: immediately proceed to Step 7.5 in the same turn. Do NOT pause to report the verdict to the user — reporting happens only at Step 8 (`/oh-my-copilot:cancel`) or on rejection (Step 9). Treating an approved verdict as a reporting checkpoint is a polite-stop anti-pattern.**
+   - **On APPROVAL: immediately proceed to Step 7.5 in the same turn. Do NOT pause to report the verdict to the user — reporting happens only at Step 8 (`/omcp:cancel`) or on rejection (Step 9). Treating an approved verdict as a reporting checkpoint is a polite-stop anti-pattern.**
 
 7.5 **Mandatory Deslop Pass** (runs unconditionally after Step 7 approval, unless `{{PROMPT}}` contains `--no-deslop`):
    - **Invoke the `ai-slop-cleaner` skill via the Skill tool: `Skill("ai-slop-cleaner")`.** Run in standard mode (not `--review`) on the files changed during the current Ralph session only.
@@ -119,7 +119,7 @@ By default, ralph operates in PRD mode. A scaffold `prd.json` is auto-generated 
    - If regression fails, roll back the cleaner changes or fix the regression, then rerun the verification loop until it passes.
    - Only proceed to completion after the post-deslop regression run passes (or `--no-deslop` was explicitly specified).
 
-8. **On approval**: After Step 7.6 passes (with Step 7.5 completed, or skipped via `--no-deslop`), run `/oh-my-copilot:cancel` to cleanly exit and clean up all state files
+8. **On approval**: After Step 7.6 passes (with Step 7.5 completed, or skipped via `--no-deslop`), run `/omcp:cancel` to cleanly exit and clean up all state files
 
 9. **On rejection**: Fix the issues raised, re-verify with the same reviewer, then loop back to check if the story needs to be marked incomplete
 </Steps>
@@ -204,7 +204,7 @@ Why bad: Did not refine scaffold criteria into task-specific ones. This is PRD t
 
 <Escalation_And_Stop_Conditions>
 - Stop and report when a fundamental blocker requires user input (missing credentials, unclear requirements, external service down)
-- Stop when the user says "stop", "cancel", or "abort" -- run `/oh-my-copilot:cancel`
+- Stop when the user says "stop", "cancel", or "abort" -- run `/omcp:cancel`
 - Continue working when the hook system sends "The boulder never stops" -- this means the iteration continues
 - If the selected reviewer rejects verification, fix the issues and re-verify (do not stop)
 - If the same issue recurs across 3+ iterations, report it as a potential fundamental problem
@@ -223,7 +223,7 @@ Why bad: Did not refine scaffold criteria into task-specific ones. This is PRD t
 - [ ] Selected reviewer verification passed against specific acceptance criteria
 - [ ] ai-slop-cleaner pass completed on changed files (or `--no-deslop` specified)
 - [ ] Post-deslop regression tests pass
-- [ ] `/oh-my-copilot:cancel` run for clean state cleanup
+- [ ] `/omcp:cancel` run for clean state cleanup
 </Final_Checklist>
 
 <Advanced>

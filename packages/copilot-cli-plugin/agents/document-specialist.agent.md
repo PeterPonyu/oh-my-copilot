@@ -54,7 +54,7 @@ Implementing against outdated or incorrect API documentation causes bugs that ar
     ```
 
     ### Additional Sources
-    - [Title](URL) - [brief description]
+    - [Title](https://example.com/...) - [brief description]
     - [Curated doc ID/tool result] - [brief description when no canonical URL is available]
 
     ### Version Notes

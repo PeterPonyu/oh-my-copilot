@@ -5,7 +5,7 @@ agent: executor
 argument-hint: <n> <task>
 ---
 
-# /team
+# /omcp:team
 
 Run N coordinated agents working in parallel on the user's shared task.
 
