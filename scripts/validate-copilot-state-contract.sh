@@ -51,12 +51,20 @@ fi
 
 installed_plugin_present="$(python3 - "$CONFIG_PATH" <<'PY'
 from __future__ import annotations
+
 import json
 import pathlib
+import re
 import sys
 
 config_path = pathlib.Path(sys.argv[1]).expanduser().resolve()
-cfg = json.loads(config_path.read_text(encoding="utf-8"))
+json_text = re.sub(r"(?m)^\s*//.*$", "", config_path.read_text(encoding="utf-8"))
+try:
+    cfg = json.loads(json_text)
+except json.JSONDecodeError as exc:
+    print(f"FAIL: Copilot config at {config_path} is not valid JSON/JSONC ({exc})", file=sys.stderr)
+    sys.exit(2)
+
 entry = next(
     (item for item in cfg.get("installedPlugins", []) if item.get("name") == "oh-my-copilot-power-pack"),
     None,
@@ -78,6 +86,7 @@ from __future__ import annotations
 
 import json
 import pathlib
+import re
 import sys
 
 root = pathlib.Path(sys.argv[1]).resolve()
@@ -94,7 +103,15 @@ def ok(message: str) -> None:
     print(f"ok: {message}")
 
 
-cfg = json.loads(config_path.read_text(encoding="utf-8"))
+def parse_json(path: pathlib.Path, label: str) -> dict:
+    json_text = re.sub(r"(?m)^\s*//.*$", "", path.read_text(encoding="utf-8"))
+    try:
+        return json.loads(json_text)
+    except json.JSONDecodeError as exc:
+        fail(f"{label} at {path} is not valid JSON/JSONC ({exc})")
+
+
+cfg = parse_json(config_path, "Copilot config")
 entry = next(
     (item for item in cfg.get("installedPlugins", []) if item.get("name") == "oh-my-copilot-power-pack"),
     None,
@@ -115,7 +132,7 @@ if plugin_root != source_path:
 ok(f"plugin source path is canonical root plugin path: {source_path}")
 
 if hook_cfg.exists():
-    hook_data = json.loads(hook_cfg.read_text(encoding="utf-8"))
+    hook_data = parse_json(hook_cfg, "hook workspace config")
     workspace_root = pathlib.Path(hook_data.get("workspace_root", "")).resolve()
     if workspace_root != root:
         fail(f"hook workspace_root drifted from repo root: {workspace_root} != {root}")

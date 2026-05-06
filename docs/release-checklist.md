@@ -115,6 +115,7 @@ Release readiness evidence:
 - Release readiness validation: PASS/FAIL — ./scripts/validate-release-readiness.sh
 - Copilot CLI smoke: PASS/FAIL/SKIPPED — ./scripts/smoke-copilot-cli.sh
 - Agent prompt smoke: PASS/FAIL/SKIPPED — RUN_COPILOT_AGENT_SMOKE=1 ./scripts/smoke-copilot-cli.sh
+- Plugin session evidence attach point (optional redacted logs): benchmark/results/plugin-session-evidence/
 - Version checked: packages/copilot-cli-plugin/plugin.json <version>
 - Known gaps:
 ```

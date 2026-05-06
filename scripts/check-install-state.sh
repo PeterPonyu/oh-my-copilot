@@ -61,6 +61,7 @@ from __future__ import annotations
 
 import json
 import pathlib
+import re
 import sys
 
 root = pathlib.Path(sys.argv[1]).resolve()
@@ -74,6 +75,15 @@ def fail(message: str) -> None:
 
 def ok(message: str) -> None:
     print(f"ok: {message}")
+
+
+def parse_json_file(path: pathlib.Path, label: str) -> dict:
+    text = path.read_text(encoding="utf-8")
+    json_text = re.sub(r"(?m)^\s*//.*$", "", text)
+    try:
+        return json.loads(json_text)
+    except json.JSONDecodeError as exc:
+        fail(f"{label} is not valid JSON/JSONC: {exc}")
 
 
 if not plugin_json.is_file():
@@ -113,10 +123,7 @@ ok(f"package manifest is valid for {plugin_name} {manifest['version']}")
 
 if not config_path.is_file():
     fail(f"Copilot config missing: {config_path}")
-try:
-    config = json.loads(config_path.read_text(encoding="utf-8"))
-except json.JSONDecodeError as exc:
-    fail(f"Copilot config is not valid JSON: {exc}")
+config = parse_json_file(config_path, "Copilot config")
 
 installed = config.get("installedPlugins")
 if not isinstance(installed, list):
