@@ -21,3 +21,7 @@ jobs:
         run: bash scripts/validate-root-copilot-surfaces.sh
       - name: Validate release readiness
         run: bash scripts/validate-release-readiness.sh
+      - name: Run mcp-server tests
+        run: |
+          cd packages/copilot-cli-plugin/mcp-server
+          npm test
