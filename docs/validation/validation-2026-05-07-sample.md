@@ -1,10 +1,10 @@
 # omcp Validation Report
 
-**Generated:** 2026-05-07T03:08:30Z
-**Plugin location:** `/home/zeyufu/.copilot/installed-plugins/_direct/PeterPonyu--oh-my-copilot--packages-copilot-cli-plugin` (installed-symlink)
+**Generated:** 2026-05-07T03:21:42Z
+**Plugin location:** `$HOME/.copilot/installed-plugins/_direct/PeterPonyu--oh-my-copilot--packages-copilot-cli-plugin` (installed-symlink)
 **Plugin version:** 0.0.7
-**Validation run host:** `zeyufu-Vector-17-HX-A13VHG` (Linux x86_64)
-**Working dir for tool side-effects:** `/tmp/omcp-validation-dJgW7W`
+**Validation run host:** `<host>` (Linux x86_64)
+**Working dir for tool side-effects:** `<tmpdir>`
 
 This report exercises every omcp component end-to-end: each check shows the
 literal command, the literal stdout (or content snippet), and a PASS/FAIL
@@ -20,7 +20,7 @@ Wave-F: plugin.json version is the current declared version (0.0.7).
 **Command:**
 
 ```
-grep '"version"' /home/zeyufu/.copilot/installed-plugins/_direct/PeterPonyu--oh-my-copilot--packages-copilot-cli-plugin/plugin.json | sed -E 's/.*"version": *"([^"]+)".*/\1/'
+grep '"version"' $HOME/.copilot/installed-plugins/_direct/PeterPonyu--oh-my-copilot--packages-copilot-cli-plugin/plugin.json | sed -E 's/.*"version": *"([^"]+)".*/\1/'
 
 ```
 
@@ -42,7 +42,7 @@ Wave B-1..B-6: MCP server registers 35 tools.
 **Command:**
 
 ```
-echo '{"jsonrpc":"2.0","id":1,"method":"tools/list"}' | node /home/zeyufu/.copilot/installed-plugins/_direct/PeterPonyu--oh-my-copilot--packages-copilot-cli-plugin/mcp-server/server.mjs 2>&1 | head -1 | node -e 'let d=""; process.stdin.on("data",c=>d+=c); process.stdin.on("end",()=>{const j=JSON.parse(d.trim()); console.log(j.result.tools.length)})'
+echo '{"jsonrpc":"2.0","id":1,"method":"tools/list"}' | node $HOME/.copilot/installed-plugins/_direct/PeterPonyu--oh-my-copilot--packages-copilot-cli-plugin/mcp-server/server.mjs 2>&1 | head -1 | node -e 'let d=""; process.stdin.on("data",c=>d+=c); process.stdin.on("end",()=>{const j=JSON.parse(d.trim()); console.log(j.result.tools.length)})'
 
 ```
 
@@ -71,7 +71,7 @@ Wave B-1: state_write({key, value}) form writes to .omcp/state/<key>.json.
 **Output:**
 
 ```
-{"result":{"content":[{"type":"text","text":"{\n  \"ok\": true,\n  \"path\": \"/tmp/omcp-validation-dJgW7W/.omcp/state/validation-key.json\"\n}"}]},"jsonrpc":"2.0","id":1}
+{"result":{"content":[{"type":"text","text":"{\n  \"ok\": true,\n  \"path\": \"<tmpdir>/.omcp/state/validation-key.json\"\n}"}]},"jsonrpc":"2.0","id":1}
 
 ```
 
@@ -115,7 +115,7 @@ Wave D-1: state_write({mode, ...rest}) writes to <mode>-state.json with mode fie
 **Output:**
 
 ```
-{"result":{"content":[{"type":"text","text":"{\n  \"ok\": true,\n  \"path\": \"/tmp/omcp-validation-dJgW7W/.omcp/state/validation-state.json\"\n}"}]},"jsonrpc":"2.0","id":1}
+{"result":{"content":[{"type":"text","text":"{\n  \"ok\": true,\n  \"path\": \"<tmpdir>/.omcp/state/validation-state.json\"\n}"}]},"jsonrpc":"2.0","id":1}
 
 ```
 
@@ -247,7 +247,7 @@ Wave B-6: shared_memory_write returns the channel name.
 **Output:**
 
 ```
-{"result":{"content":[{"type":"text","text":"{\n  \"ok\": true,\n  \"channel\": \"validation-channel\",\n  \"ts\": \"2026-05-07T03:08:31.582Z\"\n}"}]},"jsonrpc":"2.0","id":1}
+{"result":{"content":[{"type":"text","text":"{\n  \"ok\": true,\n  \"channel\": \"validation-channel\",\n  \"ts\": \"2026-05-07T03:21:43.884Z\"\n}"}]},"jsonrpc":"2.0","id":1}
 
 ```
 
@@ -262,7 +262,7 @@ Wave C-2: tool-ref audit script reports zero blocking entries (list a empty).
 **Command:**
 
 ```
-node /home/zeyufu/Desktop/oh-my-copilot/scripts/audit-tool-refs.mjs
+node $HOME/Desktop/oh-my-copilot/scripts/audit-tool-refs.mjs
 
 ```
 
@@ -317,7 +317,7 @@ Wave C-3: omcp_call_store helper is defined in .copilot-hooks/common.sh.
 **Command:**
 
 ```
-grep -c '^omcp_call_store()' /home/zeyufu/Desktop/oh-my-copilot/.copilot-hooks/common.sh
+grep -c '^omcp_call_store()' $HOME/Desktop/oh-my-copilot/.copilot-hooks/common.sh
 
 ```
 
@@ -339,7 +339,7 @@ Wave E: post-tool-audit and log-session-start use git rev-parse for REPO_ROOT.
 **Command:**
 
 ```
-grep -l 'git rev-parse --show-toplevel' /home/zeyufu/.copilot/installed-plugins/_direct/PeterPonyu--oh-my-copilot--packages-copilot-cli-plugin/scripts/post-tool-audit.sh /home/zeyufu/.copilot/installed-plugins/_direct/PeterPonyu--oh-my-copilot--packages-copilot-cli-plugin/scripts/log-session-start.sh | wc -l
+grep -l 'git rev-parse --show-toplevel' $HOME/.copilot/installed-plugins/_direct/PeterPonyu--oh-my-copilot--packages-copilot-cli-plugin/scripts/post-tool-audit.sh $HOME/.copilot/installed-plugins/_direct/PeterPonyu--oh-my-copilot--packages-copilot-cli-plugin/scripts/log-session-start.sh | wc -l
 
 ```
 
@@ -361,7 +361,7 @@ Wave C-3 + Wave E: post-tool-audit hook captures a tool_failure envelope, writes
 **Command:**
 
 ```
-MARKER="validation-e2e-$(date +%s%N)" && echo "{\"tool\":\"$MARKER\",\"exit_code\":42,\"stderr\":\"e2e validation\"}" | bash /home/zeyufu/.copilot/installed-plugins/_direct/PeterPonyu--oh-my-copilot--packages-copilot-cli-plugin/scripts/post-tool-audit.sh > /dev/null && grep -c "$MARKER" /home/zeyufu/Desktop/oh-my-copilot/.omcp/traces/default.jsonl
+MARKER="validation-e2e-$(date +%s%N)" && echo "{\"tool\":\"$MARKER\",\"exit_code\":42,\"stderr\":\"e2e validation\"}" | bash $HOME/.copilot/installed-plugins/_direct/PeterPonyu--oh-my-copilot--packages-copilot-cli-plugin/scripts/post-tool-audit.sh > /dev/null && grep -c "$MARKER" $HOME/Desktop/oh-my-copilot/.omcp/traces/default.jsonl
 
 ```
 
@@ -383,7 +383,7 @@ Wave C-1c: packages/omcs/ contains exactly one file (README.md).
 **Command:**
 
 ```
-ls /home/zeyufu/Desktop/oh-my-copilot/packages/omcs/ | tr '\n' ' '
+ls $HOME/Desktop/oh-my-copilot/packages/omcs/ | tr '\n' ' '
 
 ```
 
@@ -405,7 +405,7 @@ All store + integration + fixture unit tests pass.
 **Command:**
 
 ```
-cd /home/zeyufu/.copilot/installed-plugins/_direct/PeterPonyu--oh-my-copilot--packages-copilot-cli-plugin/mcp-server && npm test 2>&1 | grep -E '^# (tests|pass|fail) ' | tr '\n' ' '
+cd $HOME/.copilot/installed-plugins/_direct/PeterPonyu--oh-my-copilot--packages-copilot-cli-plugin/mcp-server && npm test 2>&1 | grep -E '^# (tests|pass|fail) ' | tr '\n' ' '
 
 ```
 
@@ -427,9 +427,9 @@ cd /home/zeyufu/.copilot/installed-plugins/_direct/PeterPonyu--oh-my-copilot--pa
 | Total checks | 17 |
 | Passed | 17 |
 | Failed | 0 |
-| Plugin location | `/home/zeyufu/.copilot/installed-plugins/_direct/PeterPonyu--oh-my-copilot--packages-copilot-cli-plugin` (installed-symlink) |
-| Working dir | `/tmp/omcp-validation-dJgW7W` (cleaned up after run) |
+| Plugin location | `$HOME/.copilot/installed-plugins/_direct/PeterPonyu--oh-my-copilot--packages-copilot-cli-plugin` (installed-symlink) |
+| Working dir | `<tmpdir>` (cleaned up after run) |
 
 **All checks passed.**
 
-_Generated by `scripts/run-validation.sh` at 2026-05-07T03:08:42Z._
+_Generated by `scripts/run-validation.sh` at 2026-05-07T03:21:54Z._

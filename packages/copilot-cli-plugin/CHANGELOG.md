@@ -34,7 +34,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - `skills/omc-reference/` (duplicate of `oh-my-copilot-reference`, kept the latter).
 
 ### Wave-C-1a: Skill path drift sweep (`.omc/` → `.omcp/`)
-- Mechanical replacement in 3 skills with paths drifting from the v0.4.0 directory rename: `wiki/SKILL.md` (5 lines), `ccg/SKILL.md` (3 lines), `cli-teams/SKILL.md` (2 lines). 10 lines updated total.
+- Mechanical replacement in 3 skills with paths drifting from the v0.0.5 directory rename: `wiki/SKILL.md` (5 lines), `ccg/SKILL.md` (3 lines), `cli-teams/SKILL.md` (2 lines). 10 lines updated total.
 - `writer-memory/SKILL.md` excluded — line 232 references `.omc/notepad.md` as a deliberate cross-host bridge for users running both omcp and OMC. Annotated with `<!-- cross-host: deliberate -->` so future sweeps skip it.
 - `cancel/SKILL.md` excluded — owned by Wave-C-1b (separate concern: ToolSearch query-string surgery).
 
@@ -77,14 +77,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Wave-C-1b: cancel/SKILL.md surgery + content reconciliation
 - Removed three embedded HTML comments from inside the `ToolSearch(query="...")` call at line 48. The comments claimed `state_clear`, `state_list_active`, `state_get_status` were "not in v1 server" — these claims were false (all three registered in `server.mjs` at L95/L122/L134 since PR #20). The HTML inside the quoted string was runtime garbage being passed to the tool dispatcher.
-- Updated 3 stale `.omc/` references in the bash fallback block (walk-up loop, directory check, error message) to `.omcp/` to match the v0.4.0 path rename. The fallback's substantive logic is unchanged — the warning prose about not using fallback for `autopilot`/`cli-teams` remains intact.
+- Updated 3 stale `.omc/` references in the bash fallback block (walk-up loop, directory check, error message) to `.omcp/` to match the v0.0.5 path rename. The fallback's substantive logic is unchanged — the warning prose about not using fallback for `autopilot`/`cli-teams` remains intact.
 - Updated descriptive label "OMC Teams (tmux CLI workers)" to "CLI Teams (tmux CLI workers)" in the dependency-order list to reflect the B-0 skill rename.
 
-## [0.5.0] - 2026-05-06
+## [0.0.6] - 2026-05-06
 
 ### Fixed
 - **`docs/orchestration.md` rewritten end-to-end.** The previous version listed 6 phantom MCP tools (`read_file`, `write_file`, `run_command`, `list_directory`, `search_files`, `get_diagnostics`) that were never implemented; documented the wrong hook script paths (`hooks/session-start.sh` etc.); used the wrong event name `sessionStop` instead of `sessionEnd`; and showed a `stages` schema that mismatched the array form actually written by `orchestrator.mjs`. The new version reflects the real 8-tool surface, real script paths, real event names, and the array schema.
-- **`mcp-server/server.mjs` self-name corrected.** The `Server` constructor identified itself as `"oh-my-copilot"` v0.1.0; updated to `"omcp"` v0.5.0 to match the plugin name and version. (Functionally a no-op — Copilot CLI uses the `.mcp.json` server-key for the tool prefix `mcp__omcp__*` — but eliminates internal naming drift.)
+- **`mcp-server/server.mjs` self-name corrected.** The `Server` constructor identified itself as `"oh-my-copilot"` v0.0.2; updated to `"omcp"` v0.0.6 to match the plugin name and version. (Functionally a no-op — Copilot CLI uses the `.mcp.json` server-key for the tool prefix `mcp__omcp__*` — but eliminates internal naming drift.)
 - **`docs/parity-matrix.md`** MCP tools row corrected from `6 / 6` to `6 / 8` to reflect the two pipeline tools added on top of OMC's base surface.
 
 ### Removed from installed plugin
@@ -95,7 +95,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Migration
 - Reinstall: `copilot plugin uninstall omcp` then `copilot plugin install PeterPonyu/oh-my-copilot:packages/copilot-cli-plugin`. Rebuild MCP runtime deps with `bash mcp-server/build.sh`.
 
-## [0.4.0] - 2026-05-06
+## [0.0.5] - 2026-05-06
 
 ### Changed
 - **Workspace state path renamed**: `.omc/` -> `.omcp/`. The orchestrator default `stateDir` is now `.omcp/state`; all SKILL.md, agent, doc, and command references updated to write to `.omcp/specs/`, `.omcp/plans/`, `.omcp/state/`, and `.omcp/notepad.md`. Existing `.omc/` workspaces remain readable if you point the orchestrator at the old path explicitly.
@@ -106,7 +106,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Migration
 - Reinstall: `copilot plugin uninstall omcp` then `copilot plugin install PeterPonyu/oh-my-copilot:packages/copilot-cli-plugin`.
 
-## [0.3.0] - 2026-05-06
+## [0.0.4] - 2026-05-06
 
 ### Changed
 - **BREAKING**: Plugin renamed from `oh-my-copilot-power-pack` to `omcp`. Slash commands and agents are now namespaced as `omcp:<name>` (e.g. `/omcp:deep-interview`, `--agent omcp:planner`).
@@ -117,7 +117,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Reinstall: `copilot plugin uninstall oh-my-copilot-power-pack` then `copilot plugin install PeterPonyu/oh-my-copilot:packages/copilot-cli-plugin`.
 - Pre-existing `.omcp/state/pipeline-state.json` files remain compatible — the file path is unchanged and the schema is identical.
 
-## [0.2.0] - 2026-05-06
+## [0.0.3] - 2026-05-06
 
 ### Added
 - `commands/` directory reserved for Wave 6 to populate with CLI command definitions.
@@ -127,7 +127,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Notes
 - Manifest expansion to support full OMC parity port (per `.omcp/plans/omc-parity-consensus-plan.md`).
 
-## [0.1.0] - earlier
+## [0.0.2] - earlier
 
 ### Added
 - Initial plugin shape: 3 agents (`agents/`), 6 skills (`skills/`), and 2 hook events (`hooks.json`).
