@@ -1,10 +1,11 @@
-import { readFile, writeFile, mkdir, rename, unlink, readdir } from "node:fs/promises";
+import { readFile, writeFile, appendFile, mkdir, rename, unlink, readdir } from "node:fs/promises";
 import { existsSync } from "node:fs";
 import { resolve, join } from "node:path";
 import { randomBytes } from "node:crypto";
 
 const WIKI_DIR = ".omcp/wiki";
 const INDEX_FILE = "_index.json";
+const LOG_FILE = "log.md";
 const SLUG_RE = /^[a-z0-9][a-z0-9-]{0,79}$/;
 const MAX_QUERY_BODY_HITS = 10;
 const DEFAULT_QUERY_K = 5;
@@ -160,7 +161,16 @@ export async function wikiQuery({ q, k } = {}) {
   }
 
   results.sort((a, b) => b.score - a.score || a.slug.localeCompare(b.slug));
-  return { results: results.slice(0, limit) };
+  const sliced = results.slice(0, limit);
+  // Per ADR-5: log query + result count for monthly review (no automated reader)
+  try {
+    await mkdir(wikiDir(), { recursive: true });
+    const logLine = JSON.stringify({ ts: new Date().toISOString(), query: q, result_count: sliced.length }) + "\n";
+    await appendFile(join(wikiDir(), LOG_FILE), logLine, "utf8");
+  } catch {
+    // logging is best-effort; never fail the query
+  }
+  return { results: sliced };
 }
 
 export async function wikiDelete({ slug } = {}) {
@@ -198,7 +208,7 @@ export async function wikiLint() {
   if (existsSync(wikiDir())) {
     const entries = await readdir(wikiDir());
     for (const f of entries) {
-      if (f === INDEX_FILE || !f.endsWith(".md")) continue;
+      if (f === INDEX_FILE || f === LOG_FILE || !f.endsWith(".md")) continue;
       const slug = f.slice(0, -3);
       if (!(slug in index)) untracked.push(slug);
     }

@@ -26,6 +26,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - `writer-memory/SKILL.md` excluded — line 232 references `.omc/notepad.md` as a deliberate cross-host bridge for users running both omcp and OMC. Annotated with `<!-- cross-host: deliberate -->` so future sweeps skip it.
 - `cancel/SKILL.md` excluded — owned by Wave-C-1b (separate concern: ToolSearch query-string surgery).
 
+### Wave-C-3c: wiki_query result-count logging
+- `wikiQuery` appends one JSON line `{ts, query, result_count}` to `.omcp/wiki/log.md` per call. Per ADR-5: write-only; user reviews monthly via `grep` to detect when substring-search relevance degrades enough to trigger an embedding-based search upgrade. Trigger condition: >20 results in >50% of recent queries.
+- Logging is best-effort — failures don't propagate to the `wiki_query` caller.
+- `wikiLint` now skips `log.md` when scanning for untracked files (it's a system file, not a wiki entry).
+- New `mcp-server/README.md` section "Wiki query log" documents the file purpose.
+
 ### Wave-C-3: hook augmentation (default-on) + bash↔MCP bridge + fixture tests
 - New `omcp_call_store` helper in `.copilot-hooks/common.sh` — bridges from bash hooks to omcp MCP store .mjs functions via `node -e`. Per ADR-2, errors absorbed as exit 0 with stderr warning (`[omcp-bridge] ...`); telemetry must not kill a session. Caller passes JSON args built with `jq -nc` (NOT bash string interpolation) to avoid quoting bugs.
 - Augmented `post-tool-audit.sh`: captures stdin envelope; if `exit_code != 0` or `error` field present, writes a `tool_failure` trace event to `.omcp/traces/<session>.jsonl` via `trace_write`. Inserted before parity-guard so traces capture even on parity violations. Best-effort failure detection: works against the partly-observable Copilot CLI envelope shape; tolerates unknown keys.

@@ -84,6 +84,18 @@ Pinned to `@modelcontextprotocol/sdk@^1.18`. The server uses:
 - `Server` from `@modelcontextprotocol/sdk/server/index.js`
 - `StdioServerTransport` from `@modelcontextprotocol/sdk/server/stdio.js`
 
+## Wiki query log (`.omcp/wiki/log.md`)
+
+`wiki_query` appends one JSON line per call to `.omcp/wiki/log.md`:
+
+```
+{"ts":"2026-05-07T12:00:00.000Z","query":"authentication","result_count":3}
+```
+
+This is **write-only**; no automated reader consumes it. Per ADR-5 of the post-Wave-B consolidation plan, the user reviews this file manually every ~30 days via `grep` to decide whether substring-search relevance has degraded enough to trigger an embedding-based search upgrade. Trigger condition: >20 results in >50% of recent queries.
+
+Logging is best-effort — failures don't propagate to the `wiki_query` caller.
+
 ## v2 Follow-ups
 
-- `wiki_query` — deferred until `.omcp/wiki/` has backing content. Re-introduce in v2 when the wiki store ships.
+- Embedding-based wiki search (deferred under ADR-5; trigger fires when query log shows degraded substring relevance).
