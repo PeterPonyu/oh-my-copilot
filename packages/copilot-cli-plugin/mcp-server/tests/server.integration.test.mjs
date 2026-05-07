@@ -397,3 +397,49 @@ test("integration: invalid arguments produce isError envelope (validation)", asy
   assert.equal(isError(resp), true);
   assert.match(resp.result.content[0].text, /kind must be one of/);
 });
+
+test("integration: bundled dist/server.mjs is functional (Wave-K-b)", async (t) => {
+  // Production .mcp.json points at dist/server.mjs (the esbuild bundle).
+  // This test exercises the BUNDLED artifact, not the source — catches any
+  // bundling regression that would silently break end-user installs.
+  const BUNDLE_PATH = resolve(dirname(__filename), "..", "dist", "server.mjs");
+  const cwd = mkdtempSync(join(tmpdir(), "omcp-bundle-"));
+
+  // Custom client targeting the bundle
+  class BundleClient extends StdioClient {
+    constructor(cwd) {
+      super(cwd);
+      // Override the proc with one targeting the bundle
+      this.proc.kill();
+      this.pending.clear();
+      const p = spawn("node", [BUNDLE_PATH], { cwd, stdio: ["pipe", "pipe", "pipe"] });
+      this.proc = p;
+      this.buffer = "";
+      this.pending = new Map();
+      this.nextId = 1;
+      p.stdout.on("data", (chunk) => this._onData(chunk.toString()));
+      p.stderr.on("data", (d) => (this.stderr += d.toString()));
+    }
+  }
+
+  const client = new BundleClient(cwd);
+  t.after(async () => {
+    await client.close();
+    rmSync(cwd, { recursive: true, force: true });
+  });
+
+  // tools/list returns 35 tools
+  const list = await client.send("tools/list");
+  assert.equal(list.result.tools.length, 35, "bundle exposes all 35 tools");
+
+  // Round-trip a write+read to verify dispatch + store I/O work in the bundle
+  const w = await client.callTool("state_write", { key: "bundle-test", value: { ok: 1 } });
+  assert.equal(unwrap(w).ok, true);
+  const r = await client.callTool("state_read", { key: "bundle-test" });
+  assert.deepEqual(unwrap(r).value, { ok: 1 });
+
+  // Wave-H prefix tolerance must work in the bundle too
+  const prefixed = await client.callTool("mcp__omcp__notepad_stats", {});
+  assert.ok(!isError(prefixed), "prefix tolerance preserved in bundle");
+  assert.ok("byLane" in unwrap(prefixed));
+});

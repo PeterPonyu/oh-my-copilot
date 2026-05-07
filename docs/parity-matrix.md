@@ -137,7 +137,7 @@ MCP server source: `packages/copilot-cli-plugin/mcp-server/`. Build with
 
 | Feature | Status | Reference | Notes |
 | --- | --- | --- | --- |
-| Orchestration (spec → plan → artifact pipeline) | PORTED | [`packages/copilot-cli-plugin/docs/orchestration.md`](../packages/copilot-cli-plugin/docs/orchestration.md) | 8-tool MCP surface; 2 pipeline tools (`pipeline_record_transition`, `pipeline_state`); pipeline-state.json schema documented in [state-management.md](../packages/copilot-cli-plugin/docs/state-management.md) |
+| Orchestration (spec → plan → artifact pipeline) | PORTED | [`docs/plugin-internal/orchestration.md`](../docs/plugin-internal/orchestration.md) | 8-tool MCP surface; 2 pipeline tools (`pipeline_record_transition`, `pipeline_state`); pipeline-state.json schema documented in [state-management.md](./plugin-internal/state-management.md) |
 
 ---
 

@@ -53,10 +53,10 @@ copilot plugin install /path/to/oh-my-copilot/packages/copilot-cli-plugin
 bash packages/copilot-cli-plugin/mcp-server/build.sh
 ```
 
-See [`docs/orchestration.md`](docs/orchestration.md) for the full MCP tool
-surface, hook events, resume semantics, and failure modes. See
-[`docs/state-management.md`](docs/state-management.md) for the
-`pipeline-state.json` schema.
+See [`docs/plugin-internal/orchestration.md`](../../docs/plugin-internal/orchestration.md)
+for the full MCP tool surface, hook events, resume semantics, and failure modes.
+See [`docs/plugin-internal/state-management.md`](../../docs/plugin-internal/state-management.md)
+for the `pipeline-state.json` schema.
 
 When using the installed plugin inside a Copilot CLI session, invoke plugin
 slash commands in their namespaced form (for example `/omcp:ralplan`) as the
