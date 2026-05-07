@@ -6,11 +6,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
-### Wave-E: post-audit cleanup (this PR)
-- **Hook script path arithmetic fixed.** `post-tool-audit.sh` and `log-session-start.sh` previously computed `REPO_ROOT="$(cd "$SCRIPT_DIR/../../.." && pwd)"`. That arithmetic assumed the script lived at `<repo>/packages/copilot-cli-plugin/scripts/`; under the install symlink at `~/.copilot/installed-plugins/_direct/...`, three `..` up landed at `~/.copilot/installed-plugins/` instead of the workspace root, so `.copilot-hooks/common.sh` couldn't be sourced. Replaced with `git rev-parse --show-toplevel || pwd` — locates the actual workspace regardless of install path.
-- **Stripped 13 stale `<!-- TODO: agent X must be in agents/X.agent.md (Wave 4) -->` comments** across 5 skills (ultraqa, ralph, external-context, team, deep-interview). All cited agents (qa-tester, architect, executor, critic, document-specialist, planner, explore) were ported in PR #18 and exist in `agents/`. Same false-claim pattern as the cancel/SKILL.md fix in PR #27 but in HTML comments rather than inside ToolSearch query strings.
+### Wave-F: substantive tests + reproducible validation report
+- **Strengthened hook-envelope fixture tests** with deep side-effect assertions. Replaced shallow string matches (`assert.match(stdout, /\{"continue":true\}/)`) with content + side-effect verification: snapshots `.copilot-hooks/events.jsonl` and `.omcp/traces/<session>.jsonl` before/after each hook run, asserts on byte-level deltas, kind-counts, payload-summary keys, and absence of unintended writes.
+- **New `scripts/run-validation.sh`** — single-command reproducible validator. Boots the MCP server, exercises each store's round-trip with content checks (write a value, read it back, assert structural equality), runs all hooks with fixture envelopes, then writes a timestamped Markdown report (default: `docs/validation/validation-<timestamp>.md`; pass `--out` for ephemeral runs to `.omcp/validation/`).
+- **Sample report committed** at `docs/validation/validation-2026-05-07-sample.md` showing what the script produces. 17/17 checks PASS against the symlinked install at v0.0.7.
+- Plugin version: 0.6.0 → 0.0.7 (per maintainer's explicit version line; below 0.6.0 in SemVer terms — npm/marketplace publish would need a parallel branch or scope-rename if the lower number is rejected).
 
-## [0.6.0] - 2026-05-07
+## [0.0.7] - 2026-05-07
+
+### Wave-E: post-audit cleanup
+- **Hook script path arithmetic fixed.** `post-tool-audit.sh` and `log-session-start.sh` previously computed `REPO_ROOT="$(cd "$SCRIPT_DIR/../../.." && pwd)"`. That arithmetic assumed the script lived at `<repo>/packages/copilot-cli-plugin/scripts/`; under the install symlink at `~/.copilot/installed-plugins/_direct/...`, three `..` up landed at `~/.copilot/installed-plugins/` instead of the workspace root, so `.copilot-hooks/common.sh` couldn't be sourced. Replaced with `git rev-parse --show-toplevel || pwd` — locates the actual workspace regardless of install path.
+- **Stripped 38 stale `<!-- TODO: agent X must be in agents/X.agent.md (Wave 4) -->` comments** across 9 skills (autopilot, deep-interview, external-context, ralph, sciomc, team, ultraqa, ultrawork, writer-memory). All cited agents (qa-tester, architect, executor, critic, document-specialist, planner, explore, security-reviewer) were ported in PR #18 and exist in `agents/`. Same false-claim pattern as the cancel/SKILL.md fix in PR #27 but in HTML comments rather than inside ToolSearch query strings.
 
 ### Added (Wave A, PR #18)
 - 5 agents ported from OMC: `analyst`, `code-simplifier`, `designer`, `explore`, `git-master`. Agent count 16 → 21.
