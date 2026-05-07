@@ -359,6 +359,32 @@ test("integration: unknown tool returns isError envelope", async (t) => {
   assert.match(resp.result.content[0].text, /Unknown tool/);
 });
 
+test("integration: server tolerates mcp__omcp__ prefix on tool names (Wave-H)", async (t) => {
+  const cwd = mkdtempSync(join(tmpdir(), "omcp-int-"));
+  const client = new StdioClient(cwd);
+  t.after(async () => {
+    await client.close();
+    rmSync(cwd, { recursive: true, force: true });
+  });
+
+  // Prefixed form (what skill prose uses)
+  const prefixed = await client.callTool("mcp__omcp__wiki_add", {
+    title: "Prefix Test",
+    body: "tolerance",
+  });
+  assert.ok(!isError(prefixed), "prefixed form must succeed");
+  assert.equal(unwrap(prefixed).slug, "prefix-test");
+
+  // Bare form (what server registers, what validation scripts use)
+  const bare = await client.callTool("wiki_read", { slug: "prefix-test" });
+  assert.equal(unwrap(bare).body, "tolerance");
+
+  // Unknown tool with valid prefix is still rejected (we don't accept any prefix)
+  const unknownPrefixed = await client.callTool("mcp__omcp__no_such_tool", {});
+  assert.equal(isError(unknownPrefixed), true);
+  assert.match(unknownPrefixed.result.content[0].text, /Unknown tool/);
+});
+
 test("integration: invalid arguments produce isError envelope (validation)", async (t) => {
   const cwd = mkdtempSync(join(tmpdir(), "omcp-int-"));
   const client = new StdioClient(cwd);
