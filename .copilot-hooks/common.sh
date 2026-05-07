@@ -136,3 +136,50 @@ copilot_hook_finish() {
   fi
   printf '{"continue":true}\n'
 }
+
+# omcp_call_store — bridge from bash hooks to omcp MCP store .mjs functions.
+#
+# Args:
+#   $1: store module name (without .mjs), e.g. "trace-store", "state-store",
+#       "notepad-store"
+#   $2: exported function name, e.g. "traceWrite", "stateListActive",
+#       "notepadPrune"
+#   $3: JSON args literal — MUST be built with jq (NOT bash string
+#       interpolation), e.g.:
+#         args=$(jq -nc --arg tool "$tool" '{kind:"tool_failure",tool:$tool}')
+#         omcp_call_store trace-store traceWrite "$args"
+#
+# Behavior:
+#   - Always exits 0 (telemetry is non-load-bearing per ADR-2 of the
+#     post-Wave-B consolidation plan; broken bridge must not kill a session)
+#   - On success: prints JSON.stringify(result) to stdout
+#   - On error: prints "[omcp-bridge] <message>" to stderr; stdout empty
+#   - If node is not on PATH: prints warning to stderr and returns 0
+#
+# Note: the called .mjs function operates relative to the current process's
+# cwd. Hooks set cwd to repo root before sourcing common.sh, so MCP store
+# paths like .omcp/state/<key>.json resolve correctly.
+omcp_call_store() {
+  local module="$1" fn="$2" json_args="${3:-}"
+  if [[ -z "$json_args" ]]; then
+    json_args='{}'
+  fi
+
+  if ! command -v node >/dev/null 2>&1; then
+    printf '[omcp-bridge] node not on PATH; skipping %s.%s\n' "$module" "$fn" >&2
+    return 0
+  fi
+
+  local plugin_root
+  plugin_root="$(git rev-parse --show-toplevel 2>/dev/null || pwd)/packages/copilot-cli-plugin"
+
+  node -e "
+    import('${plugin_root}/mcp-server/${module}.mjs').then(m =>
+      m.${fn}(${json_args})
+    ).then(result => {
+      if (result !== undefined) console.log(JSON.stringify(result));
+    }).catch(e => {
+      console.error('[omcp-bridge]', e && e.message ? e.message : String(e));
+    });
+  " || true
+}

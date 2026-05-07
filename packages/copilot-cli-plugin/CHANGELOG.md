@@ -26,6 +26,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - `writer-memory/SKILL.md` excluded — line 232 references `.omc/notepad.md` as a deliberate cross-host bridge for users running both omcp and OMC. Annotated with `<!-- cross-host: deliberate -->` so future sweeps skip it.
 - `cancel/SKILL.md` excluded — owned by Wave-C-1b (separate concern: ToolSearch query-string surgery).
 
+### Wave-C-3: hook augmentation (default-on) + bash↔MCP bridge + fixture tests
+- New `omcp_call_store` helper in `.copilot-hooks/common.sh` — bridges from bash hooks to omcp MCP store .mjs functions via `node -e`. Per ADR-2, errors absorbed as exit 0 with stderr warning (`[omcp-bridge] ...`); telemetry must not kill a session. Caller passes JSON args built with `jq -nc` (NOT bash string interpolation) to avoid quoting bugs.
+- Augmented `post-tool-audit.sh`: captures stdin envelope; if `exit_code != 0` or `error` field present, writes a `tool_failure` trace event to `.omcp/traces/<session>.jsonl` via `trace_write`. Inserted before parity-guard so traces capture even on parity violations. Best-effort failure detection: works against the partly-observable Copilot CLI envelope shape; tolerates unknown keys.
+- Augmented `log-session-start.sh`: queries `state_list_active`; if any modes still active, appends `resumed=true active_modes=...` line to `.copilot-hooks/session.log` so operators can see resumed orchestration state at session start.
+- Augmented `session-end-audit.sh`: calls `notepad_prune({maxAgeDays: 7})` before exit so long sessions don't accumulate stale notepad entries.
+- New `tests/hook-envelope.fixture.test.mjs`: 7 tests spawn each augmented hook with synthetic envelopes, verify positive (success/failure paths produce expected outputs and side-effects) + negative (unknown envelope keys / malformed JSON / missing module bridge) behavior. Combined suite now 108/108 pass.
+
 ### Wave-C-2: tool-ref audit script + wiki skill arg-shape fix
 - New `scripts/audit-tool-refs.mjs` parses every `mcp__omcp__<tool>` and `ToolSearch(query="select:...")` reference in `packages/copilot-cli-plugin/skills/**/*.md` and `packages/copilot-cli-plugin/agents/**/*.md`, diffs against `server.mjs` `name:` registrations, and emits 3 lists: (a) referenced-but-not-registered (blocking), (b) registered-but-never-referenced (informational), (c) cross-host allowlist matches.
 - New `scripts/audit-tool-refs.allowlist.json` allows `omc-doctor`, `omc-setup`, and `reference` to reference cross-host tool names without failing the audit.
