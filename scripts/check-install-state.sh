@@ -191,12 +191,24 @@ for required in ("agents", "skills", "hooks.json"):
         fail(f"installed plugin cache missing {required}: {cache_path / required}")
 
 allowed_cache_entries = {
+    # plugin metadata
     "README.md",
-    "agents",
-    "hooks.json",
+    "CHANGELOG.md",
     "plugin.json",
-    "scripts",
+    ".gitignore",
+    # agentic surface
+    "agents",
     "skills",
+    "commands",
+    # MCP server (runtime)
+    ".mcp.json",
+    "mcp-server",
+    "orchestrator",
+    # hooks (runtime)
+    "hooks.json",
+    "scripts",
+    # internal docs (optional but ships with the install)
+    "docs",
 }
 actual_cache_entries = {item.name for item in cache_path.iterdir()}
 extra_cache_entries = sorted(actual_cache_entries - allowed_cache_entries)
@@ -206,7 +218,7 @@ if extra_cache_entries:
         + ", ".join(extra_cache_entries)
     )
 
-for forbidden in (".git", ".github", ".omc", ".omx", "apps", "benchmark", "docs", "examples", "research"):
+for forbidden in (".git", ".github", ".omc", ".omx", "apps", "benchmark", "examples", "research"):
     if (cache_path / forbidden).exists():
         fail(f"installed plugin cache should not include {forbidden}: {cache_path / forbidden}")
 

@@ -6,6 +6,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+### Wave-J: install payload audit + cleanup
+- **Moved 7 stale `_omc-port-diff.md` translator sidecars** from `packages/copilot-cli-plugin/skills/<slug>/` to `tools/omc-port/diffs/<slug>/` matching the convention established in v0.0.5. Pre-fix: 7 in install path. Post-fix: 0. Translator audit history is preserved at `tools/omc-port/diffs/` (now 36 entries).
+- **Aligned `scripts/check-install-state.sh` allowlist with actual install reality.** Previous allowlist was 6 entries (`README.md`, `agents`, `hooks.json`, `plugin.json`, `scripts`, `skills`); installed plugin actually contains 11+ runtime entries. Validator falsely flagged `commands/`, `docs/`, `mcp-server/`, `orchestrator/`, `.mcp.json`, `CHANGELOG.md` as "non-runtime/development". Updated allowlist + removed `docs` from forbidden list (was a false positive — `docs/` ships with the install for plugin's internal docs, distinct from the monorepo's top-level `docs/`).
+- **Removed 2 obsolete `TODO_UNRESOLVED.md` files** from `tools/omc-port/unresolved/`:
+  - `git-master/TODO_UNRESOLVED.md` claimed the agent didn't exist; PR #18 (Wave A) ported it.
+  - `ralph/TODO_UNRESOLVED.md` flagged ai-slop-cleaner-agent confusion; the workaround is now baked into `skills/ralph/SKILL.md` body. The TODO is no longer load-bearing.
+  Empty `unresolved/` directory removed.
+- **Surfaced a real follow-up:** the in-place `~/.copilot/config.json` `installedPlugins` entry still records the plugin version as `0.5.0` (from before the version bumps in Wave-E/G). The source `plugin.json` says `0.0.7`. Run `copilot plugin uninstall omcp && copilot plugin install PeterPonyu/oh-my-copilot:packages/copilot-cli-plugin` to refresh Copilot's recorded install state. Not a code issue — it's local-cache drift expected during dev.
+
 ### Wave-I: interactive Copilot CLI testing via tmux + slash command coverage
 - **Real interactive Copilot CLI session captured via tmux** — first time we've validated the orchestration substrate through the actual user flow (typed slash commands in interactive `copilot` mode, not synthesized via `copilot -p`). Found a real gap that synthetic testing missed.
 - **The gap:** only 5 skills had `commands/<slug>.md` wrappers (autopilot, ralph, ralplan, team, deep-interview). The other 37 skills (wiki, cancel, doctor, hud, ccg, ...) returned `Unknown command: /omcp:<slug>` when typed as slash commands. Skills work as auto-injected behavior but not as user-typed slash commands.
