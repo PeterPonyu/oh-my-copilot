@@ -28,8 +28,10 @@ optimization. Instead, they live as separate packages in this monorepo so:
 
 ## When this directory will get real code
 
-Per [ADR-4 of `.omcp/plans/post-wave-b-consolidation.md`](../../.omcp/plans/post-wave-b-consolidation.md),
-omcs is **deferred, not separated**. The directory exists today to:
+Per ADR-4 of the post-Wave-B consolidation plan (kept locally at
+`.omcp/plans/post-wave-b-consolidation.md`; `.omcp/` is gitignored as a
+runtime state directory, so the plan is not committed), omcs is
+**deferred, not separated**. The directory exists today to:
 
 1. Lock the path so future omcs work has an unambiguous home.
 2. Avoid re-litigating the omcp-vs-omcs structure question.
