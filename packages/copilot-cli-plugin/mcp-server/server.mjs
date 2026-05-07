@@ -565,7 +565,16 @@ server.setRequestHandler(ListToolsRequestSchema, async () => ({
 }));
 
 server.setRequestHandler(CallToolRequestSchema, async (request) => {
-  const { name, arguments: args } = request.params;
+  let { name, arguments: args } = request.params;
+  // Tolerate the Copilot-CLI client-side namespace prefix `mcp__omcp__`.
+  // Real Copilot sessions strip this prefix before forwarding to the
+  // server, but skill prose and other docs use the prefixed form. Direct
+  // stdio clients (validation scripts, tests, other MCP-aware tooling)
+  // can pass either form here without dispatch confusion.
+  const PREFIX = "mcp__omcp__";
+  if (typeof name === "string" && name.startsWith(PREFIX)) {
+    name = name.slice(PREFIX.length);
+  }
 
   try {
     let result;

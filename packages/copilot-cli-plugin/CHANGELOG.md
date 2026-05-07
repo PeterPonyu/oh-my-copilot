@@ -6,6 +6,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+### Wave-H: prefix tolerance + multi-test agentic exercise
+- **Server now tolerates `mcp__omcp__` prefix on tool names** in `CallToolRequestSchema` handler. Skill prose documents calls as `mcp__omcp__wiki_add(...)` (the form Copilot's MCP client expects); previously direct-stdio dispatch required bare `wiki_add`. Now both forms work everywhere — eliminates token waste from agents that read skill prose then encounter dispatch failures when invoking via raw stdio.
+- **3 real `copilot -p` agentic tests run end-to-end** (4 Premium requests total, ~9m20s):
+  - **Test A (multi-tool):** Agent invoked `mcp__omcp__wiki_add` + `mcp__omcp__wiki_query` + `mcp__omcp__notepad_write_priority` via prefixed names. All succeeded with no diagnose-retry — Wave-H fix verified agentically.
+  - **Test B (cross-session state):** Run 1 wrote mode-form state in one `copilot -p` session; Run 2 read it from a separate session, got identical payload with `exists: true`. D-1 mode-form persistence verified end-to-end.
+  - **Test C (slash + hooks):** `/omcp:doctor` is **not** routed in non-interactive `-p` mode (Copilot CLI host limit; slash commands are interactive-only). Hooks fire relative to invocation cwd — workspaces without the plugin source tree don't get hook events, by design. Documented as host behavior, not omcp bugs.
+- **Updated `docs/validation/agentic-2026-05-07-sample.md`** with all 3 test results, observed verbatim outputs, and explicit notes on Copilot-CLI host behaviors that affect what's testable from non-interactive prompts.
+- New integration test `tests/server.integration.test.mjs::server tolerates mcp__omcp__ prefix` (Wave-H) — combined suite is now 113/113.
+
 ### Wave-G: version-line consistency + report redaction + agentic evidence
 - **Renumbered prior CHANGELOG versions** to align with the 0.0.x line: `[0.5.0] → [0.0.6]`, `[0.4.0] → [0.0.5]`, `[0.3.0] → [0.0.4]`, `[0.2.0] → [0.0.3]`, `[0.1.0] → [0.0.2]`. Inline narrative version refs updated for consistency.
 - **Path redaction in `scripts/run-validation.sh`** — `$HOME` → literal `$HOME`, hostname → `<host>`, tmp working dir → `<tmpdir>` in the committed report content. Default behavior: redact when `--out` is under `docs/`, raw when under `.omcp/`. Override with `--redact` / `--no-redact`. Prevents leaking machine-specific user paths to the public repo.
