@@ -3,7 +3,7 @@
     "omcp": {
       "command": "node",
       "args": [
-        "./mcp-server/server.mjs"
+        "./mcp-server/dist/server.mjs"
       ],
       "transport": "stdio"
     }

@@ -6,6 +6,34 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+### Wave-K: payload trim + hand-tune top commands
+
+**K-a: plugin docs/ moved out of install path.**
+`packages/copilot-cli-plugin/docs/` (`orchestration.md`, `state-management.md`) → `docs/plugin-internal/`. Maintainer-facing reference docs no longer ship to end-user installs. Cross-refs in `docs/parity-matrix.md` and `packages/copilot-cli-plugin/README.md` updated.
+
+**K-b: mcp-server bundled with esbuild → 27MB → 588KB.**
+`mcp-server/dist/server.mjs` is the new committed runtime artifact (~588KB, single-file ESM bundle that inlines `@modelcontextprotocol/sdk` plus all stores). `.mcp.json` updated to point at `dist/server.mjs`. End-user installs no longer need `npm install` or `node_modules` — the bundle is shipped as-is.
+
+- New `npm run build:bundle` script + revised `build.sh` (idempotent: skips rebuild when package-lock.json checksum + dist/ both present).
+- Source `server.mjs` and store .mjs files retained for dev iteration and the bash→MCP bridge in `.copilot-hooks/common.sh` (which imports individual stores).
+- New integration test `bundled dist/server.mjs is functional (Wave-K-b)` verifies `tools/list` returns 35 tools, state round-trip works, and Wave-H prefix tolerance survives bundling. Suite: 113 → **114**.
+- `node_modules/` and `.build-checksum` added to `.gitignore` (already excluded at the plugin level; making it explicit at repo level too).
+
+**K-c: 8 high-traffic command wrappers hand-tuned** (replacing Wave-I's auto-generated stubs):
+
+| Command | Generic stub had | Hand-tuned now provides |
+|---|---|---|
+| `/omcp:wiki` | `<input>` | `<action> [args]` with sub-action table mapping to specific MCP tools |
+| `/omcp:cancel` | `<input>` | `[mode] | --force | --all` with concrete dispatch sequence |
+| `/omcp:omc-doctor` | `<input>` | `[--json] | [check name]` with explicit OMC-not-omcp scope note |
+| `/omcp:ask` | `<input>` | `<claude|codex|gemini> <question>` |
+| `/omcp:ccg` | `<input>` | `<question or task>` with synthesis instruction |
+| `/omcp:hud` | `<input>` | `[setup | minimal | focused | full | status]` |
+| `/omcp:learner` | `<input>` | `[topic or focus area]` with 4-step capture procedure |
+| `/omcp:remember` | `<input>` | `[what to remember]` with 5-way classification routing to specific MCP tools |
+
+Auto-generated wrappers for the remaining 28 skills still work (they delegate to skill bodies); hand-tuning is a quality polish, not a routing fix.
+
 ### Wave-J: install payload audit + cleanup
 - **Moved 7 stale `_omc-port-diff.md` translator sidecars** from `packages/copilot-cli-plugin/skills/<slug>/` to `tools/omc-port/diffs/<slug>/` matching the convention established in v0.0.5. Pre-fix: 7 in install path. Post-fix: 0. Translator audit history is preserved at `tools/omc-port/diffs/` (now 36 entries).
 - **Aligned `scripts/check-install-state.sh` allowlist with actual install reality.** Previous allowlist was 6 entries (`README.md`, `agents`, `hooks.json`, `plugin.json`, `scripts`, `skills`); installed plugin actually contains 11+ runtime entries. Validator falsely flagged `commands/`, `docs/`, `mcp-server/`, `orchestrator/`, `.mcp.json`, `CHANGELOG.md` as "non-runtime/development". Updated allowlist + removed `docs` from forbidden list (was a false positive — `docs/` ships with the install for plugin's internal docs, distinct from the monorepo's top-level `docs/`).
