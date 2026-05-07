@@ -1,0 +1,6 @@
+{
+  "omc-doctor": ["*"],
+  "omc-setup": ["*"],
+  "reference": ["*"],
+  "_comment": "Files in this allowlist may reference cross-host (OMC-specific) tool names that are not registered in omcp's server.mjs. Use ['*'] for full pass-through, or list specific tool names. omc-doctor and omc-setup are honest OMC interop skills; 'reference' is the omcp catalog that quotes both surfaces."
+}
