@@ -130,16 +130,11 @@ audit across repositories.
 
 | Dimension | Count |
 | --- | --- |
-| Agents | 16 |
-| Skills | 36 |
-| Slash commands | 5 |
+| Agents | 21 |
+| Skills | 42 |
+| Slash commands | 41 |
 | Hook events | 4 |
-| MCP server tools | 8 |
+| MCP server tools | 35 |
 
 See [`docs/parity-matrix.md`](../../docs/parity-matrix.md) for per-item status
 and the full OMC ↔ oh-my-copilot coverage breakdown.
-
-## Sibling package
-
-See [`packages/omcs/`](../omcs/) for the deferred Cursor-IDE-targeted sibling
-package. omcs is reserved-but-empty today; this plugin is the active surface.

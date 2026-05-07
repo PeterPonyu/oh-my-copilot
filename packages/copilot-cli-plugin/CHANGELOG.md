@@ -6,6 +6,38 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+### Wave-M: cleanup — stray runtime, premature placeholder, doc archive, stale counts
+
+**M-1: stray runtime dirs purged.** Local cleanup of:
+- `packages/.omcp/{autopilot,plans}/` — empty leftover dirs from autopilot's path-resolution mistake during Wave-L test (autopilot self-corrected to repo-root `.omcp/`, leaving these stubs).
+- `packages/copilot-cli-plugin/.omcp/state/` — `pipeline-state.json` and `skill-active-state.json` from Wave-L test runs.
+
+Both were already gitignored at the repo root, so this was filesystem-only cleanup. No commit needed for the deletion itself; this entry documents that the residue is gone.
+
+**M-2: `packages/omcs/` premature placeholder removed.** The directory contained only a `README.md` (2085 bytes) describing a deferred Cursor-IDE sibling package. Per the README itself: *"Status: reserved path — no code lives here yet."* Reserved-but-empty directories in `packages/` make the install boundary fuzzy and confuse navigation. When omcs has actual code, it can be (re)added then with substance. Cross-reference removed from `packages/copilot-cli-plugin/README.md` (the `## Sibling package` section).
+
+**M-3: docs archived.** 3 files moved to `docs/_archive/` (with index `docs/_archive/README.md` explaining what and why):
+
+| Archived | Reason | Successor |
+|---|---|---|
+| `docs/review-notes.md` | Wave-time publication-review snapshot, not cross-linked from anything | None — current repo state is canonical |
+| `docs/validation/agentic-2026-05-07-sample.md` | Wave-G/H `copilot -p` evidence | `docs/validation/agentic-tmux-2026-05-07-wave-l.md` (real interactive — strictly stronger) |
+| `docs/validation/validation-2026-05-07-sample.md` | Wave-F/G synthetic stdio report | `bash scripts/run-validation.sh` regenerates fresh evidence on demand |
+
+The other 20 top-level docs and `docs/plugin-internal/` stay — all are explicitly cataloged in the root README as part of the docs-first publication surface (this repo is intentionally `docs-first`, not just code).
+
+**M-4: plugin README inventory de-staled.** The `## Plugin inventory` table had been frozen at `Agents: 16, Skills: 36, Slash commands: 5, MCP server tools: 8` since pre-Wave-A. Real counts (verified against `git ls-files`, `ls`, and `tools/list` against the bundled MCP server):
+
+| Dimension | Was | Now |
+|---|---|---|
+| Agents | 16 | **21** |
+| Skills | 36 | **42** |
+| Slash commands | 5 | **41** |
+| Hook events | 4 | 4 (unchanged) |
+| MCP server tools | 8 | **35** |
+
+**M-5: known follow-up — `~/.copilot/config.json` version drift.** The cached install record still says `"version": "0.5.0"`. Source `plugin.json` says `0.0.7`. Two-line fix in `~/.copilot/config.json` would resolve it, but per safety policy that file is out-of-project-scope and must be edited only with explicit user direction. Untouched. To fix: `copilot plugin uninstall omcp && copilot plugin install <repo-path>` (canonical) or hand-edit the version field (surgical).
+
 ### Wave-L: hand-tune the 5 originals + tmux-dominated end-to-end evidence
 
 **L-1: 5 original commands hand-tuned to template parity** with the 8 done in Wave-K-c. Pre-fix audit on `commands/{autopilot,ralph,ralplan,team,deep-interview}.md` found:
