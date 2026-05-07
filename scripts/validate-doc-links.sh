@@ -238,6 +238,7 @@ def collect_anchors(path: pathlib.Path) -> set[str]:
 excluded_dirs = {
     '.git',
     '.omx',
+    '_archive',
     'node_modules',
 }
 

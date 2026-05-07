@@ -1,215 +1,99 @@
 # oh-my-copilot
 
-`oh-my-copilot` is a small, Copilot CLI-first power pack for making a repository
-feel ready for practical GitHub Copilot CLI work: clear instructions, short root
-agents, reusable plugin assets, validation scripts, and docs that explain what is
-safe to trust.
+A Copilot CLI-native power pack for GitHub Copilot CLI: 21 agents, 42 skills, 41 typed slash commands, 4 hook events, and a 35-tool MCP server — installed as a single plugin.
 
-V1 is intentionally **Copilot CLI-first** and **docs/research-first**. Copilot
-cloud agent, IDE integrations, and SDK runtimes are out of scope — those
-host-product surfaces are not addressed here. The Copilot CLI surface achieves
-OMC-shaped parity for agents, skills, hooks, slash commands, and MCP server (see
-`docs/parity-matrix.md`). Here, "v1" names the public docs-first repository
-blueprint; it does **not** turn the root workspace, reusable plugin package, and
-examples into version tiers.
+## What you get
 
-Public claims in this repo follow a simple proof rule:
+- **Typed slash commands** — `/omcp:autopilot`, `/omcp:ralph`, `/omcp:wiki`, `/omcp:cancel`, ... 41 user-invocable routes that the LLM can resolve at the `❯` prompt.
+- **Persistent state** — wiki, project memory, notepad, traces, shared memory, and pipeline state all live under `.omcp/` and survive across sessions.
+- **Real MCP server** — single 588 KB bundled file (`mcp-server/dist/server.mjs`); no `npm install` needed at install time.
+- **Hooks for the 4 lifecycle events** Copilot CLI v1.0.43 exposes: `sessionStart`, `preToolUse`, `postToolUse`, `sessionEnd`.
 
-- repo-owned behavior should point to checked-in files, validators, smoke tests,
-  or logged local evidence;
-- Copilot host-product capabilities such as plan mode, autopilot mode, and
-  built-in delegation should point to GitHub documentation/changelog sources;
-  and
-- examples, design synthesis, and adjacent-host comparison notes should stay
-  labelled as illustrative, inferred, or sibling-scoped.
+## Install
 
-## Parity status
+```bash
+git clone https://github.com/PeterPonyu/oh-my-copilot.git
+cd oh-my-copilot
+copilot plugin install ./packages/copilot-cli-plugin
+```
 
-The Copilot CLI plugin achieves OMC-shaped parity across all major CLI surfaces.
-See [`docs/parity-matrix.md`](./docs/parity-matrix.md) for the full per-feature
-matrix.
+Verify:
 
-| Surface | OMC | oh-my-copilot | Status |
-| --- | --- | --- | --- |
-| Agents | 19 | 21 | covers OMC v1 surface plus 2 omcp-specific (reviewer, research) |
-| Skills | 39 | 42 | covers OMC v1 surface plus omcp-specific additions |
-| Slash commands | 5 | 5 | 1:1 mapping |
-| Hook events | 4 | 4 | covers all 4 hook events Copilot CLI v1.0.42 exposes; OMC's 7 additional events (`UserPromptSubmit`, `PostToolUseFailure`, `SubagentStart`/`Stop`, `PreCompact`, `PermissionRequest`, `Stop`) are host-product limits, see [docs/hook-surface.md](docs/hook-surface.md) |
-| MCP server tools | 6 | 35 | covers state (6), notepad (6), plan (1), pipeline (2), project memory (4), trace (4), wiki (7), shared memory (5) — 17 OMC tools (LSP/AST/python_repl) remain unported |
+```bash
+bash scripts/check-install-state.sh
+# expected: Result: PASS
+```
 
-## Start here
+For the full installation guide (prerequisites, bootstrap script, troubleshooting), see [`docs/installation.md`](./docs/installation.md).
 
-| Need | Read or run |
+## Plugin surface
+
+| Dimension | Count | Notes |
+| --- | --- | --- |
+| Agents | 21 | reviewer, research, executor, planner, architect, debugger, ... |
+| Skills | 42 | autopilot, ralph, ralplan, team, deep-interview, wiki, cancel, ... |
+| Slash commands | 41 | every user-invocable skill has a typed `/omcp:<cmd>` route |
+| Hook events | 4 | `sessionStart`, `preToolUse`, `postToolUse`, `sessionEnd` — all 4 events Copilot CLI v1.0.43 exposes |
+| MCP server tools | 35 | state (6), notepad (6), plan (1), pipeline (2), project memory (4), trace (4), wiki (7), shared memory (5) |
+
+## First commands to try
+
+After install, in an interactive `copilot` session:
+
+```
+/omcp:wiki list                                     # see the persistent wiki
+/omcp:autopilot create a TODO list for this repo    # full pipeline: spec → plan → code
+/omcp:ralplan refactor the auth module              # consensus planning (Planner/Architect/Critic)
+/omcp:cancel --all                                  # stop active modes
+/omcp:omc-doctor                                    # diagnose interop with Claude Code's OMC plugin
+```
+
+## Validate
+
+```bash
+bash scripts/run-validation.sh        # 17-check end-to-end (server + bundled tools/list + state contracts)
+bash scripts/validate-doc-links.sh    # docs cross-refs
+bash scripts/validate-power-surfaces.sh   # manifest counts vs filesystem
+node scripts/audit-tool-refs.mjs      # MCP tool reference audit (skill prompts ↔ registered tools)
+```
+
+The full bootstrap entry point is `bash scripts/bootstrap-copilot-power.sh`. For agentic interactive proof, see `docs/validation/agentic-tmux-2026-05-07-wave-l.md`.
+
+## Documentation map
+
+| Topic | Doc |
 | --- | --- |
-| [`research/`](./research/) | Evidence and source synthesis for OMC, OMX, and current Copilot CLI capabilities. |
-| [`docs/design-spec.md`](./docs/design-spec.md) | Product/design specification for the docs-first Copilot-native repository blueprint. |
-| [`docs/comparison-matrix.md`](./docs/comparison-matrix.md) | Side-by-side comparison of OMC, OMX, and oh-my-copilot v1. |
-| [`docs/copilot-native-mapping.md`](./docs/copilot-native-mapping.md) | Mapping from OMC/OMX concepts to Copilot CLI primitives without forced parity. |
-| [`docs/refinement-priority-map.md`](./docs/refinement-priority-map.md) | Evidence-ordered refinement ledger showing which OMC/OMX lessons should land as Copilot-native shipped surfaces, support tooling, or investigation items. |
-| [`docs/plugin-boundary-review.md`](./docs/plugin-boundary-review.md) | Review note explaining when reusable Copilot-native surfaces should stay plugin-first and when shell/Python should remain proof/support tooling only. |
-| [`docs/benchmark-status.md`](./docs/benchmark-status.md) | Current checked-in benchmark snapshot with durations, score/evaluation gates, raw result links, and what the proof run actually established. |
-| [`docs/state-contract.md`](./docs/state-contract.md) | Local plugin/cache/hook state rules that keep root installs canonical and project-local. |
-| [`docs/root-registration.md`](./docs/root-registration.md) | Source-of-truth matrix for root workspace registration, plugin reuse, and example boundaries. |
-| [`docs/v1-repo-blueprint.md`](./docs/v1-repo-blueprint.md) | Concrete repository layout and artifact roles for the root workspace, reusable plugin package, and illustrative examples. |
-| [`docs/vscode-copilot-testing.md`](./docs/vscode-copilot-testing.md) | How to smoke-test the root workspace and illustrative VS Code layout. |
-| [`benchmark/`](./benchmark/) | Benchmark-style local proof harness for checking whether root, plugin, and example surfaces still work as separate layers. |
-| [`docs/release-checklist.md`](./docs/release-checklist.md) | Maintainer release gates, versioning notes, and Copilot CLI smoke-test evidence. |
-| [`examples/copilot-cli-layout/`](./examples/copilot-cli-layout/) | Illustrative Copilot CLI customization layout. It is not a complete runtime. |
-| [`examples/vscode-copilot-layout/`](./examples/vscode-copilot-layout/) | Stronger VS Code Copilot workspace with handoff agents, prompt files, skills, hooks, and sample files. |
-| [`packages/copilot-cli-plugin/`](./packages/copilot-cli-plugin/) | Experimental local Copilot CLI plugin package with reusable agents, skills, hooks, and scripts. |
-| [`docs/references.md`](./docs/references.md) | Source links and access dates for Copilot claims plus current OMC/OMX/Cursor comparison inputs. |
+| **Install + verify** | [`docs/installation.md`](./docs/installation.md) |
+| **Quick start** | [`docs/quick-start.md`](./docs/quick-start.md) |
+| **Day-to-day usage** | [`docs/usage.md`](./docs/usage.md) |
+| **Limitations + host-product caveats** | [`docs/known-limitations.md`](./docs/known-limitations.md) |
+| **Hook surface (4 events)** | [`docs/hook-surface.md`](./docs/hook-surface.md) |
+| **State contract** | [`docs/state-contract.md`](./docs/state-contract.md) |
+| **Plugin internals** | [`docs/plugin-internal/orchestration.md`](./docs/plugin-internal/orchestration.md), [`docs/plugin-internal/state-management.md`](./docs/plugin-internal/state-management.md) |
+| **Design + scope** | [`docs/design-spec.md`](./docs/design-spec.md), [`docs/v1-repo-blueprint.md`](./docs/v1-repo-blueprint.md) |
+| **Maintainer release lane** | [`docs/release-checklist.md`](./docs/release-checklist.md) |
+| **Adjacent-host comparison (OMC, OMX, Cursor)** | [`docs/comparison-matrix.md`](./docs/comparison-matrix.md), [`docs/copilot-native-mapping.md`](./docs/copilot-native-mapping.md), [`docs/references.md`](./docs/references.md) |
+| **Examples** (illustrative — smoke-test layouts, not runtime) | [`examples/copilot-cli-layout/`](./examples/copilot-cli-layout/), [`examples/vscode-copilot-layout/`](./examples/vscode-copilot-layout/) |
+| **Plugin package source** | [`packages/copilot-cli-plugin/`](./packages/copilot-cli-plugin/) |
+| **Research + evidence** | [`research/`](./research/), [`benchmark/`](./benchmark/) |
 
-## Reading path
+Older wave-time materials live under [`docs/_archive/`](./docs/_archive/) with an index.
 
-1. Start with the [quick start](./docs/quick-start.md) and
-   [installation guide](./docs/installation.md).
-2. Use the [usage guide](./docs/usage.md) for root agents, prompts, skills,
-   plugin routes, and validation commands.
-3. Read the [benchmark status](./docs/benchmark-status.md) to see the latest
-   local Copilot proof snapshot before trusting a surface claim.
-4. Read the [design spec](./docs/design-spec.md) for scope, non-goals, and the
-   core Copilot-native design rule.
-5. Read the [Copilot CLI capability research](./research/copilot-cli-capabilities.md)
-   to see what is source-backed and what remains inference.
-6. Use the [comparison matrix](./docs/comparison-matrix.md) and
-   [native mapping](./docs/copilot-native-mapping.md) if you already know OMC or OMX.
-   Use [references](./docs/references.md) for current Cursor comparison inputs,
-   but keep those Cursor notes sibling-scoped rather than treating them as proof
-   that this repo currently supports Cursor.
-7. Read the [root registration guide](./docs/root-registration.md) for the root
-   workspace, reusable plugin package, and example-workspace boundary.
-8. Use the [v1 blueprint](./docs/v1-repo-blueprint.md) for artifact ownership
-   rules, and the [VS Code/root testing guide](./docs/vscode-copilot-testing.md)
-   for smoke-test details.
+## Boundaries (what's *not* here)
 
-## V1 scope
+The repo is **Copilot CLI-first** and intentionally bounded:
 
-V1 focuses on Copilot CLI as the host because it is the GitHub Copilot surface
-that most closely resembles local terminal-based Claude Code and Codex workflows:
-it can plan, edit, run commands, use project guidance, delegate to agents, use
-skills/hooks/MCP, and review changes from the command line. Those plan,
-autopilot, and delegation capabilities are **host-product features of Copilot
-CLI** documented by GitHub. This repository documents how to adapt to them and
-verifies its own root/plugin/example registration surfaces; it does not
-re-implement those host behaviors.
+- **No runtime framework** — orchestration relies on Copilot CLI's host primitives (custom agents, slash commands, MCP, hooks). The plugin doesn't reimplement plan/autopilot modes.
+- **No tmux worker runtime** and no separate memory subsystem.
+- **Out of scope**: Copilot cloud agent, IDE integrations, SDK runtimes, supported Cursor host surface.
 
-V1 includes:
+The architectural layers are **root workspace** (this repo's `.github/` + `AGENTS.md`), **plugin package** (`packages/copilot-cli-plugin/`), and **examples** (`examples/`). They have distinct ownership and validation; see [`docs/root-registration.md`](./docs/root-registration.md), [`docs/plugin-boundary-review.md`](./docs/plugin-boundary-review.md), and the benchmark snapshot at [`docs/benchmark-status.md`](./docs/benchmark-status.md).
 
-- current-source research and citations;
-- current-source comparison inputs for OMC, OMX, and Cursor boundary analysis;
-- product-facing quick-start, installation, usage, limitation, and release docs;
-- public design docs;
-- a comparison with OMC and OMX;
-- a Copilot-native concept mapping;
-- three architectural layers with distinct ownership: the root workspace, the
-  reusable plugin package, and illustrative examples;
-- root workspace registration for instructions, agents, prompts, skills, and hooks;
-- illustrative repository examples;
-- an experimental reusable Copilot CLI plugin package; and
-- lightweight documentation, root-surface, plugin-surface, and hook validation checks.
+The current refinement priorities — which OMC/OMX lessons land as Copilot-native shipped surfaces, support tooling, or investigation items — are tracked at [`docs/refinement-priority-map.md`](./docs/refinement-priority-map.md).
 
-V1 does **not** include:
+## Project conventions
 
-- custom runtime orchestration machinery;
-- a tmux worker runtime;
-- a replacement for Copilot CLI;
-- forced feature parity with OMC or OMX;
-- a current supported Cursor host surface inside this repository;
-- cloud agent, IDE, SDK, or broad multi-surface implementation; or
-- executable product code beyond validation helpers and bounded hook/skill scripts.
-
-## Design principle
-
-Copilot-native adaptation beats lineage cloning. OMC and OMX are valuable
-reference systems, but Copilot CLI has its own primitives: `AGENTS.md`,
-repository and path-specific instructions, custom agents, skills, hooks, MCP,
-plugins, plan/autopilot modes, and built-in review/delegation surfaces. This
-repo treats those primitives as the design substrate. When those host-product
-primitives are mentioned in public docs, the claim should be backed by GitHub
-sources; when this repo claims a root/plugin/example surface works, the proof
-should come from checked-in validators, smoke tests, or local evidence.
-
-The new flagship Pages rhythm is intentionally still repo-local. We now share
-visual principles with the sibling `oh-my-cursor` site, but we are **not**
-extracting a shared cross-repo design-system package yet. That stays deferred
-until repeated patterns justify the maintenance cost and can be proven without
-blurring the two repos' different proof contracts.
-
-## Hook and log policy
-
-Hook and log behavior is intentionally **project-local** and stable:
-
-- each project writes to its own `.copilot-hooks/`;
-- `sessionStart` bootstraps `.copilot-hooks/config.json` only if it is missing;
-- every hook run appends structured events to `.copilot-hooks/events.jsonl`;
-- human-readable summaries continue to go to `.copilot-hooks/session.log` and
-  `.copilot-hooks/tools.log`; and
-- root workspace, plugin package, and example hook evidence must stay distinct.
-
-This keeps logs separated across projects and avoids recreating hook config on
-every session start.
-
-Plugin installation state is also treated as part of the product contract:
-
-- the installed plugin cache should live under `~/.copilot/installed-plugins/`;
-- the installed plugin `source.path` should point at the canonical root
-  `packages/copilot-cli-plugin/` path, not a transient `.omx/team/...`
-  worktree; and
-- release validation now includes an explicit state-contract check for that.
-
-## Status
-
-Research draft created April 20, 2026. The current product direction is a small,
-usable Copilot CLI-first repository: root workspace registration is the default
-current-directory target, the plugin package remains the reusable distribution
-surface, and examples stay illustrative smoke-test material. The latest checked-
-in proof run is summarized in [docs/benchmark-status.md](./docs/benchmark-status.md).
-
-## Verification
-
-Run the lightweight checks from the repository root:
-
-```bash
-./scripts/validate-doc-links.sh
-./packages/copilot-cli-plugin/skills/parity-guard/check-parity-claims.sh .
-./scripts/validate-power-surfaces.sh
-./scripts/validate-root-copilot-surfaces.sh
-./scripts/validate-copilot-state-contract.sh
-./scripts/validate-benchmark-evidence.sh
-./scripts/validate-release-readiness.sh
-./scripts/bootstrap-copilot-power.sh
-```
-
-If root-surface checks are folded into `validate-power-surfaces.sh`, the third
-command is optional, but the same root instruction, agent, prompt, skill, and
-hook-routing checks should still be covered.
-
-For direct Copilot CLI smoke evidence, run:
-
-```bash
-./scripts/smoke-copilot-cli.sh
-```
-
-Use `RUN_COPILOT_AGENT_SMOKE=1 ./scripts/smoke-copilot-cli.sh` only when a
-signed-in Copilot CLI session and model access are available.
-
-For a benchmark-style local proof run, use:
-
-```bash
-./benchmark/quick_test.sh --variant vanilla
-./benchmark/quick_test.sh --run-agent-smoke --variant enhanced
-./benchmark/run_full_comparison.sh --run-agent-smoke --variant enhanced
-```
-
-Each run now writes both timing output and an evaluation contract
-(`*_evaluation.json` / `*_evaluation.md`) so enhanced prompt-smoke proof can be
-scored and release-gated separately from the vanilla baseline. The benchmark
-wrappers also normalize transient `/.omx/team/.../worktrees/...` invocation
-paths back to the canonical repo root before they write checked-in evidence.
-
-For manual Copilot smoke tests, including root-vs-plugin agent routing and hook
-evidence caveats, see
-[docs/vscode-copilot-testing.md](./docs/vscode-copilot-testing.md).
+Repo-owned claims point to checked-in files, validators, smoke tests, or local evidence. Copilot host-product behavior (plan mode, autopilot mode, delegation) points to GitHub documentation. Adjacent-host references (OMC, OMX, Cursor) stay illustrative or sibling-scoped — never used as proof of repo behavior.
 
 ## License
 

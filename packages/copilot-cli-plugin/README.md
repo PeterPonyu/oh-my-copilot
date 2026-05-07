@@ -73,9 +73,6 @@ It is still intentionally bounded:
 - no separate memory subsystem
 - Copilot cloud agent, IDE integrations, and SDK runtimes are out of scope
 
-On the Copilot CLI surface this plugin achieves OMC-shaped parity. See
-[`docs/parity-matrix.md`](../../docs/parity-matrix.md) for the full matrix.
-
 ## Suggested local test
 
 From a machine with GitHub Copilot CLI installed, install from this local path
@@ -135,6 +132,3 @@ audit across repositories.
 | Slash commands | 41 |
 | Hook events | 4 |
 | MCP server tools | 35 |
-
-See [`docs/parity-matrix.md`](../../docs/parity-matrix.md) for per-item status
-and the full OMC ↔ oh-my-copilot coverage breakdown.

@@ -134,20 +134,15 @@ import pathlib
 import sys
 
 text = pathlib.Path(sys.argv[1]).read_text(encoding="utf-8")
-start = text.find("## Start here")
-end = text.find("## Reading path", start)
-if start == -1 or end == -1:
-    raise SystemExit("FAIL: README is missing the Start here -> Reading path structure")
-segment = text[start:end]
 required = [
     "docs/refinement-priority-map.md",
     "docs/plugin-boundary-review.md",
     "docs/benchmark-status.md",
 ]
-missing = [item for item in required if item not in segment]
+missing = [item for item in required if item not in text]
 if missing:
-    raise SystemExit(f"FAIL: README Start here section is missing required discoverability links: {missing}")
-print("ok: README Start here section exposes refinement-priority, plugin-boundary, and benchmark-status links")
+    raise SystemExit(f"FAIL: README is missing required discoverability links: {missing}")
+print("ok: README exposes refinement-priority, plugin-boundary, and benchmark-status links")
 PY
   log "REFINEMENT_MAP_OK"
   log "PLUGIN_BOUNDARY_OK"

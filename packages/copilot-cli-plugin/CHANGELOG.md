@@ -6,6 +6,23 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+### Wave-O: README polish + one more outdated archive
+
+- **Root `README.md` rewritten** for human readability. Length cut 210 → ~110 lines. Lead now opens with what the plugin gives you and how to install, not with v1-blueprint governance language. Removed: `## V1 scope` (22-bullet includes/excludes list), `## Reading path` (8-step walkthrough redundant with the docs map), `## Status` (date stamp not load-bearing), most of `## Verification` (consolidated to 4 lines + pointer), `## Hook and log policy` (moved entirely to `docs/hook-surface.md` territory; one-line summary removed from front README), most of `## Design principle` (compressed to a 3-line `## Project conventions` section that names the proof rule without expanding it). Kept: `## Plugin surface` table, install steps, "first commands to try" tutorial block, doc map, license.
+- **`docs/copilot-cli-plugin-install.md` archived.** Documented `npm install` + MCP build steps that became stale after Wave-K's bundle (`mcp-server/dist/server.mjs` ships pre-built). Only inbound link was from a historical wave-0 port note in `tools/omc-port/historical/`. Canonical install path is now the 3 commands in the root README plus `docs/installation.md` for the full bootstrap walkthrough. Archive index entry added.
+
+### Wave-N: drop OMC-parity framing
+
+Project no longer frames itself in terms of parity to other plugins (`oh-my-claudecode`, `oh-my-codex`, etc.). The plugin is a Copilot CLI-native power pack on its own terms.
+
+**Changes:**
+- **Root `README.md`**: removed the `## Parity status` section (header, intro paragraph, 6-row OMC ↔ omcp table) entirely. Replaced with a `## Plugin surface` table that just describes what omcp is, with no comparison framing. Lead paragraph rewritten to drop the "achieves OMC-shaped parity" claim.
+- **Plugin `README.md`**: removed the parity-matrix sentence from the "still intentionally bounded" section. Removed the trailing "for per-item status and the full OMC ↔ oh-my-copilot coverage breakdown" line below the inventory table.
+- **`AGENTS.md`**: rewrote the agent-instructions parity sentence. The 5-line claim ("OMC-shaped parity for agents (16), skills (36)...") is now a single line stating what omcp delivers (21/42/41/4/35) without the comparison.
+- **`docs/parity-matrix.md` archived** to `docs/_archive/parity-matrix.md` with index entry. The matrix is no longer load-bearing — was the canonical reference cited from every parity-framing claim above. With those claims gone, no active doc links to it.
+
+**No CHANGELOG history rewrites.** Older wave entries that referenced parity-matrix.md or used parity language remain as-is — they describe what was true at that wave; rewriting historical entries would be revisionist.
+
 ### Wave-M: cleanup — stray runtime, premature placeholder, doc archive, stale counts
 
 **M-1: stray runtime dirs purged.** Local cleanup of:

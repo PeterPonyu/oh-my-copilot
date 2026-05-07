@@ -12,6 +12,8 @@ top-level repo or plugin READMEs and are not exercised by `validate-doc-links.sh
 | `review-notes.md` | Wave-time publication-review snapshot. Not cross-linked from any README or other doc. | The current state of the repo *is* the canonical surface; no successor doc needed. |
 | `validation/agentic-2026-05-07-sample.md` | Wave-G/H agentic evidence captured via `copilot -p` and ad-hoc invocations. Superseded by tmux-interactive evidence. | `docs/validation/agentic-tmux-2026-05-07-wave-l.md` (real interactive `copilot` session — strictly stronger evidence). |
 | `validation/validation-2026-05-07-sample.md` | Wave-F/G 17-check validation report (synthetic stdio). Superseded by the live runs of `scripts/run-validation.sh`. | Run `bash scripts/run-validation.sh` to regenerate fresh evidence on demand; the script is the artifact, not the report. |
+| `parity-matrix.md` | OMC ↔ oh-my-copilot per-feature parity tracker. Project explicitly stopped framing itself in terms of parity to other plugins (Wave-N), so the matrix is no longer load-bearing. | Plugin surface is summarized in the root README's `## Plugin surface` table and the plugin README's `## Plugin inventory` table — both kept in sync with the actual install. |
+| `copilot-cli-plugin-install.md` | Plugin-specific install guide that documented `npm install` + MCP build steps. Wave-K bundled the MCP server (`mcp-server/dist/server.mjs`), so the build steps are stale. The only inbound link was from a historical wave-0 port note. | `docs/installation.md` covers the canonical install + bootstrap path; the install in the root README's `## Install` section is now a 3-line `git clone` + `copilot plugin install` + `check-install-state`. |
 
 ## Why these specifically (and not the rest of `docs/`)
 
