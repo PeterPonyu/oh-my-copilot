@@ -32,4 +32,11 @@ jq -cn --arg ts "$NOW" --arg cwd "$CWD" \
 printf 'source=plugin event=sessionEnd timestamp=%s cwd=%s\n' \
   "$NOW" "$CWD" >> .copilot-hooks/session.log
 
+# Wave-C-3: prune notepad lanes (manual + working) older than 7 days at
+# session end (per ADR-2). Priority lane is preserved by the store's
+# default-lane behavior. Bridge errors absorbed; non-fatal.
+if declare -f omcp_call_store >/dev/null; then
+  omcp_call_store notepad-store notepadPrune '{"maxAgeDays":7}' >/dev/null
+fi
+
 exit 0
