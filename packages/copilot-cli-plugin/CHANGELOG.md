@@ -26,6 +26,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - `writer-memory/SKILL.md` excluded — line 232 references `.omc/notepad.md` as a deliberate cross-host bridge for users running both omcp and OMC. Annotated with `<!-- cross-host: deliberate -->` so future sweeps skip it.
 - `cancel/SKILL.md` excluded — owned by Wave-C-1b (separate concern: ToolSearch query-string surgery).
 
+### Wave-C-1b: cancel/SKILL.md surgery + content reconciliation
+- Removed three embedded HTML comments from inside the `ToolSearch(query="...")` call at line 48. The comments claimed `state_clear`, `state_list_active`, `state_get_status` were "not in v1 server" — these claims were false (all three registered in `server.mjs` at L95/L122/L134 since PR #20). The HTML inside the quoted string was runtime garbage being passed to the tool dispatcher.
+- Updated 3 stale `.omc/` references in the bash fallback block (walk-up loop, directory check, error message) to `.omcp/` to match the v0.4.0 path rename. The fallback's substantive logic is unchanged — the warning prose about not using fallback for `autopilot`/`cli-teams` remains intact.
+- Updated descriptive label "OMC Teams (tmux CLI workers)" to "CLI Teams (tmux CLI workers)" in the dependency-order list to reflect the B-0 skill rename.
+
 ## [0.5.0] - 2026-05-06
 
 ### Fixed
