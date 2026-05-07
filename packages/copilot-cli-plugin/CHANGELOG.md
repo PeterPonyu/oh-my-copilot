@@ -26,6 +26,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - `writer-memory/SKILL.md` excluded — line 232 references `.omc/notepad.md` as a deliberate cross-host bridge for users running both omcp and OMC. Annotated with `<!-- cross-host: deliberate -->` so future sweeps skip it.
 - `cancel/SKILL.md` excluded — owned by Wave-C-1b (separate concern: ToolSearch query-string surgery).
 
+### Wave-C-2: tool-ref audit script + wiki skill arg-shape fix
+- New `scripts/audit-tool-refs.mjs` parses every `mcp__omcp__<tool>` and `ToolSearch(query="select:...")` reference in `packages/copilot-cli-plugin/skills/**/*.md` and `packages/copilot-cli-plugin/agents/**/*.md`, diffs against `server.mjs` `name:` registrations, and emits 3 lists: (a) referenced-but-not-registered (blocking), (b) registered-but-never-referenced (informational), (c) cross-host allowlist matches.
+- New `scripts/audit-tool-refs.allowlist.json` allows `omc-doctor`, `omc-setup`, and `reference` to reference cross-host tool names without failing the audit.
+- Audit run: 16 unique tools referenced, 35 registered, list (a) empty (PASS), 23 tools registered-but-unreferenced (Wave-D follow-up scope: skill rewiring to actually invoke the new tools instead of just naming them).
+- `skills/wiki/SKILL.md` rewritten — every tool example was using OMC's API (`{title, content, tags, category, page, query}`) instead of omcp's actual schema (`{title, body, tags, slug, q}`). Now uses correct arg names: `body` not `content`, `slug` not `page`, `q` not `query`, `path` for ingest. `category` field replaced with tag-based taxonomy guidance. Examples now use literal `mcp__omcp__` prefix.
+
 ### Wave-C-1d: shared-memory 4KB warning + per-family concurrency contract
 - `mcp-server/shared-memory-store.mjs`: `sharedMemoryWrite` now computes the encoded byte size of each event before append; if it exceeds 4096 bytes (Linux PIPE_BUF), emits a rate-limited stderr warning. Deduped per `(channel, size)` within a 60-second window via in-memory map. Exposes `_resetSharedMemoryWarningRateLimit()` for test isolation.
 - `mcp-server/README.md`: new "Concurrency contract per tool family" section. Per-family rules table covering `state_*`, `notepad_*`, `project_memory_*`, `wiki_*`, `shared_memory_*` with explicit atomicity and concurrent-writer semantics. Aligns documentation with actual implementation per ADR-1.
