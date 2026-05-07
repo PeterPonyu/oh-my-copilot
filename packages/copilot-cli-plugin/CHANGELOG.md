@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+### Wave-O: README polish + one more outdated archive
+
+- **Root `README.md` rewritten** for human readability. Length cut 210 → ~110 lines. Lead now opens with what the plugin gives you and how to install, not with v1-blueprint governance language. Removed: `## V1 scope` (22-bullet includes/excludes list), `## Reading path` (8-step walkthrough redundant with the docs map), `## Status` (date stamp not load-bearing), most of `## Verification` (consolidated to 4 lines + pointer), `## Hook and log policy` (moved entirely to `docs/hook-surface.md` territory; one-line summary removed from front README), most of `## Design principle` (compressed to a 3-line `## Project conventions` section that names the proof rule without expanding it). Kept: `## Plugin surface` table, install steps, "first commands to try" tutorial block, doc map, license.
+- **`docs/copilot-cli-plugin-install.md` archived.** Documented `npm install` + MCP build steps that became stale after Wave-K's bundle (`mcp-server/dist/server.mjs` ships pre-built). Only inbound link was from a historical wave-0 port note in `tools/omc-port/historical/`. Canonical install path is now the 3 commands in the root README plus `docs/installation.md` for the full bootstrap walkthrough. Archive index entry added.
+
 ### Wave-N: drop OMC-parity framing
 
 Project no longer frames itself in terms of parity to other plugins (`oh-my-claudecode`, `oh-my-codex`, etc.). The plugin is a Copilot CLI-native power pack on its own terms.
