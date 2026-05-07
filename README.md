@@ -73,7 +73,7 @@ The full bootstrap entry point is `bash scripts/bootstrap-copilot-power.sh`. For
 | **Design + scope** | [`docs/design-spec.md`](./docs/design-spec.md), [`docs/v1-repo-blueprint.md`](./docs/v1-repo-blueprint.md) |
 | **Maintainer release lane** | [`docs/release-checklist.md`](./docs/release-checklist.md) |
 | **Adjacent-host comparison (OMC, OMX, Cursor)** | [`docs/comparison-matrix.md`](./docs/comparison-matrix.md), [`docs/copilot-native-mapping.md`](./docs/copilot-native-mapping.md), [`docs/references.md`](./docs/references.md) |
-| **Examples** | [`examples/copilot-cli-layout/`](./examples/copilot-cli-layout/), [`examples/vscode-copilot-layout/`](./examples/vscode-copilot-layout/) |
+| **Examples** (illustrative — smoke-test layouts, not runtime) | [`examples/copilot-cli-layout/`](./examples/copilot-cli-layout/), [`examples/vscode-copilot-layout/`](./examples/vscode-copilot-layout/) |
 | **Plugin package source** | [`packages/copilot-cli-plugin/`](./packages/copilot-cli-plugin/) |
 | **Research + evidence** | [`research/`](./research/), [`benchmark/`](./benchmark/) |
 
