@@ -45,7 +45,7 @@ The state management tools (`state_clear`, `state_read`, `state_write`, `state_l
 any state tool, you MUST first load all of them via `ToolSearch`:
 
 ```
-ToolSearch(query="select:mcp__omcp__state_clear <!-- TODO: MCP tool state_clear not in v1 server -->,mcp__omcp__state_read,mcp__omcp__state_write,mcp__omcp__state_list_active <!-- TODO: MCP tool state_list_active not in v1 server -->,mcp__omcp__state_get_status <!-- TODO: MCP tool state_get_status not in v1 server -->")
+ToolSearch(query="select:mcp__omcp__state_clear,mcp__omcp__state_read,mcp__omcp__state_write,mcp__omcp__state_list_active,mcp__omcp__state_get_status")
 ```
 
 If `state_clear` is unavailable or fails, use this **bash fallback** as an **emergency
@@ -62,7 +62,7 @@ cleanup that cannot be done via file deletion alone.
 ```bash
 # Fallback: direct file removal when state_clear MCP tool is unavailable
 SESSION_ID="${CLAUDE_SESSION_ID:-${CLAUDECODE_SESSION_ID:-}}"
-REPO_ROOT="$(git rev-parse --show-toplevel 2>/dev/null || { d="$PWD"; while [ "$d" != "/" ] && [ ! -d "$d/.omc" ]; do d="$(dirname "$d")"; done; echo "$d"; })"
+REPO_ROOT="$(git rev-parse --show-toplevel 2>/dev/null || { d="$PWD"; while [ "$d" != "/" ] && [ ! -d "$d/.omcp" ]; do d="$(dirname "$d")"; done; echo "$d"; })"
 
 # Cross-platform SHA-256 (macOS: shasum, Linux: sha256sum)
 sha256portable() { printf '%s' "$1" | (sha256sum 2>/dev/null || shasum -a 256) | cut -c1-16; }
@@ -75,10 +75,10 @@ if [ -n "${OMC_STATE_DIR:-}" ]; then
   DIR_NAME="$(basename "$REPO_ROOT" | sed 's/[^a-zA-Z0-9_-]/_/g')"
   OMC_STATE="$OMC_STATE_DIR/${DIR_NAME}-${HASH}/state"
   [ ! -d "$OMC_STATE" ] && { echo "ERROR: State dir not found at $OMC_STATE" >&2; exit 1; }
-elif [ "$REPO_ROOT" != "/" ] && [ -d "$REPO_ROOT/.omc" ]; then
+elif [ "$REPO_ROOT" != "/" ] && [ -d "$REPO_ROOT/.omcp" ]; then
   OMC_STATE="$REPO_ROOT/.omcp/state"
 else
-  echo "ERROR: Could not locate .omc state directory" >&2
+  echo "ERROR: Could not locate .omcp state directory" >&2
   exit 1
 fi
 MODE="ralplan"  # <-- replace with the target mode
@@ -118,7 +118,7 @@ Active modes are still cancelled in dependency order:
 6. Ultrapilot (standalone)
 7. Pipeline (standalone)
 8. Team (Claude Code native)
-9. OMC Teams (tmux CLI workers)
+9. CLI Teams (tmux CLI workers)
 10. Plan Consensus (standalone)
 11. Self-Improve (standalone — clear state, clean orphaned worktrees, preserve iteration_state for resume, set status: "user_stopped" in the resolved `<self-improve-root>/state/agent-settings.json`; new runs use `.omcp/self-improve/topics/<topic-slug>/`, with flat `.omcp/self-improve/` retained only for legacy single-track resumes)
 
