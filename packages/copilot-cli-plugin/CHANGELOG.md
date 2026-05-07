@@ -6,6 +6,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+### Wave-G: version-line consistency + report redaction + agentic evidence
+- **Renumbered prior CHANGELOG versions** to align with the 0.0.x line: `[0.5.0] → [0.0.6]`, `[0.4.0] → [0.0.5]`, `[0.3.0] → [0.0.4]`, `[0.2.0] → [0.0.3]`, `[0.1.0] → [0.0.2]`. Inline narrative version refs updated for consistency.
+- **Path redaction in `scripts/run-validation.sh`** — `$HOME` → literal `$HOME`, hostname → `<host>`, tmp working dir → `<tmpdir>` in the committed report content. Default behavior: redact when `--out` is under `docs/`, raw when under `.omcp/`. Override with `--redact` / `--no-redact`. Prevents leaking machine-specific user paths to the public repo.
+- **`--print-agentic-runbook` flag** documents the manual real-Copilot-CLI test sequence (slash command discovery, autopilot dispatch, hook lifecycle observation) that the auto-script cannot run inside a sandboxed agent harness.
+- **`docs/validation/agentic-2026-05-07-sample.md`** — captured a real `copilot -p` agentic run as evidence. Discovered an interesting behavioral nuance: skill prose uses `mcp__omcp__<tool>` (the user-facing form Copilot's MCP client expects); direct stdio uses bare `<tool>` (the registered name). The agent autonomously diagnosed and retried; both forms work in their respective contexts. No skill rewrites needed.
+
 ### Wave-F: substantive tests + reproducible validation report
 - **Strengthened hook-envelope fixture tests** with deep side-effect assertions. Replaced shallow string matches (`assert.match(stdout, /\{"continue":true\}/)`) with content + side-effect verification: snapshots `.copilot-hooks/events.jsonl` and `.omcp/traces/<session>.jsonl` before/after each hook run, asserts on byte-level deltas, kind-counts, payload-summary keys, and absence of unintended writes.
 - **New `scripts/run-validation.sh`** — single-command reproducible validator. Boots the MCP server, exercises each store's round-trip with content checks (write a value, read it back, assert structural equality), runs all hooks with fixture envelopes, then writes a timestamped Markdown report (default: `docs/validation/validation-<timestamp>.md`; pass `--out` for ephemeral runs to `.omcp/validation/`).
