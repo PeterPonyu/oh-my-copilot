@@ -26,6 +26,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - `writer-memory/SKILL.md` excluded — line 232 references `.omc/notepad.md` as a deliberate cross-host bridge for users running both omcp and OMC. Annotated with `<!-- cross-host: deliberate -->` so future sweeps skip it.
 - `cancel/SKILL.md` excluded — owned by Wave-C-1b (separate concern: ToolSearch query-string surgery).
 
+### Wave-D-1: state_write/state_read mode-form compat
+- `state_write` and `state_read` now accept an OMC-style mode-form alongside the original key/value form. This unblocks the OMC-ported skills (`team`, `deep-dive`, `deep-interview`, `cancel`) whose state pseudocode like `state_write(mode="team", active=true, current_phase="team-plan", state={...})` previously didn't dispatch correctly to omcp's `{key, value}` schema.
+- **Form 1 (unchanged):** `state_write({key, value})` writes verbatim.
+- **Form 2 (new):** `state_write({mode, active?, current_phase?, session_id?, state?, ...})` — strips `mode`, writes the rest as the value to `.omcp/state/<mode>-state.json`. Fields `key` and `value` are also stripped from form-2 calls.
+- **state_read symmetry:** `state_read({mode})` reads `<mode>-state.json` and returns the stored value (with `mode` already stripped at write time).
+- Schema descriptions updated to document both forms with examples. Validation: rejects calls with neither `key` nor `mode`.
+- 3 new integration tests verify mode-form round-trip, key-form regression (unchanged behavior), and missing-arg validation. Combined suite: 111/111 pass.
+- Skill bodies are NOT touched in this PR — the compat layer makes them work as-written. Future cosmetic cleanup (explicit `mcp__omcp__` prefixes in skill prose) is deferred.
+
 ### Wave-C-3c: wiki_query result-count logging
 - `wikiQuery` appends one JSON line `{ts, query, result_count}` to `.omcp/wiki/log.md` per call. Per ADR-5: write-only; user reviews monthly via `grep` to detect when substring-search relevance degrades enough to trigger an embedding-based search upgrade. Trigger condition: >20 results in >50% of recent queries.
 - Logging is best-effort — failures don't propagate to the `wiki_query` caller.

@@ -61,25 +61,42 @@ server.setRequestHandler(ListToolsRequestSchema, async () => ({
   tools: [
     {
       name: "state_read",
-      description: "Read a JSON value from .omcp/state/<key>.json",
+      description:
+        "Read a JSON value from state. Pass {key} for direct key access (.omcp/state/<key>.json), or {mode} for orchestration-mode shorthand (reads .omcp/state/<mode>-state.json). Returns {value, exists}.",
       inputSchema: {
         type: "object",
         properties: {
           key: { type: "string", description: "State key (filename without .json)" },
+          mode: {
+            type: "string",
+            description: "Orchestration mode shorthand — reads <mode>-state.json (compat form)",
+          },
         },
-        required: ["key"],
+        required: [],
       },
     },
     {
       name: "state_write",
-      description: "Atomically write a JSON value to .omcp/state/<key>.json",
+      description:
+        "Atomically write a JSON value to state. Two forms accepted: (1) explicit {key, value} writes to .omcp/state/<key>.json verbatim. (2) compat {mode, ...rest} writes the rest object as the value to .omcp/state/<mode>-state.json (with mode stripped). Form 2 supports the OMC-style state_write(mode='team', active=true, current_phase='...', state={...}) pseudocode used in ported skills.",
       inputSchema: {
         type: "object",
         properties: {
-          key: { type: "string", description: "State key" },
-          value: { description: "JSON-serializable value to store" },
+          key: { type: "string", description: "State key (form 1)" },
+          value: { description: "JSON-serializable value (form 1)" },
+          mode: {
+            type: "string",
+            description: "Orchestration mode (form 2) — writes to <mode>-state.json",
+          },
+          active: { type: "boolean", description: "Mode active flag (form 2)" },
+          current_phase: { type: "string", description: "Mode phase (form 2)" },
+          session_id: { type: "string", description: "Session id (form 2)" },
+          state: {
+            type: "object",
+            description: "Custom mode state sub-object (form 2)",
+          },
         },
-        required: ["key", "value"],
+        required: [],
       },
     },
     {
@@ -554,11 +571,45 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
     let result;
     switch (name) {
       case "state_read": {
-        result = await stateRead(args.key);
+        // Two forms accepted:
+        //   (1) {key} — read .omcp/state/<key>.json verbatim
+        //   (2) {mode} — read .omcp/state/<mode>-state.json (compat shorthand)
+        let resolvedKey = args?.key;
+        if (!resolvedKey && typeof args?.mode === "string" && args.mode.length > 0) {
+          resolvedKey = `${args.mode}-state`;
+        }
+        if (!resolvedKey) {
+          throw new Error("state_read requires either 'key' or 'mode'");
+        }
+        result = await stateRead(resolvedKey);
         break;
       }
       case "state_write": {
-        result = await stateWrite(args.key, args.value);
+        // Two forms accepted:
+        //   (1) {key, value} — write verbatim
+        //   (2) {mode, ...rest} — write rest (minus mode/key/value) as value
+        //       to .omcp/state/<mode>-state.json
+        let resolvedKey = args?.key;
+        let resolvedValue = args?.value;
+        if (!resolvedKey && typeof args?.mode === "string" && args.mode.length > 0) {
+          resolvedKey = `${args.mode}-state`;
+          // Build value from all args except mode/key/value
+          const v = { ...(args ?? {}) };
+          delete v.mode;
+          delete v.key;
+          delete v.value;
+          // If caller passed an explicit `value` field alongside mode-form
+          // top-level fields, prefer mode-form (top-level + state subobject).
+          // If neither key nor value was passed and v is empty, value = {}.
+          resolvedValue = v;
+        }
+        if (!resolvedKey) {
+          throw new Error("state_write requires either 'key' or 'mode'");
+        }
+        if (resolvedValue === undefined) {
+          throw new Error("state_write requires 'value' (form 1) or mode-form fields");
+        }
+        result = await stateWrite(resolvedKey, resolvedValue);
         break;
       }
       case "state_list": {
