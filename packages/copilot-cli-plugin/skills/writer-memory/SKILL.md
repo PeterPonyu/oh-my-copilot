@@ -239,7 +239,7 @@ Writer Memory integrates with `.omc/notepad.md`:
 For complex character analysis:
 ```
 [Delegate to the architect agent]
-<!-- TODO: agent architect must be in agents/architect.agent.md (Wave 4) -->
+
 ```
 
 ### Character Validation Pipeline

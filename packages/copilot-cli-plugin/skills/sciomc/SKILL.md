@@ -67,15 +67,15 @@ Fire independent stages in parallel via Task tool:
 ```
 // Stage 1 - Simple data gathering
 [Delegate to the scientist agent]
-<!-- TODO: agent scientist must be in agents/scientist.agent.md (Wave 4) -->
+
 
 // Stage 2 - Standard analysis
 [Delegate to the scientist agent]
-<!-- TODO: agent scientist must be in agents/scientist.agent.md (Wave 4) -->
+
 
 // Stage 3 - Complex reasoning
 [Delegate to the scientist agent]
-<!-- TODO: agent scientist must be in agents/scientist.agent.md (Wave 4) -->
+
 ```
 
 ### Smart Model Routing
@@ -106,7 +106,7 @@ After parallel execution completes, verify findings:
 ```
 // Cross-validation stage
 [Delegate to the scientist agent]
-<!-- TODO: agent scientist must be in agents/scientist.agent.md (Wave 4) -->
+
 ```
 
 ## AUTO Mode
@@ -173,11 +173,11 @@ When stages analyze different data sources:
 ```
 // All fire simultaneously
 [Delegate to the scientist agent]
-<!-- TODO: agent scientist must be in agents/scientist.agent.md (Wave 4) -->
+
 [Delegate to the scientist agent]
-<!-- TODO: agent scientist must be in agents/scientist.agent.md (Wave 4) -->
+
 [Delegate to the scientist agent]
-<!-- TODO: agent scientist must be in agents/scientist.agent.md (Wave 4) -->
+
 ```
 
 ### Hypothesis Battery (Parallel)
@@ -187,11 +187,11 @@ When testing multiple hypotheses:
 ```
 // Test hypotheses simultaneously
 [Delegate to the scientist agent]
-<!-- TODO: agent scientist must be in agents/scientist.agent.md (Wave 4) -->
+
 [Delegate to the scientist agent]
-<!-- TODO: agent scientist must be in agents/scientist.agent.md (Wave 4) -->
+
 [Delegate to the scientist agent]
-<!-- TODO: agent scientist must be in agents/scientist.agent.md (Wave 4) -->
+
 ```
 
 ### Cross-Validation (Sequential)
@@ -204,7 +204,7 @@ When verification depends on all findings:
 
 // Then sequential verification
 [Delegate to the scientist agent]
-<!-- TODO: agent scientist must be in agents/scientist.agent.md (Wave 4) -->
+
 ```
 
 ### Concurrency Limit
