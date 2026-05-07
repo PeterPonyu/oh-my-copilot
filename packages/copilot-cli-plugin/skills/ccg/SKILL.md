@@ -37,7 +37,7 @@ Use this when you want parallel external perspectives without launching tmux tea
    - `omc ask codex "<codex prompt>"`
    - `omc ask gemini "<gemini prompt>"`
 
-3. Artifacts are written under `.omc/artifacts/ask/`
+3. Artifacts are written under `.omcp/artifacts/ask/`
 
 4. Claude synthesizes both outputs into one final response
 ```
@@ -69,8 +69,8 @@ omc ask gemini "<gemini prompt>"
 Read latest ask artifacts from:
 
 ```text
-.omc/artifacts/ask/codex-*.md
-.omc/artifacts/ask/gemini-*.md
+.omcp/artifacts/ask/codex-*.md
+.omcp/artifacts/ask/gemini-*.md
 ```
 
 ### 4. Synthesize

@@ -21,6 +21,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Removed
 - `skills/omc-reference/` (duplicate of `oh-my-copilot-reference`, kept the latter).
 
+### Wave-C-1a: Skill path drift sweep (`.omc/` → `.omcp/`)
+- Mechanical replacement in 3 skills with paths drifting from the v0.4.0 directory rename: `wiki/SKILL.md` (5 lines), `ccg/SKILL.md` (3 lines), `cli-teams/SKILL.md` (2 lines). 10 lines updated total.
+- `writer-memory/SKILL.md` excluded — line 232 references `.omc/notepad.md` as a deliberate cross-host bridge for users running both omcp and OMC. Annotated with `<!-- cross-host: deliberate -->` so future sweeps skip it.
+- `cancel/SKILL.md` excluded — owned by Wave-C-1b (separate concern: ToolSearch query-string surgery).
+
 ## [0.5.0] - 2026-05-06
 
 ### Fixed

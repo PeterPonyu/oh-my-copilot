@@ -87,13 +87,13 @@ plan lives in one repo but the implementation touches sibling repos, resolve the
 working directory before launch:
 
 - If the task references a plan artifact under one repo (for example
-  `tool/.omc/plans/task-1200-gwd-gifs.md`) and target paths in sibling repos
+  `tool/.omcp/plans/task-1200-gwd-gifs.md`) and target paths in sibling repos
   (for example `api/` and `admin/`), choose the shared workspace root that contains
   all participating repos (for example the parent `inter/` directory).
 - Use an **absolute plan path** in the task text so the workers can still find the
   plan after `--cwd` changes the launch directory.
 - Include the explicit repo paths or repo names in the task text and subtasks.
-- Do not anchor the launch cwd to only the repo containing `.omc/plans/...` when
+- Do not anchor the launch cwd to only the repo containing `.omcp/plans/...` when
   target repos are siblings; that strands `codex`, `claude`, and `gemini` workers in
   the plan repo instead of the implementation workspace.
 - If no safe shared workspace root can be identified, do not launch `/omcp:cli-teams`.
