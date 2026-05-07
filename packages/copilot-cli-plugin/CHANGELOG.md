@@ -6,6 +6,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+### Wave-E: post-audit cleanup (this PR)
+- **Hook script path arithmetic fixed.** `post-tool-audit.sh` and `log-session-start.sh` previously computed `REPO_ROOT="$(cd "$SCRIPT_DIR/../../.." && pwd)"`. That arithmetic assumed the script lived at `<repo>/packages/copilot-cli-plugin/scripts/`; under the install symlink at `~/.copilot/installed-plugins/_direct/...`, three `..` up landed at `~/.copilot/installed-plugins/` instead of the workspace root, so `.copilot-hooks/common.sh` couldn't be sourced. Replaced with `git rev-parse --show-toplevel || pwd` — locates the actual workspace regardless of install path.
+- **Stripped 13 stale `<!-- TODO: agent X must be in agents/X.agent.md (Wave 4) -->` comments** across 5 skills (ultraqa, ralph, external-context, team, deep-interview). All cited agents (qa-tester, architect, executor, critic, document-specialist, planner, explore) were ported in PR #18 and exist in `agents/`. Same false-claim pattern as the cancel/SKILL.md fix in PR #27 but in HTML comments rather than inside ToolSearch query strings.
+
+## [0.6.0] - 2026-05-07
+
 ### Added (Wave A, PR #18)
 - 5 agents ported from OMC: `analyst`, `code-simplifier`, `designer`, `explore`, `git-master`. Agent count 16 → 21.
 - 8 skills ported from OMC: `ccg`, `deepinit`, `omc-doctor`, `omc-reference` (since renamed), `omc-setup`, `omc-teams` (since renamed), `wiki`, `writer-memory`. Skill count 35 → 43.

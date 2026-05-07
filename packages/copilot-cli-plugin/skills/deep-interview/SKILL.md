@@ -452,7 +452,7 @@ Skipping any stage is possible but reduces quality assurance:
 - Use `AskUserQuestion` for each interview question — provides clickable UI with contextual options
 - Preserve the AskUserQuestion path for OMC-native interaction; do not introduce OMX-only structured-question transport into this skill
 - Use `[Delegate to the explore agent]
-<!-- TODO: agent explore must be in agents/explore.agent.md (Wave 4) -->` for brownfield codebase exploration (run BEFORE asking user about codebase)
+` for brownfield codebase exploration (run BEFORE asking user about codebase)
 - Use opus model (temperature 0.1) for ambiguity scoring — consistency is critical
 - Use `state_write` / `state_read` for interview state persistence
 - Use `Write` tool to save the final spec to `.omcp/specs/deep-interview-{slug}.md` exactly; use `.omcp/state/` or `state_write` for ephemeral artifacts

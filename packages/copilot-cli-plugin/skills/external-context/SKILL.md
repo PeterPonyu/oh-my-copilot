@@ -50,10 +50,10 @@ Fire independent facets in parallel via Task tool:
 
 ```
 [Delegate to the document-specialist agent]
-<!-- TODO: agent document-specialist must be in agents/document-specialist.agent.md (Wave 4) -->
+
 
 [Delegate to the document-specialist agent]
-<!-- TODO: agent document-specialist must be in agents/document-specialist.agent.md (Wave 4) -->
+
 ```
 
 Maximum 5 parallel document-specialist agents.

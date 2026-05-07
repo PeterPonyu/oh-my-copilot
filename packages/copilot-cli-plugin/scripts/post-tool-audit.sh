@@ -4,8 +4,10 @@
 # Wire format: {"schema_version":1,"source":"plugin","event":"postToolUse",...}
 set -euo pipefail
 
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-REPO_ROOT="$(cd "$SCRIPT_DIR/../../.." && pwd)"
+# Resolve the actual workspace root, not the install symlink path.
+# Copilot CLI fires hooks with cwd=workspace, so $PWD is authoritative.
+# git rev-parse is a defensive fallback when invoked outside a git checkout.
+REPO_ROOT="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
 cd "$REPO_ROOT"
 
 # shellcheck source=../../../.copilot-hooks/common.sh

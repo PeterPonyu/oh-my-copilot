@@ -90,11 +90,11 @@ Most non-trivial software tasks require coordinated phases: understanding requir
 
 <Tool_Usage>
 - Use `[Delegate to the architect agent]
-<!-- TODO: agent architect must be in agents/architect.agent.md (Wave 4) -->` for Phase 4 architecture validation
+` for Phase 4 architecture validation
 - Use `[Delegate to the security-reviewer agent]
-<!-- TODO: agent security-reviewer must be in agents/security-reviewer.agent.md (Wave 4) -->` for Phase 4 security review
+` for Phase 4 security review
 - Use `[Delegate to the code-reviewer agent]
-<!-- TODO: agent code-reviewer must be in agents/code-reviewer.agent.md (Wave 4) -->` for Phase 4 quality review
+` for Phase 4 quality review
 - Agents form their own analysis first, then spawn Claude Task agents for cross-validation
 - Never block on external tools; proceed with available agents if delegation fails
 </Tool_Usage>

@@ -652,7 +652,7 @@ The lead runs #1 (Codex security analysis), then #2 and #3 in parallel (Codex re
 For large ambiguous tasks, run analysis before team creation:
 
 1. Spawn `[Delegate to the planner agent]
-<!-- TODO: agent planner must be in agents/planner.agent.md (Wave 4) -->` with task description + codebase context
+` with task description + codebase context
 2. Use the analysis to produce better task decomposition
 3. Create team and tasks with enriched context
 

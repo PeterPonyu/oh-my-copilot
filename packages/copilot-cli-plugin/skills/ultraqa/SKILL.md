@@ -44,7 +44,7 @@ If no structured goal provided, interpret the argument as a custom goal.
    - `--interactive`: Use qa-tester for interactive CLI/service testing:
      ```
      [Delegate to the qa-tester agent]
-<!-- TODO: agent qa-tester must be in agents/qa-tester.agent.md (Wave 4) -->
+
      ```
 
 2. **CHECK RESULT**: Did the goal pass?
@@ -54,13 +54,13 @@ If no structured goal provided, interpret the argument as a custom goal.
 3. **ARCHITECT DIAGNOSIS**: Spawn architect to analyze failure
    ```
    [Delegate to the architect agent]
-<!-- TODO: agent architect must be in agents/architect.agent.md (Wave 4) -->
+
    ```
 
 4. **FIX ISSUES**: Apply architect's recommendations
    ```
    [Delegate to the executor agent]
-<!-- TODO: agent executor must be in agents/executor.agent.md (Wave 4) -->
+
    ```
 
 5. **REPEAT**: Go back to step 1

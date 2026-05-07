@@ -126,9 +126,9 @@ By default, ralph operates in PRD mode. A scaffold `prd.json` is auto-generated 
 
 <Tool_Usage>
 - Use `[Delegate to the architect agent]
-<!-- TODO: agent architect must be in agents/architect.agent.md (Wave 4) -->` for architect verification cross-checks when changes are security-sensitive, architectural, or involve complex multi-system integration
+` for architect verification cross-checks when changes are security-sensitive, architectural, or involve complex multi-system integration
 - Use `[Delegate to the critic agent]
-<!-- TODO: agent critic must be in agents/critic.agent.md (Wave 4) -->` when `--critic=critic`
+` when `--critic=critic`
 - Use `omc ask codex --agent-prompt critic "..."` when `--critic=codex`. Construct the prompt to include: (a) prd.json acceptance criteria, (b) files changed + related files, (c) explicit optimality question: "Is there a meaningfully simpler, faster, or more maintainable approach that achieves the same acceptance criteria?"
 - Skip architect consultation for simple feature additions, well-tested changes, or time-critical verification
 - Proceed with architect agent verification alone -- never block on unavailable tools
@@ -157,11 +157,11 @@ Why good: Generic criteria replaced with specific, testable criteria.
 Correct parallel delegation:
 ```
 [Delegate to the executor agent]
-<!-- TODO: agent executor must be in agents/executor.agent.md (Wave 4) -->
+
 [Delegate to the executor agent]
-<!-- TODO: agent executor must be in agents/executor.agent.md (Wave 4) -->
+
 [Delegate to the executor agent]
-<!-- TODO: agent executor must be in agents/executor.agent.md (Wave 4) -->
+
 ```
 Why good: Three independent tasks fired simultaneously at appropriate tiers.
 </Good>

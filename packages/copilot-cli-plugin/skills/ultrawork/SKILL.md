@@ -68,11 +68,11 @@ Sequential task execution wastes time when tasks are independent. Ultrawork enab
 
 <Tool_Usage>
 - Use `[Delegate to the executor agent]
-<!-- TODO: agent executor must be in agents/executor.agent.md (Wave 4) -->` for simple changes
+` for simple changes
 - Use `[Delegate to the executor agent]
-<!-- TODO: agent executor must be in agents/executor.agent.md (Wave 4) -->` for standard work
+` for standard work
 - Use `[Delegate to the executor agent]
-<!-- TODO: agent executor must be in agents/executor.agent.md (Wave 4) -->` for complex work
+` for complex work
 - Use `run_in_background: true` for package installs, builds, and test suites
 - Use foreground execution for quick status checks and file operations
 </Tool_Usage>
@@ -82,11 +82,11 @@ Sequential task execution wastes time when tasks are independent. Ultrawork enab
 Three independent tasks fired simultaneously:
 ```
 [Delegate to the executor agent]
-<!-- TODO: agent executor must be in agents/executor.agent.md (Wave 4) -->
+
 [Delegate to the executor agent]
-<!-- TODO: agent executor must be in agents/executor.agent.md (Wave 4) -->
+
 [Delegate to the executor agent]
-<!-- TODO: agent executor must be in agents/executor.agent.md (Wave 4) -->
+
 ```
 Why good: Independent tasks at appropriate tiers, all fired at once.
 </Good>
@@ -95,9 +95,9 @@ Why good: Independent tasks at appropriate tiers, all fired at once.
 Correct use of background execution:
 ```
 [Delegate to the executor agent]
-<!-- TODO: agent executor must be in agents/executor.agent.md (Wave 4) -->
+
 [Delegate to the executor agent]
-<!-- TODO: agent executor must be in agents/executor.agent.md (Wave 4) -->
+
 ```
 Why good: Long build runs in background while short task runs in foreground.
 </Good>
@@ -116,7 +116,7 @@ Why bad: These tasks are independent. Running them sequentially wastes time.
 Wrong tier selection:
 ```
 [Delegate to the executor agent]
-<!-- TODO: agent executor must be in agents/executor.agent.md (Wave 4) -->
+
 ```
 Why bad: Opus is expensive overkill for a trivial fix. Use executor with Haiku instead.
 </Bad>
