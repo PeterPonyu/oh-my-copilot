@@ -6,6 +6,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+### Wave-I: interactive Copilot CLI testing via tmux + slash command coverage
+- **Real interactive Copilot CLI session captured via tmux** — first time we've validated the orchestration substrate through the actual user flow (typed slash commands in interactive `copilot` mode, not synthesized via `copilot -p`). Found a real gap that synthetic testing missed.
+- **The gap:** only 5 skills had `commands/<slug>.md` wrappers (autopilot, ralph, ralplan, team, deep-interview). The other 37 skills (wiki, cancel, doctor, hud, ccg, ...) returned `Unknown command: /omcp:<slug>` when typed as slash commands. Skills work as auto-injected behavior but not as user-typed slash commands.
+- **The fix:** `scripts/generate-skill-commands.sh` generates thin command wrappers from skill frontmatter. Idempotent — never overwrites existing commands. Skipped 1 skill marked `user-invocable: false` (`reference`).
+- **36 new command wrappers** added; total commands: 5 → 41. `/omcp:wiki`, `/omcp:cancel`, `/omcp:doctor`, etc. now route correctly.
+- **Verified end-to-end via tmux:** `/omcp:autopilot` routed, agent loaded skill body, performed glob searches, dispatched `state_read (MCP: omcp) · mode: "autopilot"` with mode-form (D-1), got `{"value":null,"exists":false}`. 19 hook events fired during the session (2 sessionStart, 16 postToolUse, 1 sessionEnd) — full lifecycle confirmed in real interactive use. Documented in `docs/validation/agentic-2026-05-07-sample.md` Test D.
+
 ### Wave-H: prefix tolerance + multi-test agentic exercise
 - **Server now tolerates `mcp__omcp__` prefix on tool names** in `CallToolRequestSchema` handler. Skill prose documents calls as `mcp__omcp__wiki_add(...)` (the form Copilot's MCP client expects); previously direct-stdio dispatch required bare `wiki_add`. Now both forms work everywhere — eliminates token waste from agents that read skill prose then encounter dispatch failures when invoking via raw stdio.
 - **3 real `copilot -p` agentic tests run end-to-end** (4 Premium requests total, ~9m20s):
