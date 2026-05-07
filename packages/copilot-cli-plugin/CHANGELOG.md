@@ -6,6 +6,18 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+### Wave-N: drop OMC-parity framing
+
+Project no longer frames itself in terms of parity to other plugins (`oh-my-claudecode`, `oh-my-codex`, etc.). The plugin is a Copilot CLI-native power pack on its own terms.
+
+**Changes:**
+- **Root `README.md`**: removed the `## Parity status` section (header, intro paragraph, 6-row OMC ↔ omcp table) entirely. Replaced with a `## Plugin surface` table that just describes what omcp is, with no comparison framing. Lead paragraph rewritten to drop the "achieves OMC-shaped parity" claim.
+- **Plugin `README.md`**: removed the parity-matrix sentence from the "still intentionally bounded" section. Removed the trailing "for per-item status and the full OMC ↔ oh-my-copilot coverage breakdown" line below the inventory table.
+- **`AGENTS.md`**: rewrote the agent-instructions parity sentence. The 5-line claim ("OMC-shaped parity for agents (16), skills (36)...") is now a single line stating what omcp delivers (21/42/41/4/35) without the comparison.
+- **`docs/parity-matrix.md` archived** to `docs/_archive/parity-matrix.md` with index entry. The matrix is no longer load-bearing — was the canonical reference cited from every parity-framing claim above. With those claims gone, no active doc links to it.
+
+**No CHANGELOG history rewrites.** Older wave entries that referenced parity-matrix.md or used parity language remain as-is — they describe what was true at that wave; rewriting historical entries would be revisionist.
+
 ### Wave-M: cleanup — stray runtime, premature placeholder, doc archive, stale counts
 
 **M-1: stray runtime dirs purged.** Local cleanup of:

@@ -7,11 +7,9 @@ safe to trust.
 
 V1 is intentionally **Copilot CLI-first** and **docs/research-first**. Copilot
 cloud agent, IDE integrations, and SDK runtimes are out of scope — those
-host-product surfaces are not addressed here. The Copilot CLI surface achieves
-OMC-shaped parity for agents, skills, hooks, slash commands, and MCP server (see
-`docs/parity-matrix.md`). Here, "v1" names the public docs-first repository
-blueprint; it does **not** turn the root workspace, reusable plugin package, and
-examples into version tiers.
+host-product surfaces are not addressed here. Here, "v1" names the public
+docs-first repository blueprint; it does **not** turn the root workspace,
+reusable plugin package, and examples into version tiers.
 
 Public claims in this repo follow a simple proof rule:
 
@@ -23,19 +21,15 @@ Public claims in this repo follow a simple proof rule:
 - examples, design synthesis, and adjacent-host comparison notes should stay
   labelled as illustrative, inferred, or sibling-scoped.
 
-## Parity status
+## Plugin surface
 
-The Copilot CLI plugin achieves OMC-shaped parity across all major CLI surfaces.
-See [`docs/parity-matrix.md`](./docs/parity-matrix.md) for the full per-feature
-matrix.
-
-| Surface | OMC | oh-my-copilot | Status |
-| --- | --- | --- | --- |
-| Agents | 19 | 21 | covers OMC v1 surface plus 2 omcp-specific (reviewer, research) |
-| Skills | 39 | 42 | covers OMC v1 surface plus omcp-specific additions |
-| Slash commands | 5 | 5 | 1:1 mapping |
-| Hook events | 4 | 4 | covers all 4 hook events Copilot CLI v1.0.42 exposes; OMC's 7 additional events (`UserPromptSubmit`, `PostToolUseFailure`, `SubagentStart`/`Stop`, `PreCompact`, `PermissionRequest`, `Stop`) are host-product limits, see [docs/hook-surface.md](docs/hook-surface.md) |
-| MCP server tools | 6 | 35 | covers state (6), notepad (6), plan (1), pipeline (2), project memory (4), trace (4), wiki (7), shared memory (5) — 17 OMC tools (LSP/AST/python_repl) remain unported |
+| Dimension | Count | Notes |
+| --- | --- | --- |
+| Agents | 21 | reviewer, research, executor, planner, architect, debugger, ... |
+| Skills | 42 | autopilot, ralph, ralplan, team, deep-interview, wiki, cancel, ... |
+| Slash commands | 41 | every user-invocable skill has a typed `/omcp:<cmd>` route |
+| Hook events | 4 | `sessionStart`, `preToolUse`, `postToolUse`, `sessionEnd` — all 4 events Copilot CLI v1.0.43 exposes |
+| MCP server tools | 35 | state (6), notepad (6), plan (1), pipeline (2), project memory (4), trace (4), wiki (7), shared memory (5) |
 
 ## Start here
 
