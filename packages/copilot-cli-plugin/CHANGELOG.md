@@ -6,6 +6,44 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+### Wave-L: hand-tune the 5 originals + tmux-dominated end-to-end evidence
+
+**L-1: 5 original commands hand-tuned to template parity** with the 8 done in Wave-K-c. Pre-fix audit on `commands/{autopilot,ralph,ralplan,team,deep-interview}.md` found:
+
+| Issue | autopilot | ralph | ralplan | team | deep-interview |
+|---|---|---|---|---|---|
+| `argument-hint` missing quotes | ✗ | ✗ | partial | ✗ | ✗ |
+| Skill flags surfaced in command | none | missing 2 | missing 3 | missing 2 | missing 2 |
+| MCP tool refs (`mcp__omcp__*`) | none | none | none | none | none |
+| `{{ARGUMENTS}}` footer | ✗ | ✗ | ✗ | ✗ | ✗ |
+| Output paths surfaced | ✗ | ✗ | partial | ✗ | partial |
+| Cancel/cost warning | ✗ | ✗ | ✗ | **N× cost not warned** | ✗ |
+| State-write mode reference | ✗ | ✗ | ✗ | ✗ | ✗ |
+
+Post-fix: every rewritten command now has the same template as the hand-tuned 8 — quoted argument-hint with full flag set, "Use when / use instead" routing block, MCP tool refs in backticks, dispatch tables (or numbered procedures), output-path documentation, cost/cancel warnings, `{{ARGUMENTS}}` footer.
+
+**L-2: tmux-dominated end-to-end evidence** captured at `docs/validation/agentic-tmux-2026-05-07-wave-l.md`. The user-facing surface — typed `/omcp:<cmd>` at the interactive `❯` prompt — is only reachable through a real interactive session. Synthetic stdio MCP tests verify the protocol; tmux verifies the **user experience**. 4 substantive tests captured:
+
+| Test | Routing | MCP tools called | Result |
+|---|---|---|---|
+| `/omcp:wiki list` | ✅ skill(wiki) | `wiki_list` | "Wiki entries: none found." |
+| `/omcp:omc-doctor --json` | ✅ skill(omc-doctor) | (composed shell + jq) | JSON report with 3 issues from `~/.claude/` |
+| `/omcp:cancel --all` | ✅ skill(cancel) | `state_list_active`, `state_list`, `state_clear` | "All OMC modes cleared." |
+| `/omcp:autopilot ...` (rewritten) | ✅ skill(autopilot) | `pipeline_record_transition` | `/tmp/wave-l-test.txt` written + 3 artifacts + transition recorded |
+
+**The autopilot test is the strongest evidence the rewritten command body works.** It exercised every doc'd contract:
+1. `/omcp:autopilot create /tmp/wave-l-test.txt with the single word omcp inside` → routed to skill(autopilot) ✅
+2. Composed shell to fetch UTC timestamp + repo root for provenance frontmatter ✅
+3. Wrote artifacts to `.omcp/autopilot/spec.md`, `.omcp/plans/autopilot-impl.md`, `.omcp/autopilot/artifact.md` (the exact paths the new command body documents) ✅
+4. **Self-corrected a path-resolution slip**: first wrote under `packages/.omcp/`, noticed the mistake ("the first patch landed under packages/.omcp instead of the repo root"), deleted misplaced files, recreated at repo-root `.omcp/` ✅
+5. Self-verifying file create: `printf 'omcp' > /tmp/wave-l-test.txt; cat...; if not match: exit 1` ✅
+6. Called `mcp__omcp__pipeline_record_transition({from:"plan", to:"artifact", artifact_path:"<absolute>"})` exactly as documented in the rewritten body ✅
+7. Pipeline state persisted to `.omcp/state/pipeline-state.json` with the actual transition record (`{"from":"plan","to":"artifact","ts":"2026-05-07T07:44:53.400Z"}`) ✅
+
+The self-correction in step 4 is the strongest signal: the LLM read the rewritten command body's "Output paths produced" section, attempted to honor it, noticed its own resolution was wrong, and fixed without prompting. Thin command wrappers do not produce that behavior — they produce flailing.
+
+**L-3: actual install payload table** documented in this PR description (no doc-only churn). Git-tracked total: **~1.7 MB across 138 files**. Runtime-critical: only `mcp-server/dist/server.mjs` (588 KB) is loaded at startup. Source `mcp-server/server.mjs` + stores + tests retained for dev iteration and the bash→MCP bridge.
+
 ### Wave-K: payload trim + hand-tune top commands
 
 **K-a: plugin docs/ moved out of install path.**
