@@ -172,6 +172,78 @@ test("integration: state round-trip via real MCP transport", async (t) => {
   assert.equal(unwrap(post).cancelled, true);
 });
 
+test("integration: state_write mode-form translates to <mode>-state.json", async (t) => {
+  const cwd = mkdtempSync(join(tmpdir(), "omcp-int-"));
+  const client = new StdioClient(cwd);
+  t.after(async () => {
+    await client.close();
+    rmSync(cwd, { recursive: true, force: true });
+  });
+
+  // Write via mode-form (OMC-style pseudocode used in ported skills)
+  const w = await client.callTool("state_write", {
+    mode: "team",
+    active: true,
+    current_phase: "team-plan",
+    state: { workers: 3, lead: "agent-1" },
+  });
+  assert.ok(!isError(w), "mode-form state_write must succeed");
+  const wResult = unwrap(w);
+  assert.equal(wResult.ok, true);
+  assert.match(wResult.path, /team-state\.json$/);
+
+  // Read back via mode-form
+  const rByMode = await client.callTool("state_read", { mode: "team" });
+  const rmValue = unwrap(rByMode).value;
+  assert.equal(rmValue.active, true);
+  assert.equal(rmValue.current_phase, "team-plan");
+  assert.deepEqual(rmValue.state, { workers: 3, lead: "agent-1" });
+
+  // mode field MUST be stripped from value (it's the key, not data)
+  assert.equal(rmValue.mode, undefined, "mode field stripped from stored value");
+
+  // Read back via key-form — should resolve to same file
+  const rByKey = await client.callTool("state_read", { key: "team-state" });
+  assert.deepEqual(unwrap(rByKey).value, rmValue, "mode-form and key-form read same data");
+});
+
+test("integration: state mode-form rejects missing mode and key", async (t) => {
+  const cwd = mkdtempSync(join(tmpdir(), "omcp-int-"));
+  const client = new StdioClient(cwd);
+  t.after(async () => {
+    await client.close();
+    rmSync(cwd, { recursive: true, force: true });
+  });
+
+  const w = await client.callTool("state_write", {});
+  assert.equal(isError(w), true);
+  assert.match(w.result.content[0].text, /requires either 'key' or 'mode'/);
+
+  const r = await client.callTool("state_read", {});
+  assert.equal(isError(r), true);
+  assert.match(r.result.content[0].text, /requires either 'key' or 'mode'/);
+});
+
+test("integration: state_write key-form unchanged by mode-form addition", async (t) => {
+  // Regression test — original {key, value} form must still work as before
+  const cwd = mkdtempSync(join(tmpdir(), "omcp-int-"));
+  const client = new StdioClient(cwd);
+  t.after(async () => {
+    await client.close();
+    rmSync(cwd, { recursive: true, force: true });
+  });
+
+  const w = await client.callTool("state_write", {
+    key: "custom-key",
+    value: { foo: "bar" },
+  });
+  assert.equal(unwrap(w).ok, true);
+  assert.match(unwrap(w).path, /custom-key\.json$/);
+
+  const r = await client.callTool("state_read", { key: "custom-key" });
+  assert.deepEqual(unwrap(r).value, { foo: "bar" });
+});
+
 test("integration: notepad lanes round-trip", async (t) => {
   const cwd = mkdtempSync(join(tmpdir(), "omcp-int-"));
   const client = new StdioClient(cwd);
