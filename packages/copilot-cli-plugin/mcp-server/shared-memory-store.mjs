@@ -8,6 +8,27 @@ const META_FILE = "_meta.json";
 const CHANNEL_RE = /^[a-z0-9][a-z0-9-_]{0,63}$/i;
 const DEFAULT_MAX_AGE_DAYS = 1;
 
+const PIPE_BUF_BYTES = 4096;
+const WARNING_DEDUPE_WINDOW_MS = 60_000;
+const _warningLastEmittedAt = new Map();
+
+export function _resetSharedMemoryWarningRateLimit() {
+  _warningLastEmittedAt.clear();
+}
+
+function emitOversizeWarning(channel, sizeBytes) {
+  const key = `${channel}:${sizeBytes}`;
+  const now = Date.now();
+  const last = _warningLastEmittedAt.get(key);
+  if (last !== undefined && now - last < WARNING_DEDUPE_WINDOW_MS) {
+    return;
+  }
+  _warningLastEmittedAt.set(key, now);
+  process.stderr.write(
+    `[shared_memory] WARNING: entry size ${sizeBytes}B on channel '${channel}' exceeds ${PIPE_BUF_BYTES}B; concurrent writers may interleave\n`,
+  );
+}
+
 const VALID_KINDS = [
   "task_assigned",
   "task_done",
@@ -64,7 +85,12 @@ export async function sharedMemoryWrite({ channel, kind, payload, from, to } = {
   if (from !== undefined) event.from = from;
   if (to !== undefined) event.to = to;
   if (payload !== undefined) event.payload = payload;
-  await appendFile(channelPath(channel), JSON.stringify(event) + "\n", "utf8");
+  const encoded = JSON.stringify(event) + "\n";
+  const sizeBytes = Buffer.byteLength(encoded, "utf8");
+  if (sizeBytes > PIPE_BUF_BYTES) {
+    emitOversizeWarning(channel, sizeBytes);
+  }
+  await appendFile(channelPath(channel), encoded, "utf8");
 
   const meta = await readMeta();
   meta[channel] = {

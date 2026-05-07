@@ -37,6 +37,30 @@ All paths are workspace-relative (relative to `process.cwd()` when the server st
 
 Directories are auto-created on first write. Keys passed to `state_read`/`state_write` must not contain `..`, `/`, or start with `.`.
 
+## Concurrency contract per tool family
+
+Per ADR-1 of the post-Wave-B consolidation plan, the storage primitives have explicit per-family concurrency rules. The summary:
+
+| Family | Tools | Atomicity | Concurrent writers |
+|---|---|---|---|
+| `state_*` | read, write, list, clear, get_status, list_active | Atomic via temp+rename for writes | Single-writer-per-workspace assumed; behavior under concurrent writers is undefined |
+| `notepad_*` | read, write, write_priority, write_working, prune, stats | Atomic temp+rename for prune; `appendFile` for writes (single small line) | Single-writer-per-workspace assumed |
+| `project_memory_*` | read, write, add_note, add_directive | Atomic via temp+rename | Single-writer-per-workspace assumed |
+| `wiki_*` | add, read, list, query, delete, ingest, lint | Atomic via temp+rename for index; direct write for body files | Single-writer-per-workspace assumed |
+| `shared_memory_*` | write, read, list, delete, cleanup | Per-call FS-atomic for entries ≤4KB on Linux; `_meta.json` updated atomically via temp+rename | **Multi-reader, multi-writer.** Last-write-wins for `_meta.json`. Per-entry interleaving possible if `Buffer.byteLength(JSON.stringify(event) + "\n", "utf8") > 4096`. |
+
+### Why 4KB
+
+`fs.appendFile` calls `write(2)` with the full payload. POSIX guarantees atomicity for `≤PIPE_BUF` writes on pipes; on regular files, atomicity for sub-page writes is filesystem-dependent but holds in practice on ext4/xfs/apfs. The 4KB threshold is the conservative POSIX line.
+
+When `sharedMemoryWrite` encodes a message larger than 4KB, the store emits a rate-limited stderr warning (deduped per `(channel, size)` within a 60-second window):
+
+```
+[shared_memory] WARNING: entry size <bytes>B on channel '<channel>' exceeds 4096B; concurrent writers may interleave
+```
+
+Callers requiring guaranteed atomicity for >4KB entries must serialize concurrent writes themselves (e.g., one writer per agent role).
+
 ## Configuration
 
 The server is registered in `.mcp.json` at the plugin root:
