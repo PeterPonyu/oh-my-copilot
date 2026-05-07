@@ -26,6 +26,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - `writer-memory/SKILL.md` excluded — line 232 references `.omc/notepad.md` as a deliberate cross-host bridge for users running both omcp and OMC. Annotated with `<!-- cross-host: deliberate -->` so future sweeps skip it.
 - `cancel/SKILL.md` excluded — owned by Wave-C-1b (separate concern: ToolSearch query-string surgery).
 
+### Wave-C-1d: shared-memory 4KB warning + per-family concurrency contract
+- `mcp-server/shared-memory-store.mjs`: `sharedMemoryWrite` now computes the encoded byte size of each event before append; if it exceeds 4096 bytes (Linux PIPE_BUF), emits a rate-limited stderr warning. Deduped per `(channel, size)` within a 60-second window via in-memory map. Exposes `_resetSharedMemoryWarningRateLimit()` for test isolation.
+- `mcp-server/README.md`: new "Concurrency contract per tool family" section. Per-family rules table covering `state_*`, `notepad_*`, `project_memory_*`, `wiki_*`, `shared_memory_*` with explicit atomicity and concurrent-writer semantics. Aligns documentation with actual implementation per ADR-1.
+- `tests/shared-memory-store.test.mjs`: 3 new tests — warning fires on >4KB write, no warning on ≤4KB write, rate limiter dedupes within 60s window. Suite now 101/101 pass.
+
 ### Wave-C-1c: scaffold packages/omcs/ stub
 - Created `packages/omcs/README.md` reserving the path for the deferred Cursor-IDE-targeted sibling package per ADR-4 of `.omcp/plans/post-wave-b-consolidation.md`. Documents why omcs is monorepo'd-but-empty, host-product differences vs omcp, and when omcs will get real code.
 - Added "Sibling package" section to `packages/copilot-cli-plugin/README.md` cross-linking to the new directory.

@@ -10,7 +10,22 @@ import {
   sharedMemoryList,
   sharedMemoryDelete,
   sharedMemoryCleanup,
+  _resetSharedMemoryWarningRateLimit,
 } from "../shared-memory-store.mjs";
+
+function captureStderr(fn) {
+  const original = process.stderr.write.bind(process.stderr);
+  const captured = [];
+  process.stderr.write = (chunk, ...rest) => {
+    captured.push(chunk.toString());
+    return true;
+  };
+  return Promise.resolve(fn())
+    .finally(() => {
+      process.stderr.write = original;
+    })
+    .then(() => captured.join(""));
+}
 
 const originalCwd = process.cwd();
 
@@ -205,4 +220,78 @@ test("malformed jsonl lines are skipped, not thrown", async (t) => {
   const { events } = await sharedMemoryRead({ channel: "ch" });
   assert.equal(events.length, 2);
   assert.deepEqual(events.map((e) => e.payload), ["valid 1", "valid 2"]);
+});
+
+test("sharedMemoryWrite of >4KB payload triggers stderr warning", async (t) => {
+  const dir = freshCwd();
+  t.after(() => teardown(dir));
+  _resetSharedMemoryWarningRateLimit();
+
+  // Build a payload that, after JSON encoding, exceeds 4096 bytes.
+  // ~5KB of repeating chars guarantees the encoded line crosses PIPE_BUF.
+  const bigPayload = "x".repeat(5000);
+  const stderr = await captureStderr(async () => {
+    await sharedMemoryWrite({
+      channel: "big",
+      kind: "note",
+      payload: bigPayload,
+    });
+  });
+
+  assert.match(
+    stderr,
+    /\[shared_memory\] WARNING: entry size \d+B on channel 'big' exceeds 4096B/,
+    "warning fires on >4KB write",
+  );
+
+  // Confirm the entry was still written despite the warning
+  const { events } = await sharedMemoryRead({ channel: "big" });
+  assert.equal(events.length, 1);
+  assert.equal(events[0].payload, bigPayload);
+});
+
+test("sharedMemoryWrite of <=4KB payload does NOT trigger warning", async (t) => {
+  const dir = freshCwd();
+  t.after(() => teardown(dir));
+  _resetSharedMemoryWarningRateLimit();
+
+  const stderr = await captureStderr(async () => {
+    await sharedMemoryWrite({
+      channel: "small",
+      kind: "note",
+      payload: "tiny",
+    });
+    // Even a payload near the boundary but under it should be silent.
+    await sharedMemoryWrite({
+      channel: "small",
+      kind: "note",
+      payload: "x".repeat(3500),
+    });
+  });
+
+  assert.equal(stderr, "", "no warnings on sub-4KB writes");
+
+  const { events } = await sharedMemoryRead({ channel: "small" });
+  assert.equal(events.length, 2);
+});
+
+test("oversize warning is rate-limited (deduped within 60s window)", async (t) => {
+  const dir = freshCwd();
+  t.after(() => teardown(dir));
+  _resetSharedMemoryWarningRateLimit();
+
+  const bigPayload = "x".repeat(5000);
+  const stderr = await captureStderr(async () => {
+    // Three back-to-back writes with the same encoded size — should warn once.
+    await sharedMemoryWrite({ channel: "rl", kind: "note", payload: bigPayload });
+    await sharedMemoryWrite({ channel: "rl", kind: "note", payload: bigPayload });
+    await sharedMemoryWrite({ channel: "rl", kind: "note", payload: bigPayload });
+  });
+
+  const matches = stderr.match(/\[shared_memory\] WARNING/g) ?? [];
+  assert.equal(
+    matches.length,
+    1,
+    "rate limiter dedupes identical warnings within 60s window",
+  );
 });
