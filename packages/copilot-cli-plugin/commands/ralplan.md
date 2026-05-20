@@ -1,6 +1,6 @@
 ---
 name: ralplan
-description: Consensus planning — Planner / Architect / Critic loop until APPROVE, emits plan to .omcp/plans/
+description: "[OMCP] Consensus planning — Planner / Architect / Critic loop until APPROVE, emits plan to .omcp/plans/"
 agent: planner
 argument-hint: "[--interactive] [--deliberate] [--architect codex] [--critic codex] <task description>"
 ---

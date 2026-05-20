@@ -1,6 +1,6 @@
 ---
 name: architect
-description: Strategic Architecture & Debugging Advisor (READ-ONLY)
+description: "[OMCP] Strategic Architecture & Debugging Advisor (READ-ONLY)"
 agent: architect
 argument-hint: "<file, component, or architectural question>"
 ---

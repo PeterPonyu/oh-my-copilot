@@ -1,6 +1,6 @@
 ---
 name: autopilot
-description: Full autonomous pipeline — spec → plan → implement → QA → validate, end-to-end
+description: "[OMCP] Full autonomous pipeline — spec → plan → implement → QA → validate, end-to-end"
 agent: executor
 argument-hint: "<idea or task description>"
 ---

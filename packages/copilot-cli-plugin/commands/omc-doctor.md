@@ -1,6 +1,6 @@
 ---
 name: omc-doctor
-description: Diagnose and fix oh-my-claudecode (OMC) installation issues. For diagnostics of THIS plugin (omcp), run `bash scripts/run-validation.sh` from the repo root.
+description: "[OMCP] Diagnose and fix oh-my-claudecode (OMC) installation issues. For diagnostics of THIS plugin (omcp), run `bash scripts/run-validation.sh` from the repo root."
 argument-hint: "[--json]   |   [check name]"
 ---
 

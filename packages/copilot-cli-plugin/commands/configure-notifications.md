@@ -1,6 +1,6 @@
 ---
 name: configure-notifications
-description: Configure notification integrations (Telegram, Discord, Slack) via natural language
+description: "[OMCP] Configure notification integrations (Telegram, Discord, Slack) via natural language"
 argument-hint: "<input>"
 ---
 

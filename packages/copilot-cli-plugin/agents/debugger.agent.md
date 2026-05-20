@@ -1,6 +1,6 @@
 ---
 name: debugger
-description: Root-cause analysis, regression isolation, stack trace analysis, build/compilation error resolution
+description: "[OMCP] Root-cause analysis, regression isolation, stack trace analysis, build/compilation error resolution"
 agent: debugger
 argument-hint: "<error message, stack trace, or failing file>"
 ---

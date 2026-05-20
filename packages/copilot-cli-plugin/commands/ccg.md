@@ -1,6 +1,6 @@
 ---
 name: ccg
-description: Tri-model orchestration — Claude + Codex + Gemini in parallel, then Claude synthesizes
+description: "[OMCP] Tri-model orchestration — Claude + Codex + Gemini in parallel, then Claude synthesizes"
 argument-hint: "<question or task>"
 ---
 

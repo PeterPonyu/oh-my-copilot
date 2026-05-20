@@ -1,6 +1,6 @@
 ---
 name: review
-description: Severity-rated code review pass for pending changes or a specified diff.
+description: "[OMCP] Severity-rated code review pass for pending changes or a specified diff."
 argument-hint: "<input>"
 ---
 

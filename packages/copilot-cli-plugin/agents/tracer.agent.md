@@ -1,6 +1,6 @@
 ---
 name: tracer
-description: Evidence-driven causal tracing with competing hypotheses, evidence for/against, uncertainty tracking, and next-probe recommendations
+description: "[OMCP] Evidence-driven causal tracing with competing hypotheses, evidence for/against, uncertainty tracking, and next-probe recommendations"
 agent: tracer
 argument-hint: "<observed symptom or behavior to trace>"
 ---

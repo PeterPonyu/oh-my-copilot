@@ -1,6 +1,6 @@
 ---
 name: deepinit
-description: Deep codebase initialization with hierarchical AGENTS.md documentation
+description: "[OMCP] Deep codebase initialization with hierarchical AGENTS.md documentation"
 argument-hint: "<input>"
 ---
 

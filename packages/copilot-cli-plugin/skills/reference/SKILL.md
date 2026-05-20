@@ -1,6 +1,6 @@
 ---
 name: reference
-description: omcp agent catalog, available tools, team pipeline routing, commit protocol, and skills registry. Auto-loads when delegating to agents, using omcp tools, orchestrating teams, making commits, or invoking skills.
+description: "[OMCP] omcp agent catalog, available tools, team pipeline routing, commit protocol, and skills registry. Auto-loads when delegating to agents, using omcp tools, orchestrating teams, making commits, or invoking skills."
 user-invocable: false
 ---
 
