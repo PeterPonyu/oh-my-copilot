@@ -16510,10 +16510,107 @@ async function readResource({ uri } = {}) {
   throw new Error(`unhandled uri kind: ${kind}`);
 }
 
+// prompts.mjs
+import { readdir as readdir6, readFile as readFile8 } from "node:fs/promises";
+import { existsSync as existsSync9 } from "node:fs";
+import { join as join7, dirname as dirname3 } from "node:path";
+import { fileURLToPath } from "node:url";
+var NAME_RE = /^[a-z0-9][a-z0-9_-]*$/;
+function defaultSkillsDir() {
+  const here = dirname3(fileURLToPath(import.meta.url));
+  const candidates = [
+    join7(here, "..", "skills"),
+    join7(here, "..", "..", "skills")
+  ];
+  for (const c of candidates) {
+    if (existsSync9(c)) return c;
+  }
+  return candidates[0];
+}
+function parseFrontmatter(text) {
+  const m = text.match(/^---\n([\s\S]*?)\n---\n?([\s\S]*)$/);
+  if (!m) return { fm: {}, body: text };
+  const fm = {};
+  for (const line of m[1].split("\n")) {
+    const kv = line.match(/^([a-zA-Z_-]+):\s*(.+)$/);
+    if (!kv) continue;
+    let v = kv[2].trim();
+    if (v.startsWith('"') && v.endsWith('"') || v.startsWith("'") && v.endsWith("'")) {
+      v = v.slice(1, -1);
+    }
+    fm[kv[1]] = v;
+  }
+  return { fm, body: m[2] };
+}
+async function listPrompts(skillsDir = defaultSkillsDir()) {
+  if (!existsSync9(skillsDir)) return { prompts: [] };
+  const entries = await readdir6(skillsDir, { withFileTypes: true });
+  const prompts = [];
+  for (const e of entries) {
+    if (!e.isDirectory()) continue;
+    const skillPath = join7(skillsDir, e.name, "SKILL.md");
+    if (!existsSync9(skillPath)) continue;
+    const text = await readFile8(skillPath, "utf8");
+    const { fm } = parseFrontmatter(text);
+    const name = fm.name || e.name;
+    const description = fm.description || `omcp skill: ${name}`;
+    const argHint = fm["argument-hint"] || "";
+    prompts.push({
+      name,
+      description,
+      arguments: [
+        {
+          name: "args",
+          description: argHint ? `Arguments for the skill. argument-hint: ${argHint}` : "Arguments to pass to the skill (optional)",
+          required: false
+        }
+      ]
+    });
+  }
+  prompts.sort((a, b) => a.name.localeCompare(b.name));
+  return { prompts };
+}
+async function getPrompt({ name, arguments: args } = {}, skillsDir = defaultSkillsDir()) {
+  if (typeof name !== "string" || name.length === 0) {
+    throw new Error("prompts/get requires non-empty 'name'");
+  }
+  if (!NAME_RE.test(name)) {
+    throw new Error(`invalid prompt name: ${name}`);
+  }
+  const skillPath = join7(skillsDir, name, "SKILL.md");
+  if (!existsSync9(skillPath)) {
+    throw new Error(`prompt not found: ${name}`);
+  }
+  const text = await readFile8(skillPath, "utf8");
+  const { fm, body } = parseFrontmatter(text);
+  let promptText = body.trim();
+  const userArgs = args && typeof args === "object" && typeof args.args === "string" ? args.args.trim() : "";
+  if (userArgs.length > 0) {
+    promptText += `
+
+## Arguments provided by caller
+
+${userArgs}
+`;
+  }
+  return {
+    description: fm.description || `omcp skill: ${name}`,
+    messages: [
+      {
+        role: "user",
+        content: {
+          type: "text",
+          text: promptText
+        }
+      }
+    ]
+  };
+}
+
 // server.mjs
 var server = new Server(
-  { name: "omcp", version: "0.6.0" },
-  { capabilities: { tools: {}, resources: {} } }
+  { name: "omcp", version: "0.7.0" },
+  { capabilities: { tools: {}, resources: {}, prompts: {} } }
 );
 server.setRequestHandler(ListToolsRequestSchema, async () => ({
   tools: [
@@ -17235,6 +17332,12 @@ server.setRequestHandler(ListResourcesRequestSchema, async () => {
 });
 server.setRequestHandler(ReadResourceRequestSchema, async (request) => {
   return await readResource(request.params);
+});
+server.setRequestHandler(ListPromptsRequestSchema, async () => {
+  return await listPrompts();
+});
+server.setRequestHandler(GetPromptRequestSchema, async (request) => {
+  return await getPrompt(request.params);
 });
 var transport = new StdioServerTransport();
 await server.connect(transport);

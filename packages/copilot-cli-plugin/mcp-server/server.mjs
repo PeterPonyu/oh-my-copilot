@@ -6,6 +6,8 @@ import {
   ListToolsRequestSchema,
   ListResourcesRequestSchema,
   ReadResourceRequestSchema,
+  ListPromptsRequestSchema,
+  GetPromptRequestSchema,
 } from "@modelcontextprotocol/sdk/types.js";
 import {
   stateRead,
@@ -54,10 +56,11 @@ import {
 } from "./shared-memory-store.mjs";
 import { readStage, transitionRecord } from "../orchestrator/orchestrator.mjs";
 import { listResources, readResource } from "./resources.mjs";
+import { listPrompts, getPrompt } from "./prompts.mjs";
 
 const server = new Server(
-  { name: "omcp", version: "0.6.0" },
-  { capabilities: { tools: {}, resources: {} } }
+  { name: "omcp", version: "0.7.0" },
+  { capabilities: { tools: {}, resources: {}, prompts: {} } }
 );
 
 server.setRequestHandler(ListToolsRequestSchema, async () => ({
@@ -824,6 +827,14 @@ server.setRequestHandler(ListResourcesRequestSchema, async () => {
 
 server.setRequestHandler(ReadResourceRequestSchema, async (request) => {
   return await readResource(request.params);
+});
+
+server.setRequestHandler(ListPromptsRequestSchema, async () => {
+  return await listPrompts();
+});
+
+server.setRequestHandler(GetPromptRequestSchema, async (request) => {
+  return await getPrompt(request.params);
 });
 
 const transport = new StdioServerTransport();
