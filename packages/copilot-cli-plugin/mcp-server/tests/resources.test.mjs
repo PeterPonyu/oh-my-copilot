@@ -21,15 +21,21 @@ function teardown(dir) {
   rmSync(dir, { recursive: true, force: true });
 }
 
-test("listResources returns only the pipeline singleton when nothing else exists", async (t) => {
+test("listResources returns only the always-on singletons when nothing else exists", async (t) => {
   const dir = freshCwd();
   t.after(() => teardown(dir));
 
   const r = await listResources();
-  // The pipeline state resource is always exposed (singleton); everything
-  // else is empty in a fresh workspace.
-  assert.equal(r.resources.length, 1);
-  assert.equal(r.resources[0].uri, "omcp://pipeline/state");
+  // Always-on singletons: pipeline state, notepad, project-memory notes,
+  // project-memory directives. Wiki/traces/state are empty in a fresh
+  // workspace.
+  const uris = r.resources.map((x) => x.uri).sort();
+  assert.deepEqual(uris, [
+    "omcp://notepad",
+    "omcp://pipeline/state",
+    "omcp://project-memory/directives",
+    "omcp://project-memory/notes",
+  ]);
 });
 
 test("listResources enumerates wiki slugs as omcp://wiki/<slug>", async (t) => {

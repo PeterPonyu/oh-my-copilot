@@ -2,6 +2,10 @@ import { readFile, writeFile, mkdir, rename } from "node:fs/promises";
 import { existsSync } from "node:fs";
 import { resolve, dirname } from "node:path";
 import { randomBytes } from "node:crypto";
+import { emitResourceUpdate } from "./events.mjs";
+
+const NOTES_URI = "omcp://project-memory/notes";
+const DIRECTIVES_URI = "omcp://project-memory/directives";
 
 const MEMORY_FILE = ".omcp/project-memory.json";
 const SCHEMA_VERSION = 1;
@@ -114,6 +118,7 @@ export async function projectMemoryAddNote({ text, tags } = {}) {
   };
   memory.notes.push(note);
   await writeMemory(memory);
+  emitResourceUpdate(NOTES_URI);
   return { ok: true, note };
 }
 
@@ -134,5 +139,6 @@ export async function projectMemoryAddDirective({ text, scope = "permanent" } = 
   };
   memory.directives.push(directive);
   await writeMemory(memory);
+  emitResourceUpdate(DIRECTIVES_URI);
   return { ok: true, directive };
 }

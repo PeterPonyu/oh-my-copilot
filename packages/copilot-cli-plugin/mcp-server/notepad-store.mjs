@@ -2,6 +2,9 @@ import { readFile, writeFile, appendFile, mkdir, rename } from "node:fs/promises
 import { existsSync } from "node:fs";
 import { resolve, dirname } from "node:path";
 import { randomBytes } from "node:crypto";
+import { emitResourceUpdate } from "./events.mjs";
+
+const NOTEPAD_URI = "omcp://notepad";
 
 const NOTEPAD_FILE = ".omcp/notepad.md";
 
@@ -50,6 +53,7 @@ export async function notepadWrite({ entry, priority = "manual" } = {}) {
   const ts = new Date().toISOString();
   const line = `[${ts}] [${priority}] ${entry}\n`;
   await appendFile(filePath, line, "utf8");
+  emitResourceUpdate(NOTEPAD_URI);
   return { ok: true };
 }
 
@@ -105,6 +109,7 @@ export async function notepadPrune({ maxAgeDays = DEFAULT_MAX_AGE_DAYS, lane } =
   await writeFile(tmp, output, "utf8");
   await rename(tmp, filePath);
 
+  if (prunedCount > 0) emitResourceUpdate(NOTEPAD_URI);
   return { ok: true, kept: kept.length, pruned: prunedCount };
 }
 

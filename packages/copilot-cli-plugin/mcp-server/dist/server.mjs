@@ -15585,6 +15585,7 @@ import { readFile as readFile2, writeFile as writeFile2, appendFile, mkdir as mk
 import { existsSync as existsSync2 } from "node:fs";
 import { resolve as resolve2, dirname } from "node:path";
 import { randomBytes as randomBytes2 } from "node:crypto";
+var NOTEPAD_URI = "omcp://notepad";
 var NOTEPAD_FILE = ".omcp/notepad.md";
 var VALID_LANES = ["manual", "working", "priority"];
 var DEFAULT_PRUNE_LANES = ["manual", "working"];
@@ -15626,6 +15627,7 @@ async function notepadWrite({ entry, priority = "manual" } = {}) {
   const line = `[${ts}] [${priority}] ${entry}
 `;
   await appendFile(filePath, line, "utf8");
+  emitResourceUpdate(NOTEPAD_URI);
   return { ok: true };
 }
 async function notepadWritePriority({ entry } = {}) {
@@ -15673,6 +15675,7 @@ async function notepadPrune({ maxAgeDays = DEFAULT_MAX_AGE_DAYS, lane } = {}) {
   const tmp = filePath + ".tmp." + randomBytes2(6).toString("hex");
   await writeFile2(tmp, output, "utf8");
   await rename2(tmp, filePath);
+  if (prunedCount > 0) emitResourceUpdate(NOTEPAD_URI);
   return { ok: true, kept: kept.length, pruned: prunedCount };
 }
 async function notepadStats() {
@@ -15763,6 +15766,8 @@ import { readFile as readFile4, writeFile as writeFile3, mkdir as mkdir3, rename
 import { existsSync as existsSync4 } from "node:fs";
 import { resolve as resolve4, dirname as dirname2 } from "node:path";
 import { randomBytes as randomBytes3 } from "node:crypto";
+var NOTES_URI = "omcp://project-memory/notes";
+var DIRECTIVES_URI = "omcp://project-memory/directives";
 var MEMORY_FILE = ".omcp/project-memory.json";
 var SCHEMA_VERSION = 1;
 function memoryPath() {
@@ -15858,6 +15863,7 @@ async function projectMemoryAddNote({ text, tags } = {}) {
   };
   memory.notes.push(note);
   await writeMemory(memory);
+  emitResourceUpdate(NOTES_URI);
   return { ok: true, note };
 }
 async function projectMemoryAddDirective({ text, scope = "permanent" } = {}) {
@@ -15877,6 +15883,7 @@ async function projectMemoryAddDirective({ text, scope = "permanent" } = {}) {
   };
   memory.directives.push(directive);
   await writeMemory(memory);
+  emitResourceUpdate(DIRECTIVES_URI);
   return { ok: true, directive };
 }
 
@@ -16439,8 +16446,17 @@ function transitionRecord({ from, to, artifact, stateDir: stateDir2 = ".omcp/sta
 }
 
 // resources.mjs
-var URI_RE = /^omcp:\/\/(wiki|traces|state|pipeline)\/([^/]+)(?:\/([^/]+))?$/;
+var URI_RE = /^omcp:\/\/(wiki|traces|state|pipeline|notepad|project-memory)(?:\/([^/]+))?(?:\/([^/]+))?$/;
 var PIPELINE_URI = "omcp://pipeline/state";
+var NOTEPAD_URI2 = "omcp://notepad";
+var PROJECT_MEMORY_NOTES_URI = "omcp://project-memory/notes";
+var PROJECT_MEMORY_DIRECTIVES_URI = "omcp://project-memory/directives";
+var SINGLETON_URIS = /* @__PURE__ */ new Set([
+  PIPELINE_URI,
+  NOTEPAD_URI2,
+  PROJECT_MEMORY_NOTES_URI,
+  PROJECT_MEMORY_DIRECTIVES_URI
+]);
 async function listResources() {
   const resources = [];
   const wiki = await wikiList({});
@@ -16482,6 +16498,24 @@ async function listResources() {
     description: "Autopilot pipeline state (stages + transitions)",
     mimeType: "application/json"
   });
+  resources.push({
+    uri: NOTEPAD_URI2,
+    name: "Workspace notepad",
+    description: "Append-only workspace notepad (.omcp/notepad.md)",
+    mimeType: "text/markdown"
+  });
+  resources.push({
+    uri: PROJECT_MEMORY_NOTES_URI,
+    name: "Project memory: notes",
+    description: "Persistent free-form notes from project_memory_add_note",
+    mimeType: "application/json"
+  });
+  resources.push({
+    uri: PROJECT_MEMORY_DIRECTIVES_URI,
+    name: "Project memory: directives",
+    description: "Persistent rules/directives from project_memory_add_directive",
+    mimeType: "application/json"
+  });
   return { resources };
 }
 async function readResource({ uri } = {}) {
@@ -16493,6 +16527,38 @@ async function readResource({ uri } = {}) {
     return {
       contents: [
         { uri, mimeType: "application/json", text: JSON.stringify(s) }
+      ]
+    };
+  }
+  if (uri === NOTEPAD_URI2) {
+    const r = await notepadRead({});
+    return {
+      contents: [
+        { uri, mimeType: "text/markdown", text: r.content }
+      ]
+    };
+  }
+  if (uri === PROJECT_MEMORY_NOTES_URI) {
+    const r = await projectMemoryRead({ kind: "notes" });
+    return {
+      contents: [
+        {
+          uri,
+          mimeType: "application/json",
+          text: JSON.stringify({ notes: r.notes ?? [] })
+        }
+      ]
+    };
+  }
+  if (uri === PROJECT_MEMORY_DIRECTIVES_URI) {
+    const r = await projectMemoryRead({ kind: "directives" });
+    return {
+      contents: [
+        {
+          uri,
+          mimeType: "application/json",
+          text: JSON.stringify({ directives: r.directives ?? [] })
+        }
       ]
     };
   }
@@ -16551,7 +16617,7 @@ function subscribeResource(uri) {
   if (typeof uri !== "string" || uri.length === 0) {
     throw new Error("subscribeResource requires non-empty 'uri'");
   }
-  if (uri !== PIPELINE_URI && !URI_RE.test(uri)) {
+  if (!SINGLETON_URIS.has(uri) && !URI_RE.test(uri)) {
     throw new Error(`cannot subscribe to unsupported uri: ${uri}`);
   }
   subscriptions.add(uri);
