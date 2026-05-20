@@ -4,6 +4,8 @@ import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js"
 import {
   CallToolRequestSchema,
   ListToolsRequestSchema,
+  ListResourcesRequestSchema,
+  ReadResourceRequestSchema,
 } from "@modelcontextprotocol/sdk/types.js";
 import {
   stateRead,
@@ -51,10 +53,11 @@ import {
   sharedMemoryCleanup,
 } from "./shared-memory-store.mjs";
 import { readStage, transitionRecord } from "../orchestrator/orchestrator.mjs";
+import { listResources, readResource } from "./resources.mjs";
 
 const server = new Server(
-  { name: "omcp", version: "0.5.0" },
-  { capabilities: { tools: {} } }
+  { name: "omcp", version: "0.6.0" },
+  { capabilities: { tools: {}, resources: {} } }
 );
 
 server.setRequestHandler(ListToolsRequestSchema, async () => ({
@@ -813,6 +816,14 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
       isError: true,
     };
   }
+});
+
+server.setRequestHandler(ListResourcesRequestSchema, async () => {
+  return await listResources();
+});
+
+server.setRequestHandler(ReadResourceRequestSchema, async (request) => {
+  return await readResource(request.params);
 });
 
 const transport = new StdioServerTransport();
