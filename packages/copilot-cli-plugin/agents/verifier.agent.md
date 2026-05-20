@@ -1,6 +1,6 @@
 ---
 name: verifier
-description: Verification strategy, evidence-based completion checks, test adequacy
+description: "[OMCP] Verification strategy, evidence-based completion checks, test adequacy"
 agent: verifier
 argument-hint: "<change, PR, or acceptance criteria to verify>"
 ---

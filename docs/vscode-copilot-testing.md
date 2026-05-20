@@ -63,10 +63,11 @@ The root registration target is expected to host:
 - `AGENTS.md`
 - `.github/copilot-instructions.md`
 - `.github/instructions/*.instructions.md`
-- root-local custom agents such as `research`, `reviewer`, and `verifier`
-- root prompt files such as `/ship-docs`, `/review-scope`, and
-  `/root-registration-check`
-- root-local skills such as `docs-ship` and `parity-guard`
+- generated root custom agents such as `research`, `reviewer`, `verifier`,
+  `planner`, and `executor`
+- generated root prompt files such as `/docs-ship`, `/review`, and `/verify`
+- generated root skills such as `docs-ship`, `review`, `plan`, and
+  `parity-guard`
 - root hooks that write source-labelled evidence under `.copilot-hooks/`
 
 Use the root when you want to prove current-directory behavior. Use the plugin
@@ -152,9 +153,9 @@ Suggested prompts from the repo root:
 1. `What instructions are active in this repository?`
 2. `Using the reviewer agent, check whether README.md overclaims OMC/OMX parity.`
 3. `Using the verifier agent, list the validation evidence needed for root registration.`
-4. `Run /review-scope README.md and summarize any scope risks.`
-5. `Run /ship-docs docs/root-registration.md and tell me which checks it would run.`
-6. `Run /root-registration-check and separate root, plugin, and example findings.`
+4. `Run /review README.md and summarize any scope risks.`
+5. `Run /docs-ship docs/root-registration.md and tell me which checks it would run.`
+6. `Run /verify and separate root, plugin, and example findings.`
 
 Expected signals:
 
@@ -170,7 +171,7 @@ plugin is installed:
 
 ```bash
 copilot --agent reviewer -s -p "Reply with exactly: ROOT_AGENT_OK" --model auto --allow-all
-copilot --agent 'oh-my-copilot-power-pack:reviewer' -s -p "Reply with exactly: PLUGIN_AGENT_OK" --model auto --allow-all
+copilot --agent 'omcp:reviewer' -s -p "Reply with exactly: PLUGIN_AGENT_OK" --model auto --allow-all
 ```
 
 Pass criteria:

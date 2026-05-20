@@ -1,6 +1,7 @@
 ---
 name: trace
-description: Evidence-driven tracing lane that orchestrates competing tracer hypotheses in Claude built-in team mode
+description: "[OMCP] Evidence-driven tracing lane that orchestrates competing tracer hypotheses in Copilot CLI"
+orchestrates-agents: "tracer, debugger, scientist"
 argument-hint: "<observation to trace>"
 agent: tracer
 level: 2
@@ -8,7 +9,7 @@ level: 2
 
 <!-- omc-port-translated: v1 -->
 <!-- source: references/oh-my-claudecode/skills/trace/SKILL.md | wave: 4.5 -->
-# Trace Skill
+# [OMCP] Trace Skill
 
 Use this skill for ambiguous, causal, evidence-heavy questions where the goal is to explain **why** an observed result happened, not to jump directly into fixing or rewriting code.
 

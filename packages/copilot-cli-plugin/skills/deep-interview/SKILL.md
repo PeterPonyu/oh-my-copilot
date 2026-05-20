@@ -1,6 +1,7 @@
 ---
 name: deep-interview
-description: Socratic deep interview with mathematical ambiguity gating before autonomous execution
+description: "[OMCP] Socratic deep interview with mathematical ambiguity gating before autonomous execution"
+orchestrates-agents: "analyst, architect, critic"
 argument-hint: "[--quick|--standard|--deep] [--autoresearch] <idea or vague description>"
 pipeline: [deep-interview, omc-plan, autopilot]
 next-skill: omc-plan
@@ -8,6 +9,14 @@ next-skill-args: --consensus --direct
 handoff: .omcp/specs/deep-interview-{slug}.md
 level: 3
 ---
+
+# [OMCP] Deep Interview
+
+## Agent orchestration
+
+This skill uses `analyst` for requirement extraction, `architect` for technical
+shape, and `critic` for ambiguity and acceptance-criteria challenge before
+execution skills run.
 
 <!-- omc-port-translated: v1 -->
 <!-- source: references/oh-my-claudecode/skills/deep-interview/SKILL.md | wave: 4.5 -->

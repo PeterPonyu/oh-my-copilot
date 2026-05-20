@@ -28,15 +28,15 @@ chronological order.
 2. Feed the canonical vague prompt through the pipeline:
 
    ```sh
-   copilot --agent oh-my-copilot-power-pack:deep-interview \
+   copilot --agent omcp:deep-interview \
      -p "$(cat scripts/fixtures/vague-prompt.txt)"
    # deep-interview writes .omc/specs/<timestamp>-spec.md
 
-   copilot --agent oh-my-copilot-power-pack:ralplan \
+   copilot --agent omcp:ralplan \
      -p "refine the spec in .omc/specs/"
    # ralplan writes .omc/plans/<timestamp>-plan.md
 
-   copilot --agent oh-my-copilot-power-pack:autopilot \
+   copilot --agent omcp:autopilot \
      -p "implement the plan in .omc/plans/"
    # autopilot emits artifact(s) in a scratch/ subdir
    ```

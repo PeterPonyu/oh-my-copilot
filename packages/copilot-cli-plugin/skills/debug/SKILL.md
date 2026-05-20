@@ -1,13 +1,19 @@
 ---
 name: debug
-description: Root-cause analysis with hypothesis tracking and smallest-fix output.
+description: "[OMCP] Root-cause analysis with hypothesis tracking and smallest-fix output."
+orchestrates-agents: "debugger, tracer, verifier"
 ---
 
-# Debug
+# [OMCP] Debug
 
 Use this plugin skill to isolate a bug, regression, or confusing runtime
 behavior. The skill returns a diagnosis and the smallest next action; it does
 not apply fixes unless the user asks.
+
+## Agent orchestration
+
+This skill coordinates `debugger` for reproduction and diagnosis, `tracer` for
+causal paths, and `verifier` for confirming the smallest fix path.
 
 ## Run
 

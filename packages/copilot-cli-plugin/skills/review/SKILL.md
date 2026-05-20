@@ -1,13 +1,19 @@
 ---
 name: review
-description: Severity-rated code review pass for pending changes or a specified diff.
+description: "[OMCP] Severity-rated code review pass for pending changes or a specified diff."
+orchestrates-agents: "code-reviewer, verifier"
 ---
 
-# Review
+# [OMCP] Review
 
 Use this plugin skill to run a structured review on pending changes. Authoring
 and review stay in separate passes — if the current Copilot CLI session wrote
 the code, hand the review to a separate session.
+
+## Agent orchestration
+
+This skill routes review work through `code-reviewer` for findings and
+`verifier` for evidence checks when completion claims need independent proof.
 
 ## Run
 

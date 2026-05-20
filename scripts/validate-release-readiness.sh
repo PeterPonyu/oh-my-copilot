@@ -64,6 +64,9 @@ for path in \
   scripts/validate-doc-links.sh \
   scripts/validate-power-surfaces.sh \
   scripts/validate-root-copilot-surfaces.sh \
+  scripts/check-mirror-drift.sh \
+  scripts/validate-plugin-orchestration.mjs \
+  scripts/run-validation.sh \
   scripts/validate-copilot-state-contract.sh \
   scripts/validate-benchmark-evidence.sh \
   scripts/validate-cross-host-benchmark-data.py \
@@ -79,6 +82,9 @@ for path in \
   scripts/validate-doc-links.sh \
   scripts/validate-power-surfaces.sh \
   scripts/validate-root-copilot-surfaces.sh \
+  scripts/check-mirror-drift.sh \
+  scripts/validate-plugin-orchestration.mjs \
+  scripts/run-validation.sh \
   scripts/validate-copilot-state-contract.sh \
   scripts/validate-benchmark-evidence.sh \
   scripts/validate-release-readiness.sh \
@@ -90,7 +96,7 @@ done
 log "release validator scripts exist and are executable"
 
 require_contains "release checklist preserves CLI-first scope" 'CLI-first|Copilot CLI' docs/release-checklist.md
-require_contains "release checklist keeps plugin canonical" 'plugin.*canonical|canonical.*plugin|oh-my-copilot-power-pack' docs/release-checklist.md
+require_contains "release checklist keeps plugin canonical" 'plugin.*canonical|canonical.*plugin|omcp' docs/release-checklist.md
 require_contains "release checklist keeps examples illustrative" 'examples?.*illustrative|illustrative.*examples?' docs/release-checklist.md
 require_contains "release checklist documents versioning" 'version|semantic-version|plugin\.json' docs/release-checklist.md
 require_contains "release checklist documents release notes" 'release notes' docs/release-checklist.md
@@ -115,6 +121,8 @@ print(f"ok: plugin version metadata is release-shaped ({version})")
 PY
 
 (cd "$ROOT" && ./scripts/validate-doc-links.sh)
+(cd "$ROOT" && ./scripts/check-mirror-drift.sh)
+(cd "$ROOT" && node scripts/validate-plugin-orchestration.mjs)
 (cd "$ROOT" && ./packages/copilot-cli-plugin/skills/parity-guard/check-parity-claims.sh .)
 (cd "$ROOT" && ./scripts/validate-power-surfaces.sh)
 (cd "$ROOT" && ./scripts/validate-root-copilot-surfaces.sh)

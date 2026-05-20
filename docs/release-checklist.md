@@ -32,7 +32,7 @@ reusable plugin behavior, and keeps [`examples/`](../examples/) illustrative.
 - Draft release notes from merged PRs or the release branch diff. Include:
   - user-facing documentation changes;
   - bootstrap or install proof changes;
-  - root prompt/agent/skill alias changes;
+  - plugin command/agent/skill changes and generated root mirror changes;
   - validator and smoke-test changes;
   - known limitations that remain.
 - Keep the Git tag and release notes aligned with the plugin version when the
@@ -44,6 +44,8 @@ Run these commands from the repository root:
 
 ```bash
 ./scripts/validate-doc-links.sh
+./scripts/check-mirror-drift.sh
+node scripts/validate-plugin-orchestration.mjs
 ./packages/copilot-cli-plugin/skills/parity-guard/check-parity-claims.sh .
 ./scripts/validate-power-surfaces.sh
 ./scripts/validate-root-copilot-surfaces.sh
@@ -75,10 +77,10 @@ Pass criteria:
 - `copilot --version` succeeds.
 - `copilot plugin --help` succeeds.
 - Root agent files for `research`, `reviewer`, and `verifier` exist.
-- Plugin metadata parses and still names `oh-my-copilot-power-pack`.
+- Plugin metadata parses and still names `omcp`.
 - The root `reviewer` route responds to a constrained prompt.
 - If the plugin is installed, the namespaced
-  `oh-my-copilot-power-pack:reviewer` route responds to a constrained prompt.
+  `omcp:reviewer` route responds to a constrained prompt.
 
 Do not treat a skipped namespaced plugin prompt as root proof. Install proof is
 owned by the bootstrap/install path and should be recorded separately.
@@ -94,7 +96,8 @@ owned by the bootstrap/install path and should be recorded separately.
   dates are current and any Cursor notes remain comparison-only rather than
   product-support claims.
 - Confirm bootstrap/install commands in the docs match the scripts in `scripts/`.
-- Confirm the root prompts and agents remain short-name aliases for root work.
+- Confirm the root prompts, skills, agents, and instructions have no drift from
+  plugin canonical sources.
 - Confirm namespaced plugin routes remain documented for reusable installed
   plugin work.
 - Confirm no generated `.copilot-hooks/*.log`, `.copilot-hooks/*.jsonl`, or
@@ -107,6 +110,8 @@ Paste this into the release PR or release notes:
 ```text
 Release readiness evidence:
 - Docs validation: PASS/FAIL — ./scripts/validate-doc-links.sh
+- Mirror drift validation: PASS/FAIL — ./scripts/check-mirror-drift.sh
+- Plugin orchestration validation: PASS/FAIL — node scripts/validate-plugin-orchestration.mjs
 - Parity wording scan: PASS/FAIL — ./packages/copilot-cli-plugin/skills/parity-guard/check-parity-claims.sh .
 - Power surface validation: PASS/FAIL — ./scripts/validate-power-surfaces.sh
 - Root surface validation: PASS/FAIL — ./scripts/validate-root-copilot-surfaces.sh

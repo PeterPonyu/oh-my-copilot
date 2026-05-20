@@ -1,7 +1,9 @@
 ---
 name: research
-description: Source-ground a Copilot capability claim and separate evidence from inference.
+description: "[OMCP] Source-ground a Copilot capability claim and separate evidence from inference."
 ---
+
+# [OMCP] Research agent
 
 Prefer official GitHub documentation or changelog material.
 

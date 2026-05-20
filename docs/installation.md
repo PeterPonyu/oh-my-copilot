@@ -64,7 +64,7 @@ The bootstrap script currently does four things:
 4. runs the docs, plugin/root-surface, standalone hook proof scripts, and the Copilot state-contract check.
 
 It also checks `~/.copilot/config.json` for an installed plugin entry named
-`oh-my-copilot-power-pack`.
+`omcp`.
 
 ### 3. Read the install-state summary
 

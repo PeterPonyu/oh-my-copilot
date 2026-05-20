@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # check-mirror-drift.sh
 #
-# CI-runnable check that .github/{agents,skills,prompts}/ is in sync with the
+# CI-runnable check that root Copilot Markdown mirrors are in sync with the
 # canonical plugin sources in packages/copilot-cli-plugin/.
 #
 # Exits 0 if no drift; exits 1 and prints the diff if drift is detected.
@@ -28,14 +28,16 @@ echo "Generating mirror into ${WORK_DIR} ..."
 bash "${SCRIPT}" --dry-run --to "${WORK_DIR}" > /dev/null 2>&1 || true
 bash "${SCRIPT}" --to "${WORK_DIR}" > /dev/null 2>&1
 
-echo "Comparing generated mirror against .github/{agents,skills,prompts}/ ..."
+echo "Comparing generated mirror against root Copilot Markdown ..."
 
-DIFF_OUTPUT="$(diff -r \
-  --exclude="MIRROR_FROM_PLUGIN.md" \
-  "${WORK_DIR}/.github/agents"  "${REPO_ROOT}/.github/agents" \
-  "${WORK_DIR}/.github/skills"  "${REPO_ROOT}/.github/skills" \
-  "${WORK_DIR}/.github/prompts" "${REPO_ROOT}/.github/prompts" \
-  2>&1 || true)"
+DIFF_OUTPUT="$(
+  diff -u "${WORK_DIR}/AGENTS.md" "${REPO_ROOT}/AGENTS.md" 2>&1 || true
+  diff -u "${WORK_DIR}/.github/copilot-instructions.md" "${REPO_ROOT}/.github/copilot-instructions.md" 2>&1 || true
+  diff -r --exclude="MIRROR_FROM_PLUGIN.md" "${WORK_DIR}/.github/instructions" "${REPO_ROOT}/.github/instructions" 2>&1 || true
+  diff -r --exclude="MIRROR_FROM_PLUGIN.md" "${WORK_DIR}/.github/agents" "${REPO_ROOT}/.github/agents" 2>&1 || true
+  diff -r --exclude="MIRROR_FROM_PLUGIN.md" "${WORK_DIR}/.github/skills" "${REPO_ROOT}/.github/skills" 2>&1 || true
+  diff -r --exclude="MIRROR_FROM_PLUGIN.md" "${WORK_DIR}/.github/prompts" "${REPO_ROOT}/.github/prompts" 2>&1 || true
+)"
 
 if [[ -z "${DIFF_OUTPUT}" ]]; then
   echo "OK — no drift detected."

@@ -25,17 +25,14 @@ oh-my-copilot/
 │   │   ├── copilot-surfaces.instructions.md
 │   │   └── scripts.instructions.md
 │   ├── agents/
-│   │   ├── research.agent.md
-│   │   ├── reviewer.agent.md
-│   │   └── verifier.agent.md
+│   │   ├── MIRROR_FROM_PLUGIN.md
+│   │   └── *.agent.md
 │   ├── prompts/
-│   │   ├── ship-docs.prompt.md
-│   │   ├── review-scope.prompt.md
-│   │   └── root-registration-check.prompt.md
+│   │   ├── MIRROR_FROM_PLUGIN.md
+│   │   └── *.prompt.md
 │   ├── skills/
-│   │   ├── docs-ship/
-│   │   │   └── SKILL.md
-│   │   └── parity-guard/
+│   │   ├── MIRROR_FROM_PLUGIN.md
+│   │   └── */
 │   │       └── SKILL.md
 │   ├── hooks/
 │   │   └── hooks.json
@@ -87,12 +84,12 @@ oh-my-copilot/
 | Path | Role | V1 boundary |
 | --- | --- | --- |
 | `README.md` | Public orientation and reading path | Must state docs/research-first, CLI-first scope, the root/plugin/example split, and the repo-vs-host claim/proof rule. |
-| `AGENTS.md` | Root agent guidance | Governs the current repository root, not nested examples or installed plugins. |
-| `.github/copilot-instructions.md` | Root Copilot workspace instructions | Must preserve CLI-first and non-parity boundaries. |
-| `.github/instructions/*.instructions.md` | Path-specific root instructions | Must scope docs, scripts, and Copilot surface files explicitly. |
-| `.github/agents/*.agent.md` | Root-local current-directory agents | Must use short names only for root work and keep plugin-equivalent namespaced routes distinct. |
-| `.github/prompts/*.prompt.md` | Root prompt routing | Must reference root agents that exist and avoid example-only routes. |
-| `.github/skills/*/SKILL.md` | Root skills | Must call root-relative scripts and not require changing into the plugin package. |
+| `AGENTS.md` | Root agent guidance mirror | Generated from `packages/copilot-cli-plugin/instructions/AGENTS.md`. |
+| `.github/copilot-instructions.md` | Root Copilot workspace instructions mirror | Generated from `packages/copilot-cli-plugin/instructions/copilot-instructions.md`. |
+| `.github/instructions/*.instructions.md` | Path-specific root instructions mirror | Generated from `packages/copilot-cli-plugin/instructions/instructions/`. |
+| `.github/agents/*.agent.md` | Root-local current-directory agent mirror | Generated from `packages/copilot-cli-plugin/agents/`. |
+| `.github/prompts/*.prompt.md` | Root prompt templates for hosts that support prompt files | Generated from `packages/copilot-cli-plugin/commands/`; not Copilot CLI prompt-file proof. |
+| `.github/skills/*/SKILL.md` | Root skill mirror | Generated from `packages/copilot-cli-plugin/skills/`. |
 | `.github/hooks/hooks.json` | Root hook policy | Must be root proof, not nested example proof. |
 | `.copilot-hooks/*.sh` | Root hook helpers | Must write source-labelled root-workspace evidence and keep logs out of source control. |
 | `docs/design-spec.md` | Canonical v1 spec | Must include non-goals and acceptance checklist. |
@@ -104,7 +101,7 @@ oh-my-copilot/
 | `research/*.md` | Evidence base | Must separate source observations from design synthesis. |
 | `examples/copilot-cli-layout/` | Illustrative CLI-oriented layout | Not a supported runtime or root proof. |
 | `examples/vscode-copilot-layout/` | Illustrative VS Code power workspace | Useful for smoke tests; nested hook behavior is not root proof. |
-| `packages/copilot-cli-plugin/` | Reusable Copilot CLI plugin package | Canonical for reusable plugin agents, skills, hooks, and plugin metadata. |
+| `packages/copilot-cli-plugin/` | Reusable Copilot CLI plugin package | Canonical for reusable plugin agents, skills, commands, hooks, MCP, mirrored instructions, and plugin metadata. |
 | `scripts/validate-doc-links.sh` | Documentation hygiene | Must not implement product orchestration. |
 | `scripts/validate-power-surfaces.sh` | Power-surface validation | Checks examples, plugin package, and root docs mentions. |
 | `scripts/validate-root-copilot-surfaces.sh` | Root surface validation | Checks root instructions, agents, prompts, skills, hooks, and routing references when present. |
@@ -114,10 +111,10 @@ oh-my-copilot/
 
 | Capability | Root owner | Plugin owner | Example role |
 | --- | --- | --- | --- |
-| Instructions | Root `AGENTS.md` and `.github/instructions/` | Plugin skill/agent docs only | Demonstrate workspace-specific instructions. |
-| Agents | Root `.github/agents/` aliases | `packages/copilot-cli-plugin/agents/` | Demonstrate richer handoff layouts. |
-| Prompts | Root `.github/prompts/` | No plugin prompt source today | Seed ideas only. |
-| Skills | Root `.github/skills/` wrappers | `packages/copilot-cli-plugin/skills/` | Demonstrate skill shape and scripts. |
+| Instructions | Generated root mirror | `packages/copilot-cli-plugin/instructions/` | Demonstrate workspace-specific instructions. |
+| Agents | Generated root mirror | `packages/copilot-cli-plugin/agents/` | Demonstrate richer handoff layouts. |
+| Prompts | Generated root mirror | `packages/copilot-cli-plugin/commands/` | Seed ideas only; do not treat as Copilot CLI prompt-file proof. |
+| Skills | Generated root mirror | `packages/copilot-cli-plugin/skills/` | Demonstrate skill shape and scripts. |
 | Hooks | Root `.github/hooks/hooks.json` and `.copilot-hooks/` helpers | `packages/copilot-cli-plugin/hooks.json` and scripts | Standalone proof only, not root proof. |
 
 The ownership split also controls proof language:

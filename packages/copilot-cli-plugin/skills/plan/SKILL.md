@@ -1,13 +1,20 @@
 ---
 name: plan
-description: Strategic planning workflow that scopes a task before any code is written.
+description: "[OMCP] Strategic planning workflow that scopes a task before any code is written."
+orchestrates-agents: "planner, architect, critic"
 ---
 
-# Plan
+# [OMCP] Plan
 
 Use this plugin skill when a Copilot CLI task needs to be scoped before code is
 written. Authoring and execution stay in separate passes — this skill never
 edits source code itself.
+
+## Agent orchestration
+
+This skill coordinates `planner`, `architect`, and `critic` roles: planner
+drafts scope, architect checks technical shape, and critic challenges ambiguity,
+risks, and verification gaps before execution starts.
 
 ## Modes
 
