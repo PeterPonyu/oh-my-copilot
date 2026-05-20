@@ -6,6 +6,8 @@ import {
   ListToolsRequestSchema,
   ListResourcesRequestSchema,
   ReadResourceRequestSchema,
+  SubscribeRequestSchema,
+  UnsubscribeRequestSchema,
   ListPromptsRequestSchema,
   GetPromptRequestSchema,
 } from "@modelcontextprotocol/sdk/types.js";
@@ -55,12 +57,25 @@ import {
   sharedMemoryCleanup,
 } from "./shared-memory-store.mjs";
 import { readStage, transitionRecord } from "../orchestrator/orchestrator.mjs";
-import { listResources, readResource } from "./resources.mjs";
+import {
+  listResources,
+  readResource,
+  subscribeResource,
+  unsubscribeResource,
+  isResourceSubscribed,
+} from "./resources.mjs";
 import { listPrompts, getPrompt } from "./prompts.mjs";
+import { resourceEvents } from "./events.mjs";
 
 const server = new Server(
-  { name: "omcp", version: "0.7.0" },
-  { capabilities: { tools: {}, resources: {}, prompts: {} } }
+  { name: "omcp", version: "0.8.0" },
+  {
+    capabilities: {
+      tools: {},
+      resources: { subscribe: true },
+      prompts: {},
+    },
+  }
 );
 
 server.setRequestHandler(ListToolsRequestSchema, async () => ({
@@ -827,6 +842,29 @@ server.setRequestHandler(ListResourcesRequestSchema, async () => {
 
 server.setRequestHandler(ReadResourceRequestSchema, async (request) => {
   return await readResource(request.params);
+});
+
+server.setRequestHandler(SubscribeRequestSchema, async (request) => {
+  subscribeResource(request.params.uri);
+  return {};
+});
+
+server.setRequestHandler(UnsubscribeRequestSchema, async (request) => {
+  unsubscribeResource(request.params.uri);
+  return {};
+});
+
+// Forward resource-change events from the store bus to subscribed clients
+// via notifications/resources/updated.
+resourceEvents.on("updated", (uri) => {
+  if (!isResourceSubscribed(uri)) return;
+  // Fire-and-forget — notification delivery is best-effort.
+  server
+    .notification({
+      method: "notifications/resources/updated",
+      params: { uri },
+    })
+    .catch(() => {});
 });
 
 server.setRequestHandler(ListPromptsRequestSchema, async () => {
