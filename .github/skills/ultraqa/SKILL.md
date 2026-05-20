@@ -1,7 +1,7 @@
 ---
 name: ultraqa
 description: "[OMCP] QA cycling workflow - test, verify, fix, repeat until goal met"
-orchestrates-agents: "verifier, test-engineer, debugger, security-reviewer, code-reviewer"
+orchestrates-agents: "verifier, test-engineer, qa-tester, debugger, security-reviewer, code-reviewer"
 argument-hint: "[--tests|--build|--lint|--typecheck|--custom <pattern>] [--interactive]"
 level: 3
 ---
@@ -10,9 +10,10 @@ level: 3
 
 ## Agent orchestration
 
-This skill coordinates `verifier`, `test-engineer`, `debugger`,
+This skill coordinates `verifier`, `test-engineer`, `qa-tester`, `debugger`,
 `security-reviewer`, and `code-reviewer` roles through test, diagnose, fix, and
-regression loops.
+regression loops. `qa-tester` covers interactive CLI/service validation in the
+`--interactive` lane.
 
 <!-- omc-port-translated: v1 -->
 <!-- source: references/oh-my-claudecode/skills/ultraqa/SKILL.md | wave: 4.5 -->

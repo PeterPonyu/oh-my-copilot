@@ -1,6 +1,7 @@
 ---
 name: self-improve
 description: "[OMCP] Autonomous evolutionary code improvement engine with tournament selection"
+orchestrates-agents: "planner, architect, critic, executor, git-master"
 level: 4
 ---
 
