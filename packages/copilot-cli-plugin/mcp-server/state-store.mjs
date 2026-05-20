@@ -2,6 +2,7 @@ import { readFile, writeFile, mkdir, readdir, rename, unlink } from "node:fs/pro
 import { existsSync } from "node:fs";
 import { join, resolve } from "node:path";
 import { randomBytes } from "node:crypto";
+import { emitResourceUpdate } from "./events.mjs";
 
 const STATE_DIR = ".omcp/state";
 
@@ -44,6 +45,7 @@ export async function stateWrite(key, value) {
   const tmp = filePath + ".tmp." + randomBytes(6).toString("hex");
   await writeFile(tmp, JSON.stringify(value, null, 2), "utf8");
   await rename(tmp, filePath);
+  emitResourceUpdate(`omcp://state/${key}`);
   return { ok: true, path: filePath };
 }
 

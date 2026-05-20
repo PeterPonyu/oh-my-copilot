@@ -21,12 +21,15 @@ function teardown(dir) {
   rmSync(dir, { recursive: true, force: true });
 }
 
-test("listResources returns empty list when nothing exists", async (t) => {
+test("listResources returns only the pipeline singleton when nothing else exists", async (t) => {
   const dir = freshCwd();
   t.after(() => teardown(dir));
 
   const r = await listResources();
-  assert.deepEqual(r, { resources: [] });
+  // The pipeline state resource is always exposed (singleton); everything
+  // else is empty in a fresh workspace.
+  assert.equal(r.resources.length, 1);
+  assert.equal(r.resources[0].uri, "omcp://pipeline/state");
 });
 
 test("listResources enumerates wiki slugs as omcp://wiki/<slug>", async (t) => {
@@ -37,8 +40,11 @@ test("listResources enumerates wiki slugs as omcp://wiki/<slug>", async (t) => {
   await wikiAdd({ title: "Deploy Pipeline", body: "ci/cd notes" });
 
   const r = await listResources();
-  const uris = r.resources.map((x) => x.uri).sort();
-  assert.deepEqual(uris, ["omcp://wiki/auth-flow", "omcp://wiki/deploy-pipeline"]);
+  const wikiUris = r.resources
+    .map((x) => x.uri)
+    .filter((u) => u.startsWith("omcp://wiki/"))
+    .sort();
+  assert.deepEqual(wikiUris, ["omcp://wiki/auth-flow", "omcp://wiki/deploy-pipeline"]);
 
   const auth = r.resources.find((x) => x.uri === "omcp://wiki/auth-flow");
   assert.equal(auth.mimeType, "text/markdown");
@@ -54,8 +60,11 @@ test("listResources enumerates trace sessions as timeline + summary URIs", async
   await traceWrite({ session_id: "sess-2", kind: "hypothesis", lane: "L2", payload: { note: "b" } });
 
   const r = await listResources();
-  const uris = r.resources.map((x) => x.uri).sort();
-  assert.deepEqual(uris, [
+  const traceUris = r.resources
+    .map((x) => x.uri)
+    .filter((u) => u.startsWith("omcp://traces/"))
+    .sort();
+  assert.deepEqual(traceUris, [
     "omcp://traces/sess-1/summary",
     "omcp://traces/sess-1/timeline",
     "omcp://traces/sess-2/summary",

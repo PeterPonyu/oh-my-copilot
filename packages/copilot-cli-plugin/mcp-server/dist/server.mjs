@@ -15450,6 +15450,18 @@ import { readFile, writeFile, mkdir, readdir, rename, unlink } from "node:fs/pro
 import { existsSync } from "node:fs";
 import { join, resolve } from "node:path";
 import { randomBytes } from "node:crypto";
+
+// events.mjs
+import { EventEmitter } from "node:events";
+var resourceEvents = new EventEmitter();
+resourceEvents.setMaxListeners(8);
+function emitResourceUpdate(uri) {
+  if (typeof uri === "string" && uri.length > 0) {
+    resourceEvents.emit("updated", uri);
+  }
+}
+
+// state-store.mjs
 var STATE_DIR = ".omcp/state";
 function stateDir() {
   return resolve(process.cwd(), STATE_DIR);
@@ -15486,6 +15498,7 @@ async function stateWrite(key, value) {
   const tmp = filePath + ".tmp." + randomBytes(6).toString("hex");
   await writeFile(tmp, JSON.stringify(value, null, 2), "utf8");
   await rename(tmp, filePath);
+  emitResourceUpdate(`omcp://state/${key}`);
   return { ok: true, path: filePath };
 }
 async function stateList() {
@@ -16422,10 +16435,12 @@ function transitionRecord({ from, to, artifact, stateDir: stateDir2 = ".omcp/sta
   const serialized = JSON.stringify(state, null, 2);
   writeFileSync(tmp, serialized, "utf8");
   renameSync(tmp, dest);
+  emitResourceUpdate("omcp://pipeline/state");
 }
 
 // resources.mjs
-var URI_RE = /^omcp:\/\/(wiki|traces)\/([^/]+)(?:\/([^/]+))?$/;
+var URI_RE = /^omcp:\/\/(wiki|traces|state|pipeline)\/([^/]+)(?:\/([^/]+))?$/;
+var PIPELINE_URI = "omcp://pipeline/state";
 async function listResources() {
   const resources = [];
   const wiki = await wikiList({});
@@ -16452,11 +16467,34 @@ async function listResources() {
       mimeType: "application/json"
     });
   }
+  const state = await stateList();
+  for (const key of state.keys) {
+    resources.push({
+      uri: `omcp://state/${key}`,
+      name: `State ${key}`,
+      description: "Orchestration-mode state entry",
+      mimeType: "application/json"
+    });
+  }
+  resources.push({
+    uri: PIPELINE_URI,
+    name: "Pipeline state",
+    description: "Autopilot pipeline state (stages + transitions)",
+    mimeType: "application/json"
+  });
   return { resources };
 }
 async function readResource({ uri } = {}) {
   if (typeof uri !== "string" || uri.length === 0) {
     throw new Error("readResource requires non-empty 'uri'");
+  }
+  if (uri === PIPELINE_URI) {
+    const s = readStage();
+    return {
+      contents: [
+        { uri, mimeType: "application/json", text: JSON.stringify(s) }
+      ]
+    };
   }
   const m = uri.match(URI_RE);
   if (!m) {
@@ -16470,11 +16508,7 @@ async function readResource({ uri } = {}) {
     }
     return {
       contents: [
-        {
-          uri,
-          mimeType: "text/markdown",
-          text: r.body
-        }
+        { uri, mimeType: "text/markdown", text: r.body }
       ]
     };
   }
@@ -16485,11 +16519,7 @@ async function readResource({ uri } = {}) {
       const t = await traceTimeline({ session_id: sid });
       return {
         contents: [
-          {
-            uri,
-            mimeType: "application/json",
-            text: JSON.stringify(t)
-          }
+          { uri, mimeType: "application/json", text: JSON.stringify(t) }
         ]
       };
     }
@@ -16497,17 +16527,45 @@ async function readResource({ uri } = {}) {
       const s = await traceSummary({ session_id: sid });
       return {
         contents: [
-          {
-            uri,
-            mimeType: "application/json",
-            text: JSON.stringify(s)
-          }
+          { uri, mimeType: "application/json", text: JSON.stringify(s) }
         ]
       };
     }
     throw new Error(`unsupported trace view: ${view}`);
   }
+  if (kind === "state") {
+    const r = await stateRead(key);
+    if (!r.exists) {
+      throw new Error(`state entry not found: ${key}`);
+    }
+    return {
+      contents: [
+        { uri, mimeType: "application/json", text: JSON.stringify(r.value) }
+      ]
+    };
+  }
   throw new Error(`unhandled uri kind: ${kind}`);
+}
+var subscriptions = /* @__PURE__ */ new Set();
+function subscribeResource(uri) {
+  if (typeof uri !== "string" || uri.length === 0) {
+    throw new Error("subscribeResource requires non-empty 'uri'");
+  }
+  if (uri !== PIPELINE_URI && !URI_RE.test(uri)) {
+    throw new Error(`cannot subscribe to unsupported uri: ${uri}`);
+  }
+  subscriptions.add(uri);
+  return { ok: true };
+}
+function unsubscribeResource(uri) {
+  if (typeof uri !== "string" || uri.length === 0) {
+    throw new Error("unsubscribeResource requires non-empty 'uri'");
+  }
+  const removed = subscriptions.delete(uri);
+  return { ok: true, removed };
+}
+function isResourceSubscribed(uri) {
+  return subscriptions.has(uri);
 }
 
 // prompts.mjs
@@ -16609,8 +16667,14 @@ ${userArgs}
 
 // server.mjs
 var server = new Server(
-  { name: "omcp", version: "0.7.0" },
-  { capabilities: { tools: {}, resources: {}, prompts: {} } }
+  { name: "omcp", version: "0.8.0" },
+  {
+    capabilities: {
+      tools: {},
+      resources: { subscribe: true },
+      prompts: {}
+    }
+  }
 );
 server.setRequestHandler(ListToolsRequestSchema, async () => ({
   tools: [
@@ -17332,6 +17396,22 @@ server.setRequestHandler(ListResourcesRequestSchema, async () => {
 });
 server.setRequestHandler(ReadResourceRequestSchema, async (request) => {
   return await readResource(request.params);
+});
+server.setRequestHandler(SubscribeRequestSchema, async (request) => {
+  subscribeResource(request.params.uri);
+  return {};
+});
+server.setRequestHandler(UnsubscribeRequestSchema, async (request) => {
+  unsubscribeResource(request.params.uri);
+  return {};
+});
+resourceEvents.on("updated", (uri) => {
+  if (!isResourceSubscribed(uri)) return;
+  server.notification({
+    method: "notifications/resources/updated",
+    params: { uri }
+  }).catch(() => {
+  });
 });
 server.setRequestHandler(ListPromptsRequestSchema, async () => {
   return await listPrompts();

@@ -14,6 +14,7 @@
 import { readFileSync, writeFileSync, renameSync, mkdirSync, existsSync } from 'node:fs';
 import { join } from 'node:path';
 import { randomBytes } from 'node:crypto';
+import { emitResourceUpdate } from '../mcp-server/events.mjs';
 
 const PIPELINE_FILE = 'pipeline-state.json';
 
@@ -88,4 +89,6 @@ export function transitionRecord({ from, to, artifact, stateDir = '.omcp/state' 
 
   writeFileSync(tmp, serialized, 'utf8');
   renameSync(tmp, dest);
+
+  emitResourceUpdate('omcp://pipeline/state');
 }
