@@ -1,6 +1,6 @@
 ---
 name: document-specialist
-description: External Documentation & Reference Specialist
+description: "[OMCP] External Documentation & Reference Specialist"
 agent: document-specialist
 argument-hint: "<question, API, framework, or package to research>"
 ---

@@ -1,6 +1,6 @@
 ---
 name: planner
-description: Strategic planning consultant with interview workflow
+description: "[OMCP] Strategic planning consultant with interview workflow"
 agent: planner
 argument-hint: "<task or goal to plan>"
 ---

@@ -1,6 +1,6 @@
 ---
 name: ask
-description: Process-first advisor routing — query Claude, Codex, or Gemini via `omc ask` with artifact capture
+description: "[OMCP] Process-first advisor routing — query Claude, Codex, or Gemini via `omc ask` with artifact capture"
 argument-hint: "<claude|codex|gemini> <question>"
 ---
 

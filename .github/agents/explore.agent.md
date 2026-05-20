@@ -1,6 +1,6 @@
 ---
 name: explore
-description: Codebase search specialist for finding files and code patterns (READ-ONLY)
+description: "[OMCP] Codebase search specialist for finding files and code patterns (READ-ONLY)"
 agent: explore
 argument-hint: "<what to find — symbol, pattern, or relationship>"
 ---

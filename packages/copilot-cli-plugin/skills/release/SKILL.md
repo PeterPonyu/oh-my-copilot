@@ -1,6 +1,6 @@
 ---
 name: release
-description: Generic release assistant — analyzes repo release rules, caches them in .omcp/RELEASE_RULE.md, then guides the release
+description: "[OMCP] Generic release assistant — analyzes repo release rules, caches them in .omcp/RELEASE_RULE.md, then guides the release"
 level: 3
 ---
 

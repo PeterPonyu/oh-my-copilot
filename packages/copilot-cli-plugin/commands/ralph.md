@@ -1,6 +1,6 @@
 ---
 name: ralph
-description: PRD-driven persistence loop — iterate story-by-story with reviewer verification until done
+description: "[OMCP] PRD-driven persistence loop — iterate story-by-story with reviewer verification until done"
 agent: executor
 argument-hint: "[--no-deslop] [--critic=architect|critic|codex] <task description>"
 ---

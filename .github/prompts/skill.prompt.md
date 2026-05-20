@@ -1,6 +1,6 @@
 ---
 name: skill
-description: Manage local skills - list, add, remove, search, edit, setup wizard
+description: "[OMCP] Manage local skills - list, add, remove, search, edit, setup wizard"
 argument-hint: "<input>"
 ---
 

@@ -1,6 +1,6 @@
 ---
 name: hud
-description: Configure the OMC HUD statusline (Claude Code only — has no effect in Copilot CLI)
+description: "[OMCP] Configure the OMC HUD statusline (Claude Code only — has no effect in Copilot CLI)"
 argument-hint: "[setup | minimal | focused | full | status]"
 ---
 

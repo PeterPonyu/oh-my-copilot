@@ -1,6 +1,6 @@
 ---
 name: scientist
-description: Data analysis and research execution specialist
+description: "[OMCP] Data analysis and research execution specialist"
 agent: scientist
 argument-hint: "<data file, analysis objective, or research question>"
 ---

@@ -1,6 +1,6 @@
 ---
 name: wiki
-description: LLM Wiki — persistent markdown knowledge base that compounds across sessions (Karpathy model)
+description: "[OMCP] LLM Wiki — persistent markdown knowledge base that compounds across sessions (Karpathy model)"
 triggers: ["wiki", "wiki this", "wiki add", "wiki lint", "wiki query"]
 ---
 

@@ -1,6 +1,6 @@
 ---
 name: iterate-loop
-description: Persistence loop that keeps working a task until acceptance criteria pass and a reviewer signs off.
+description: "[OMCP] Persistence loop that keeps working a task until acceptance criteria pass and a reviewer signs off."
 argument-hint: "<input>"
 ---
 

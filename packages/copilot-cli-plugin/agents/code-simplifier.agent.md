@@ -1,6 +1,6 @@
 ---
 name: code-simplifier
-description: Simplifies and refines recently-modified code for clarity and maintainability while preserving functionality
+description: "[OMCP] Simplifies and refines recently-modified code for clarity and maintainability while preserving functionality"
 agent: code-simplifier
 argument-hint: "<files or scope to simplify>"
 ---

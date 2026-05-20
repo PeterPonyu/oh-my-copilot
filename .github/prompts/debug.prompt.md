@@ -1,6 +1,6 @@
 ---
 name: debug
-description: Root-cause analysis with hypothesis tracking and smallest-fix output.
+description: "[OMCP] Root-cause analysis with hypothesis tracking and smallest-fix output."
 argument-hint: "<input>"
 ---
 

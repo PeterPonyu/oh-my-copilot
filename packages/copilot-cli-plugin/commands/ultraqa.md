@@ -1,6 +1,6 @@
 ---
 name: ultraqa
-description: QA cycling workflow - test, verify, fix, repeat until goal met
+description: "[OMCP] QA cycling workflow - test, verify, fix, repeat until goal met"
 argument-hint: "<input>"
 ---
 

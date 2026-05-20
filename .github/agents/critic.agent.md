@@ -1,6 +1,6 @@
 ---
 name: critic
-description: Work plan and code review expert — thorough, structured, multi-perspective
+description: "[OMCP] Work plan and code review expert — thorough, structured, multi-perspective"
 agent: critic
 argument-hint: "<plan file path or code to review>"
 ---

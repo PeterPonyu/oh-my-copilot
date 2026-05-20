@@ -1,6 +1,6 @@
 ---
 name: team
-description: N coordinated agents in parallel via native team primitives — TeamCreate / TaskCreate / SendMessage
+description: "[OMCP] N coordinated agents in parallel via native team primitives — TeamCreate / TaskCreate / SendMessage"
 agent: executor
 argument-hint: "[N:agent-type] [ralph] <task description>"
 ---

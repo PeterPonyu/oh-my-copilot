@@ -1,6 +1,6 @@
 ---
 name: cancel
-description: End an active orchestration mode (autopilot, ralph, ralplan, team, ultrawork, ultraqa, sciomc) and clean its state
+description: "[OMCP] End an active orchestration mode (autopilot, ralph, ralplan, team, ultrawork, ultraqa, sciomc) and clean its state"
 argument-hint: "[mode]   |   --force   |   --all"
 ---
 

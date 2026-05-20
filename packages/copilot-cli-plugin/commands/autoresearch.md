@@ -1,6 +1,6 @@
 ---
 name: autoresearch
-description: Stateful single-mission improvement loop with strict evaluator contract, markdown decision logs, and max-runtime stop behavior
+description: "[OMCP] Stateful single-mission improvement loop with strict evaluator contract, markdown decision logs, and max-runtime stop behavior"
 argument-hint: "<input>"
 ---
 

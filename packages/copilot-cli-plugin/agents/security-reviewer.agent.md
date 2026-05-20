@@ -1,6 +1,6 @@
 ---
 name: security-reviewer
-description: Security vulnerability detection specialist (OWASP Top 10, secrets, unsafe patterns)
+description: "[OMCP] Security vulnerability detection specialist (OWASP Top 10, secrets, unsafe patterns)"
 agent: security-reviewer
 argument-hint: "<files, component, or PR to security-review>"
 ---

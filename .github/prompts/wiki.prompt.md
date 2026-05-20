@@ -1,6 +1,6 @@
 ---
 name: wiki
-description: Persistent markdown knowledge base that compounds across sessions (add / read / list / query / lint / ingest / delete)
+description: "[OMCP] Persistent markdown knowledge base that compounds across sessions (add / read / list / query / lint / ingest / delete)"
 argument-hint: "<action> [args]   e.g. add 'Auth' 'jwt+passport'   |   query authentication   |   list --tag arch   |   lint"
 ---
 

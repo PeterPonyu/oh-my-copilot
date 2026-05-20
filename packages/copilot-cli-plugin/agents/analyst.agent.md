@@ -1,6 +1,6 @@
 ---
 name: analyst
-description: Pre-planning consultant for requirements analysis (READ-ONLY)
+description: "[OMCP] Pre-planning consultant for requirements analysis (READ-ONLY)"
 agent: analyst
 argument-hint: "<feature, scope, or requirement to analyze>"
 ---

@@ -1,6 +1,6 @@
 ---
 name: qa-tester
-description: Interactive CLI testing specialist using tmux for session management
+description: "[OMCP] Interactive CLI testing specialist using tmux for session management"
 agent: qa-tester
 argument-hint: "<service or feature to interactively test>"
 ---
