@@ -17,6 +17,8 @@ class StdioClient {
     });
     this.buffer = "";
     this.pending = new Map();
+    this.notifications = [];
+    this.notificationWaiters = [];
     this.proc.stdout.on("data", (chunk) => this._onData(chunk.toString()));
     this.stderr = "";
     this.proc.stderr.on("data", (d) => (this.stderr += d.toString()));
@@ -35,10 +37,18 @@ class StdioClient {
       } catch {
         continue;
       }
-      const resolver = this.pending.get(msg.id);
-      if (resolver) {
-        this.pending.delete(msg.id);
-        resolver(msg);
+      if (msg.id != null) {
+        const resolver = this.pending.get(msg.id);
+        if (resolver) {
+          this.pending.delete(msg.id);
+          resolver(msg);
+        }
+      } else if (msg.method) {
+        // server-initiated notification (no id, has method)
+        this.notifications.push(msg);
+        const waiters = this.notificationWaiters;
+        this.notificationWaiters = [];
+        for (const w of waiters) w(msg);
       }
     }
   }
@@ -55,6 +65,31 @@ class StdioClient {
 
   async callTool(name, args = {}) {
     return this.send("tools/call", { name, arguments: args });
+  }
+
+  // Wait until a notification matching predicate arrives, or timeout.
+  // Returns the matching message, or throws on timeout.
+  async awaitNotification(predicate, timeoutMs = 3000) {
+    // Check already-arrived first
+    const existing = this.notifications.find(predicate);
+    if (existing) return existing;
+    return new Promise((resolve, reject) => {
+      const timer = setTimeout(() => {
+        const idx = this.notificationWaiters.indexOf(handler);
+        if (idx >= 0) this.notificationWaiters.splice(idx, 1);
+        reject(new Error(`timeout waiting for notification`));
+      }, timeoutMs);
+      const handler = (msg) => {
+        if (predicate(msg)) {
+          clearTimeout(timer);
+          resolve(msg);
+        } else {
+          // not the one we want — re-register
+          this.notificationWaiters.push(handler);
+        }
+      };
+      this.notificationWaiters.push(handler);
+    });
   }
 
   close() {
@@ -442,4 +477,243 @@ test("integration: bundled dist/server.mjs is functional (Wave-K-b)", async (t) 
   const prefixed = await client.callTool("mcp__omcp__notepad_stats", {});
   assert.ok(!isError(prefixed), "prefix tolerance preserved in bundle");
   assert.ok("byLane" in unwrap(prefixed));
+});
+
+// ===========================================================================
+// Resources / Templates / Prompts / Subscriptions — wire-level E2E
+// ===========================================================================
+//
+// The block above proves Tools work end-to-end. Below proves the three
+// non-Tool primitives + subscription delivery work over the actual MCP
+// JSON-RPC transport, not just at the handler function layer.
+
+test("integration: resources/list returns the four always-on singletons in a fresh workspace", async (t) => {
+  const cwd = mkdtempSync(join(tmpdir(), "omcp-int-"));
+  const client = new StdioClient(cwd);
+  t.after(async () => {
+    await client.close();
+    rmSync(cwd, { recursive: true, force: true });
+  });
+
+  const resp = await client.send("resources/list");
+  const uris = resp.result.resources.map((r) => r.uri).sort();
+  assert.deepEqual(uris, [
+    "omcp://notepad",
+    "omcp://pipeline/state",
+    "omcp://project-memory/directives",
+    "omcp://project-memory/notes",
+  ]);
+});
+
+test("integration: resources/list includes a wiki entry after wiki_add", async (t) => {
+  const cwd = mkdtempSync(join(tmpdir(), "omcp-int-"));
+  const client = new StdioClient(cwd);
+  t.after(async () => {
+    await client.close();
+    rmSync(cwd, { recursive: true, force: true });
+  });
+
+  await client.callTool("wiki_add", { title: "Auth Notes", body: "JWT details", tags: ["sec"] });
+
+  const resp = await client.send("resources/list");
+  const wiki = resp.result.resources.find((r) => r.uri === "omcp://wiki/auth-notes");
+  assert.ok(wiki, "expected omcp://wiki/auth-notes in resources/list");
+  assert.equal(wiki.mimeType, "text/markdown");
+  assert.equal(wiki.name, "Auth Notes");
+});
+
+test("integration: resources/templates/list returns the four parametric URI templates", async (t) => {
+  const cwd = mkdtempSync(join(tmpdir(), "omcp-int-"));
+  const client = new StdioClient(cwd);
+  t.after(async () => {
+    await client.close();
+    rmSync(cwd, { recursive: true, force: true });
+  });
+
+  const resp = await client.send("resources/templates/list");
+  const templates = resp.result.resourceTemplates.map((t) => t.uriTemplate).sort();
+  assert.deepEqual(templates, [
+    "omcp://state/{key}",
+    "omcp://traces/{session_id}/summary",
+    "omcp://traces/{session_id}/timeline",
+    "omcp://wiki/{slug}",
+  ]);
+});
+
+test("integration: resources/read for omcp://wiki/<slug> returns markdown body", async (t) => {
+  const cwd = mkdtempSync(join(tmpdir(), "omcp-int-"));
+  const client = new StdioClient(cwd);
+  t.after(async () => {
+    await client.close();
+    rmSync(cwd, { recursive: true, force: true });
+  });
+
+  await client.callTool("wiki_add", { title: "Topic", body: "# Hello\n\nbody text" });
+
+  const resp = await client.send("resources/read", { uri: "omcp://wiki/topic" });
+  const contents = resp.result.contents;
+  assert.equal(contents.length, 1);
+  assert.equal(contents[0].uri, "omcp://wiki/topic");
+  assert.equal(contents[0].mimeType, "text/markdown");
+  assert.equal(contents[0].text, "# Hello\n\nbody text");
+});
+
+test("integration: resources/read for omcp://state/<key> returns the stored JSON", async (t) => {
+  const cwd = mkdtempSync(join(tmpdir(), "omcp-int-"));
+  const client = new StdioClient(cwd);
+  t.after(async () => {
+    await client.close();
+    rmSync(cwd, { recursive: true, force: true });
+  });
+
+  await client.callTool("state_write", { key: "team-state", value: { phase: "exec", n: 3 } });
+
+  const resp = await client.send("resources/read", { uri: "omcp://state/team-state" });
+  const contents = resp.result.contents;
+  assert.equal(contents[0].mimeType, "application/json");
+  const parsed = JSON.parse(contents[0].text);
+  assert.equal(parsed.phase, "exec");
+  assert.equal(parsed.n, 3);
+});
+
+test("integration: resources/read for omcp://pipeline/state returns the pipeline JSON", async (t) => {
+  const cwd = mkdtempSync(join(tmpdir(), "omcp-int-"));
+  const client = new StdioClient(cwd);
+  t.after(async () => {
+    await client.close();
+    rmSync(cwd, { recursive: true, force: true });
+  });
+
+  await client.callTool("pipeline_record_transition", {
+    from: null,
+    to: "spec",
+    artifact: "/tmp/spec.md",
+  });
+
+  const resp = await client.send("resources/read", { uri: "omcp://pipeline/state" });
+  const parsed = JSON.parse(resp.result.contents[0].text);
+  assert.equal(parsed.transitions.length, 1);
+  assert.equal(parsed.transitions[0].to, "spec");
+});
+
+test("integration: resources/read on unsupported URI returns an error", async (t) => {
+  const cwd = mkdtempSync(join(tmpdir(), "omcp-int-"));
+  const client = new StdioClient(cwd);
+  t.after(async () => {
+    await client.close();
+    rmSync(cwd, { recursive: true, force: true });
+  });
+
+  const resp = await client.send("resources/read", { uri: "omcp://garbage/x" });
+  assert.ok(resp.error || resp.result?.isError, `expected error response, got: ${JSON.stringify(resp)}`);
+});
+
+test("integration: prompts/list returns ≥30 prompts including known skills", async (t) => {
+  const cwd = mkdtempSync(join(tmpdir(), "omcp-int-"));
+  const client = new StdioClient(cwd);
+  t.after(async () => {
+    await client.close();
+    rmSync(cwd, { recursive: true, force: true });
+  });
+
+  const resp = await client.send("prompts/list");
+  const prompts = resp.result.prompts;
+  assert.ok(prompts.length >= 30, `expected many prompts, got ${prompts.length}`);
+  const names = new Set(prompts.map((p) => p.name));
+  for (const expected of ["autopilot", "ralph", "team", "wiki", "trace"]) {
+    assert.ok(names.has(expected), `expected ${expected} in prompts/list`);
+  }
+  // Each prompt declares a single optional `args` argument
+  for (const p of prompts) {
+    assert.equal(p.arguments.length, 1);
+    assert.equal(p.arguments[0].name, "args");
+    assert.equal(p.arguments[0].required, false);
+  }
+});
+
+test("integration: prompts/get returns the skill body as a user message", async (t) => {
+  const cwd = mkdtempSync(join(tmpdir(), "omcp-int-"));
+  const client = new StdioClient(cwd);
+  t.after(async () => {
+    await client.close();
+    rmSync(cwd, { recursive: true, force: true });
+  });
+
+  const resp = await client.send("prompts/get", { name: "autopilot" });
+  const msgs = resp.result.messages;
+  assert.equal(msgs.length, 1);
+  assert.equal(msgs[0].role, "user");
+  assert.equal(msgs[0].content.type, "text");
+  // The actual autopilot SKILL.md mentions Autopilot in its body
+  assert.match(msgs[0].content.text, /[Aa]utopilot/);
+});
+
+test("integration: prompts/get with args appends them to the prompt body", async (t) => {
+  const cwd = mkdtempSync(join(tmpdir(), "omcp-int-"));
+  const client = new StdioClient(cwd);
+  t.after(async () => {
+    await client.close();
+    rmSync(cwd, { recursive: true, force: true });
+  });
+
+  const resp = await client.send("prompts/get", {
+    name: "ralph",
+    arguments: { args: "build a TODO app" },
+  });
+  const text = resp.result.messages[0].content.text;
+  assert.match(text, /## Arguments provided by caller/);
+  assert.match(text, /build a TODO app/);
+});
+
+test("integration: resources/subscribe + state_write tool call → notifications/resources/updated delivered", async (t) => {
+  const cwd = mkdtempSync(join(tmpdir(), "omcp-int-"));
+  const client = new StdioClient(cwd);
+  t.after(async () => {
+    await client.close();
+    rmSync(cwd, { recursive: true, force: true });
+  });
+
+  const subUri = "omcp://state/team-state";
+
+  // Subscribe via real MCP wire
+  const sub = await client.send("resources/subscribe", { uri: subUri });
+  assert.ok(sub.result !== undefined, `subscribe should succeed, got: ${JSON.stringify(sub)}`);
+
+  // Trigger a write via a real tool call (NOT a direct store import)
+  await client.callTool("state_write", { key: "team-state", value: { phase: "plan" } });
+
+  // The notification should arrive over stdio. Wait up to 3 seconds.
+  const notif = await client.awaitNotification(
+    (msg) =>
+      msg.method === "notifications/resources/updated" && msg.params?.uri === subUri
+  );
+  assert.equal(notif.method, "notifications/resources/updated");
+  assert.equal(notif.params.uri, subUri);
+});
+
+test("integration: unsubscribe stops notifications for that URI", async (t) => {
+  const cwd = mkdtempSync(join(tmpdir(), "omcp-int-"));
+  const client = new StdioClient(cwd);
+  t.after(async () => {
+    await client.close();
+    rmSync(cwd, { recursive: true, force: true });
+  });
+
+  const subUri = "omcp://state/ralph-state";
+  await client.send("resources/subscribe", { uri: subUri });
+  await client.send("resources/unsubscribe", { uri: subUri });
+
+  // Track notifications observed during the post-unsubscribe write window
+  const before = client.notifications.filter(
+    (m) => m.method === "notifications/resources/updated" && m.params?.uri === subUri
+  ).length;
+
+  await client.callTool("state_write", { key: "ralph-state", value: { i: 1 } });
+  // Give the server a window to (incorrectly) emit a notification
+  await new Promise((r) => setTimeout(r, 200));
+
+  const after = client.notifications.filter(
+    (m) => m.method === "notifications/resources/updated" && m.params?.uri === subUri
+  ).length;
+  assert.equal(after, before, `expected no new notifications after unsubscribe, before=${before} after=${after}`);
 });
