@@ -15946,6 +15946,8 @@ async function traceWrite({
   if (exit_code !== void 0) event.exit_code = exit_code;
   if (stderr_snippet !== void 0) event.stderr_snippet = stderr_snippet;
   await appendFile2(filePath, JSON.stringify(event) + "\n", "utf8");
+  emitResourceUpdate(`omcp://traces/${session}/timeline`);
+  emitResourceUpdate(`omcp://traces/${session}/summary`);
   return { ok: true, session_id: session, kind };
 }
 async function readTraceEvents(sessionId) {
@@ -16078,6 +16080,7 @@ async function wikiAdd({ title, body, tags, slug } = {}) {
     mtime: (/* @__PURE__ */ new Date()).toISOString()
   };
   await writeIndex(index);
+  emitResourceUpdate(`omcp://wiki/${finalSlug}`);
   return { ok: true, slug: finalSlug };
 }
 async function wikiRead({ slug } = {}) {
@@ -16168,14 +16171,18 @@ async function wikiQuery({ q, k } = {}) {
 async function wikiDelete({ slug } = {}) {
   validateSlug(slug);
   const path = wikiFilePath(slug);
+  let mutated = false;
   if (existsSync6(path)) {
     await unlink2(path);
+    mutated = true;
   }
   const index = await readIndex();
   if (slug in index) {
     delete index[slug];
     await writeIndex(index);
+    mutated = true;
   }
+  if (mutated) emitResourceUpdate(`omcp://wiki/${slug}`);
   return { ok: true, slug };
 }
 async function wikiIngest({ path, slug, tags } = {}) {
