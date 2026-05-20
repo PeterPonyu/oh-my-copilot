@@ -338,16 +338,16 @@ shell_check "hook-e2e-trace" \
   "MARKER=\"validation-e2e-\$(date +%s%N)\" && echo \"{\\\"tool\\\":\\\"\$MARKER\\\",\\\"exit_code\\\":42,\\\"stderr\\\":\\\"e2e validation\\\"}\" | bash $PLUGIN_DIR/scripts/post-tool-audit.sh > /dev/null && grep -c \"\$MARKER\" $REPO_ROOT/.omcp/traces/default.jsonl" \
   "^[1-9][0-9]*\$"
 
-# 14. omcs stub
-shell_check "omcs-stub" \
-  "Wave C-1c: packages/omcs/ contains exactly one file (README.md)." \
-  "ls $REPO_ROOT/packages/omcs/ | tr '\\n' ' '" \
-  "^README\\.md *$"
+# 14. Plugin source-of-truth mirror
+shell_check "plugin-source-truth-mirror" \
+  "Plugin-canonical instructions, agents, skills, and commands regenerate the root mirror without drift." \
+  "test -f $PLUGIN_DIR/instructions/AGENTS.md && bash $REPO_ROOT/scripts/check-mirror-drift.sh" \
+  "OK — no drift detected"
 
 # 15. node:test full suite
 shell_check "mcp-server-tests" \
   "All store + integration + fixture unit tests pass." \
-  "cd $PLUGIN_DIR/mcp-server && npm test 2>&1 | grep -E '^# (tests|pass|fail) ' | tr '\\n' ' '" \
+  "cd $PLUGIN_DIR/mcp-server && node --test --test-reporter=tap 'tests/*.test.mjs' 2>&1 | grep -E '^# (tests|pass|fail) ' | tr '\\n' ' '" \
   "fail 0"
 
 # ---------------------------------------------------------------------------

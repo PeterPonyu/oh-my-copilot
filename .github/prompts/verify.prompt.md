@@ -1,20 +1,14 @@
 ---
 name: verify
-description: Short alias for the root verifier flow; gathers validation evidence for docs and Copilot surfaces.
-agent: verifier
-argument-hint: "[changed file, command, or surface]"
+description: Verify that a change really works before you claim completion
+argument-hint: "<input>"
 ---
 
-Verify the target using the root-local `verifier` agent.
+# /omcp:verify
 
-This is the short invocation alias for `/root-registration-check` when the user
-wants completion evidence rather than a detailed audit prompt. Separate:
+Verify that a change really works before you claim completion
 
-- automated validation output from manual Copilot smoke-test gaps;
-- root workspace evidence from plugin or example-workspace evidence;
-- docs checks from Copilot surface checks; and
-- passing checks from known environment limitations.
+The skill at `skills/verify/SKILL.md` defines the full procedure. Follow
+that skill's instructions, using `{{ARGUMENTS}}` as the user input.
 
-Prefer root-relative commands such as `./scripts/validate-doc-links.sh`,
-`./scripts/validate-power-surfaces.sh`, and
-`./scripts/validate-root-copilot-surfaces.sh` when they are in scope.
+Task: {{ARGUMENTS}}

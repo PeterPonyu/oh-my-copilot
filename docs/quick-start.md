@@ -50,16 +50,16 @@ From the repository root, prefer the root-local names for current-directory work
 
 | Goal | Route |
 | --- | --- |
-| Review docs, registration, or surface changes | `reviewer` or `/review-scope` |
-| Verify validation evidence and smoke-test gaps | `verifier` or `/root-registration-check` |
+| Review docs, registration, or surface changes | `reviewer` or `/review` |
+| Verify validation evidence and smoke-test gaps | `verifier` or `/verify` |
 | Source-ground capability claims | `research` |
-| Check install/bootstrap proof | `/install-check` |
-| Review the reusable plugin package | `/plugin-review` |
+| Check install/bootstrap proof | `/omcp:omc-doctor` or `/omcp:verify` |
+| Review the reusable plugin package | `/omcp:review` |
 | Run docs shipment checks | `docs-ship` skill |
 | Scan for parity-risk wording | `parity-guard` skill |
 
 Use the namespaced plugin route only when testing the reusable installed plugin,
-for example `oh-my-copilot-power-pack:reviewer`.
+for example `omcp:reviewer`.
 
 ## 5. Read next only as needed
 

@@ -1,6 +1,6 @@
 # References
 
-Access date for web sources: 2026-04-21.
+Access date for web sources: 2026-05-20.
 
 This page is the citation index for public `oh-my-copilot` v1 claims. It favors GitHub-owned sources for Copilot behavior and uses local research files for source-system synthesis.
 
@@ -23,6 +23,8 @@ Use this page with the repo's claim/proof discipline:
 | [About GitHub Copilot CLI](https://docs.github.com/en/copilot/concepts/agents/about-copilot-cli) | Conceptual overview of Copilot CLI and customization surfaces. | Use for broad capability framing. |
 | [Using GitHub Copilot CLI](https://docs.github.com/en/copilot/how-tos/copilot-cli/use-copilot-cli-agents/overview) | CLI usage, custom instructions, default/custom agents, delegation, and command-line agent selection. | Use for CLI-first design claims and custom-agent invocation. |
 | [Allowing GitHub Copilot CLI to work autonomously](https://docs.github.com/en/copilot/concepts/agents/copilot-cli/autopilot) | Autopilot mode, permission implications, `--autopilot`, `--allow-all`/`--yolo`, and continuation limits. | Use carefully: autonomy is a Copilot CLI mode, not an `oh-my-copilot` runtime. |
+| [Comparing GitHub Copilot CLI customization features](https://docs.github.com/en/copilot/concepts/agents/copilot-cli/comparing-cli-features) | Custom instructions, skills, tools, MCP servers, hooks, subagents, custom agents, and plugins. | Use to distinguish CLI-supported customization surfaces from adjacent prompt-file examples. |
+| [Copilot customization cheat sheet](https://docs.github.com/en/copilot/reference/customization-cheat-sheet) | Cross-surface customization matrix, including file locations and support by host. | Use when documenting which surfaces are Copilot CLI proof versus VS Code or general Copilot customization assets. |
 | [GitHub Copilot CLI now supports Copilot auto model selection](https://github.blog/changelog/2026-04-17-github-copilot-cli-now-supports-copilot-auto-model-selection) | Current model-selection behavior as of 2026-04-17. | Optional current-state reference; not required for v1 examples. |
 
 ## Visual Studio Code Copilot Customization
@@ -32,7 +34,7 @@ Use this page with the repo's claim/proof discipline:
 | [Use custom instructions in VS Code](https://code.visualstudio.com/docs/copilot/customization/custom-instructions) | `.github/copilot-instructions.md`, `AGENTS.md`, and `*.instructions.md` discovery in VS Code. | Primary source for the VS Code example workspace. |
 | [Custom agents in VS Code](https://code.visualstudio.com/docs/copilot/customization/custom-agents) | `.agent.md` files, target environments, handoffs, tools, and diagnostics. | Primary source for the planner -> implementer -> reviewer -> verifier chain. |
 | [Use Agent Skills in VS Code](https://code.visualstudio.com/docs/copilot/customization/agent-skills) | skill discovery, user-invocable skills, and reusable skill resources. | Use for script-backed VS Code skills. |
-| [Use prompt files in VS Code](https://code.visualstudio.com/docs/copilot/customization/prompt-files) | `.prompt.md` files, agent binding, and argument hints. | Use for the `ship-docs` and `review-scope` prompt examples. |
+| [Use prompt files in VS Code](https://code.visualstudio.com/docs/copilot/customization/prompt-files) | `.prompt.md` files, agent binding, and argument hints. | Use for generated root prompts such as `docs-ship`, `review`, and `verify`, plus the illustrative VS Code prompt examples. |
 | [Agent hooks in Visual Studio Code](https://code.visualstudio.com/docs/copilot/customization/hooks) | hook file locations, command format, and agent/workspace hook behavior. | Use for workspace hook examples and audit scripts. |
 | [GitHub Copilot in VS Code settings reference](https://code.visualstudio.com/docs/copilot/reference/copilot-settings) | relevant settings such as `chat.useAgentsMdFile`. | Use when documenting workspace settings. |
 
@@ -41,6 +43,11 @@ Use this page with the repo's claim/proof discipline:
 | Source | What it supports in v1 docs | Notes |
 | --- | --- | --- |
 | [Adding custom instructions for GitHub Copilot CLI](https://docs.github.com/en/copilot/how-tos/copilot-cli/customize-copilot/add-custom-instructions) | `.github/copilot-instructions.md`; `.github/instructions/**/*.instructions.md`; `applyTo` frontmatter; `AGENTS.md`; local `$HOME/.copilot/copilot-instructions.md`; `COPILOT_CUSTOM_INSTRUCTIONS_DIRS`. | Primary source for example instruction paths. |
+| [Creating and using custom agents for GitHub Copilot CLI](https://docs.github.com/en/copilot/how-tos/copilot-cli/customize-copilot/create-custom-agents-for-cli) | `.agent.md` files, `.github/agents/` project location, agent descriptions, tools, and CLI invocation. | Primary source for root and plugin custom-agent shape. |
+| [Custom agents configuration](https://docs.github.com/en/copilot/reference/custom-agents-configuration) | Custom-agent YAML frontmatter fields, tool aliases, and processing behavior. | Use when editing agent frontmatter. |
+| [Adding agent skills for GitHub Copilot CLI](https://docs.github.com/en/copilot/how-tos/copilot-cli/customize-copilot/add-skills) | `.github/skills/<name>/SKILL.md`, required `name` and `description`, and script-backed skill directories. | Primary source for root skill shape and naming constraints. |
+| [About agent skills](https://docs.github.com/en/copilot/concepts/agents/about-agent-skills) | Conceptual definition of skills and supported project/personal skill locations. | Use for skill capability framing. |
+| [Hooks](https://docs.github.com/en/copilot/concepts/agents/hooks) | Repository `.github/hooks/*.json`, hook event names, command format, and security considerations. | Primary source for root and plugin hook policy shape. |
 | [agentsmd/agents.md](https://github.com/agentsmd/agents.md) | Cross-agent convention for `AGENTS.md`. | Use only as supporting context; GitHub Docs should remain the primary Copilot source. |
 
 ## Plugins and Power Surfaces

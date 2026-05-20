@@ -1,58 +1,39 @@
 # Plugin vs root divergence registry
 
-This document enumerates **intentional** differences between the reusable Copilot
-CLI plugin package (`packages/copilot-cli-plugin/`) and the **current-directory**
-root workspace (repository root `.github/`, `.copilot-hooks/`, `AGENTS.md`).
+This document enumerates the remaining **intentional** differences between the
+canonical reusable Copilot CLI plugin package (`packages/copilot-cli-plugin/`)
+and the generated **current-directory** root workspace mirror (repository root
+`.github/`, `.copilot-hooks/`, `AGENTS.md`).
 It implements the governance requirement from
 [`plugin-boundary-review.md`](./plugin-boundary-review.md):
-same conceptual roles may appear in both layers, but **byte parity is not a goal**.
+plugin Markdown is the source of truth for mirrored assets; divergence is only
+allowed where Copilot host discovery or root evidence scripts require it.
 
 Rationale classes:
 
 | Class | Meaning |
 | --- | --- |
-| **generalization** | Plugin keeps reusable wording and avoids oh-my-copilot maintainer-only workflows. |
-| **repo-specific** | Root carries prompts, skills, and instructions tuned for developing this repository. |
+| **generated mirror** | Root Markdown is regenerated from plugin sources. |
+| **repo-specific** | Root carries hooks, CI, and evidence scripts tuned for developing this repository. |
 | **routing / packaging** | Host discovers hooks or agents differently for workspace vs installed plugin. |
 
 ## Agents (custom agents / “subagents”)
 
 | Role | Root workspace | Plugin package | Rationale class |
 | --- | --- | --- | --- |
-| research | `.github/agents/research.agent.md` | `packages/copilot-cli-plugin/agents/research.agent.md` | generalization / repo-specific |
-| reviewer | `.github/agents/reviewer.agent.md` | `packages/copilot-cli-plugin/agents/reviewer.agent.md` | generalization / repo-specific |
-| verifier | `.github/agents/verifier.agent.md` | `packages/copilot-cli-plugin/agents/verifier.agent.md` | generalization / repo-specific |
+| all plugin agents | `.github/agents/*.agent.md` | `packages/copilot-cli-plugin/agents/*.agent.md` | generated mirror |
 
 **Invocation difference:** root-local short names vs plugin namespaced routes such as
-`oh-my-copilot-power-pack:reviewer` (see
+`omcp:reviewer` (see
 [`packages/copilot-cli-plugin/README.md`](../packages/copilot-cli-plugin/README.md)).
 
 ## Skills
 
-Skills present **only under the root workspace** (not shipped in the plugin package):
+All root skills under `.github/skills/` are generated from
+`packages/copilot-cli-plugin/skills/`.
 
-| Skill directory | Notes |
-| --- | --- |
-| `.github/skills/auto-execute/` | Maintainer workflow |
-| `.github/skills/deep-interview/` | OMC-oriented workflow in this repo |
-| `.github/skills/doctor/` | Install/diagnostic lane |
-| `.github/skills/parallel-batch/` | Batch workflow |
-| `.github/skills/root-surface-audit/` | Validator-oriented audit |
-| `.github/skills/security-review/` | Security lane |
-| `.github/skills/trace/` | Trace workflow |
-
-Skills present in **both** layers (names aligned; bodies may drift):
-
-| Skill | Root | Plugin |
-| --- | --- | --- |
-| debug | `.github/skills/debug/` | `packages/copilot-cli-plugin/skills/debug/` |
-| docs-ship | `.github/skills/docs-ship/` | `packages/copilot-cli-plugin/skills/docs-ship/` |
-| iterate-loop | `.github/skills/iterate-loop/` | `packages/copilot-cli-plugin/skills/iterate-loop/` |
-| parity-guard | `.github/skills/parity-guard/` | `packages/copilot-cli-plugin/skills/parity-guard/` |
-| plan | `.github/skills/plan/` | `packages/copilot-cli-plugin/skills/plan/` |
-| review | `.github/skills/review/` | `packages/copilot-cli-plugin/skills/review/` |
-
-**Rationale:** repo-specific skills stay workspace-local; reusable bundles ship with the plugin.
+**Rationale:** reusable plugin skills are the source of truth; root-local skill
+drift is blocked by `scripts/check-mirror-drift.sh`.
 
 ## Hooks
 
@@ -70,20 +51,22 @@ self-contained commands suitable for an installed package path.
 
 | Surface | Root workspace | Plugin package |
 | --- | --- | --- |
-| Repo-wide instructions | `AGENTS.md`, `.github/copilot-instructions.md`, `.github/instructions/*.instructions.md` | Not bundled inside `packages/copilot-cli-plugin/` |
+| Repo-wide instructions | `AGENTS.md`, `.github/copilot-instructions.md`, `.github/instructions/*.instructions.md` | `packages/copilot-cli-plugin/instructions/` |
 
 **Rationale:** Copilot CLI discovers workspace instructions from the **opened
-repository**. The plugin supplies agents, skills, and hooks—not a replacement
-for checking in `.github/` instructions on consumer repos unless maintainers copy them.
+repository**, so this repo mirrors plugin-canonical instruction files into the
+root. Installed plugins do not automatically rewrite consumer repository
+instructions.
 
 ## Prompts and workflows
 
 | Surface | Root workspace | Plugin package |
 | --- | --- | --- |
-| Prompt files | `.github/prompts/*.prompt.md` | Absent |
+| Prompt files | `.github/prompts/*.prompt.md` | `packages/copilot-cli-plugin/commands/*.md` |
 | GitHub Actions workflows | `.github/workflows/*.yml` | Absent |
 
-**Rationale:** prompts and CI are repository maintenance concerns, not Copilot CLI plugin payloads.
+**Rationale:** prompt templates are generated from plugin command sources for
+root development convenience. CI remains root-specific.
 
 ## Maintainers
 

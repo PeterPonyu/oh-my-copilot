@@ -54,11 +54,13 @@ required_root_files=(
   .github/agents/research.agent.md
   .github/agents/reviewer.agent.md
   .github/agents/verifier.agent.md
-  .github/prompts/ship-docs.prompt.md
-  .github/prompts/review-scope.prompt.md
-  .github/prompts/root-registration-check.prompt.md
+  .github/prompts/docs-ship.prompt.md
+  .github/prompts/review.prompt.md
+  .github/prompts/verify.prompt.md
   .github/skills/docs-ship/SKILL.md
+  .github/skills/docs-ship/run-docs-checks.sh
   .github/skills/parity-guard/SKILL.md
+  .github/skills/parity-guard/check-parity-claims.sh
   .github/hooks/hooks.json
   .copilot-hooks/common.sh
   .copilot-hooks/session-start.sh
@@ -129,6 +131,7 @@ errors: list[str] = []
 required_agents = {"research", "reviewer", "verifier"}
 agent_dir = root / ".github" / "agents"
 prompt_dir = root / ".github" / "prompts"
+plugin_command_dir = root / "packages" / "copilot-cli-plugin" / "commands"
 
 
 def read(path: pathlib.Path) -> str:
@@ -166,13 +169,14 @@ for name in required_agents:
 for path in sorted(prompt_dir.glob("*.prompt.md")):
     data = frontmatter(path)
     agent = data.get("agent")
-    if not agent:
-        errors.append(f"{path.relative_to(root)}: missing agent frontmatter")
-        continue
-    if ":" in agent:
-        errors.append(f"{path.relative_to(root)}: prompt must use root-local agent, not namespaced {agent!r}")
-    if not (agent_dir / f"{agent}.agent.md").is_file():
-        errors.append(f"{path.relative_to(root)}: agent {agent!r} has no root agent file")
+    command_name = path.name.removesuffix(".prompt.md")
+    if plugin_command_dir.is_dir() and not (plugin_command_dir / f"{command_name}.md").is_file():
+        errors.append(f"{path.relative_to(root)}: mirrored prompt has no plugin command source")
+    if agent:
+        if ":" in agent:
+            errors.append(f"{path.relative_to(root)}: prompt must use root-local agent, not namespaced {agent!r}")
+        if not (agent_dir / f"{agent}.agent.md").is_file():
+            errors.append(f"{path.relative_to(root)}: agent {agent!r} has no root agent file")
 
 agent_ref_re = re.compile(r"^\s*agent:\s*([A-Za-z0-9_.:-]+)\s*$", re.M)
 for path in sorted(agent_dir.glob("*.agent.md")):
@@ -218,13 +222,18 @@ if errors:
         print(f"- {error}", file=sys.stderr)
     sys.exit(1)
 PY
-  require_contains "docs-ship skill references root docs validation" 'scripts/validate-doc-links\.sh' \
-    .github/skills/docs-ship/SKILL.md
-  require_contains "docs-ship skill references root surface validation" 'scripts/validate-root-copilot-surfaces\.sh' \
+  require_exec .github/skills/docs-ship/run-docs-checks.sh
+  require_exec .github/skills/parity-guard/check-parity-claims.sh
+  require_contains "docs-ship skill references its bundled docs check script" 'run-docs-checks\.sh' \
     .github/skills/docs-ship/SKILL.md
   require_contains "parity-guard skill preserves non-parity boundary" 'parity|scope|over-scope|OMC|OMX' \
     .github/skills/parity-guard/SKILL.md
-  log "root skills are root-relative"
+  if [[ -x "$ROOT/scripts/check-mirror-drift.sh" ]]; then
+    (cd "$ROOT" && ./scripts/check-mirror-drift.sh >/dev/null)
+    log "root skills are mirrored from plugin sources"
+  else
+    log "mirror drift script absent; self-test skips mirror comparison"
+  fi
 }
 
 validate_hooks() {
@@ -318,6 +327,10 @@ validate_cross_host_benchmark_boundary() {
 validate_ci_wiring() {
   require_contains "CI runs root Copilot surface validation" \
     'validate-root-copilot-surfaces\.sh' .github/workflows/docs-check.yml
+  require_contains "CI runs mirror drift validation" \
+    'check-mirror-drift\.sh' .github/workflows/docs-check.yml
+  require_contains "CI runs plugin orchestration validation" \
+    'validate-plugin-orchestration\.mjs' .github/workflows/docs-check.yml
 }
 
 validate_repo() {
@@ -408,27 +421,27 @@ description: Verify root workspace changes.
 
 Verify root workspace changes.
 MD
-  cat > "$dir/.github/prompts/ship-docs.prompt.md" <<'MD'
+  cat > "$dir/.github/prompts/docs-ship.prompt.md" <<'MD'
 ---
-name: ship-docs
+name: docs-ship
 description: Ship root docs changes.
 agent: reviewer
 ---
 
 Review and ship docs.
 MD
-  cat > "$dir/.github/prompts/review-scope.prompt.md" <<'MD'
+  cat > "$dir/.github/prompts/review.prompt.md" <<'MD'
 ---
-name: review-scope
+name: review
 description: Review scope.
 agent: reviewer
 ---
 
 Review scope.
 MD
-  cat > "$dir/.github/prompts/root-registration-check.prompt.md" <<'MD'
+  cat > "$dir/.github/prompts/verify.prompt.md" <<'MD'
 ---
-name: root-registration-check
+name: verify
 description: Verify root registration.
 agent: verifier
 ---
@@ -505,6 +518,8 @@ jobs:
   validate:
     steps:
       - run: bash scripts/validate-root-copilot-surfaces.sh
+      - run: bash scripts/check-mirror-drift.sh
+      - run: node scripts/validate-plugin-orchestration.mjs
 YAML
 }
 

@@ -1,60 +1,43 @@
 ---
 name: plan
-description: Strategic planning workflow that scopes a task before any code is written.
-user-invocable: true
+description: "[OMCP] Strategic planning workflow that scopes a task before any code is written."
+orchestrates-agents: "planner, architect, critic"
 ---
 
-# Plan
+# [OMCP] Plan
 
-Use this root workspace skill when a Copilot CLI session needs to scope a vague
-or multi-surface task before touching code. Copilot CLI's host-product **plan
-mode** is what actually drafts and edits the plan; this skill is a workflow
-wrapper that decides whether to interview, draft directly, or ask for review.
+Use this plugin skill when a Copilot CLI task needs to be scoped before code is
+written. Authoring and execution stay in separate passes — this skill never
+edits source code itself.
 
-## Copilot CLI host note
+## Agent orchestration
 
-- The skill is read by the Copilot CLI agent in the current workspace; it does
-  not invoke a separate orchestrator.
-- Suggested host commands: `copilot plan`, `copilot suggest`, `copilot explain`.
-  Verify against your installed Copilot CLI version before quoting them in
-  user-facing output.
-- Plan artifacts are repo-local. Default location: `docs/plans/<slug>.md`.
+This skill coordinates `planner`, `architect`, and `critic` roles: planner
+drafts scope, architect checks technical shape, and critic challenges ambiguity,
+risks, and verification gaps before execution starts.
 
 ## Modes
 
-| Mode | Trigger | Behavior |
-| --- | --- | --- |
-| Interview | Default for broad or vague requests | Ask one focused question at a time before drafting |
-| Direct | `--direct`, or request already cites files / functions / criteria | Skip interview, draft the plan in one pass |
-| Review | `--review` | Critique an existing plan file and return APPROVED, REVISE, or REJECT |
+- **Interview** (default for vague requests): ask one focused question per
+  turn, gathering codebase facts via search/`grep` before asking the user
+  about them.
+- **Direct** (`--direct`, or request already cites files / functions /
+  criteria): skip interview, draft the plan in one pass.
+- **Review** (`--review`): critique an existing plan and return APPROVED,
+  REVISE, or REJECT.
 
 ## Run
 
 1. Classify the request as interview, direct, or review.
-2. Before asking any codebase question, look it up first (Copilot CLI search,
-   `grep`, `find`). Only ask the user for preferences, scope, and constraints.
-3. Ask one question at a time. Build each question on the previous answer.
-4. When ready, draft the plan into `docs/plans/<slug>.md` with:
-   - Goal and non-goals
-   - Acceptance criteria (testable, file-referenced where possible)
-   - Implementation steps (sized to scope, not a fixed template)
-   - Risks and mitigations
-   - Verification commands
-5. In review mode, read the existing plan, evaluate against the same checklist,
-   and return a verdict with concrete diff-level feedback.
+2. For interview mode, ask one question at a time targeting the weakest
+   dimension; never batch.
+3. Draft the plan into `docs/plans/<slug>.md` (or the consuming repo's
+   equivalent) with: goal, non-goals, acceptance criteria, implementation
+   steps sized to scope, risks, verification commands.
+4. Cite file:line where possible; prefer runnable commands over vague intent.
 
 ## Goal
 
-- separate planning from execution so authoring and review stay distinct;
-- prefer concrete file/line citations and runnable verification commands over
-  vague intent;
-- keep the plan repo-local so Copilot CLI can re-discover it next session;
-- defer execution to the user or a follow-up `iterate-loop` / `auto-execute`
-  invocation; this skill must not edit source code itself.
-
-## Stop conditions
-
-- Stop interviewing once the request is concrete enough to draft.
-- Stop the workflow if the user says "just do it" or "skip planning".
-- In review mode, stop after returning the verdict; do not patch the plan in
-  the same pass.
+- separate planning from execution;
+- keep plan artifacts repo-local and discoverable next session;
+- defer execution to a follow-up `iterate-loop` or `auto-execute` invocation.

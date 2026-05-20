@@ -1,9 +1,9 @@
 ---
 name: iterate-loop
-description: Persistence loop that keeps working a task until acceptance criteria pass and a reviewer signs off.
+description: "[OMCP] Persistence loop that keeps working a task until acceptance criteria pass and a reviewer signs off."
 ---
 
-# Iterate Loop
+# [OMCP] Iterate Loop
 
 Use this plugin skill when a task must reach a verified, reviewer-signed
 endpoint, not just "best effort". The loop is the Copilot CLI session itself

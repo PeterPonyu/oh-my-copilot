@@ -1,24 +1,26 @@
 ---
 name: parity-guard
-description: Scan the root repository for parity-risk or over-scope wording.
-user-invocable: true
+description: "[OMCP] Scan a repository for parity-risk and over-scope wording."
+orchestrates-agents: "reviewer, verifier"
 ---
 
-# Parity Guard
+# [OMCP] Parity Guard
 
-Use this root workspace skill before publishing explanations that compare
-Copilot with OMC or OMX, or before shipping root registration copy.
+Use this skill when a repository compares Copilot with OMC or OMX.
+
+## Agent orchestration
+
+This skill coordinates `reviewer` for overclaim detection and `verifier` for
+evidence-backed completion checks.
 
 ## Run
 
 ```bash
-./packages/copilot-cli-plugin/skills/parity-guard/check-parity-claims.sh .
+./skills/parity-guard/check-parity-claims.sh .
 ```
 
 ## Goal
 
-- prevent positive claims of full feature parity;
-- prevent language that implies this repository is an OMC/OMX runtime clone;
-- keep examples labelled as examples and plugin behavior labelled as reusable
-  plugin behavior;
-- fix wording before publishing or summarizing the change.
+- prevent claims of full feature parity
+- prevent accidental multi-surface expansion wording
+- catch misleading runtime-language drift in docs

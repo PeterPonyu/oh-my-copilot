@@ -76,7 +76,7 @@ Overlap with `check-install-state.sh`: plugin name/version, `installedPlugins` e
 
 Release-gate orchestrator. Unique assertions:
 - `docs/release-checklist.md` content: CLI-first scope, plugin canonical, examples illustrative, versioning, release notes, smoke reference, parity-guard reference.
-- `plugin.json` `name == oh-my-copilot-power-pack` and semver-shaped `version`.
+- `plugin.json` `name == omcp` and semver-shaped `version`.
 - Calls all sub-validators in sequence (doc-links, parity-guard, power-surfaces, root-copilot-surfaces, state-contract, benchmark-evidence, cross-host-data, optional smoke).
 - `--skip-copilot-smoke` flag for CI environments without `copilot` CLI.
 
@@ -105,7 +105,7 @@ Overlap: `validate-power-surfaces.sh` calls `validate-cross-host-benchmark-data.
 
 Verifies local installation state. Unique assertions:
 - `copilot` CLI binary is in PATH.
-- `plugin.json` name is exactly `oh-my-copilot-power-pack`.
+- `plugin.json` name is exactly `omcp`.
 - `installedPlugins` entry exists, is enabled, version matches manifest.
 - `cache_path` directory contains `agents/`, `skills/`, `hooks.json` surfaces.
 - `source.path` resolves to canonical plugin root, not a `.omx/team/` or `/worktrees/` path.

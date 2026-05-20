@@ -283,7 +283,7 @@ if command -v copilot >/dev/null 2>&1 && [[ "$plugin_installed" == "yes" ]] && [
 
   # Step 1: deep-interview → spec
   timeout "$TIMEOUT_SECONDS" copilot \
-    --agent "oh-my-copilot-power-pack:deep-interview" \
+    --agent "omcp:deep-interview" \
     --model "$SMOKE_MODEL" \
     --allow-all \
     --no-color \
@@ -292,7 +292,7 @@ if command -v copilot >/dev/null 2>&1 && [[ "$plugin_installed" == "yes" ]] && [
 
   # Step 2: ralplan → plan
   timeout "$TIMEOUT_SECONDS" copilot \
-    --agent "oh-my-copilot-power-pack:ralplan" \
+    --agent "omcp:ralplan" \
     --model "$SMOKE_MODEL" \
     --allow-all \
     --no-color \
@@ -301,7 +301,7 @@ if command -v copilot >/dev/null 2>&1 && [[ "$plugin_installed" == "yes" ]] && [
 
   # Step 3: autopilot → artifact
   timeout "$TIMEOUT_SECONDS" copilot \
-    --agent "oh-my-copilot-power-pack:autopilot" \
+    --agent "omcp:autopilot" \
     --model "$SMOKE_MODEL" \
     --allow-all \
     --no-color \

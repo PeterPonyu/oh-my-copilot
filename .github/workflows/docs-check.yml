@@ -17,6 +17,10 @@ jobs:
           node-version: '22'
       - name: Validate docs-first research repository
         run: bash scripts/validate-doc-links.sh
+      - name: Check root mirror drift
+        run: bash scripts/check-mirror-drift.sh
+      - name: Validate plugin orchestration metadata
+        run: node scripts/validate-plugin-orchestration.mjs
       - name: Validate power surfaces
         run: bash scripts/validate-power-surfaces.sh
       - name: Validate Pages surface
@@ -32,3 +36,5 @@ jobs:
           cd packages/copilot-cli-plugin/mcp-server
           npm install --omit=dev
           npm test
+      - name: Run plugin E2E validation
+        run: bash scripts/run-validation.sh --out .omcp/validation/ci-validation.md --no-redact

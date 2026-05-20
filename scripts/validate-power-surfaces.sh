@@ -85,6 +85,8 @@ validate_cli_plugin() {
     packages/copilot-cli-plugin/README.md \
     packages/copilot-cli-plugin/plugin.json \
     packages/copilot-cli-plugin/hooks.json \
+    packages/copilot-cli-plugin/instructions/AGENTS.md \
+    packages/copilot-cli-plugin/instructions/copilot-instructions.md \
     packages/copilot-cli-plugin/agents/research.agent.md \
     packages/copilot-cli-plugin/agents/reviewer.agent.md \
     packages/copilot-cli-plugin/agents/verifier.agent.md \
@@ -94,6 +96,8 @@ validate_cli_plugin() {
     packages/copilot-cli-plugin/skills/docs-ship/run-docs-checks.sh \
     packages/copilot-cli-plugin/scripts/log-session-start.sh \
     packages/copilot-cli-plugin/scripts/post-tool-audit.sh \
+    scripts/check-mirror-drift.sh \
+    scripts/validate-plugin-orchestration.mjs \
     scripts/bootstrap-copilot-power.sh
   do
     require_file "$path"
@@ -103,6 +107,8 @@ validate_cli_plugin() {
   require_exec "packages/copilot-cli-plugin/skills/docs-ship/run-docs-checks.sh"
   require_exec "packages/copilot-cli-plugin/scripts/log-session-start.sh"
   require_exec "packages/copilot-cli-plugin/scripts/post-tool-audit.sh"
+  require_exec "scripts/check-mirror-drift.sh"
+  require_exec "scripts/validate-plugin-orchestration.mjs"
   require_exec "scripts/bootstrap-copilot-power.sh"
 
   python3 - "$ROOT/packages/copilot-cli-plugin/plugin.json" <<'PY'
@@ -121,6 +127,10 @@ if data.get("version") != 1:
     raise SystemExit("hooks.json must have version: 1")
 PY
   log "plugin hooks.json has versioned schema"
+  (cd "$ROOT" && ./scripts/check-mirror-drift.sh >/dev/null)
+  log "root Copilot mirror has no drift from plugin sources"
+  (cd "$ROOT" && node scripts/validate-plugin-orchestration.mjs >/dev/null)
+  log "plugin orchestration metadata validates"
 }
 
 validate_docs_mentions() {

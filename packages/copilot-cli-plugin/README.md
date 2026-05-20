@@ -1,4 +1,4 @@
-# oh-my-copilot CLI Plugin
+# [OMCP] oh-my-copilot CLI Plugin
 
 ## Quick walkthrough — spec → plan → working code
 
