@@ -259,3 +259,50 @@ export function listResourceSubscriptions() {
 export function _clearResourceSubscriptions() {
   subscriptions.clear();
 }
+
+// --- Resource templates -------------------------------------------------
+//
+// MCP clients fetch templates once to learn the URI shape of each
+// parametric resource family, instead of paying O(N) for ListResources
+// on a large workspace. The four templates below cover every parametric
+// URI omcp exposes. The four singletons (pipeline, notepad,
+// project-memory/notes, project-memory/directives) are NOT exposed as
+// templates because they have no parameters — they always show up in
+// ListResources as concrete URIs.
+//
+// uriTemplate strings follow RFC 6570 level 1 (simple string expansion).
+
+export function listResourceTemplates() {
+  return {
+    resourceTemplates: [
+      {
+        uriTemplate: "omcp://wiki/{slug}",
+        name: "Wiki entry",
+        description:
+          "Markdown body of the wiki entry identified by {slug}. Use wiki_list or wiki_query to discover slugs.",
+        mimeType: "text/markdown",
+      },
+      {
+        uriTemplate: "omcp://state/{key}",
+        name: "State entry",
+        description:
+          "Orchestration-mode state JSON keyed by {key} (e.g. team-state, ralph-state, autopilot-state). Use state_list to enumerate keys.",
+        mimeType: "application/json",
+      },
+      {
+        uriTemplate: "omcp://traces/{session_id}/timeline",
+        name: "Trace timeline",
+        description:
+          "Append-only event log for the trace session {session_id}. Use trace_list_sessions to enumerate session ids.",
+        mimeType: "application/json",
+      },
+      {
+        uriTemplate: "omcp://traces/{session_id}/summary",
+        name: "Trace summary",
+        description:
+          "Aggregated summary of the trace session {session_id} (kind counts, first/last timestamps, last outcome, hypotheses).",
+        mimeType: "application/json",
+      },
+    ],
+  };
+}

@@ -5,6 +5,7 @@ import {
   CallToolRequestSchema,
   ListToolsRequestSchema,
   ListResourcesRequestSchema,
+  ListResourceTemplatesRequestSchema,
   ReadResourceRequestSchema,
   SubscribeRequestSchema,
   UnsubscribeRequestSchema,
@@ -59,6 +60,7 @@ import {
 import { readStage, transitionRecord } from "../orchestrator/orchestrator.mjs";
 import {
   listResources,
+  listResourceTemplates,
   readResource,
   subscribeResource,
   unsubscribeResource,
@@ -838,6 +840,10 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
 
 server.setRequestHandler(ListResourcesRequestSchema, async () => {
   return await listResources();
+});
+
+server.setRequestHandler(ListResourceTemplatesRequestSchema, async () => {
+  return listResourceTemplates();
 });
 
 server.setRequestHandler(ReadResourceRequestSchema, async (request) => {

@@ -16640,6 +16640,36 @@ function unsubscribeResource(uri) {
 function isResourceSubscribed(uri) {
   return subscriptions.has(uri);
 }
+function listResourceTemplates() {
+  return {
+    resourceTemplates: [
+      {
+        uriTemplate: "omcp://wiki/{slug}",
+        name: "Wiki entry",
+        description: "Markdown body of the wiki entry identified by {slug}. Use wiki_list or wiki_query to discover slugs.",
+        mimeType: "text/markdown"
+      },
+      {
+        uriTemplate: "omcp://state/{key}",
+        name: "State entry",
+        description: "Orchestration-mode state JSON keyed by {key} (e.g. team-state, ralph-state, autopilot-state). Use state_list to enumerate keys.",
+        mimeType: "application/json"
+      },
+      {
+        uriTemplate: "omcp://traces/{session_id}/timeline",
+        name: "Trace timeline",
+        description: "Append-only event log for the trace session {session_id}. Use trace_list_sessions to enumerate session ids.",
+        mimeType: "application/json"
+      },
+      {
+        uriTemplate: "omcp://traces/{session_id}/summary",
+        name: "Trace summary",
+        description: "Aggregated summary of the trace session {session_id} (kind counts, first/last timestamps, last outcome, hypotheses).",
+        mimeType: "application/json"
+      }
+    ]
+  };
+}
 
 // prompts.mjs
 import { readdir as readdir6, readFile as readFile8 } from "node:fs/promises";
@@ -17466,6 +17496,9 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
 });
 server.setRequestHandler(ListResourcesRequestSchema, async () => {
   return await listResources();
+});
+server.setRequestHandler(ListResourceTemplatesRequestSchema, async () => {
+  return listResourceTemplates();
 });
 server.setRequestHandler(ReadResourceRequestSchema, async (request) => {
   return await readResource(request.params);
