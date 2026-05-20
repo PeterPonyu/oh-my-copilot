@@ -209,6 +209,8 @@ allowed_cache_entries = {
     "scripts",
     # internal docs (optional but ships with the install)
     "docs",
+    # canonical source for root AGENTS.md / copilot-instructions.md mirror; ships with the install
+    "instructions",
 }
 actual_cache_entries = {item.name for item in cache_path.iterdir()}
 extra_cache_entries = sorted(actual_cache_entries - allowed_cache_entries)
