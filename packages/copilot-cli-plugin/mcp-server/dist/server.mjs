@@ -16424,10 +16424,96 @@ function transitionRecord({ from, to, artifact, stateDir: stateDir2 = ".omcp/sta
   renameSync(tmp, dest);
 }
 
+// resources.mjs
+var URI_RE = /^omcp:\/\/(wiki|traces)\/([^/]+)(?:\/([^/]+))?$/;
+async function listResources() {
+  const resources = [];
+  const wiki = await wikiList({});
+  for (const entry of wiki.entries) {
+    resources.push({
+      uri: `omcp://wiki/${entry.slug}`,
+      name: entry.title ?? entry.slug,
+      description: entry.tags?.length ? `Wiki entry [${entry.tags.join(", ")}]` : "Wiki entry",
+      mimeType: "text/markdown"
+    });
+  }
+  const traces = await traceListSessions();
+  for (const sid of traces.sessions) {
+    resources.push({
+      uri: `omcp://traces/${sid}/timeline`,
+      name: `Trace timeline ${sid}`,
+      description: "Append-only event log for the trace session",
+      mimeType: "application/json"
+    });
+    resources.push({
+      uri: `omcp://traces/${sid}/summary`,
+      name: `Trace summary ${sid}`,
+      description: "Aggregate summary of the trace session",
+      mimeType: "application/json"
+    });
+  }
+  return { resources };
+}
+async function readResource({ uri } = {}) {
+  if (typeof uri !== "string" || uri.length === 0) {
+    throw new Error("readResource requires non-empty 'uri'");
+  }
+  const m = uri.match(URI_RE);
+  if (!m) {
+    throw new Error(`unsupported resource uri: ${uri}`);
+  }
+  const [, kind, key, view] = m;
+  if (kind === "wiki") {
+    const r = await wikiRead({ slug: key });
+    if (!r.exists) {
+      throw new Error(`wiki entry not found: ${key}`);
+    }
+    return {
+      contents: [
+        {
+          uri,
+          mimeType: "text/markdown",
+          text: r.body
+        }
+      ]
+    };
+  }
+  if (kind === "traces") {
+    const sid = key;
+    const which = view || "timeline";
+    if (which === "timeline") {
+      const t = await traceTimeline({ session_id: sid });
+      return {
+        contents: [
+          {
+            uri,
+            mimeType: "application/json",
+            text: JSON.stringify(t)
+          }
+        ]
+      };
+    }
+    if (which === "summary") {
+      const s = await traceSummary({ session_id: sid });
+      return {
+        contents: [
+          {
+            uri,
+            mimeType: "application/json",
+            text: JSON.stringify(s)
+          }
+        ]
+      };
+    }
+    throw new Error(`unsupported trace view: ${view}`);
+  }
+  throw new Error(`unhandled uri kind: ${kind}`);
+}
+
 // server.mjs
 var server = new Server(
-  { name: "omcp", version: "0.5.0" },
-  { capabilities: { tools: {} } }
+  { name: "omcp", version: "0.6.0" },
+  { capabilities: { tools: {}, resources: {} } }
 );
 server.setRequestHandler(ListToolsRequestSchema, async () => ({
   tools: [
@@ -17143,6 +17229,12 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
       isError: true
     };
   }
+});
+server.setRequestHandler(ListResourcesRequestSchema, async () => {
+  return await listResources();
+});
+server.setRequestHandler(ReadResourceRequestSchema, async (request) => {
+  return await readResource(request.params);
 });
 var transport = new StdioServerTransport();
 await server.connect(transport);
