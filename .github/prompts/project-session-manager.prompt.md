@@ -1,6 +1,6 @@
 ---
 name: project-session-manager
-description: Worktree-first dev environment manager for issues, PRs, and features with optional tmux sessions
+description: "[OMCP] Worktree-first dev environment manager for issues, PRs, and features with optional tmux sessions"
 argument-hint: "<input>"
 ---
 

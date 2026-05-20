@@ -1,6 +1,6 @@
 ---
 name: docs-ship
-description: Run repository docs checks and emit explicit evidence before completion.
+description: "[OMCP] Run repository docs checks and emit explicit evidence before completion."
 argument-hint: "<input>"
 ---
 

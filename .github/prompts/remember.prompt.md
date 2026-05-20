@@ -1,6 +1,6 @@
 ---
 name: remember
-description: Review reusable project knowledge and route it to project-memory, notepad, or durable docs
+description: "[OMCP] Review reusable project knowledge and route it to project-memory, notepad, or durable docs"
 argument-hint: "[what to remember]   e.g. 'we use Postgres 16 in prod'   |   '@directive: always use --force-with-lease'"
 ---
 

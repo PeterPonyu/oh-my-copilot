@@ -1,6 +1,6 @@
 ---
 name: executor
-description: Focused task executor for implementation work
+description: "[OMCP] Focused task executor for implementation work"
 agent: executor
 argument-hint: "<task description or plan file>"
 ---

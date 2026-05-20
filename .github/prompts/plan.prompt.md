@@ -1,6 +1,6 @@
 ---
 name: plan
-description: Strategic planning workflow that scopes a task before any code is written.
+description: "[OMCP] Strategic planning workflow that scopes a task before any code is written."
 argument-hint: "<input>"
 ---
 

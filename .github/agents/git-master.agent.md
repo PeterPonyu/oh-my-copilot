@@ -1,6 +1,6 @@
 ---
 name: git-master
-description: Git expert for atomic commits, rebasing, and history management with style detection
+description: "[OMCP] Git expert for atomic commits, rebasing, and history management with style detection"
 agent: git-master
 argument-hint: "<commit, rebase, or history task>"
 ---

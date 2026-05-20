@@ -1,6 +1,6 @@
 ---
 name: writer
-description: Technical documentation writer for README, API docs, and comments
+description: "[OMCP] Technical documentation writer for README, API docs, and comments"
 agent: writer
 argument-hint: "<documentation task or file to document>"
 ---

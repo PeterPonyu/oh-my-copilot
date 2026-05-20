@@ -1,6 +1,6 @@
 ---
 name: designer
-description: UI/UX Designer-Developer for production-grade visual implementations
+description: "[OMCP] UI/UX Designer-Developer for production-grade visual implementations"
 agent: designer
 argument-hint: "<UI feature, component, or design brief>"
 ---

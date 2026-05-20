@@ -1,6 +1,6 @@
 ---
 name: ask
-description: Process-first advisor routing for Claude, Codex, or Gemini via `omc ask`, with artifact capture and no raw CLI assembly
+description: "[OMCP] Process-first advisor routing for Claude, Codex, or Gemini via `omc ask`, with artifact capture and no raw CLI assembly"
 ---
 
 <!-- omc-port-translated: v1 -->

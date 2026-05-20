@@ -1,6 +1,6 @@
 ---
 name: external-context
-description: Invoke parallel document-specialist agents for external web searches and documentation lookup
+description: "[OMCP] Invoke parallel document-specialist agents for external web searches and documentation lookup"
 argument-hint: <search query or topic>
 level: 4
 ---

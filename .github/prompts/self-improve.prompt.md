@@ -1,6 +1,6 @@
 ---
 name: self-improve
-description: Autonomous evolutionary code improvement engine with tournament selection
+description: "[OMCP] Autonomous evolutionary code improvement engine with tournament selection"
 argument-hint: "<input>"
 ---
 

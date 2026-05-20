@@ -1,6 +1,6 @@
 ---
 name: deep-interview
-description: Socratic interview with mathematical ambiguity gating — refuses to proceed until clarity threshold is met
+description: "[OMCP] Socratic interview with mathematical ambiguity gating — refuses to proceed until clarity threshold is met"
 agent: planner
 argument-hint: "[--quick|--standard|--deep] [--autoresearch] <vague idea or description>"
 ---

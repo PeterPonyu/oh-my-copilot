@@ -1,6 +1,6 @@
 ---
 name: learner
-description: Extract a learned skill from the current conversation and persist it as a reusable artifact
+description: "[OMCP] Extract a learned skill from the current conversation and persist it as a reusable artifact"
 argument-hint: "[topic or focus area; defaults to 'main thread of this conversation']"
 ---
 

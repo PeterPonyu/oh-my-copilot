@@ -1,6 +1,6 @@
 ---
 name: setup
-description: Use first for install/update routing — sends setup, doctor, or MCP requests to the correct OMC setup flow
+description: "[OMCP] Use first for install/update routing — sends setup, doctor, or MCP requests to the correct OMC setup flow"
 argument-hint: "<input>"
 ---
 

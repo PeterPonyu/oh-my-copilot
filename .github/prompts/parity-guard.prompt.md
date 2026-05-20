@@ -1,6 +1,6 @@
 ---
 name: parity-guard
-description: Scan a repository for parity-risk and over-scope wording.
+description: "[OMCP] Scan a repository for parity-risk and over-scope wording."
 argument-hint: "<input>"
 ---
 

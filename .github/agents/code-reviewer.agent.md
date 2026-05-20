@@ -1,6 +1,6 @@
 ---
 name: code-reviewer
-description: Expert code review specialist with severity-rated feedback, logic defect detection, SOLID principle checks, style, performance, and quality strategy
+description: "[OMCP] Expert code review specialist with severity-rated feedback, logic defect detection, SOLID principle checks, style, performance, and quality strategy"
 agent: code-reviewer
 argument-hint: "<files or PR to review>"
 ---

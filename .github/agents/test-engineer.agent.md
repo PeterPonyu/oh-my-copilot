@@ -1,6 +1,6 @@
 ---
 name: test-engineer
-description: Test strategy, integration/e2e coverage, flaky test hardening, TDD workflows
+description: "[OMCP] Test strategy, integration/e2e coverage, flaky test hardening, TDD workflows"
 agent: test-engineer
 argument-hint: "<module, feature, or test file to work on>"
 ---
