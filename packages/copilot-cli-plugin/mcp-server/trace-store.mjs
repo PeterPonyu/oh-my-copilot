@@ -1,6 +1,7 @@
 import { readFile, appendFile, mkdir, readdir } from "node:fs/promises";
 import { existsSync } from "node:fs";
 import { resolve, join } from "node:path";
+import { emitResourceUpdate } from "./events.mjs";
 
 const TRACE_DIR = ".omcp/traces";
 const DEFAULT_SESSION = "default";
@@ -66,6 +67,10 @@ export async function traceWrite({
   if (stderr_snippet !== undefined) event.stderr_snippet = stderr_snippet;
 
   await appendFile(filePath, JSON.stringify(event) + "\n", "utf8");
+  // Emit both views — timeline gets the new event and summary's aggregates
+  // change with every append.
+  emitResourceUpdate(`omcp://traces/${session}/timeline`);
+  emitResourceUpdate(`omcp://traces/${session}/summary`);
   return { ok: true, session_id: session, kind };
 }
 

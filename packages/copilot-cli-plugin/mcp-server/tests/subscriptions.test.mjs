@@ -21,6 +21,8 @@ import {
   projectMemoryAddNote,
   projectMemoryAddDirective,
 } from "../project-memory-store.mjs";
+import { wikiAdd, wikiDelete } from "../wiki-store.mjs";
+import { traceWrite } from "../trace-store.mjs";
 
 const originalCwd = process.cwd();
 
@@ -390,4 +392,126 @@ test("subscribe accepts all four new singleton URIs", async (t) => {
   assert.ok(isResourceSubscribed("omcp://notepad"));
   assert.ok(isResourceSubscribed("omcp://project-memory/notes"));
   assert.ok(isResourceSubscribed("omcp://project-memory/directives"));
+});
+
+// --- wiki emission -----------------------------------------------------
+
+test("wikiAdd emits omcp://wiki/<slug>", async (t) => {
+  const dir = freshCwd();
+  const cap = captureEvents();
+  t.after(() => {
+    cap.stop();
+    teardown(dir);
+  });
+  await wikiAdd({ title: "Auth Flow", body: "OAuth notes" });
+  await cap.wait();
+  assert.ok(
+    cap.events.includes("omcp://wiki/auth-flow"),
+    `expected omcp://wiki/auth-flow in events, got: ${JSON.stringify(cap.events)}`
+  );
+});
+
+test("wikiAdd with explicit slug emits the explicit slug URI", async (t) => {
+  const dir = freshCwd();
+  const cap = captureEvents();
+  t.after(() => {
+    cap.stop();
+    teardown(dir);
+  });
+  await wikiAdd({ title: "Some Title", slug: "custom-slug", body: "x" });
+  await cap.wait();
+  assert.ok(cap.events.includes("omcp://wiki/custom-slug"));
+});
+
+test("wikiDelete emits omcp://wiki/<slug> when entry existed", async (t) => {
+  const dir = freshCwd();
+  t.after(() => teardown(dir));
+  await wikiAdd({ title: "Entry", body: "body" });
+
+  const cap = captureEvents();
+  t.after(() => cap.stop());
+  await wikiDelete({ slug: "entry" });
+  await cap.wait();
+  assert.ok(
+    cap.events.includes("omcp://wiki/entry"),
+    `expected omcp://wiki/entry in events, got: ${JSON.stringify(cap.events)}`
+  );
+});
+
+test("wikiDelete on non-existent slug does NOT emit", async (t) => {
+  const dir = freshCwd();
+  const cap = captureEvents();
+  t.after(() => {
+    cap.stop();
+    teardown(dir);
+  });
+  await wikiDelete({ slug: "no-such" });
+  await cap.wait();
+  assert.ok(
+    !cap.events.includes("omcp://wiki/no-such"),
+    "expected no emission for delete of non-existent wiki entry"
+  );
+});
+
+test("subscribe accepts omcp://wiki/<slug> URIs", async (t) => {
+  const dir = freshCwd();
+  t.after(() => teardown(dir));
+  subscribeResource("omcp://wiki/some-page");
+  assert.ok(isResourceSubscribed("omcp://wiki/some-page"));
+});
+
+// --- traces emission ---------------------------------------------------
+
+test("traceWrite emits both timeline and summary URIs", async (t) => {
+  const dir = freshCwd();
+  const cap = captureEvents();
+  t.after(() => {
+    cap.stop();
+    teardown(dir);
+  });
+  await traceWrite({
+    session_id: "sess-1",
+    kind: "hypothesis",
+    hypothesis: { lane: "L1" },
+  });
+  await cap.wait();
+  assert.ok(
+    cap.events.includes("omcp://traces/sess-1/timeline"),
+    `expected timeline emission, got: ${JSON.stringify(cap.events)}`
+  );
+  assert.ok(
+    cap.events.includes("omcp://traces/sess-1/summary"),
+    `expected summary emission, got: ${JSON.stringify(cap.events)}`
+  );
+});
+
+test("traceWrite emits scoped to the right session_id", async (t) => {
+  const dir = freshCwd();
+  const cap = captureEvents();
+  t.after(() => {
+    cap.stop();
+    teardown(dir);
+  });
+  await traceWrite({
+    session_id: "alpha",
+    kind: "hypothesis",
+    hypothesis: { lane: "L1" },
+  });
+  await traceWrite({
+    session_id: "beta",
+    kind: "evidence",
+    evidence: {},
+  });
+  await cap.wait();
+  assert.ok(cap.events.includes("omcp://traces/alpha/timeline"));
+  assert.ok(cap.events.includes("omcp://traces/beta/timeline"));
+});
+
+test("subscribe accepts omcp://traces/<sid>/timeline and /summary URIs", async (t) => {
+  const dir = freshCwd();
+  t.after(() => teardown(dir));
+  subscribeResource("omcp://traces/sess-x/timeline");
+  subscribeResource("omcp://traces/sess-x/summary");
+  assert.ok(isResourceSubscribed("omcp://traces/sess-x/timeline"));
+  assert.ok(isResourceSubscribed("omcp://traces/sess-x/summary"));
 });

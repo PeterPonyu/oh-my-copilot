@@ -1,4 +1,5 @@
 import { readFile, writeFile, appendFile, mkdir, rename, unlink, readdir } from "node:fs/promises";
+import { emitResourceUpdate } from "./events.mjs";
 import { existsSync } from "node:fs";
 import { resolve, join } from "node:path";
 import { randomBytes } from "node:crypto";
@@ -77,6 +78,7 @@ export async function wikiAdd({ title, body, tags, slug } = {}) {
     mtime: new Date().toISOString(),
   };
   await writeIndex(index);
+  emitResourceUpdate(`omcp://wiki/${finalSlug}`);
   return { ok: true, slug: finalSlug };
 }
 
@@ -176,14 +178,18 @@ export async function wikiQuery({ q, k } = {}) {
 export async function wikiDelete({ slug } = {}) {
   validateSlug(slug);
   const path = wikiFilePath(slug);
+  let mutated = false;
   if (existsSync(path)) {
     await unlink(path);
+    mutated = true;
   }
   const index = await readIndex();
   if (slug in index) {
     delete index[slug];
     await writeIndex(index);
+    mutated = true;
   }
+  if (mutated) emitResourceUpdate(`omcp://wiki/${slug}`);
   return { ok: true, slug };
 }
 
