@@ -2,11 +2,14 @@
 //
 // Exposes URI-addressable read-only resources, complementing the Tools
 // surface:
-//   omcp://wiki/<slug>                — wiki entry body (text/markdown)
-//   omcp://traces/<sid>/timeline      — append-only event log (application/json)
-//   omcp://traces/<sid>/summary       — aggregated summary (application/json)
-//   omcp://state/<key>                — orchestration-mode state JSON
-//   omcp://pipeline/state             — autopilot pipeline state JSON
+//   omcp://wiki/<slug>                       — wiki entry body (text/markdown)
+//   omcp://traces/<sid>/timeline             — append-only event log (json)
+//   omcp://traces/<sid>/summary              — aggregated summary (json)
+//   omcp://state/<key>                       — orchestration-mode state (json)
+//   omcp://pipeline/state                    — autopilot pipeline state (json)
+//   omcp://notepad                           — workspace notepad (markdown)
+//   omcp://project-memory/notes              — project memory notes (json)
+//   omcp://project-memory/directives         — project memory directives (json)
 //
 // Also owns the subscription registry: which URIs clients have subscribed
 // to via resources/subscribe. server.mjs forwards "updated" events from
@@ -20,10 +23,22 @@ import {
   traceSummary,
 } from "./trace-store.mjs";
 import { stateRead, stateList } from "./state-store.mjs";
+import { notepadRead } from "./notepad-store.mjs";
+import { projectMemoryRead } from "./project-memory-store.mjs";
 import { readStage } from "../orchestrator/orchestrator.mjs";
 
-const URI_RE = /^omcp:\/\/(wiki|traces|state|pipeline)\/([^/]+)(?:\/([^/]+))?$/;
+const URI_RE =
+  /^omcp:\/\/(wiki|traces|state|pipeline|notepad|project-memory)(?:\/([^/]+))?(?:\/([^/]+))?$/;
 const PIPELINE_URI = "omcp://pipeline/state";
+const NOTEPAD_URI = "omcp://notepad";
+const PROJECT_MEMORY_NOTES_URI = "omcp://project-memory/notes";
+const PROJECT_MEMORY_DIRECTIVES_URI = "omcp://project-memory/directives";
+const SINGLETON_URIS = new Set([
+  PIPELINE_URI,
+  NOTEPAD_URI,
+  PROJECT_MEMORY_NOTES_URI,
+  PROJECT_MEMORY_DIRECTIVES_URI,
+]);
 
 // --- Resource listing / reading -----------------------------------------
 
@@ -75,6 +90,28 @@ export async function listResources() {
     mimeType: "application/json",
   });
 
+  resources.push({
+    uri: NOTEPAD_URI,
+    name: "Workspace notepad",
+    description: "Append-only workspace notepad (.omcp/notepad.md)",
+    mimeType: "text/markdown",
+  });
+
+  resources.push({
+    uri: PROJECT_MEMORY_NOTES_URI,
+    name: "Project memory: notes",
+    description: "Persistent free-form notes from project_memory_add_note",
+    mimeType: "application/json",
+  });
+
+  resources.push({
+    uri: PROJECT_MEMORY_DIRECTIVES_URI,
+    name: "Project memory: directives",
+    description:
+      "Persistent rules/directives from project_memory_add_directive",
+    mimeType: "application/json",
+  });
+
   return { resources };
 }
 
@@ -88,6 +125,41 @@ export async function readResource({ uri } = {}) {
     return {
       contents: [
         { uri, mimeType: "application/json", text: JSON.stringify(s) },
+      ],
+    };
+  }
+
+  if (uri === NOTEPAD_URI) {
+    const r = await notepadRead({});
+    return {
+      contents: [
+        { uri, mimeType: "text/markdown", text: r.content },
+      ],
+    };
+  }
+
+  if (uri === PROJECT_MEMORY_NOTES_URI) {
+    const r = await projectMemoryRead({ kind: "notes" });
+    return {
+      contents: [
+        {
+          uri,
+          mimeType: "application/json",
+          text: JSON.stringify({ notes: r.notes ?? [] }),
+        },
+      ],
+    };
+  }
+
+  if (uri === PROJECT_MEMORY_DIRECTIVES_URI) {
+    const r = await projectMemoryRead({ kind: "directives" });
+    return {
+      contents: [
+        {
+          uri,
+          mimeType: "application/json",
+          text: JSON.stringify({ directives: r.directives ?? [] }),
+        },
       ],
     };
   }
@@ -160,7 +232,7 @@ export function subscribeResource(uri) {
   if (typeof uri !== "string" || uri.length === 0) {
     throw new Error("subscribeResource requires non-empty 'uri'");
   }
-  if (uri !== PIPELINE_URI && !URI_RE.test(uri)) {
+  if (!SINGLETON_URIS.has(uri) && !URI_RE.test(uri)) {
     throw new Error(`cannot subscribe to unsupported uri: ${uri}`);
   }
   subscriptions.add(uri);
