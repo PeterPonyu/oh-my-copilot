@@ -45,8 +45,12 @@ The state management tools (`state_clear`, `state_read`, `state_write`, `state_l
 any state tool, you MUST first load all of them via `ToolSearch`:
 
 ```
-ToolSearch(query="select:mcp__omcp__state_clear,mcp__omcp__state_read,mcp__omcp__state_write,mcp__omcp__state_list_active,mcp__omcp__state_get_status")
+ToolSearch(query="select:mcp__omcp__state_clear,mcp__omcp__state_read,mcp__omcp__state_write,mcp__omcp__state_list_active,mcp__omcp__state_get_status,mcp__omcp__notepad_prune")
 ```
+
+After clearing mode state, optionally call `notepad_prune` to drop expired session-scoped
+notepad entries so the next session starts with a clean working set. This keeps notepad
+growth bounded across long-lived workspaces.
 
 If `state_clear` is unavailable or fails, use this **bash fallback** as an **emergency
 escape from the stop hook loop**. This is NOT a full replacement for the cancel flow —
