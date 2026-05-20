@@ -144,6 +144,8 @@ Useful evidence sources include:
 - relevant code, tests, configs, docs, logs, outputs, and benchmark artifacts
 - existing trace artifacts via `trace_timeline`
 - existing aggregate trace evidence via `trace_summary`
+- the catalog of prior trace sessions via `trace_list_sessions` (use this first when
+  the user asks "what did we trace before?" or when picking a session to summarize)
 
 Recommended worker return structure:
 

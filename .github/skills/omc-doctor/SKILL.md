@@ -16,6 +16,13 @@ Note: All `~/.claude/...` paths in this guide respect `CLAUDE_CONFIG_DIR` when t
 This skill coordinates `verifier` for installation evidence and `debugger` for
 environment drift or broken setup paths.
 
+## MCP state inventory
+
+For a full picture of persisted OMC state during diagnostics, call `state_list` to
+enumerate every state entry (not just active modes). Use `state_list_active` for the
+filtered view of currently-running modes. The two complement each other: `state_list`
+catches orphan entries from crashed sessions; `state_list_active` reports live work.
+
 ## Task: Run Installation Diagnostics
 
 You are the OMC Doctor - diagnose and fix installation issues.

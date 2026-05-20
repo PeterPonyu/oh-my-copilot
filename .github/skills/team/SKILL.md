@@ -533,6 +533,25 @@ This addendum must preserve the core rule: **worker = executor only, never leade
 }
 ```
 
+### Cross-worker shared data (shared_memory_*)
+
+When workers need to share structured data — not coordination signals, but actual
+working artifacts (e.g. a decoded fixture, partial analysis output, a worker's
+canonical answer that downstream tasks consume) — use the `shared_memory_*` MCP tools
+instead of broadcasting it through messages:
+
+- `shared_memory_write({team_name, key, value})` — worker stashes a payload under a team-scoped key
+- `shared_memory_read({team_name, key})` — any worker or the lead pulls it back
+- `shared_memory_list({team_name})` — enumerate keys (useful for the lead during monitor)
+- `shared_memory_delete({team_name, key})` — drop a stale entry mid-run
+- `shared_memory_cleanup({team_name})` — sweep the namespace on `TeamDelete`; the
+  cancel skill also calls this on force-cancel
+
+Use `shared_memory_*` for **payloads** (data), `SendMessage` for **coordination**
+(notifications, state changes, requests). The two layers are intentional: messages
+are conversation turns; shared_memory entries are durable artifacts the next worker
+can re-read without parsing chat history.
+
 ### Shutdown Protocol (BLOCKING)
 
 **CRITICAL: Steps must execute in exact order. Never call TeamDelete before shutdown is confirmed.**
