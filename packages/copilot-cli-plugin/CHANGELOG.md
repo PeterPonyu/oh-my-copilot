@@ -6,6 +6,25 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+### ulw-loop — ultrawork with mandatory Oracle verification gate
+
+- Added `/omcp:ulw-loop` skill + command translating oh-my-openagent's
+  `ULW_LOOP_TEMPLATE` (ultrawork variant where the verifier confirms
+  completion) for the Copilot CLI execution model.
+- The completion contract: emitting `<promise>DONE</promise>` *opens* the
+  verification gate but does not close the loop. The `verifier` agent
+  (Oracle) reads touched files, re-runs cited commands, and returns
+  `VERIFIED` or `REJECTED` with concrete gap evidence. On REJECTED, the
+  loop feeds the gap list back to the executor (via continuation by
+  default, or fresh dispatch with `--strategy=reset`).
+- Default `--max-iterations=500`. Hard stop on limit with the Oracle's
+  last rejection surfaced — no silent mark-complete.
+- Differentiation from sibling skills documented in the skill: `ultrawork`
+  has no gate, `ralph` is PRD-driven, `ulw-loop` is the lowest-ceremony
+  skill that still guarantees verified completion.
+- Skill count is now 45, slash-command count is now 44. Root `.github`
+  mirror regenerated. Plugin orchestration validates; no mirror drift.
+
 ### sisyphus — top-tier orchestrator agent
 
 - Added `sisyphus` custom agent translated from oh-my-openagent
