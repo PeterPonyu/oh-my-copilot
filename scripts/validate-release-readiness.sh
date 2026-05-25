@@ -69,7 +69,7 @@ for path in \
   scripts/run-validation.sh \
   scripts/validate-copilot-state-contract.sh \
   scripts/validate-benchmark-evidence.sh \
-  scripts/validate-cross-host-benchmark-data.py \
+  scripts/validate-cross-host-benchmark-data.mjs \
   scripts/validate-release-readiness.sh \
   scripts/smoke-copilot-cli.sh \
   packages/copilot-cli-plugin/skills/parity-guard/check-parity-claims.sh \
@@ -128,7 +128,7 @@ PY
 (cd "$ROOT" && ./scripts/validate-root-copilot-surfaces.sh)
 (cd "$ROOT" && ./scripts/validate-copilot-state-contract.sh)
 (cd "$ROOT" && ./scripts/validate-benchmark-evidence.sh)
-(cd "$ROOT" && python3 ./scripts/validate-cross-host-benchmark-data.py --app-root ./apps/cross-host-benchmark-site)
+(cd "$ROOT" && node ./scripts/validate-cross-host-benchmark-data.mjs --app-root ./apps/cross-host-benchmark-site)
 
 if [[ "$RUN_COPILOT_SMOKE" == "1" ]]; then
   if command -v copilot >/dev/null 2>&1; then

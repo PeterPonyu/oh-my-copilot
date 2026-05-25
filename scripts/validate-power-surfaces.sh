@@ -162,8 +162,8 @@ PY
 validate_cross_host_benchmark_site() {
   local path
   for path in \
-    scripts/harvest-cross-host-benchmark-data.py \
-    scripts/validate-cross-host-benchmark-data.py \
+    scripts/harvest-cross-host-benchmark-data.mjs \
+    scripts/validate-cross-host-benchmark-data.mjs \
     apps/cross-host-benchmark-site/package.json \
     apps/cross-host-benchmark-site/app/layout.tsx \
     apps/cross-host-benchmark-site/app/page.tsx \
@@ -191,7 +191,7 @@ validate_cross_host_benchmark_site() {
     'reporting-comparable|repo-native|mechanism-equivalent' \
     "$ROOT/apps/cross-host-benchmark-site/src/lib/presentation/primitives.ts"
 
-  python3 "$ROOT/scripts/validate-cross-host-benchmark-data.py" --app-root "$ROOT/apps/cross-host-benchmark-site" >/dev/null
+  node "$ROOT/scripts/validate-cross-host-benchmark-data.mjs" --app-root "$ROOT/apps/cross-host-benchmark-site" >/dev/null
   log "cross-host benchmark site files exist and generated data validates"
 }
 

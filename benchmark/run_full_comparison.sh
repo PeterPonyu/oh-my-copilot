@@ -2,7 +2,7 @@
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-ROOT="$(python3 "$SCRIPT_DIR/../scripts/resolve-canonical-root.py" "$SCRIPT_DIR/..")"
+ROOT="$(node "$SCRIPT_DIR/../scripts/resolve-canonical-root.mjs" "$SCRIPT_DIR/..")"
 cd "$ROOT"
 
 has_flag() {

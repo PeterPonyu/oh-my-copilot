@@ -51,7 +51,7 @@ require_contains() {
 }
 
 require_file docs/benchmark-status.md
-require_file scripts/validate-cross-host-benchmark-data.py
+require_file scripts/validate-cross-host-benchmark-data.mjs
 require_file benchmark/results/wrapper-surface-analysis-20260428.md
 require_file benchmark/results/wrapper-surface-analysis-20260428.json
 
@@ -247,6 +247,6 @@ if f"Snapshot git SHA: `{latest_sha}`" not in benchmark_status:
 ok("benchmark-status.md records the latest benchmark history SHA")
 PY
 
-(cd "$ROOT" && python3 ./scripts/validate-cross-host-benchmark-data.py --app-root ./apps/cross-host-benchmark-site)
+(cd "$ROOT" && node ./scripts/validate-cross-host-benchmark-data.mjs --app-root ./apps/cross-host-benchmark-site)
 
 log "benchmark evidence validation complete"

@@ -72,7 +72,7 @@ while (($#)); do
   esac
 done
 
-ROOT="$(python3 "$ROOT/scripts/resolve-canonical-root.py" "$ROOT")"
+ROOT="$(node "$ROOT/scripts/resolve-canonical-root.mjs" "$ROOT")"
 PLUGIN_PATH="$ROOT/packages/copilot-cli-plugin"
 PLUGIN_JSON="$PLUGIN_PATH/plugin.json"
 
