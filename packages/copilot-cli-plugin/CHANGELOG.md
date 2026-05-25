@@ -6,6 +6,23 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+### Wave-Q: expose existing agents as skills (`build-fix`, `git-master`)
+
+- Added `/omcp:build-fix` skill + command that delegates to the `debugger` and
+  `verifier` agents to clear build/typecheck/compile errors with the smallest
+  possible diff. No refactor, no architectural changes; stops on every red →
+  green hop.
+- Added `/omcp:git-master` skill + command that delegates to the existing
+  `git-master` agent for atomic commits, style-matched messages, and safe
+  rebases. Includes hard guards against `--no-verify`, force-push to
+  `main`/`master`, and destructive operations without confirmation.
+- Both skills wrap agents that already existed in `packages/copilot-cli-plugin/agents/`
+  but had no slash-command surface. Patterns inspired by oh-my-codex
+  (`build-fix`) and oh-my-claudecode (`git-master`) translated for the
+  Copilot CLI execution model.
+- Skill count is now 44, slash-command count is now 43. Root `.github` mirror
+  regenerated. Plugin orchestration validates; no mirror drift.
+
 ### Wave-P: rules and memory policy layer
 
 - Added a first-class OMCP rules engine (`rules-store.mjs`) that discovers
