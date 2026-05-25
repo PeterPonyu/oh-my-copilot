@@ -1,0 +1,47 @@
+{
+  "slug": "auto-execute-rules-memory-policy",
+  "status": "completed",
+  "spec": "docs/specs/auto-execute-rules-memory-policy.md",
+  "plan": "docs/plans/auto-execute-rules-memory-policy.md",
+  "implemented": [
+    "Copilot-native rules discovery and matching",
+    "Pending rules context storage and MCP tools/resources",
+    "Post-tool file-touch rules capture",
+    "Rules/memory operating policy documentation",
+    "Regression tests, bundled server rebuild, and root mirror regeneration"
+  ],
+  "acceptance": [
+    {
+      "id": "rules-discovery",
+      "description": "Discover project, GitHub, adjacent-host, and user rule sources with glob/applyTo matching.",
+      "status": "passed"
+    },
+    {
+      "id": "pending-context",
+      "description": "Capture matched rules into bounded pending context with session dedupe and MCP access.",
+      "status": "passed"
+    },
+    {
+      "id": "hook-integration",
+      "description": "PostToolUse hook captures file-touch rule context from current Copilot envelopes.",
+      "status": "passed"
+    },
+    {
+      "id": "security-bounds",
+      "description": "Rules lookup rejects out-of-workspace paths, skips symlinked rule sources, redacts unscoped pending reads, and sanitizes hook logs.",
+      "status": "passed"
+    },
+    {
+      "id": "verification",
+      "description": "MCP tests, repository validation, release readiness, and review/security review complete.",
+      "status": "passed"
+    }
+  ],
+  "evidence": [
+    "node --test --test-reporter=tap 'tests/*.test.mjs' => 203 tests, 203 pass, 0 fail",
+    "bash scripts/run-validation.sh => 17/17 passed",
+    "./scripts/validate-release-readiness.sh --skip-copilot-smoke => passed",
+    "code review => APPROVED",
+    "security review => APPROVED"
+  ]
+}
