@@ -6,6 +6,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+### Wave-Q follow-up
+
+- `git-master` skill: declared a co-author opt-in contract. Commits do not
+  append `Co-Authored-By:` trailers by default; opt-in via env var
+  `OMCP_COMMIT_COAUTHOR=1` or `.omcp/commit-lore.json` with
+  `{ "coauthor": true }`. Ports the opt-in gate from `oh-my-codex`
+  `src/config/commit-lore-guard.ts` as skill-level guidance.
+
 ### Wave-Q: expose existing agents as skills (`build-fix`, `git-master`)
 
 - Added `/omcp:build-fix` skill + command that delegates to the `debugger` and
