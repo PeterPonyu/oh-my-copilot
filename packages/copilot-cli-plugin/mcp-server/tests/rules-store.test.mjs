@@ -1,6 +1,6 @@
-import { test } from "node:test";
+import { test, describe } from "node:test";
 import assert from "node:assert/strict";
-import { mkdtempSync, rmSync, mkdirSync, writeFileSync, existsSync, symlinkSync } from "node:fs";
+import { mkdtempSync, rmSync, mkdirSync, writeFileSync, existsSync, symlinkSync, readFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 
@@ -9,6 +9,7 @@ import {
   rulesPendingRead,
   rulesPendingClear,
   rulesPolicyReport,
+  redactSecrets,
   _clearRulesStateForTests,
 } from "../rules-store.mjs";
 
@@ -246,6 +247,97 @@ test("rulesPendingRead redacts content and project roots unless session-scoped",
   const scoped = await rulesPendingRead({ session_id: "redact" });
   assert.equal(scoped.entries[0].project_root, dir);
   assert.match(scoped.entries[0].rules[0].content, /Sensitive local rule text/);
+});
+
+describe("secret redaction", () => {
+  test("AWS key in rule content is redacted on write (verified on disk)", async (t) => {
+    const dir = freshCwd();
+    t.after(() => teardown(dir));
+
+    mkdirSync(join(dir, ".omcp", "rules"), { recursive: true });
+    writeFileSync(join(dir, "index.js"), "console.log('x')\n", "utf8");
+    writeFileSync(
+      join(dir, ".omcp", "rules", "always.md"),
+      "---\nalwaysApply: true\n---\nAWS key here AKIA1234567890123456 and a non-secret tail.\n",
+      "utf8",
+    );
+
+    const result = await rulesContextForFile({
+      path: "index.js",
+      tool: "read",
+      session_id: "aws-redact",
+    });
+    assert.equal(result.matched, 1);
+
+    const raw = readFileSync(join(dir, ".omcp", "state", "rules-pending.json"), "utf8");
+    assert.equal(raw.includes("AKIA"), false, "AKIA prefix must not appear on disk");
+    assert.ok(raw.includes("[REDACTED:AWS_KEY]"), "redaction marker must appear on disk");
+    assert.ok(raw.includes("non-secret tail"), "non-secret content preserved");
+  });
+
+  test("Bearer token in pre-existing pending state is redacted on read", async (t) => {
+    const dir = freshCwd();
+    t.after(() => teardown(dir));
+
+    mkdirSync(join(dir, ".omcp", "state"), { recursive: true });
+    const staged = {
+      version: 1,
+      updated_at: new Date().toISOString(),
+      entries: [
+        {
+          id: "rules_staged_1",
+          ts: new Date().toISOString(),
+          session_id: "bearer_read",
+          tool: "read",
+          file_path: "index.js",
+          project_root: dir,
+          rules: [
+            {
+              relativePath: ".omcp/rules/staged.md",
+              source: "omcp-rules",
+              matchReason: "alwaysApply",
+              contentHash: "abc123",
+              content: "Authorization: Bearer abcdefghijklmnopqrstuvwxyz1234567890",
+            },
+          ],
+        },
+      ],
+    };
+    writeFileSync(join(dir, ".omcp", "state", "rules-pending.json"), JSON.stringify(staged), "utf8");
+
+    const scoped = await rulesPendingRead({ session_id: "bearer_read" });
+    assert.equal(scoped.entries.length, 1);
+    const content = scoped.entries[0].rules[0].content;
+    assert.match(content, /Bearer \[REDACTED\]/);
+    assert.equal(/Bearer abcdefghijklmnopqrstuvwxyz/.test(content), false);
+  });
+
+  test("plain-text rule body passes through unchanged at both boundaries", async (t) => {
+    const dir = freshCwd();
+    t.after(() => teardown(dir));
+
+    mkdirSync(join(dir, ".omcp", "rules"), { recursive: true });
+    writeFileSync(join(dir, "index.js"), "console.log('x')\n", "utf8");
+    const body = "This is a normal rule about logging and indentation. No secrets here.";
+    writeFileSync(
+      join(dir, ".omcp", "rules", "always.md"),
+      `---\nalwaysApply: true\n---\n${body}\n`,
+      "utf8",
+    );
+
+    const result = await rulesContextForFile({
+      path: "index.js",
+      tool: "read",
+      session_id: "plain",
+    });
+    assert.equal(result.matched, 1);
+    assert.equal(result.entry.rules[0].content, body);
+
+    const scoped = await rulesPendingRead({ session_id: "plain" });
+    assert.equal(scoped.entries[0].rules[0].content, body);
+
+    assert.equal(redactSecrets(body), body);
+  });
 });
 
 test("rulesPendingClear can clear all pending entries", async (t) => {

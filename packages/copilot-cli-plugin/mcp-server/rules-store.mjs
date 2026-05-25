@@ -16,6 +16,22 @@ const MAX_RULE_CONTENT = 12000;
 const MAX_PENDING_ENTRIES = 50;
 const RULES_PENDING_URI = "omcp://rules/pending";
 
+// Ported from oh-my-codex crates/omx-sparkshell/src/codex_bridge.rs redact_secrets.
+// ANTHROPIC_KEY must precede OPENAI_KEY — both start with `sk-`.
+const REDACTION_PATTERNS = [
+  { name: "AWS_KEY", regex: /AKIA[0-9A-Z]{16}/g, replacement: "[REDACTED:AWS_KEY]" },
+  { name: "GH_TOKEN", regex: /ghp_[A-Za-z0-9]{36,}/g, replacement: "[REDACTED:GH_TOKEN]" },
+  { name: "ANTHROPIC_KEY", regex: /sk-ant-[A-Za-z0-9_-]{20,}/g, replacement: "[REDACTED:ANTHROPIC_KEY]" },
+  { name: "OPENAI_KEY", regex: /sk-(?:proj-)?[A-Za-z0-9_-]{20,}/g, replacement: "[REDACTED:OPENAI_KEY]" },
+  { name: "BEARER", regex: /Bearer [A-Za-z0-9_.~+/=-]{20,}/g, replacement: "Bearer [REDACTED]" },
+  { name: "KV_SECRET", regex: /\b(password|secret|token|api[_-]?key)\s*[:=]\s*['"]?[A-Za-z0-9_.+/=-]{20,}/gi, replacement: "$1=[REDACTED]" },
+];
+
+export function redactSecrets(text) {
+  if (typeof text !== "string") return text;
+  return REDACTION_PATTERNS.reduce((acc, p) => acc.replace(p.regex, p.replacement), text);
+}
+
 const PROJECT_RULE_SOURCES = [
   { label: "omcp-rules", dirParts: [".omcp", "rules"], extensions: RULE_EXTENSIONS },
   { label: "github-instructions", dirParts: [".github", "instructions"], extensions: [".instructions.md"] },
@@ -342,7 +358,13 @@ async function writePending(pending) {
 
 async function appendPending(entry) {
   const pending = await readPending();
-  pending.entries.push(entry);
+  const sanitized = {
+    ...entry,
+    rules: Array.isArray(entry.rules)
+      ? entry.rules.map((rule) => ({ ...rule, content: redactSecrets(rule.content) }))
+      : entry.rules,
+  };
+  pending.entries.push(sanitized);
   await writePending(pending);
 }
 
@@ -446,6 +468,13 @@ export async function rulesPendingRead(args = {}) {
         contentHash: rule.contentHash,
         content_redacted: true,
       })),
+    }));
+  } else {
+    entries = entries.map((entry) => ({
+      ...entry,
+      rules: Array.isArray(entry.rules)
+        ? entry.rules.map((rule) => ({ ...rule, content: redactSecrets(rule.content) }))
+        : entry.rules,
     }));
   }
   return { version: pending.version, updated_at: pending.updated_at, entries };
