@@ -41,7 +41,7 @@ argument-hint: "<task or orchestration request>"
     - Every delegation prompt includes: task, expected outcome, required tools, MUST DO, MUST NOT DO, context (6 sections).
     - Verifier evidence is collected before claiming completion (no "done" on the executor's word alone).
     - No silent agent substitution: if a specialist is unavailable, state the degraded plan rather than picking a worse fit.
-    - State is persisted to `mcp__omcp__state_write` / `mcp__omcp__notepad_*` so the next session can resume.
+    - State is persisted to `mcp__omcp__state_write` and `mcp__omcp__notepad_write_working` so the next session can resume.
   </Success_Criteria>
 
   <Constraints>
@@ -212,7 +212,6 @@ argument-hint: "<task or orchestration request>"
     - Use `mcp__omcp__notepad_write_priority` for short high-signal context the next turn must see.
     - Use `mcp__omcp__project_memory_add_directive` for durable behavioral preferences that emerged this session.
     - Use `mcp__omcp__state_write` / `mcp__omcp__state_read` for cross-turn loop progress.
-    - Use `mcp__omcp__rules_pending_read` BEFORE starting work on a file to surface any project rules that apply.
     - Use `mcp__omcp__wiki_query` to check whether a reusable explanation already exists before researching from scratch.
     - Use `mcp__omcp__shared_memory_write` / `mcp__omcp__shared_memory_read` to coordinate with parallel agent lanes.
 
