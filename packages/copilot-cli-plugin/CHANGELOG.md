@@ -6,6 +6,21 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+### Wave-P: rules and memory policy layer
+
+- Added a first-class OMCP rules engine (`rules-store.mjs`) that discovers
+  `.omcp/rules`, `.github/instructions`, `.github/copilot-instructions.md`,
+  `.cursor/rules`, `.claude/rules`, and user rules under
+  `~/.config/oh-my-copilot/rules`.
+- Added four MCP tools: `rules_context_for_file`, `rules_pending_read`,
+  `rules_pending_clear`, and `rules_policy_report`. MCP tool count is now 39.
+- Added `omcp://rules/pending` and `omcp://rules/policy-report` resources.
+- Extended `postToolUse` auditing to capture pending rule context for
+  file-touch tools without assuming hook output can mutate model context.
+- Documented the memory/rules policy: rules are long-lived constraints; project
+  memory stores durable facts/directives; notepad stores active context; wiki
+  stores reviewable knowledge; shared memory stores inter-agent coordination.
+
 ### Wave-O: README polish + one more outdated archive
 
 - **Root `README.md` rewritten** for human readability. Length cut 210 → ~110 lines. Lead now opens with what the plugin gives you and how to install, not with v1-blueprint governance language. Removed: `## V1 scope` (22-bullet includes/excludes list), `## Reading path` (8-step walkthrough redundant with the docs map), `## Status` (date stamp not load-bearing), most of `## Verification` (consolidated to 4 lines + pointer), `## Hook and log policy` (moved entirely to `docs/hook-surface.md` territory; one-line summary removed from front README), most of `## Design principle` (compressed to a 3-line `## Project conventions` section that names the proof rule without expanding it). Kept: `## Plugin surface` table, install steps, "first commands to try" tutorial block, doc map, license.

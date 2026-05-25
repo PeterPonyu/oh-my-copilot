@@ -70,8 +70,26 @@ of the research repo into reusable Copilot CLI power surfaces.
 It is still intentionally bounded:
 
 - no tmux worker runtime
-- no separate memory subsystem
+- no separate runtime framework beyond Copilot CLI hooks and MCP
 - Copilot cloud agent, IDE integrations, and SDK runtimes are out of scope
+
+## Rules and memory policy
+
+OMCP treats skills as execution protocols, rules as long-lived constraints, and
+memory as classified project knowledge.
+
+Rules are discovered lazily from `.omcp/rules/`, `.github/instructions/`,
+`.github/copilot-instructions.md`, `.cursor/rules/`, `.claude/rules/`, and
+`~/.config/oh-my-copilot/rules/`. When a file-touch tool runs, the `postToolUse`
+hook records matched rules in `.omcp/state/rules-pending.json`; agents can read
+that context through `rules_pending_read` or the `omcp://rules/pending`
+resource. Unscoped reads return a redacted summary; pass the current
+`session_id` to read the full pending rule text for that session.
+
+Memory stays split by purpose: `.omcp/notepad.md` for active short-lived context,
+`.omcp/project-memory.json` for durable facts/directives, `.omcp/wiki/` for
+reviewable markdown knowledge, and `.omcp/shared-memory/` for inter-agent
+coordination.
 
 ## Suggested local test
 
@@ -131,4 +149,4 @@ audit across repositories.
 | Skills | 42 |
 | Slash commands | 41 |
 | Hook events | 4 |
-| MCP server tools | 35 |
+| MCP server tools | 39 |

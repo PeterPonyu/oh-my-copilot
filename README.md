@@ -1,12 +1,12 @@
 # oh-my-copilot
 
-A Copilot CLI-native power pack for GitHub Copilot CLI: 21 agents, 42 skills, 41 typed slash commands, 4 hook events, and a 35-tool MCP server — installed as a single plugin.
+A Copilot CLI-native power pack for GitHub Copilot CLI: 21 agents, 42 skills, 41 typed slash commands, 4 hook events, and a 39-tool MCP server — installed as a single plugin.
 
 ## What you get
 
 - **Typed slash commands** — `/omcp:autopilot`, `/omcp:ralph`, `/omcp:wiki`, `/omcp:cancel`, ... 41 user-invocable routes that the LLM can resolve at the `❯` prompt.
 - **Persistent state** — wiki, project memory, notepad, traces, shared memory, and pipeline state all live under `.omcp/` and survive across sessions.
-- **Real MCP server** — single 588 KB bundled file (`mcp-server/dist/server.mjs`); no `npm install` needed at install time.
+- **Real MCP server** — single ~616 KB bundled file (`mcp-server/dist/server.mjs`); no `npm install` needed at install time.
 - **Hooks for the 4 lifecycle events** Copilot CLI v1.0.43 exposes: `sessionStart`, `preToolUse`, `postToolUse`, `sessionEnd`.
 
 ## Install
@@ -34,7 +34,7 @@ For the full installation guide (prerequisites, bootstrap script, troubleshootin
 | Skills | 42 | autopilot, ralph, ralplan, team, deep-interview, wiki, cancel, ... |
 | Slash commands | 41 | every user-invocable skill has a typed `/omcp:<cmd>` route |
 | Hook events | 4 | `sessionStart`, `preToolUse`, `postToolUse`, `sessionEnd` — all 4 events Copilot CLI v1.0.43 exposes |
-| MCP server tools | 35 | state (6), notepad (6), plan (1), pipeline (2), project memory (4), trace (4), wiki (7), shared memory (5) |
+| MCP server tools | 39 | state (6), notepad (6), plan (1), pipeline (2), project memory (4), trace (4), wiki (7), shared memory (5), rules policy (4) |
 
 ## First commands to try
 

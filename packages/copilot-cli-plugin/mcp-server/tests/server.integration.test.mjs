@@ -112,7 +112,7 @@ function isError(resp) {
   return resp?.result?.isError === true;
 }
 
-test("integration: tools/list returns all 35 registered tools with valid schemas", async (t) => {
+test("integration: tools/list returns all 39 registered tools with valid schemas", async (t) => {
   const cwd = mkdtempSync(join(tmpdir(), "omcp-int-"));
   const client = new StdioClient(cwd);
   t.after(async () => {
@@ -122,7 +122,7 @@ test("integration: tools/list returns all 35 registered tools with valid schemas
 
   const resp = await client.send("tools/list");
   const tools = resp.result.tools;
-  assert.equal(tools.length, 35, `expected 35 tools, got ${tools.length}`);
+  assert.equal(tools.length, 39, `expected 39 tools, got ${tools.length}`);
 
   for (const tool of tools) {
     assert.ok(tool.name, "tool must have a name");
@@ -138,6 +138,7 @@ test("integration: tools/list returns all 35 registered tools with valid schemas
     "trace_write", "trace_summary", "trace_timeline", "trace_list_sessions",
     "wiki_add", "wiki_read", "wiki_list", "wiki_query", "wiki_delete", "wiki_ingest", "wiki_lint",
     "shared_memory_write", "shared_memory_read", "shared_memory_list", "shared_memory_delete", "shared_memory_cleanup",
+    "rules_context_for_file", "rules_pending_read", "rules_pending_clear", "rules_policy_report",
     "plan_list", "pipeline_record_transition", "pipeline_state",
   ];
   for (const name of required) {
@@ -463,9 +464,9 @@ test("integration: bundled dist/server.mjs is functional (Wave-K-b)", async (t) 
     rmSync(cwd, { recursive: true, force: true });
   });
 
-  // tools/list returns 35 tools
+  // tools/list returns all bundled tools
   const list = await client.send("tools/list");
-  assert.equal(list.result.tools.length, 35, "bundle exposes all 35 tools");
+  assert.equal(list.result.tools.length, 39, "bundle exposes all 39 tools");
 
   // Round-trip a write+read to verify dispatch + store I/O work in the bundle
   const w = await client.callTool("state_write", { key: "bundle-test", value: { ok: 1 } });
@@ -487,7 +488,7 @@ test("integration: bundled dist/server.mjs is functional (Wave-K-b)", async (t) 
 // non-Tool primitives + subscription delivery work over the actual MCP
 // JSON-RPC transport, not just at the handler function layer.
 
-test("integration: resources/list returns the four always-on singletons in a fresh workspace", async (t) => {
+test("integration: resources/list returns the always-on singletons in a fresh workspace", async (t) => {
   const cwd = mkdtempSync(join(tmpdir(), "omcp-int-"));
   const client = new StdioClient(cwd);
   t.after(async () => {
@@ -502,6 +503,8 @@ test("integration: resources/list returns the four always-on singletons in a fre
     "omcp://pipeline/state",
     "omcp://project-memory/directives",
     "omcp://project-memory/notes",
+    "omcp://rules/pending",
+    "omcp://rules/policy-report",
   ]);
 });
 

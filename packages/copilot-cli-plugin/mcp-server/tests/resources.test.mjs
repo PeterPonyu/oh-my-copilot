@@ -7,6 +7,7 @@ import { join } from "node:path";
 import { listResources, readResource } from "../resources.mjs";
 import { wikiAdd } from "../wiki-store.mjs";
 import { traceWrite } from "../trace-store.mjs";
+import { rulesContextForFile } from "../rules-store.mjs";
 
 const originalCwd = process.cwd();
 
@@ -27,14 +28,16 @@ test("listResources returns only the always-on singletons when nothing else exis
 
   const r = await listResources();
   // Always-on singletons: pipeline state, notepad, project-memory notes,
-  // project-memory directives. Wiki/traces/state are empty in a fresh
-  // workspace.
+  // project-memory directives, and rules policy resources. Wiki/traces/state
+  // are empty in a fresh workspace.
   const uris = r.resources.map((x) => x.uri).sort();
   assert.deepEqual(uris, [
     "omcp://notepad",
     "omcp://pipeline/state",
     "omcp://project-memory/directives",
     "omcp://project-memory/notes",
+    "omcp://rules/pending",
+    "omcp://rules/policy-report",
   ]);
 });
 
@@ -142,6 +145,31 @@ test("readResource on omcp://traces/<sid> defaults to timeline view", async (t) 
   const r = await readResource({ uri: "omcp://traces/tD" });
   const parsed = JSON.parse(r.contents[0].text);
   assert.ok(Array.isArray(parsed.events));
+});
+
+test("readResource returns pending rules and policy report singletons", async (t) => {
+  const dir = freshCwd();
+  t.after(() => teardown(dir));
+
+  await import("node:fs/promises").then(async ({ mkdir, writeFile }) => {
+    await writeFile("package.json", "{}\n", "utf8");
+    await mkdir(".omcp/rules", { recursive: true });
+    await writeFile("example.js", "console.log('x')\n", "utf8");
+    await writeFile(".omcp/rules/always.md", "---\nalwaysApply: true\n---\nUse the rule.\n", "utf8");
+  });
+  await rulesContextForFile({ path: "example.js", tool: "read", session_id: "res" });
+
+  const pending = await readResource({ uri: "omcp://rules/pending" });
+  const pendingJson = JSON.parse(pending.contents[0].text);
+  assert.equal(pendingJson.entries.length, 1);
+  assert.equal(pendingJson.entries[0].project_root, undefined);
+  assert.equal(pendingJson.entries[0].rules[0].content, undefined);
+  assert.equal(pendingJson.entries[0].rules[0].content_redacted, true);
+  assert.equal(pending.contents[0].mimeType, "application/json");
+
+  const report = await readResource({ uri: "omcp://rules/policy-report" });
+  const reportJson = JSON.parse(report.contents[0].text);
+  assert.match(reportJson.policy.rules, /Long-lived constraints/);
 });
 
 test("readResource rejects malformed uri", async (t) => {

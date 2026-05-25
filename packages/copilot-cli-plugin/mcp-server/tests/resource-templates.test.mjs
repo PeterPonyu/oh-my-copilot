@@ -54,7 +54,7 @@ test("descriptions reference how to discover the parameter values", () => {
   assert.match(trace.description, /trace_list_sessions/);
 });
 
-test("templates do NOT include the four always-on singletons", () => {
+test("templates do NOT include the always-on singletons", () => {
   const r = listResourceTemplates();
   const uris = r.resourceTemplates.map((t) => t.uriTemplate);
   for (const singleton of [
@@ -62,6 +62,8 @@ test("templates do NOT include the four always-on singletons", () => {
     "omcp://notepad",
     "omcp://project-memory/notes",
     "omcp://project-memory/directives",
+    "omcp://rules/pending",
+    "omcp://rules/policy-report",
   ]) {
     assert.ok(!uris.includes(singleton), `singleton ${singleton} should not be a template`);
   }

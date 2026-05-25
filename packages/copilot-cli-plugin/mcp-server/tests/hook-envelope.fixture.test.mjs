@@ -11,11 +11,13 @@ const HOOKS_DIR = resolve(REPO_ROOT, "packages/copilot-cli-plugin/scripts");
 const TRACES_FILE = resolve(REPO_ROOT, ".omcp/traces/default.jsonl");
 const EVENTS_FILE = resolve(REPO_ROOT, ".copilot-hooks/events.jsonl");
 const SESSION_LOG = resolve(REPO_ROOT, ".copilot-hooks/session.log");
+const TOOLS_LOG = resolve(REPO_ROOT, ".copilot-hooks/tools.log");
 
-function runHook(scriptName, stdin = "") {
+function runHook(scriptName, stdin = "", env = {}) {
   return new Promise((resolveFn, rejectFn) => {
     const proc = spawn("bash", [resolve(HOOKS_DIR, scriptName)], {
       cwd: REPO_ROOT,
+      env: { ...process.env, ...env },
       stdio: ["pipe", "pipe", "pipe"],
     });
     let stdout = "";
@@ -132,6 +134,28 @@ test("post-tool-audit on tool_failure envelope: writes trace with full schema, p
   // Trace was written within 10 seconds of test start
   const tsAge = Date.now() - Date.parse(entry.ts);
   assert.ok(tsAge >= 0 && tsAge < 10_000, `trace ts is fresh (age=${tsAge}ms)`);
+});
+
+test("post-tool-audit captures rules for nested tool_input.path envelopes", async () => {
+  const marker = `rules-path-${Date.now()}-${Math.random().toString(36).slice(2)}`;
+  const beforeTools = snapshotFile(TOOLS_LOG);
+  const envelope = JSON.stringify({
+    tool: "read",
+    exit_code: 0,
+    tool_input: { path: "scripts/run-validation.sh" },
+  });
+
+  const { code, stdout } = await runHook("post-tool-audit.sh", envelope, {
+    COPILOT_SESSION_ID: marker,
+  });
+  assert.equal(code, 0);
+  assert.equal(stdout.trim(), '{"continue":true}');
+
+  const afterTools = snapshotFile(TOOLS_LOG);
+  assert.ok(afterTools.lineCount > beforeTools.lineCount, "tools.log appended");
+  const appended = afterTools.raw.slice(beforeTools.raw.length);
+  assert.match(appended, /event=rulesPending/);
+  assert.match(appended, /scripts\/run-validation\.sh/);
 });
 
 test("post-tool-audit handles unknown envelope keys without crashing AND without writing spurious traces", async () => {
