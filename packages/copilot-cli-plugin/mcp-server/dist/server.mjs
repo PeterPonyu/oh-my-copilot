@@ -15483,11 +15483,20 @@ async function stateRead(key) {
   if (!existsSync(filePath)) {
     return { value: null, exists: false };
   }
+  let raw;
   try {
-    const raw = await readFile(filePath, "utf8");
+    raw = await readFile(filePath, "utf8");
+  } catch (err) {
+    process.stderr.write(`[state-store] warn: failed to read state file for key "${key}": ${err.message}
+`);
+    return { value: null, exists: false, corrupt: true, error: err.message };
+  }
+  try {
     return { value: JSON.parse(raw), exists: true };
-  } catch {
-    return { value: null, exists: false };
+  } catch (err) {
+    process.stderr.write(`[state-store] warn: corrupt JSON in state file for key "${key}": ${err.message}
+`);
+    return { value: null, exists: false, corrupt: true, error: `JSON parse error: ${err.message}` };
   }
 }
 async function stateWrite(key, value) {
@@ -15765,11 +15774,28 @@ async function planList() {
 import { readFile as readFile4, writeFile as writeFile3, mkdir as mkdir3, rename as rename3 } from "node:fs/promises";
 import { existsSync as existsSync4 } from "node:fs";
 import { resolve as resolve4, dirname as dirname2 } from "node:path";
-import { randomBytes as randomBytes3 } from "node:crypto";
+import { createHash, randomBytes as randomBytes3 } from "node:crypto";
 var NOTES_URI = "omcp://project-memory/notes";
 var DIRECTIVES_URI = "omcp://project-memory/directives";
 var MEMORY_FILE = ".omcp/project-memory.json";
 var SCHEMA_VERSION = 1;
+var DEDUP_RECENT_LIMIT = 10;
+var recentHashes = /* @__PURE__ */ new Map();
+function normalizeForHash(content) {
+  if (typeof content !== "string") return "";
+  return content.trim().replace(/\s+/g, " ").toLowerCase();
+}
+function hashContent(normalized) {
+  return createHash("sha256").update(normalized).digest("hex").slice(0, 16);
+}
+function rememberHash(hash, id) {
+  if (recentHashes.has(hash)) recentHashes.delete(hash);
+  recentHashes.set(hash, { id, ts: Date.now() });
+  while (recentHashes.size > DEDUP_RECENT_LIMIT) {
+    const oldestKey = recentHashes.keys().next().value;
+    recentHashes.delete(oldestKey);
+  }
+}
 function memoryPath() {
   return resolve4(process.cwd(), MEMORY_FILE);
 }
@@ -15853,6 +15879,18 @@ async function projectMemoryAddNote({ text, tags } = {}) {
   if (typeof text !== "string" || text.length === 0) {
     throw new Error("project_memory_add_note requires non-empty 'text'");
   }
+  const normalized = normalizeForHash(text);
+  const hash = hashContent(normalized);
+  if (recentHashes.has(hash)) {
+    const existing = recentHashes.get(hash);
+    rememberHash(hash, existing.id);
+    return {
+      ok: true,
+      status: "skip",
+      reason: "duplicate",
+      existing_id: existing.id
+    };
+  }
   const memory = await readMemory();
   memory._seq += 1;
   const note = {
@@ -15864,7 +15902,8 @@ async function projectMemoryAddNote({ text, tags } = {}) {
   memory.notes.push(note);
   await writeMemory(memory);
   emitResourceUpdate(NOTES_URI);
-  return { ok: true, note };
+  rememberHash(hash, note.id);
+  return { ok: true, status: "ok", note };
 }
 async function projectMemoryAddDirective({ text, scope = "permanent" } = {}) {
   if (typeof text !== "string" || text.length === 0) {
@@ -16017,9 +16056,10 @@ async function traceListSessions() {
 
 // wiki-store.mjs
 import { readFile as readFile6, writeFile as writeFile4, appendFile as appendFile3, mkdir as mkdir5, rename as rename4, unlink as unlink2, readdir as readdir4 } from "node:fs/promises";
-import { existsSync as existsSync6 } from "node:fs";
+import { existsSync as existsSync6, realpathSync } from "node:fs";
 import { resolve as resolve6, join as join4 } from "node:path";
 import { randomBytes as randomBytes4 } from "node:crypto";
+var MAX_INGEST_BYTES = 2 * 1024 * 1024;
 var WIKI_DIR = ".omcp/wiki";
 var INDEX_FILE = "_index.json";
 var LOG_FILE = "log.md";
@@ -16189,8 +16229,26 @@ async function wikiIngest({ path, slug, tags } = {}) {
   if (typeof path !== "string" || path.length === 0) {
     throw new Error("wiki_ingest requires 'path'");
   }
-  const absPath = resolve6(process.cwd(), path);
-  const body = await readFile6(absPath, "utf8");
+  const workspaceRoot = realpathSync(process.cwd());
+  const absPath = resolve6(workspaceRoot, path);
+  let realTarget;
+  try {
+    realTarget = realpathSync(absPath);
+  } catch {
+    throw new Error(`wiki_ingest: path does not exist or cannot be resolved: ${path}`);
+  }
+  if (!realTarget.startsWith(workspaceRoot + "/") && realTarget !== workspaceRoot) {
+    throw new Error(`wiki_ingest: path escapes workspace root: ${path}`);
+  }
+  const { stat: stat3 } = await import("node:fs/promises");
+  const info = await stat3(realTarget);
+  if (info.size > MAX_INGEST_BYTES) {
+    throw new Error(`wiki_ingest: file exceeds max size (${MAX_INGEST_BYTES} bytes): ${path}`);
+  }
+  const body = await readFile6(realTarget, "utf8");
+  if (body.includes("\0")) {
+    throw new Error(`wiki_ingest: file appears to be binary: ${path}`);
+  }
   const firstLine = body.split("\n", 1)[0]?.trim() ?? "";
   const title = firstLine.startsWith("# ") ? firstLine.slice(2).trim() : path;
   return wikiAdd({ title, body, tags, slug });
@@ -16413,7 +16471,7 @@ import { readFile as readFile8, writeFile as writeFile6, mkdir as mkdir7, readdi
 import { existsSync as existsSync8 } from "node:fs";
 import { resolve as resolve8, dirname as dirname3, join as join6, relative, sep, isAbsolute } from "node:path";
 import { homedir } from "node:os";
-import { createHash, randomBytes as randomBytes6 } from "node:crypto";
+import { createHash as createHash2, randomBytes as randomBytes6 } from "node:crypto";
 var SCHEMA_VERSION2 = 1;
 var PENDING_FILE = ".omcp/state/rules-pending.json";
 var DEDUPE_DIR = ".omcp/state/rules-injector";
@@ -16423,6 +16481,18 @@ var FILE_TOOL_NAMES = /* @__PURE__ */ new Set(["read", "write", "edit", "multied
 var MAX_RULE_CONTENT = 12e3;
 var MAX_PENDING_ENTRIES = 50;
 var RULES_PENDING_URI = "omcp://rules/pending";
+var REDACTION_PATTERNS = [
+  { name: "AWS_KEY", regex: /AKIA[0-9A-Z]{16}/g, replacement: "[REDACTED:AWS_KEY]" },
+  { name: "GH_TOKEN", regex: /ghp_[A-Za-z0-9]{36,}/g, replacement: "[REDACTED:GH_TOKEN]" },
+  { name: "ANTHROPIC_KEY", regex: /sk-ant-[A-Za-z0-9_-]{20,}/g, replacement: "[REDACTED:ANTHROPIC_KEY]" },
+  { name: "OPENAI_KEY", regex: /sk-(?:proj-)?[A-Za-z0-9_-]{20,}/g, replacement: "[REDACTED:OPENAI_KEY]" },
+  { name: "BEARER", regex: /Bearer [A-Za-z0-9_.~+/=-]{20,}/g, replacement: "Bearer [REDACTED]" },
+  { name: "KV_SECRET", regex: /\b(password|secret|token|api[_-]?key)\s*[:=]\s*['"]?[A-Za-z0-9_.+/=-]{20,}/gi, replacement: "$1=[REDACTED]" }
+];
+function redactSecrets(text) {
+  if (typeof text !== "string") return text;
+  return REDACTION_PATTERNS.reduce((acc, p) => acc.replace(p.regex, p.replacement), text);
+}
 var PROJECT_RULE_SOURCES = [
   { label: "omcp-rules", dirParts: [".omcp", "rules"], extensions: RULE_EXTENSIONS },
   { label: "github-instructions", dirParts: [".github", "instructions"], extensions: [".instructions.md"] },
@@ -16606,7 +16676,7 @@ function parseFrontmatter(raw) {
   return { metadata, body };
 }
 function contentHash(content) {
-  return createHash("sha256").update(content).digest("hex").slice(0, 16);
+  return createHash2("sha256").update(content).digest("hex").slice(0, 16);
 }
 function shouldApplyRule(metadata, touchedPath, projectRoot, alwaysApply) {
   if (alwaysApply || metadata.alwaysApply === true) {
@@ -16708,7 +16778,11 @@ async function writePending(pending) {
 }
 async function appendPending(entry) {
   const pending = await readPending();
-  pending.entries.push(entry);
+  const sanitized = {
+    ...entry,
+    rules: Array.isArray(entry.rules) ? entry.rules.map((rule) => ({ ...rule, content: redactSecrets(rule.content) })) : entry.rules
+  };
+  pending.entries.push(sanitized);
   await writePending(pending);
 }
 function formatRuleContent(content) {
@@ -16808,6 +16882,11 @@ async function rulesPendingRead(args = {}) {
         content_redacted: true
       }))
     }));
+  } else {
+    entries = entries.map((entry) => ({
+      ...entry,
+      rules: Array.isArray(entry.rules) ? entry.rules.map((rule) => ({ ...rule, content: redactSecrets(rule.content) })) : entry.rules
+    }));
   }
   return { version: pending.version, updated_at: pending.updated_at, entries };
 }
@@ -16865,6 +16944,7 @@ import { readFileSync, writeFileSync, renameSync, mkdirSync, existsSync as exist
 import { join as join7 } from "node:path";
 import { randomBytes as randomBytes7 } from "node:crypto";
 var PIPELINE_FILE = "pipeline-state.json";
+var VALID_STAGES = /* @__PURE__ */ new Set(["spec", "plan", "artifact"]);
 function readStage(stateDir2 = ".omcp/state") {
   const dest = join7(stateDir2, PIPELINE_FILE);
   if (!existsSync9(dest)) {
@@ -16882,13 +16962,20 @@ function readStage(stateDir2 = ".omcp/state") {
   }
 }
 function transitionRecord({ from, to, artifact, stateDir: stateDir2 = ".omcp/state" }) {
+  if (!VALID_STAGES.has(to)) {
+    throw new Error(`pipeline_record_transition: invalid stage "${to}"; must be one of: spec, plan, artifact`);
+  }
+  const normalizedFrom = from === "null" || from === "" ? null : from;
+  if (normalizedFrom !== null && !VALID_STAGES.has(normalizedFrom)) {
+    throw new Error(`pipeline_record_transition: invalid from stage "${from}"; must be null or one of: spec, plan, artifact`);
+  }
   if (!existsSync9(stateDir2)) {
     mkdirSync(stateDir2, { recursive: true });
   }
   const dest = join7(stateDir2, PIPELINE_FILE);
   const state = readStage(stateDir2);
   const ts = (/* @__PURE__ */ new Date()).toISOString();
-  state.transitions.push({ from, to, ts });
+  state.transitions.push({ from: normalizedFrom, to, ts });
   const existingIdx = state.stages.findIndex((s) => s.name === to);
   const stageEntry = { name: to, status: "completed", artifact, ts };
   if (existingIdx >= 0) {
