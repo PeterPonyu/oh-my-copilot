@@ -7,8 +7,18 @@ set -euo pipefail
 REPO_ROOT="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
 cd "$REPO_ROOT"
 
-# shellcheck source=../../../.copilot-hooks/common.sh
-source .copilot-hooks/common.sh
+# Source common.sh: prefer workspace-local copy; fall back to plugin-bundled copy.
+_SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+if [[ -f ".copilot-hooks/common.sh" ]]; then
+  # shellcheck source=../../../.copilot-hooks/common.sh
+  source .copilot-hooks/common.sh
+elif [[ -f "${_SCRIPT_DIR}/common.sh" ]]; then
+  # shellcheck source=./common.sh
+  source "${_SCRIPT_DIR}/common.sh"
+else
+  echo "warn: common.sh not found in workspace .copilot-hooks/ or plugin scripts/; skipping session-start hook" >&2
+  exit 0
+fi
 
 copilot_hook_init_config "plugin"
 copilot_hook_log_event "sessionStart" "plugin"

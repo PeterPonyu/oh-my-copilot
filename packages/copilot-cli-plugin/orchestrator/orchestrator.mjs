@@ -19,6 +19,7 @@ import { emitResourceUpdate } from '../mcp-server/events.mjs';
 const PIPELINE_FILE = 'pipeline-state.json';
 
 const STAGE_ORDER = [null, 'spec', 'plan', 'artifact', null];
+const VALID_STAGES = new Set(['spec', 'plan', 'artifact']);
 
 /**
  * Read the current pipeline state from disk.
@@ -60,6 +61,13 @@ export function nextStage(currentStage) {
  * @param {{ from: string|null, to: string, artifact: string, stateDir?: string }} opts
  */
 export function transitionRecord({ from, to, artifact, stateDir = '.omcp/state' }) {
+  if (!VALID_STAGES.has(to)) {
+    throw new Error(`pipeline_record_transition: invalid stage "${to}"; must be one of: spec, plan, artifact`);
+  }
+  const normalizedFrom = from === 'null' || from === '' ? null : from;
+  if (normalizedFrom !== null && !VALID_STAGES.has(normalizedFrom)) {
+    throw new Error(`pipeline_record_transition: invalid from stage "${from}"; must be null or one of: spec, plan, artifact`);
+  }
   // Ensure directory exists
   if (!existsSync(stateDir)) {
     mkdirSync(stateDir, { recursive: true });
@@ -71,7 +79,7 @@ export function transitionRecord({ from, to, artifact, stateDir = '.omcp/state' 
   const ts = new Date().toISOString();
 
   // Append transition entry
-  state.transitions.push({ from, to, ts });
+  state.transitions.push({ from: normalizedFrom, to, ts });
 
   // Upsert into stages[] — update if name matches, otherwise append
   const existingIdx = state.stages.findIndex((s) => s.name === to);
