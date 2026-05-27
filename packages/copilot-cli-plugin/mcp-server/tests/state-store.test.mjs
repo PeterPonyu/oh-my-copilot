@@ -175,3 +175,29 @@ test("stateListActive returns empty list when state dir does not exist", async (
   const { active } = await stateListActive();
   assert.deepEqual(active, []);
 });
+
+// #72: corrupt JSON must be distinguished from missing state
+test("stateRead returns corrupt:true for JSON parse error, not silent exists:false", async (t) => {
+  const dir = freshCwd();
+  t.after(() => teardown(dir));
+
+  // Write valid state first, then corrupt it
+  await stateWrite("my-key", { active: true });
+  const { writeFileSync } = await import("node:fs");
+  const { join } = await import("node:path");
+  writeFileSync(join(dir, ".omcp", "state", "my-key.json"), "{bad json", "utf8");
+
+  const result = await stateRead("my-key");
+  assert.equal(result.exists, false, "exists should be false for corrupt file");
+  assert.equal(result.corrupt, true, "corrupt flag must be set to distinguish from missing");
+  assert.ok(typeof result.error === "string" && result.error.length > 0, "error message must be present");
+});
+
+test("stateRead returns exists:false (no corrupt flag) for genuinely missing key", async (t) => {
+  const dir = freshCwd();
+  t.after(() => teardown(dir));
+
+  const result = await stateRead("nonexistent");
+  assert.equal(result.exists, false);
+  assert.equal(result.corrupt, undefined, "no corrupt flag on missing file");
+});

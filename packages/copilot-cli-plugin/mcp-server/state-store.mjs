@@ -29,11 +29,18 @@ export async function stateRead(key) {
   if (!existsSync(filePath)) {
     return { value: null, exists: false };
   }
+  let raw;
   try {
-    const raw = await readFile(filePath, "utf8");
+    raw = await readFile(filePath, "utf8");
+  } catch (err) {
+    process.stderr.write(`[state-store] warn: failed to read state file for key "${key}": ${err.message}\n`);
+    return { value: null, exists: false, corrupt: true, error: err.message };
+  }
+  try {
     return { value: JSON.parse(raw), exists: true };
-  } catch {
-    return { value: null, exists: false };
+  } catch (err) {
+    process.stderr.write(`[state-store] warn: corrupt JSON in state file for key "${key}": ${err.message}\n`);
+    return { value: null, exists: false, corrupt: true, error: `JSON parse error: ${err.message}` };
   }
 }
 
