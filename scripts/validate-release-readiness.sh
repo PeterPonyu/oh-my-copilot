@@ -123,12 +123,49 @@ PY
 (cd "$ROOT" && ./scripts/validate-doc-links.sh)
 (cd "$ROOT" && ./scripts/check-mirror-drift.sh)
 (cd "$ROOT" && node scripts/validate-plugin-orchestration.mjs)
+# #75: assert README surface counts match live plugin inventory
+(cd "$ROOT" && node scripts/validate-readme-counts.mjs)
 (cd "$ROOT" && ./packages/copilot-cli-plugin/skills/parity-guard/check-parity-claims.sh .)
 (cd "$ROOT" && ./scripts/validate-power-surfaces.sh)
 (cd "$ROOT" && ./scripts/validate-root-copilot-surfaces.sh)
 (cd "$ROOT" && ./scripts/validate-copilot-state-contract.sh)
 (cd "$ROOT" && ./scripts/validate-benchmark-evidence.sh)
 (cd "$ROOT" && node ./scripts/validate-cross-host-benchmark-data.mjs --app-root ./apps/cross-host-benchmark-site)
+
+# #74: deterministic plugin agent route check (no model calls required).
+# Verifies that root and plugin agent .agent.md files contain a dispatch route
+# covering at least one root agent and one namespaced plugin agent flow.
+(cd "$ROOT" && node - <<'AGENT_ROUTE_CHECK'
+import { existsSync, readFileSync, readdirSync } from "node:fs";
+import { join, resolve, dirname } from "node:path";
+import { fileURLToPath } from "node:url";
+const ROOT = resolve(".");
+const AGENTS_DIR = join(ROOT, "packages", "copilot-cli-plugin", "agents");
+const ROOT_AGENTS_DIR = join(ROOT, ".github", "agents");
+function fail(msg) { process.stderr.write("FAIL: " + msg + "\n"); process.exit(1); }
+function log(msg) { process.stdout.write("ok: " + msg + "\n"); }
+// Root agents: at least reviewer must exist and have non-empty body
+for (const name of ["reviewer"]) {
+  const p = join(ROOT_AGENTS_DIR, `${name}.agent.md`);
+  if (!existsSync(p)) fail(`missing root agent: .github/agents/${name}.agent.md`);
+  const body = readFileSync(p, "utf8").trim();
+  if (body.length === 0) fail(`root agent ${name}.agent.md has empty body`);
+  log(`root agent route present: ${name}`);
+}
+// Plugin agents: at least one .agent.md must exist with non-empty body
+if (!existsSync(AGENTS_DIR)) fail("plugin agents directory missing");
+const agentFiles = readdirSync(AGENTS_DIR).filter(f => f.endsWith(".agent.md"));
+if (agentFiles.length === 0) fail("no plugin agent .agent.md files found");
+let withBody = 0;
+for (const f of agentFiles) {
+  const body = readFileSync(join(AGENTS_DIR, f), "utf8").trim();
+  if (body.length > 0) withBody++;
+}
+if (withBody === 0) fail("all plugin agent .agent.md files have empty bodies");
+log(`plugin agent routes present: ${withBody}/${agentFiles.length} with non-empty body`);
+log("deterministic agent route dispatch check passed (no model calls)");
+AGENT_ROUTE_CHECK
+)
 
 if [[ "$RUN_COPILOT_SMOKE" == "1" ]]; then
   if command -v copilot >/dev/null 2>&1; then
