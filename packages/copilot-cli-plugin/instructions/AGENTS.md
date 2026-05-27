@@ -9,7 +9,8 @@ the reusable plugin package.
 - Preserve the project boundary: `oh-my-copilot` is a Copilot CLI-native power
   pack; it is not a runtime framework. Copilot cloud agent, IDE integrations,
   and SDK runtimes are out of scope. The plugin currently delivers reusable
-  agents, skills, slash commands, hooks, and an MCP server.
+  agents, skills, slash commands, hooks, MCP server, and rules/memory policy
+  surfaces.
 - Treat `packages/copilot-cli-plugin/` as the canonical source for mirrored root
   Copilot Markdown assets: agents, skills, prompts generated from commands, and
   instruction files.
@@ -27,6 +28,7 @@ the reusable plugin package.
 | Root instructions | `packages/copilot-cli-plugin/instructions/` | Mirrored to root `AGENTS.md` and `.github/instructions/`. |
 | Agents, skills, commands/prompts | `packages/copilot-cli-plugin/` | Mirrored into root `.github/` by `scripts/regenerate-github-mirror.sh`. |
 | Hooks and MCP | `packages/copilot-cli-plugin/` for plugin behavior; root scripts for root evidence | Keep installed-plugin and root evidence distinct. |
+| Rules and memory policy | `packages/copilot-cli-plugin/mcp-server/`, `packages/copilot-cli-plugin/instructions/` | Rules are lazy pending context; memory is split across notepad, project memory, wiki, and shared memory. |
 | VS Code and CLI examples | `examples/` | Smoke-test and documentation examples, not hidden root dependencies. |
 | Docs/research claims | `README.md`, `docs/`, `research/` | Separate evidence from inference and avoid overclaiming. |
 
@@ -44,6 +46,10 @@ the reusable plugin package.
   comparison-scoped.
 - When editing shell scripts, use `set -euo pipefail`, quote variables, and keep
   commands runnable from the repository root.
+- Treat skills as execution protocols, rules as long-lived constraints, and
+  memory as classified project knowledge. Do not mix durable facts, temporary
+  scratchpad notes, wiki pages, and shared-agent coordination messages into one
+  store.
 
 ## Verification
 

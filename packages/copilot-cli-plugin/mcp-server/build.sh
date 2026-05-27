@@ -9,22 +9,29 @@
 #   1. Install dev dependencies (esbuild + the MCP SDK) if node_modules is
 #      stale. Idempotent via package-lock.json checksum.
 #   2. Run esbuild to produce dist/server.mjs (single-file ESM bundle that
-#      inlines the SDK + all stores). ~590KB.
+#      inlines the SDK + all stores). ~616KB.
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cd "$SCRIPT_DIR"
 
-LOCK_FILE="package-lock.json"
 CHECKSUM_FILE=".build-checksum"
 NODE_MODULES="node_modules"
 BUNDLE="dist/server.mjs"
 
-# Compute checksum of package-lock.json if it exists
-current_checksum=""
-if [ -f "$LOCK_FILE" ]; then
-  current_checksum="$(sha256sum "$LOCK_FILE" | awk '{print $1}')"
-fi
+# Compute a checksum for dependencies and bundled sources. This keeps the
+# idempotent build fast while still rebuilding when server/store code changes.
+current_checksum="$(
+  {
+    [ -f package-lock.json ] && sha256sum package-lock.json
+    find . ../orchestrator \
+      -path ./node_modules -prune -o \
+      -path ./dist -prune -o \
+      -name "*.mjs" -type f -print0 \
+      | sort -z \
+      | xargs -0 sha256sum
+  } | sha256sum | awk '{print $1}'
+)"
 
 # Idempotency: skip npm install if node_modules + bundle present and unchanged
 if [ -d "$NODE_MODULES" ] && [ -f "$CHECKSUM_FILE" ] && [ -f "$BUNDLE" ]; then
@@ -48,8 +55,6 @@ npx esbuild server.mjs \
   --outfile="$BUNDLE"
 chmod +x "$BUNDLE"
 
-if [ -f "$LOCK_FILE" ]; then
-  sha256sum "$LOCK_FILE" | awk '{print $1}' > "$CHECKSUM_FILE"
-fi
+printf '%s\n' "$current_checksum" > "$CHECKSUM_FILE"
 
 echo "oh-my-copilot-mcp-server: build complete ($(du -h "$BUNDLE" | cut -f1))"

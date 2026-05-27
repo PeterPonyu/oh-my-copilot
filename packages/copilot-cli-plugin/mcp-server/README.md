@@ -21,6 +21,10 @@ The script is idempotent — it skips `npm install` if `node_modules/` is alread
 | `state_list` | `() → { keys: string[] }` | List all state keys | `.omcp/state/` |
 | `notepad_read` | `(tail?: number) → { content: string }` | Read notepad, optionally last N lines | `.omcp/notepad.md` |
 | `notepad_write` | `(entry: string, priority?: "manual"\|"working"\|"priority") → { ok: bool }` | Append timestamped entry | `.omcp/notepad.md` |
+| `rules_context_for_file` | `(path: string, tool?: string, session_id?: string) → { matched: number, entry: object }` | Discover and capture pending rule context for a touched file | `.omcp/state/rules-pending.json` |
+| `rules_pending_read` | `(session_id?: string, limit?: number) → { entries: object[] }` | Read captured pending rule context; unscoped reads redact rule bodies and project roots | `.omcp/state/rules-pending.json` |
+| `rules_pending_clear` | `(session_id?: string) → { ok: bool, removed: number }` | Clear captured pending rule context | `.omcp/state/rules-pending.json` |
+| `rules_policy_report` | `(path?: string) → { policy: object }` | Explain OMCP rules/memory ownership and discovered rule counts | `.omcp/state/`, rule source dirs |
 | `plan_list` | `() → { plans: { path: string, slug: string, title: string }[] }` | Enumerate plan files | `.omcp/plans/` |
 
 Tools appear in the MCP namespace as `mcp__omcp__<tool_name>`.
@@ -32,6 +36,8 @@ All paths are workspace-relative (relative to `process.cwd()` when the server st
 | Path | Used by |
 |---|---|
 | `.omcp/state/` | `state_read`, `state_write`, `state_list` |
+| `.omcp/state/rules-pending.json` | `rules_context_for_file`, `rules_pending_read`, `rules_pending_clear` |
+| `.omcp/rules/` | Project-local rule files discovered by `rules_context_for_file` |
 | `.omcp/notepad.md` | `notepad_read`, `notepad_write` |
 | `.omcp/plans/` | `plan_list` |
 
@@ -48,6 +54,7 @@ Per ADR-1 of the post-Wave-B consolidation plan, the storage primitives have exp
 | `project_memory_*` | read, write, add_note, add_directive | Atomic via temp+rename | Single-writer-per-workspace assumed |
 | `wiki_*` | add, read, list, query, delete, ingest, lint | Atomic via temp+rename for index; direct write for body files | Single-writer-per-workspace assumed |
 | `shared_memory_*` | write, read, list, delete, cleanup | Per-call FS-atomic for entries ≤4KB on Linux; `_meta.json` updated atomically via temp+rename | **Multi-reader, multi-writer.** Last-write-wins for `_meta.json`. Per-entry interleaving possible if `Buffer.byteLength(JSON.stringify(event) + "\n", "utf8") > 4096`. |
+| `rules_*` | context_for_file, pending_read, pending_clear, policy_report | Atomic via temp+rename for pending and dedupe JSON | Single-writer-per-workspace assumed; duplicate suppression is best-effort per session |
 
 ### Why 4KB
 

@@ -6,6 +6,38 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+### Wave-Q: expose existing agents as skills (`build-fix`, `git-master`)
+
+- Added `/omcp:build-fix` skill + command that delegates to the `debugger` and
+  `verifier` agents to clear build/typecheck/compile errors with the smallest
+  possible diff. No refactor, no architectural changes; stops on every red →
+  green hop.
+- Added `/omcp:git-master` skill + command that delegates to the existing
+  `git-master` agent for atomic commits, style-matched messages, and safe
+  rebases. Includes hard guards against `--no-verify`, force-push to
+  `main`/`master`, and destructive operations without confirmation.
+- Both skills wrap agents that already existed in `packages/copilot-cli-plugin/agents/`
+  but had no slash-command surface. Patterns inspired by oh-my-codex
+  (`build-fix`) and oh-my-claudecode (`git-master`) translated for the
+  Copilot CLI execution model.
+- Skill count is now 44, slash-command count is now 43. Root `.github` mirror
+  regenerated. Plugin orchestration validates; no mirror drift.
+
+### Wave-P: rules and memory policy layer
+
+- Added a first-class OMCP rules engine (`rules-store.mjs`) that discovers
+  `.omcp/rules`, `.github/instructions`, `.github/copilot-instructions.md`,
+  `.cursor/rules`, `.claude/rules`, and user rules under
+  `~/.config/oh-my-copilot/rules`.
+- Added four MCP tools: `rules_context_for_file`, `rules_pending_read`,
+  `rules_pending_clear`, and `rules_policy_report`. MCP tool count is now 39.
+- Added `omcp://rules/pending` and `omcp://rules/policy-report` resources.
+- Extended `postToolUse` auditing to capture pending rule context for
+  file-touch tools without assuming hook output can mutate model context.
+- Documented the memory/rules policy: rules are long-lived constraints; project
+  memory stores durable facts/directives; notepad stores active context; wiki
+  stores reviewable knowledge; shared memory stores inter-agent coordination.
+
 ### Wave-O: README polish + one more outdated archive
 
 - **Root `README.md` rewritten** for human readability. Length cut 210 → ~110 lines. Lead now opens with what the plugin gives you and how to install, not with v1-blueprint governance language. Removed: `## V1 scope` (22-bullet includes/excludes list), `## Reading path` (8-step walkthrough redundant with the docs map), `## Status` (date stamp not load-bearing), most of `## Verification` (consolidated to 4 lines + pointer), `## Hook and log policy` (moved entirely to `docs/hook-surface.md` territory; one-line summary removed from front README), most of `## Design principle` (compressed to a 3-line `## Project conventions` section that names the proof rule without expanding it). Kept: `## Plugin surface` table, install steps, "first commands to try" tutorial block, doc map, license.

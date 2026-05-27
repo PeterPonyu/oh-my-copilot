@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { mkdtempSync, rmSync } from "node:fs";
+import { mkdtempSync, rmSync, mkdirSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 
@@ -23,6 +23,7 @@ import {
 } from "../project-memory-store.mjs";
 import { wikiAdd, wikiDelete } from "../wiki-store.mjs";
 import { traceWrite } from "../trace-store.mjs";
+import { rulesContextForFile, rulesPendingClear } from "../rules-store.mjs";
 
 const originalCwd = process.cwd();
 
@@ -383,15 +384,68 @@ test("projectMemoryAddDirective emits omcp://project-memory/directives (and not 
   assert.ok(!cap.events.includes("omcp://project-memory/notes"));
 });
 
-test("subscribe accepts all four new singleton URIs", async (t) => {
+test("subscribe accepts policy singleton URIs", async (t) => {
   const dir = freshCwd();
   t.after(() => teardown(dir));
   subscribeResource("omcp://notepad");
   subscribeResource("omcp://project-memory/notes");
   subscribeResource("omcp://project-memory/directives");
+  subscribeResource("omcp://rules/pending");
+  subscribeResource("omcp://rules/policy-report");
   assert.ok(isResourceSubscribed("omcp://notepad"));
   assert.ok(isResourceSubscribed("omcp://project-memory/notes"));
   assert.ok(isResourceSubscribed("omcp://project-memory/directives"));
+  assert.ok(isResourceSubscribed("omcp://rules/pending"));
+  assert.ok(isResourceSubscribed("omcp://rules/policy-report"));
+});
+
+test("rulesContextForFile emits omcp://rules/pending when pending context changes", async (t) => {
+  const dir = freshCwd();
+  const cap = captureEvents();
+  t.after(() => {
+    cap.stop();
+    teardown(dir);
+  });
+
+  writeFileSync(join(dir, "package.json"), "{}\n", "utf8");
+  writeFileSync(join(dir, "index.js"), "console.log('x')\n", "utf8");
+  mkdirSync(join(dir, ".omcp", "rules"), { recursive: true });
+  writeFileSync(
+    join(dir, ".omcp", "rules", "always.md"),
+    "---\nalwaysApply: true\n---\nUse the local rule.\n",
+    "utf8",
+  );
+
+  await rulesContextForFile({ path: "index.js", tool: "read", session_id: "rules-sub" });
+  await cap.wait();
+  assert.ok(
+    cap.events.includes("omcp://rules/pending"),
+    `expected omcp://rules/pending in events, got: ${JSON.stringify(cap.events)}`
+  );
+});
+
+test("rulesPendingClear emits omcp://rules/pending when clearing context", async (t) => {
+  const dir = freshCwd();
+  t.after(() => teardown(dir));
+
+  writeFileSync(join(dir, "package.json"), "{}\n", "utf8");
+  writeFileSync(join(dir, "index.js"), "console.log('x')\n", "utf8");
+  mkdirSync(join(dir, ".omcp", "rules"), { recursive: true });
+  writeFileSync(
+    join(dir, ".omcp", "rules", "always.md"),
+    "---\nalwaysApply: true\n---\nUse the local rule.\n",
+    "utf8",
+  );
+  await rulesContextForFile({ path: "index.js", tool: "read", session_id: "rules-clear" });
+
+  const cap = captureEvents();
+  t.after(() => cap.stop());
+  await rulesPendingClear({ session_id: "rules-clear" });
+  await cap.wait();
+  assert.ok(
+    cap.events.includes("omcp://rules/pending"),
+    `expected clear to emit omcp://rules/pending, got: ${JSON.stringify(cap.events)}`
+  );
 });
 
 // --- wiki emission -----------------------------------------------------

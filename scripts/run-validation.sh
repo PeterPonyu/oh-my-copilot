@@ -255,9 +255,9 @@ shell_check "plugin-version" \
 
 # 2. Tool count
 shell_check "tools-list-count" \
-  "Wave B-1..B-6: MCP server registers 35 tools." \
+  "Wave B-1..B-6 + rules policy: MCP server registers 39 tools." \
   "echo '{\"jsonrpc\":\"2.0\",\"id\":1,\"method\":\"tools/list\"}' | node $SERVER_MJS 2>&1 | head -1 | node -e 'let d=\"\"; process.stdin.on(\"data\",c=>d+=c); process.stdin.on(\"end\",()=>{const j=JSON.parse(d.trim()); console.log(j.result.tools.length)})'" \
-  "^35$"
+  "^39$"
 
 # 3-9. Per-store round-trips
 mcp_check "state-write-key-form" \

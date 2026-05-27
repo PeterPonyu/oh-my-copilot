@@ -2980,7 +2980,7 @@ var require_compile = __commonJS({
       const schOrFunc = root.refs[ref];
       if (schOrFunc)
         return schOrFunc;
-      let _sch = resolve8.call(this, root, ref);
+      let _sch = resolve9.call(this, root, ref);
       if (_sch === void 0) {
         const schema = (_a3 = root.localRefs) === null || _a3 === void 0 ? void 0 : _a3[ref];
         const { schemaId } = this.opts;
@@ -3007,7 +3007,7 @@ var require_compile = __commonJS({
     function sameSchemaEnv(s1, s2) {
       return s1.schema === s2.schema && s1.root === s2.root && s1.baseId === s2.baseId;
     }
-    function resolve8(root, ref) {
+    function resolve9(root, ref) {
       let sch;
       while (typeof (sch = this.refs[ref]) == "string")
         ref = sch;
@@ -3638,55 +3638,55 @@ var require_fast_uri = __commonJS({
       }
       return uri;
     }
-    function resolve8(baseURI, relativeURI, options) {
+    function resolve9(baseURI, relativeURI, options) {
       const schemelessOptions = options ? Object.assign({ scheme: "null" }, options) : { scheme: "null" };
       const resolved = resolveComponent(parse3(baseURI, schemelessOptions), parse3(relativeURI, schemelessOptions), schemelessOptions, true);
       schemelessOptions.skipEscape = true;
       return serialize(resolved, schemelessOptions);
     }
-    function resolveComponent(base, relative, options, skipNormalization) {
+    function resolveComponent(base, relative2, options, skipNormalization) {
       const target = {};
       if (!skipNormalization) {
         base = parse3(serialize(base, options), options);
-        relative = parse3(serialize(relative, options), options);
+        relative2 = parse3(serialize(relative2, options), options);
       }
       options = options || {};
-      if (!options.tolerant && relative.scheme) {
-        target.scheme = relative.scheme;
-        target.userinfo = relative.userinfo;
-        target.host = relative.host;
-        target.port = relative.port;
-        target.path = removeDotSegments(relative.path || "");
-        target.query = relative.query;
+      if (!options.tolerant && relative2.scheme) {
+        target.scheme = relative2.scheme;
+        target.userinfo = relative2.userinfo;
+        target.host = relative2.host;
+        target.port = relative2.port;
+        target.path = removeDotSegments(relative2.path || "");
+        target.query = relative2.query;
       } else {
-        if (relative.userinfo !== void 0 || relative.host !== void 0 || relative.port !== void 0) {
-          target.userinfo = relative.userinfo;
-          target.host = relative.host;
-          target.port = relative.port;
-          target.path = removeDotSegments(relative.path || "");
-          target.query = relative.query;
+        if (relative2.userinfo !== void 0 || relative2.host !== void 0 || relative2.port !== void 0) {
+          target.userinfo = relative2.userinfo;
+          target.host = relative2.host;
+          target.port = relative2.port;
+          target.path = removeDotSegments(relative2.path || "");
+          target.query = relative2.query;
         } else {
-          if (!relative.path) {
+          if (!relative2.path) {
             target.path = base.path;
-            if (relative.query !== void 0) {
-              target.query = relative.query;
+            if (relative2.query !== void 0) {
+              target.query = relative2.query;
             } else {
               target.query = base.query;
             }
           } else {
-            if (relative.path[0] === "/") {
-              target.path = removeDotSegments(relative.path);
+            if (relative2.path[0] === "/") {
+              target.path = removeDotSegments(relative2.path);
             } else {
               if ((base.userinfo !== void 0 || base.host !== void 0 || base.port !== void 0) && !base.path) {
-                target.path = "/" + relative.path;
+                target.path = "/" + relative2.path;
               } else if (!base.path) {
-                target.path = relative.path;
+                target.path = relative2.path;
               } else {
-                target.path = base.path.slice(0, base.path.lastIndexOf("/") + 1) + relative.path;
+                target.path = base.path.slice(0, base.path.lastIndexOf("/") + 1) + relative2.path;
               }
               target.path = removeDotSegments(target.path);
             }
-            target.query = relative.query;
+            target.query = relative2.query;
           }
           target.userinfo = base.userinfo;
           target.host = base.host;
@@ -3694,7 +3694,7 @@ var require_fast_uri = __commonJS({
         }
         target.scheme = base.scheme;
       }
-      target.fragment = relative.fragment;
+      target.fragment = relative2.fragment;
       return target;
     }
     function equal(uriA, uriB, options) {
@@ -3896,7 +3896,7 @@ var require_fast_uri = __commonJS({
     var fastUri = {
       SCHEMES,
       normalize,
-      resolve: resolve8,
+      resolve: resolve9,
       resolveComponent,
       equal,
       serialize,
@@ -14203,7 +14203,7 @@ var Protocol = class {
           return;
         }
         const pollInterval = task2.pollInterval ?? this._options?.defaultTaskPollInterval ?? 1e3;
-        await new Promise((resolve8) => setTimeout(resolve8, pollInterval));
+        await new Promise((resolve9) => setTimeout(resolve9, pollInterval));
         options?.signal?.throwIfAborted();
       }
     } catch (error2) {
@@ -14220,7 +14220,7 @@ var Protocol = class {
    */
   request(request, resultSchema, options) {
     const { relatedRequestId, resumptionToken, onresumptiontoken, task, relatedTask } = options ?? {};
-    return new Promise((resolve8, reject) => {
+    return new Promise((resolve9, reject) => {
       const earlyReject = (error2) => {
         reject(error2);
       };
@@ -14298,7 +14298,7 @@ var Protocol = class {
           if (!parseResult.success) {
             reject(parseResult.error);
           } else {
-            resolve8(parseResult.data);
+            resolve9(parseResult.data);
           }
         } catch (error2) {
           reject(error2);
@@ -14559,12 +14559,12 @@ var Protocol = class {
       }
     } catch {
     }
-    return new Promise((resolve8, reject) => {
+    return new Promise((resolve9, reject) => {
       if (signal.aborted) {
         reject(new McpError(ErrorCode.InvalidRequest, "Request cancelled"));
         return;
       }
-      const timeoutId = setTimeout(resolve8, interval);
+      const timeoutId = setTimeout(resolve9, interval);
       signal.addEventListener("abort", () => {
         clearTimeout(timeoutId);
         reject(new McpError(ErrorCode.InvalidRequest, "Request cancelled"));
@@ -15434,12 +15434,12 @@ var StdioServerTransport = class {
     this.onclose?.();
   }
   send(message) {
-    return new Promise((resolve8) => {
+    return new Promise((resolve9) => {
       const json = serializeMessage(message);
       if (this._stdout.write(json)) {
-        resolve8();
+        resolve9();
       } else {
-        this._stdout.once("drain", resolve8);
+        this._stdout.once("drain", resolve9);
       }
     });
   }
@@ -16408,14 +16408,466 @@ async function sharedMemoryCleanup({ maxAgeDays = DEFAULT_MAX_AGE_DAYS2 } = {}) 
   return { ok: true, removed };
 }
 
+// rules-store.mjs
+import { readFile as readFile8, writeFile as writeFile6, mkdir as mkdir7, readdir as readdir6, realpath, stat as stat2, lstat, rm } from "node:fs/promises";
+import { existsSync as existsSync8 } from "node:fs";
+import { resolve as resolve8, dirname as dirname3, join as join6, relative, sep, isAbsolute } from "node:path";
+import { homedir } from "node:os";
+import { createHash, randomBytes as randomBytes6 } from "node:crypto";
+var SCHEMA_VERSION2 = 1;
+var PENDING_FILE = ".omcp/state/rules-pending.json";
+var DEDUPE_DIR = ".omcp/state/rules-injector";
+var RULE_EXTENSIONS = [".md", ".mdc"];
+var PROJECT_MARKERS = [".git", "package.json", "pyproject.toml", "Cargo.toml", "go.mod"];
+var FILE_TOOL_NAMES = /* @__PURE__ */ new Set(["read", "write", "edit", "multiedit", "replace", "create"]);
+var MAX_RULE_CONTENT = 12e3;
+var MAX_PENDING_ENTRIES = 50;
+var RULES_PENDING_URI = "omcp://rules/pending";
+var PROJECT_RULE_SOURCES = [
+  { label: "omcp-rules", dirParts: [".omcp", "rules"], extensions: RULE_EXTENSIONS },
+  { label: "github-instructions", dirParts: [".github", "instructions"], extensions: [".instructions.md"] },
+  { label: "cursor-rules", dirParts: [".cursor", "rules"], extensions: RULE_EXTENSIONS },
+  { label: "claude-rules", dirParts: [".claude", "rules"], extensions: RULE_EXTENSIONS }
+];
+var SINGLE_FILE_RULES = [
+  { label: "github-copilot-instructions", pathParts: [".github", "copilot-instructions.md"] }
+];
+function nowIso() {
+  return (/* @__PURE__ */ new Date()).toISOString();
+}
+function statePath(...parts) {
+  return resolve8(process.cwd(), ...parts);
+}
+function normalizeSessionId(sessionId) {
+  const raw = typeof sessionId === "string" && sessionId.trim() ? sessionId.trim() : "default";
+  return raw.replace(/[^a-zA-Z0-9._-]/g, "_").slice(0, 120) || "default";
+}
+async function atomicWriteJson(filePath, value) {
+  await mkdir7(dirname3(filePath), { recursive: true });
+  const tmp = `${filePath}.tmp.${randomBytes6(6).toString("hex")}`;
+  await writeFile6(tmp, JSON.stringify(value, null, 2), "utf8");
+  await import("node:fs/promises").then(({ rename: rename6 }) => rename6(tmp, filePath));
+}
+async function readJson(filePath, fallback) {
+  if (!existsSync8(filePath)) return fallback;
+  try {
+    return JSON.parse(await readFile8(filePath, "utf8"));
+  } catch {
+    return fallback;
+  }
+}
+async function findProjectRoot(startPath) {
+  let current = resolve8(startPath || process.cwd());
+  try {
+    const s = await stat2(current);
+    if (!s.isDirectory()) current = dirname3(current);
+  } catch {
+    current = dirname3(current);
+  }
+  while (true) {
+    for (const marker of PROJECT_MARKERS) {
+      if (existsSync8(join6(current, marker))) return current;
+    }
+    const parent = dirname3(current);
+    if (parent === current) return process.cwd();
+    current = parent;
+  }
+}
+function hasRuleExtension(fileName, extensions) {
+  return extensions.some((ext) => fileName.endsWith(ext));
+}
+async function walkRuleFiles(dir, extensions, out = []) {
+  if (!existsSync8(dir)) return out;
+  let entries = [];
+  try {
+    entries = await readdir6(dir, { withFileTypes: true });
+  } catch {
+    return out;
+  }
+  for (const entry of entries) {
+    const fullPath = join6(dir, entry.name);
+    if (entry.isDirectory()) {
+      await walkRuleFiles(fullPath, extensions, out);
+    } else if (entry.isFile() && hasRuleExtension(entry.name, extensions)) {
+      out.push(fullPath);
+    }
+  }
+  return out;
+}
+async function safeRealpath(filePath) {
+  try {
+    return await realpath(filePath);
+  } catch {
+    return filePath;
+  }
+}
+function isWithinPath(root, target) {
+  const rel = relative(root, target);
+  return rel === "" || !rel.startsWith(`..${sep}`) && rel !== ".." && !isAbsolute(rel);
+}
+async function isSymlink(filePath) {
+  try {
+    return (await lstat(filePath)).isSymbolicLink();
+  } catch {
+    return false;
+  }
+}
+async function startDirForTouchedPath(touchedPath) {
+  try {
+    const s = await stat2(touchedPath);
+    return s.isDirectory() ? touchedPath : dirname3(touchedPath);
+  } catch {
+    return dirname3(touchedPath);
+  }
+}
+async function resolveTouchedPathInWorkspace(filePath) {
+  const workspaceRoot = await findProjectRoot(process.cwd());
+  const workspaceRootReal = await safeRealpath(workspaceRoot);
+  const touchedPath = resolve8(process.cwd(), filePath || ".");
+  const touchedReal = await safeRealpath(touchedPath);
+  if (!isWithinPath(workspaceRootReal, touchedReal) && !isWithinPath(workspaceRoot, touchedPath)) {
+    throw new Error("rules_context_for_file path must stay within the current workspace");
+  }
+  return { workspaceRoot, touchedPath };
+}
+function normalizeForMatch(filePath) {
+  return filePath.split(sep).join("/");
+}
+function globToRegExp(glob) {
+  const normalized = String(glob || "").replace(/\\/g, "/");
+  let out = "";
+  for (let i = 0; i < normalized.length; i += 1) {
+    const ch = normalized[i];
+    const next = normalized[i + 1];
+    if (ch === "*" && next === "*") {
+      if (normalized[i + 2] === "/") {
+        out += "(?:.*/)?";
+        i += 2;
+      } else {
+        out += ".*";
+        i += 1;
+      }
+    } else if (ch === "*") {
+      out += "[^/]*";
+    } else if (ch === "?") {
+      out += "[^/]";
+    } else {
+      out += ch.replace(/[|\\{}()[\]^$+?.]/g, "\\$&");
+    }
+  }
+  return new RegExp(`^${out}$`);
+}
+function matchesGlob(pattern, filePath) {
+  return globToRegExp(pattern).test(normalizeForMatch(filePath));
+}
+function normalizePatternList(value) {
+  const raw = Array.isArray(value) ? value : [value];
+  return raw.flatMap((item) => String(item || "").split(",")).map((item) => item.trim().replace(/^['"]|['"]$/g, "")).filter(Boolean);
+}
+function parseScalar(value) {
+  const trimmed = String(value || "").trim();
+  if (trimmed === "true") return true;
+  if (trimmed === "false") return false;
+  if (trimmed.startsWith("[") && trimmed.endsWith("]")) {
+    return trimmed.slice(1, -1).split(",").map((item) => item.trim().replace(/^['"]|['"]$/g, "")).filter(Boolean);
+  }
+  return trimmed.replace(/^['"]|['"]$/g, "");
+}
+function parseFrontmatter(raw) {
+  if (!raw.startsWith("---\n")) {
+    return { metadata: {}, body: raw.trim() };
+  }
+  const end = raw.indexOf("\n---", 4);
+  if (end === -1) {
+    return { metadata: {}, body: raw.trim() };
+  }
+  const frontmatter = raw.slice(4, end).split("\n");
+  const body = raw.slice(end + 4).trim();
+  const metadata = {};
+  let activeListKey = null;
+  for (const line of frontmatter) {
+    const listMatch = /^-\s+(.+)$/.exec(line.trim());
+    if (listMatch && activeListKey) {
+      if (!Array.isArray(metadata[activeListKey])) metadata[activeListKey] = [];
+      metadata[activeListKey].push(parseScalar(listMatch[1]));
+      continue;
+    }
+    const match = /^([A-Za-z0-9_-]+):\s*(.*)$/.exec(line);
+    if (!match) continue;
+    const [, key, value] = match;
+    if (value === "") {
+      metadata[key] = [];
+      activeListKey = key;
+    } else {
+      metadata[key] = parseScalar(value);
+      activeListKey = null;
+    }
+  }
+  return { metadata, body };
+}
+function contentHash(content) {
+  return createHash("sha256").update(content).digest("hex").slice(0, 16);
+}
+function shouldApplyRule(metadata, touchedPath, projectRoot, alwaysApply) {
+  if (alwaysApply || metadata.alwaysApply === true) {
+    return { applies: true, reason: "alwaysApply" };
+  }
+  const patterns = normalizePatternList(metadata.globs ?? metadata.applyTo);
+  if (patterns.length === 0) return { applies: false };
+  const relativePath = normalizeForMatch(relative(projectRoot, touchedPath));
+  for (const pattern of patterns) {
+    if (typeof pattern === "string" && pattern && matchesGlob(pattern, relativePath)) {
+      return { applies: true, reason: `glob: ${pattern}` };
+    }
+  }
+  return { applies: false };
+}
+async function discoverRuleCandidates(projectRoot, touchedPath) {
+  const candidates = [];
+  const seen = /* @__PURE__ */ new Set();
+  const projectRootReal = await safeRealpath(projectRoot);
+  let currentDir = await startDirForTouchedPath(touchedPath);
+  let distance = 0;
+  while (true) {
+    for (const source of PROJECT_RULE_SOURCES) {
+      const ruleDir = join6(currentDir, ...source.dirParts);
+      if (await isSymlink(ruleDir)) continue;
+      const ruleDirReal = await safeRealpath(ruleDir);
+      if (!isWithinPath(projectRootReal, ruleDirReal)) continue;
+      const files = await walkRuleFiles(ruleDir, source.extensions);
+      for (const path of files) {
+        const realPath = await safeRealpath(path);
+        if (!isWithinPath(ruleDirReal, realPath)) continue;
+        if (seen.has(realPath)) continue;
+        seen.add(realPath);
+        candidates.push({ path, realPath, source: source.label, distance, user: false, singleFile: false });
+      }
+    }
+    if (currentDir === projectRoot) break;
+    const parent = dirname3(currentDir);
+    if (parent === currentDir) break;
+    currentDir = parent;
+    distance += 1;
+  }
+  for (const rule of SINGLE_FILE_RULES) {
+    const path = join6(projectRoot, ...rule.pathParts);
+    if (!existsSync8(path)) continue;
+    if (await isSymlink(path)) continue;
+    const baseDirReal = await safeRealpath(dirname3(path));
+    if (!isWithinPath(projectRootReal, baseDirReal)) continue;
+    const realPath = await safeRealpath(path);
+    if (!isWithinPath(baseDirReal, realPath)) continue;
+    if (seen.has(realPath)) continue;
+    seen.add(realPath);
+    candidates.push({ path, realPath, source: rule.label, distance: 0, user: false, singleFile: true });
+  }
+  const userDir = join6(homedir(), ".config", "oh-my-copilot", "rules");
+  const userDirReal = await safeRealpath(userDir);
+  const userFiles = await walkRuleFiles(userDir, RULE_EXTENSIONS);
+  for (const path of userFiles) {
+    const realPath = await safeRealpath(path);
+    if (!isWithinPath(userDirReal, realPath)) continue;
+    if (seen.has(realPath)) continue;
+    seen.add(realPath);
+    candidates.push({ path, realPath, source: "user-rules", distance: 9999, user: true, singleFile: false });
+  }
+  return candidates.sort((a, b) => a.distance - b.distance || a.path.localeCompare(b.path));
+}
+async function loadDedupe(sessionId) {
+  const filePath = statePath(DEDUPE_DIR, `${normalizeSessionId(sessionId)}.json`);
+  const parsed = await readJson(filePath, { realPaths: [], contentHashes: [] });
+  return {
+    filePath,
+    realPaths: new Set(Array.isArray(parsed.realPaths) ? parsed.realPaths : []),
+    contentHashes: new Set(Array.isArray(parsed.contentHashes) ? parsed.contentHashes : [])
+  };
+}
+async function saveDedupe(dedupe) {
+  await atomicWriteJson(dedupe.filePath, {
+    realPaths: [...dedupe.realPaths],
+    contentHashes: [...dedupe.contentHashes],
+    updated_at: nowIso()
+  });
+}
+function pendingEmpty() {
+  return { version: SCHEMA_VERSION2, updated_at: null, entries: [] };
+}
+async function readPending() {
+  const pending = await readJson(statePath(PENDING_FILE), pendingEmpty());
+  return {
+    version: pending.version ?? SCHEMA_VERSION2,
+    updated_at: pending.updated_at ?? null,
+    entries: Array.isArray(pending.entries) ? pending.entries : []
+  };
+}
+async function writePending(pending) {
+  pending.entries = pending.entries.slice(-MAX_PENDING_ENTRIES);
+  pending.updated_at = nowIso();
+  await atomicWriteJson(statePath(PENDING_FILE), pending);
+  emitResourceUpdate(RULES_PENDING_URI);
+}
+async function appendPending(entry) {
+  const pending = await readPending();
+  pending.entries.push(entry);
+  await writePending(pending);
+}
+function formatRuleContent(content) {
+  if (content.length <= MAX_RULE_CONTENT) return content;
+  return `${content.slice(0, MAX_RULE_CONTENT).trimEnd()}
+
+[truncated by OMCP rules policy]`;
+}
+async function matchedRulesForPath(filePath, { session_id, markInjected = true } = {}) {
+  const { workspaceRoot: projectRoot, touchedPath } = await resolveTouchedPathInWorkspace(filePath);
+  const candidates = await discoverRuleCandidates(projectRoot, touchedPath);
+  const dedupe = await loadDedupe(session_id);
+  const rules = [];
+  for (const candidate of candidates) {
+    if (markInjected && dedupe.realPaths.has(candidate.realPath)) continue;
+    let raw = "";
+    try {
+      raw = await readFile8(candidate.path, "utf8");
+    } catch {
+      continue;
+    }
+    const { metadata, body } = parseFrontmatter(raw);
+    const match = shouldApplyRule(metadata, touchedPath, projectRoot, candidate.singleFile);
+    if (!match.applies) continue;
+    const hash = contentHash(body);
+    if (markInjected && dedupe.contentHashes.has(hash)) continue;
+    const rel = candidate.user ? candidate.path.replace(homedir(), "~") : relative(projectRoot, candidate.path);
+    rules.push({
+      relativePath: normalizeForMatch(rel),
+      source: candidate.source,
+      matchReason: match.reason,
+      contentHash: hash,
+      content: formatRuleContent(body)
+    });
+    if (markInjected) {
+      dedupe.realPaths.add(candidate.realPath);
+      dedupe.contentHashes.add(hash);
+    }
+  }
+  if (markInjected && rules.length > 0) {
+    await saveDedupe(dedupe);
+  }
+  return { projectRoot, touchedPath, rules };
+}
+async function rulesContextForFile(args = {}) {
+  const filePath = args.filePath || args.path || args.file_path;
+  if (typeof filePath !== "string" || filePath.length === 0) {
+    throw new Error("rules_context_for_file requires 'path' or 'filePath'");
+  }
+  const tool = String(args.tool || args.toolName || args.tool_name || "read").toLowerCase();
+  if (args.requireFileTool !== false && !FILE_TOOL_NAMES.has(tool)) {
+    return { ok: true, matched: 0, skipped: true, reason: "tool does not trigger rule lookup" };
+  }
+  const sessionId = args.session_id || args.sessionId || "default";
+  const result = await matchedRulesForPath(filePath, {
+    session_id: sessionId,
+    markInjected: args.markPending !== false
+  });
+  const entry = {
+    id: `rules_${Date.now()}_${randomBytes6(3).toString("hex")}`,
+    ts: nowIso(),
+    session_id: normalizeSessionId(sessionId),
+    tool,
+    file_path: normalizeForMatch(relative(result.projectRoot, result.touchedPath)),
+    project_root: result.projectRoot,
+    rules: result.rules
+  };
+  if (args.markPending !== false && result.rules.length > 0) {
+    await appendPending(entry);
+  }
+  return { ok: true, matched: result.rules.length, entry };
+}
+async function rulesPendingRead(args = {}) {
+  const pending = await readPending();
+  let entries = pending.entries;
+  const sessionId = args.session_id || args.sessionId;
+  if (sessionId) {
+    const normalized = normalizeSessionId(sessionId);
+    entries = entries.filter((entry) => entry.session_id === normalized);
+  }
+  if (typeof args.limit === "number" && args.limit > 0) {
+    entries = entries.slice(-args.limit);
+  }
+  const includeContent = Boolean(sessionId);
+  if (!includeContent) {
+    entries = entries.map((entry) => ({
+      id: entry.id,
+      ts: entry.ts,
+      session_id: entry.session_id,
+      tool: entry.tool,
+      file_path: entry.file_path,
+      rules: (entry.rules || []).map((rule) => ({
+        relativePath: rule.relativePath,
+        source: rule.source,
+        matchReason: rule.matchReason,
+        contentHash: rule.contentHash,
+        content_redacted: true
+      }))
+    }));
+  }
+  return { version: pending.version, updated_at: pending.updated_at, entries };
+}
+async function rulesPendingClear(args = {}) {
+  const pending = await readPending();
+  const sessionId = args.session_id || args.sessionId;
+  if (!sessionId) {
+    await writePending(pendingEmpty());
+    return { ok: true, removed: pending.entries.length };
+  }
+  const normalized = normalizeSessionId(sessionId);
+  const kept = pending.entries.filter((entry) => entry.session_id !== normalized);
+  await writePending({ ...pending, entries: kept });
+  return { ok: true, removed: pending.entries.length - kept.length };
+}
+async function rulesPolicyReport(args = {}) {
+  const requestedPath = args.path || args.filePath;
+  const resolved = requestedPath ? await resolveTouchedPathInWorkspace(requestedPath) : { workspaceRoot: await findProjectRoot(process.cwd()), touchedPath: process.cwd() };
+  const reportPath = resolved.touchedPath;
+  const root = resolved.workspaceRoot;
+  const counts = {};
+  const discovered = await discoverRuleCandidates(root, reportPath);
+  for (const candidate of discovered) {
+    counts[candidate.source] = (counts[candidate.source] || 0) + 1;
+  }
+  const pending = await readPending();
+  return {
+    version: SCHEMA_VERSION2,
+    project_root: root,
+    rule_sources: {
+      project: PROJECT_RULE_SOURCES.map((source) => ({
+        label: source.label,
+        path: source.dirParts.join("/")
+      })),
+      single_files: SINGLE_FILE_RULES.map((rule) => ({
+        label: rule.label,
+        path: rule.pathParts.join("/")
+      })),
+      user: "~/.config/oh-my-copilot/rules"
+    },
+    discovered_counts: counts,
+    pending_entries: pending.entries.length,
+    policy: {
+      rules: "Long-lived constraints matched lazily by touched file path.",
+      projectMemory: ".omcp/project-memory.json stores durable facts, notes, and directives.",
+      notepad: ".omcp/notepad.md stores short-lived priority/working/manual context.",
+      wiki: ".omcp/wiki/ stores reviewable markdown knowledge queried by keyword/tag.",
+      sharedMemory: ".omcp/shared-memory/ stores cross-agent coordination messages."
+    }
+  };
+}
+
 // ../orchestrator/orchestrator.mjs
-import { readFileSync, writeFileSync, renameSync, mkdirSync, existsSync as existsSync8 } from "node:fs";
-import { join as join6 } from "node:path";
-import { randomBytes as randomBytes6 } from "node:crypto";
+import { readFileSync, writeFileSync, renameSync, mkdirSync, existsSync as existsSync9 } from "node:fs";
+import { join as join7 } from "node:path";
+import { randomBytes as randomBytes7 } from "node:crypto";
 var PIPELINE_FILE = "pipeline-state.json";
 function readStage(stateDir2 = ".omcp/state") {
-  const dest = join6(stateDir2, PIPELINE_FILE);
-  if (!existsSync8(dest)) {
+  const dest = join7(stateDir2, PIPELINE_FILE);
+  if (!existsSync9(dest)) {
     return { stages: [], transitions: [] };
   }
   try {
@@ -16430,10 +16882,10 @@ function readStage(stateDir2 = ".omcp/state") {
   }
 }
 function transitionRecord({ from, to, artifact, stateDir: stateDir2 = ".omcp/state" }) {
-  if (!existsSync8(stateDir2)) {
+  if (!existsSync9(stateDir2)) {
     mkdirSync(stateDir2, { recursive: true });
   }
-  const dest = join6(stateDir2, PIPELINE_FILE);
+  const dest = join7(stateDir2, PIPELINE_FILE);
   const state = readStage(stateDir2);
   const ts = (/* @__PURE__ */ new Date()).toISOString();
   state.transitions.push({ from, to, ts });
@@ -16444,8 +16896,8 @@ function transitionRecord({ from, to, artifact, stateDir: stateDir2 = ".omcp/sta
   } else {
     state.stages.push(stageEntry);
   }
-  const tmpSuffix = randomBytes6(6).toString("hex");
-  const tmp = join6(stateDir2, `pipeline-state.${tmpSuffix}.tmp`);
+  const tmpSuffix = randomBytes7(6).toString("hex");
+  const tmp = join7(stateDir2, `pipeline-state.${tmpSuffix}.tmp`);
   const serialized = JSON.stringify(state, null, 2);
   writeFileSync(tmp, serialized, "utf8");
   renameSync(tmp, dest);
@@ -16453,16 +16905,20 @@ function transitionRecord({ from, to, artifact, stateDir: stateDir2 = ".omcp/sta
 }
 
 // resources.mjs
-var URI_RE = /^omcp:\/\/(wiki|traces|state|pipeline|notepad|project-memory)(?:\/([^/]+))?(?:\/([^/]+))?$/;
+var URI_RE = /^omcp:\/\/(wiki|traces|state|pipeline|notepad|project-memory|rules)(?:\/([^/]+))?(?:\/([^/]+))?$/;
 var PIPELINE_URI = "omcp://pipeline/state";
 var NOTEPAD_URI2 = "omcp://notepad";
 var PROJECT_MEMORY_NOTES_URI = "omcp://project-memory/notes";
 var PROJECT_MEMORY_DIRECTIVES_URI = "omcp://project-memory/directives";
+var RULES_PENDING_URI2 = "omcp://rules/pending";
+var RULES_POLICY_REPORT_URI = "omcp://rules/policy-report";
 var SINGLETON_URIS = /* @__PURE__ */ new Set([
   PIPELINE_URI,
   NOTEPAD_URI2,
   PROJECT_MEMORY_NOTES_URI,
-  PROJECT_MEMORY_DIRECTIVES_URI
+  PROJECT_MEMORY_DIRECTIVES_URI,
+  RULES_PENDING_URI2,
+  RULES_POLICY_REPORT_URI
 ]);
 async function listResources() {
   const resources = [];
@@ -16523,6 +16979,18 @@ async function listResources() {
     description: "Persistent rules/directives from project_memory_add_directive",
     mimeType: "application/json"
   });
+  resources.push({
+    uri: RULES_PENDING_URI2,
+    name: "Rules: pending context",
+    description: "Rule context captured lazily from file-touch hooks and rules_context_for_file",
+    mimeType: "application/json"
+  });
+  resources.push({
+    uri: RULES_POLICY_REPORT_URI,
+    name: "Rules and memory policy report",
+    description: "OMCP rules/memory source map and discovered rule counts",
+    mimeType: "application/json"
+  });
   return { resources };
 }
 async function readResource({ uri } = {}) {
@@ -16566,6 +17034,22 @@ async function readResource({ uri } = {}) {
           mimeType: "application/json",
           text: JSON.stringify({ directives: r.directives ?? [] })
         }
+      ]
+    };
+  }
+  if (uri === RULES_PENDING_URI2) {
+    const r = await rulesPendingRead({});
+    return {
+      contents: [
+        { uri, mimeType: "application/json", text: JSON.stringify(r) }
+      ]
+    };
+  }
+  if (uri === RULES_POLICY_REPORT_URI) {
+    const r = await rulesPolicyReport({});
+    return {
+      contents: [
+        { uri, mimeType: "application/json", text: JSON.stringify(r) }
       ]
     };
   }
@@ -16672,23 +17156,23 @@ function listResourceTemplates() {
 }
 
 // prompts.mjs
-import { readdir as readdir6, readFile as readFile8 } from "node:fs/promises";
-import { existsSync as existsSync9 } from "node:fs";
-import { join as join7, dirname as dirname3 } from "node:path";
+import { readdir as readdir7, readFile as readFile9 } from "node:fs/promises";
+import { existsSync as existsSync10 } from "node:fs";
+import { join as join8, dirname as dirname4 } from "node:path";
 import { fileURLToPath } from "node:url";
 var NAME_RE = /^[a-z0-9][a-z0-9_-]*$/;
 function defaultSkillsDir() {
-  const here = dirname3(fileURLToPath(import.meta.url));
+  const here = dirname4(fileURLToPath(import.meta.url));
   const candidates = [
-    join7(here, "..", "skills"),
-    join7(here, "..", "..", "skills")
+    join8(here, "..", "skills"),
+    join8(here, "..", "..", "skills")
   ];
   for (const c of candidates) {
-    if (existsSync9(c)) return c;
+    if (existsSync10(c)) return c;
   }
   return candidates[0];
 }
-function parseFrontmatter(text) {
+function parseFrontmatter2(text) {
   const m = text.match(/^---\n([\s\S]*?)\n---\n?([\s\S]*)$/);
   if (!m) return { fm: {}, body: text };
   const fm = {};
@@ -16704,15 +17188,15 @@ function parseFrontmatter(text) {
   return { fm, body: m[2] };
 }
 async function listPrompts(skillsDir = defaultSkillsDir()) {
-  if (!existsSync9(skillsDir)) return { prompts: [] };
-  const entries = await readdir6(skillsDir, { withFileTypes: true });
+  if (!existsSync10(skillsDir)) return { prompts: [] };
+  const entries = await readdir7(skillsDir, { withFileTypes: true });
   const prompts = [];
   for (const e of entries) {
     if (!e.isDirectory()) continue;
-    const skillPath = join7(skillsDir, e.name, "SKILL.md");
-    if (!existsSync9(skillPath)) continue;
-    const text = await readFile8(skillPath, "utf8");
-    const { fm } = parseFrontmatter(text);
+    const skillPath = join8(skillsDir, e.name, "SKILL.md");
+    if (!existsSync10(skillPath)) continue;
+    const text = await readFile9(skillPath, "utf8");
+    const { fm } = parseFrontmatter2(text);
     const name = fm.name || e.name;
     const description = fm.description || `omcp skill: ${name}`;
     const argHint = fm["argument-hint"] || "";
@@ -16738,12 +17222,12 @@ async function getPrompt({ name, arguments: args } = {}, skillsDir = defaultSkil
   if (!NAME_RE.test(name)) {
     throw new Error(`invalid prompt name: ${name}`);
   }
-  const skillPath = join7(skillsDir, name, "SKILL.md");
-  if (!existsSync9(skillPath)) {
+  const skillPath = join8(skillsDir, name, "SKILL.md");
+  if (!existsSync10(skillPath)) {
     throw new Error(`prompt not found: ${name}`);
   }
-  const text = await readFile8(skillPath, "utf8");
-  const { fm, body } = parseFrontmatter(text);
+  const text = await readFile9(skillPath, "utf8");
+  const { fm, body } = parseFrontmatter2(text);
   let promptText = body.trim();
   const userArgs = args && typeof args === "object" && typeof args.args === "string" ? args.args.trim() : "";
   if (userArgs.length > 0) {
@@ -17229,6 +17713,58 @@ server.setRequestHandler(ListToolsRequestSchema, async () => ({
       }
     },
     {
+      name: "rules_context_for_file",
+      description: "Discover rules relevant to a touched file path and store newly matched rules as pending OMCP context. Reads .omcp/rules, .github/instructions, .github/copilot-instructions.md, .cursor/rules, .claude/rules, and user rules.",
+      inputSchema: {
+        type: "object",
+        properties: {
+          path: { type: "string", description: "Touched file path within the current workspace" },
+          filePath: { type: "string", description: "Alias for path" },
+          tool: { type: "string", description: "Tool name that touched the file" },
+          session_id: { type: "string", description: "Optional Copilot session id for dedupe" },
+          markPending: {
+            type: "boolean",
+            description: "If false, preview matching rules without writing pending context or dedupe state."
+          }
+        },
+        required: []
+      }
+    },
+    {
+      name: "rules_pending_read",
+      description: "Read pending rules captured by hooks or rules_context_for_file from .omcp/state/rules-pending.json. Unscoped reads redact rule bodies and project roots; pass session_id for full context.",
+      inputSchema: {
+        type: "object",
+        properties: {
+          session_id: { type: "string", description: "Optional session id filter" },
+          limit: { type: "number", description: "Optional maximum number of recent entries" }
+        },
+        required: []
+      }
+    },
+    {
+      name: "rules_pending_clear",
+      description: "Clear pending rules context. Pass session_id to clear one session; omit it to clear all pending rules.",
+      inputSchema: {
+        type: "object",
+        properties: {
+          session_id: { type: "string", description: "Optional session id filter" }
+        },
+        required: []
+      }
+    },
+    {
+      name: "rules_policy_report",
+      description: "Return the OMCP rules/memory policy report, discovered rule counts, and storage ownership map.",
+      inputSchema: {
+        type: "object",
+        properties: {
+          path: { type: "string", description: "Optional path used to resolve project root" }
+        },
+        required: []
+      }
+    },
+    {
       name: "plan_list",
       description: "Enumerate all plan files in .omcp/plans/*.md",
       inputSchema: {
@@ -17420,6 +17956,31 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
       }
       case "shared_memory_cleanup": {
         result = await sharedMemoryCleanup({ maxAgeDays: args?.maxAgeDays });
+        break;
+      }
+      case "rules_context_for_file": {
+        result = await rulesContextForFile({
+          path: args?.path,
+          filePath: args?.filePath,
+          tool: args?.tool,
+          session_id: args?.session_id,
+          markPending: args?.markPending
+        });
+        break;
+      }
+      case "rules_pending_read": {
+        result = await rulesPendingRead({
+          session_id: args?.session_id,
+          limit: args?.limit
+        });
+        break;
+      }
+      case "rules_pending_clear": {
+        result = await rulesPendingClear({ session_id: args?.session_id });
+        break;
+      }
+      case "rules_policy_report": {
+        result = await rulesPolicyReport({ path: args?.path });
         break;
       }
       case "trace_write": {

@@ -46,6 +46,28 @@ if [[ -n "${COPILOT_HOOK_STDIN_FILE:-}" ]] && [[ -f "${COPILOT_HOOK_STDIN_FILE:-
   fi
 fi
 
+# Rules and memory policy: capture rule context lazily after file-touch tools.
+# The hook does not assume Copilot can inject extra model-visible text; it stores
+# pending context for MCP consumers at omcp://rules/pending.
+if [[ -n "${COPILOT_HOOK_STDIN_FILE:-}" ]] && [[ -f "${COPILOT_HOOK_STDIN_FILE:-}" ]] && command -v jq >/dev/null 2>&1; then
+  tool_name="$(jq -r '.tool // .toolName // .tool_name // .name // empty' "$COPILOT_HOOK_STDIN_FILE" 2>/dev/null || true)"
+  file_path="$(jq -r '.file_path // .filePath // .path // .tool_input.file_path // .tool_input.path // .toolInput.file_path // .toolInput.path // .input.file_path // .input.filePath // .input.path // empty' "$COPILOT_HOOK_STDIN_FILE" 2>/dev/null || true)"
+  if [[ -n "$file_path" ]]; then
+    session_id="${COPILOT_SESSION_ID:-$(jq -r '.session_id // .sessionId // "default"' "$COPILOT_HOOK_STDIN_FILE" 2>/dev/null || echo default)}"
+    rules_args="$(jq -nc \
+      --arg path "$file_path" \
+      --arg tool "${tool_name:-read}" \
+      --arg session_id "$session_id" \
+      '{path:$path,tool:$tool,session_id:$session_id}')"
+    rules_json="$(omcp_call_store rules-store rulesContextForFile "$rules_args" 2>/dev/null || true)"
+    matched="$(printf '%s' "$rules_json" | jq -r '.matched // 0' 2>/dev/null || echo 0)"
+    if [[ "$matched" =~ ^[0-9]+$ ]] && [[ "$matched" -gt 0 ]]; then
+      safe_file_path="$(printf '%s' "$file_path" | LC_ALL=C tr '\r\n\t' '???')"
+      printf 'source=plugin event=rulesPending matched=%s file=%s\n' "$matched" "$safe_file_path" >> .copilot-hooks/tools.log
+    fi
+  fi
+fi
+
 if [[ -x "./skills/parity-guard/check-parity-claims.sh" ]]; then
   if ! ./skills/parity-guard/check-parity-claims.sh . >> .copilot-hooks/tools.log 2>&1; then
     copilot_hook_warn "parity guard failed at $(date -u +%Y-%m-%dT%H:%M:%SZ)"

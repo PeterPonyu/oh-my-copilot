@@ -57,6 +57,12 @@ import {
   sharedMemoryDelete,
   sharedMemoryCleanup,
 } from "./shared-memory-store.mjs";
+import {
+  rulesContextForFile,
+  rulesPendingRead,
+  rulesPendingClear,
+  rulesPolicyReport,
+} from "./rules-store.mjs";
 import { readStage, transitionRecord } from "../orchestrator/orchestrator.mjs";
 import {
   listResources,
@@ -554,6 +560,62 @@ server.setRequestHandler(ListToolsRequestSchema, async () => ({
       },
     },
     {
+      name: "rules_context_for_file",
+      description:
+        "Discover rules relevant to a touched file path and store newly matched rules as pending OMCP context. Reads .omcp/rules, .github/instructions, .github/copilot-instructions.md, .cursor/rules, .claude/rules, and user rules.",
+      inputSchema: {
+        type: "object",
+        properties: {
+          path: { type: "string", description: "Touched file path within the current workspace" },
+          filePath: { type: "string", description: "Alias for path" },
+          tool: { type: "string", description: "Tool name that touched the file" },
+          session_id: { type: "string", description: "Optional Copilot session id for dedupe" },
+          markPending: {
+            type: "boolean",
+            description: "If false, preview matching rules without writing pending context or dedupe state.",
+          },
+        },
+        required: [],
+      },
+    },
+    {
+      name: "rules_pending_read",
+      description:
+        "Read pending rules captured by hooks or rules_context_for_file from .omcp/state/rules-pending.json. Unscoped reads redact rule bodies and project roots; pass session_id for full context.",
+      inputSchema: {
+        type: "object",
+        properties: {
+          session_id: { type: "string", description: "Optional session id filter" },
+          limit: { type: "number", description: "Optional maximum number of recent entries" },
+        },
+        required: [],
+      },
+    },
+    {
+      name: "rules_pending_clear",
+      description:
+        "Clear pending rules context. Pass session_id to clear one session; omit it to clear all pending rules.",
+      inputSchema: {
+        type: "object",
+        properties: {
+          session_id: { type: "string", description: "Optional session id filter" },
+        },
+        required: [],
+      },
+    },
+    {
+      name: "rules_policy_report",
+      description:
+        "Return the OMCP rules/memory policy report, discovered rule counts, and storage ownership map.",
+      inputSchema: {
+        type: "object",
+        properties: {
+          path: { type: "string", description: "Optional path used to resolve project root" },
+        },
+        required: [],
+      },
+    },
+    {
       name: "plan_list",
       description: "Enumerate all plan files in .omcp/plans/*.md",
       inputSchema: {
@@ -763,6 +825,31 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
       }
       case "shared_memory_cleanup": {
         result = await sharedMemoryCleanup({ maxAgeDays: args?.maxAgeDays });
+        break;
+      }
+      case "rules_context_for_file": {
+        result = await rulesContextForFile({
+          path: args?.path,
+          filePath: args?.filePath,
+          tool: args?.tool,
+          session_id: args?.session_id,
+          markPending: args?.markPending,
+        });
+        break;
+      }
+      case "rules_pending_read": {
+        result = await rulesPendingRead({
+          session_id: args?.session_id,
+          limit: args?.limit,
+        });
+        break;
+      }
+      case "rules_pending_clear": {
+        result = await rulesPendingClear({ session_id: args?.session_id });
+        break;
+      }
+      case "rules_policy_report": {
+        result = await rulesPolicyReport({ path: args?.path });
         break;
       }
       case "trace_write": {

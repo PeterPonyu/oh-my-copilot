@@ -42,7 +42,7 @@ while (($#)); do
 done
 
 command -v python3 >/dev/null 2>&1 || fail "python3 not found"
-ROOT="$(python3 "$ROOT/scripts/resolve-canonical-root.py" "$ROOT")"
+ROOT="$(node "$ROOT/scripts/resolve-canonical-root.mjs" "$ROOT")"
 PLUGIN_JSON="$ROOT/packages/copilot-cli-plugin/plugin.json"
 [[ -f "$PLUGIN_JSON" ]] || fail "missing plugin manifest: $PLUGIN_JSON"
 export OMC_CLI_PLUGIN_ID="$(

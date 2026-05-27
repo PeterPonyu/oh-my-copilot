@@ -10,6 +10,8 @@
 //   omcp://notepad                           — workspace notepad (markdown)
 //   omcp://project-memory/notes              — project memory notes (json)
 //   omcp://project-memory/directives         — project memory directives (json)
+//   omcp://rules/pending                     — pending matched rule context (json)
+//   omcp://rules/policy-report               — rules/memory ownership report (json)
 //
 // Also owns the subscription registry: which URIs clients have subscribed
 // to via resources/subscribe. server.mjs forwards "updated" events from
@@ -25,19 +27,24 @@ import {
 import { stateRead, stateList } from "./state-store.mjs";
 import { notepadRead } from "./notepad-store.mjs";
 import { projectMemoryRead } from "./project-memory-store.mjs";
+import { rulesPendingRead, rulesPolicyReport } from "./rules-store.mjs";
 import { readStage } from "../orchestrator/orchestrator.mjs";
 
 const URI_RE =
-  /^omcp:\/\/(wiki|traces|state|pipeline|notepad|project-memory)(?:\/([^/]+))?(?:\/([^/]+))?$/;
+  /^omcp:\/\/(wiki|traces|state|pipeline|notepad|project-memory|rules)(?:\/([^/]+))?(?:\/([^/]+))?$/;
 const PIPELINE_URI = "omcp://pipeline/state";
 const NOTEPAD_URI = "omcp://notepad";
 const PROJECT_MEMORY_NOTES_URI = "omcp://project-memory/notes";
 const PROJECT_MEMORY_DIRECTIVES_URI = "omcp://project-memory/directives";
+const RULES_PENDING_URI = "omcp://rules/pending";
+const RULES_POLICY_REPORT_URI = "omcp://rules/policy-report";
 const SINGLETON_URIS = new Set([
   PIPELINE_URI,
   NOTEPAD_URI,
   PROJECT_MEMORY_NOTES_URI,
   PROJECT_MEMORY_DIRECTIVES_URI,
+  RULES_PENDING_URI,
+  RULES_POLICY_REPORT_URI,
 ]);
 
 // --- Resource listing / reading -----------------------------------------
@@ -112,6 +119,22 @@ export async function listResources() {
     mimeType: "application/json",
   });
 
+  resources.push({
+    uri: RULES_PENDING_URI,
+    name: "Rules: pending context",
+    description:
+      "Rule context captured lazily from file-touch hooks and rules_context_for_file",
+    mimeType: "application/json",
+  });
+
+  resources.push({
+    uri: RULES_POLICY_REPORT_URI,
+    name: "Rules and memory policy report",
+    description:
+      "OMCP rules/memory source map and discovered rule counts",
+    mimeType: "application/json",
+  });
+
   return { resources };
 }
 
@@ -160,6 +183,24 @@ export async function readResource({ uri } = {}) {
           mimeType: "application/json",
           text: JSON.stringify({ directives: r.directives ?? [] }),
         },
+      ],
+    };
+  }
+
+  if (uri === RULES_PENDING_URI) {
+    const r = await rulesPendingRead({});
+    return {
+      contents: [
+        { uri, mimeType: "application/json", text: JSON.stringify(r) },
+      ],
+    };
+  }
+
+  if (uri === RULES_POLICY_REPORT_URI) {
+    const r = await rulesPolicyReport({});
+    return {
+      contents: [
+        { uri, mimeType: "application/json", text: JSON.stringify(r) },
       ],
     };
   }
