@@ -65,6 +65,10 @@ export async function notepadWriteWorking({ entry } = {}) {
   return notepadWrite({ entry, priority: "working" });
 }
 
+export async function notepadWriteManual({ entry } = {}) {
+  return notepadWrite({ entry, priority: "manual" });
+}
+
 export async function notepadPrune({ maxAgeDays = DEFAULT_MAX_AGE_DAYS, lane } = {}) {
   if (typeof maxAgeDays !== "number" || maxAgeDays < 0) {
     throw new Error("maxAgeDays must be a non-negative number");
