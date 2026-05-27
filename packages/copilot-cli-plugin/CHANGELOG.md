@@ -6,6 +6,23 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+### Hyperplan — adversarial 5-member planning skill
+
+- Added `/omcp:hyperplan` skill + command translating oh-my-openagent's
+  `hyperplan` workflow (adversarial 5-member cross-critique → distillation →
+  mandatory planner handoff) for the Copilot CLI execution model.
+- Roles map to existing custom agents already shipped with omcp:
+  `code-simplifier` (skeptic), `test-engineer` (validator), `research`
+  (researcher), `architect` (architect), `analyst` (creative challenger).
+  Phase 6 dispatches the distilled insight bundle to `planner` — handoff is
+  non-negotiable.
+- Three-round cross-critique: independent Round 1 findings → cross-attack
+  Round 2 → defend/refine/concede Round 3 → Lead distills only the
+  defensible insights into a structured bundle archived under
+  `docs/plans/hyperplan-<slug>.md`.
+- Skill count is now 46, slash-command count is now 45. Root `.github`
+  mirror regenerated. Plugin orchestration validates; no mirror drift.
+
 ### ulw-loop — ultrawork with mandatory Oracle verification gate
 
 - Added `/omcp:ulw-loop` skill + command translating oh-my-openagent's
@@ -87,7 +104,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Documented the memory/rules policy: rules are long-lived constraints; project
   memory stores durable facts/directives; notepad stores active context; wiki
   stores reviewable knowledge; shared memory stores inter-agent coordination.
-
 ### Wave-O: README polish + one more outdated archive
 
 - **Root `README.md` rewritten** for human readability. Length cut 210 → ~110 lines. Lead now opens with what the plugin gives you and how to install, not with v1-blueprint governance language. Removed: `## V1 scope` (22-bullet includes/excludes list), `## Reading path` (8-step walkthrough redundant with the docs map), `## Status` (date stamp not load-bearing), most of `## Verification` (consolidated to 4 lines + pointer), `## Hook and log policy` (moved entirely to `docs/hook-surface.md` territory; one-line summary removed from front README), most of `## Design principle` (compressed to a 3-line `## Project conventions` section that names the proof rule without expanding it). Kept: `## Plugin surface` table, install steps, "first commands to try" tutorial block, doc map, license.
