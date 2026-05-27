@@ -42,6 +42,22 @@ jobs:
         with:
           enablement: true
 
+      - name: Set up Node.js for scripts
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      # The cross-host benchmark data is harvested manually and committed to
+      # the repository (apps/cross-host-benchmark-site/generated/). A harvest
+      # step is intentionally omitted from this workflow because harvest
+      # requires a local checkout of the oh-my-cursor sibling repo which is
+      # not available in CI. Instead, we validate the committed data is
+      # structurally sound before building the site. To refresh the data,
+      # run scripts/harvest-cross-host-benchmark-data.mjs locally and commit
+      # the updated generated/ files.
+      - name: Validate committed benchmark data
+        run: node scripts/validate-cross-host-benchmark-data.mjs --app-root apps/cross-host-benchmark-site
+
       - name: Install site dependencies
         working-directory: apps/cross-host-benchmark-site
         run: pnpm install --frozen-lockfile

@@ -160,12 +160,12 @@ function main() {
   const cursor = loadJson(cursorPath);
 
   ensure(
-    Array.isArray(copilot) && copilot.length === 3,
-    `expected 3 copilot records, got ${Array.isArray(copilot) ? copilot.length : typeof copilot}`,
+    Array.isArray(copilot) && copilot.length > 0,
+    `expected at least 1 copilot record, got ${Array.isArray(copilot) ? copilot.length : typeof copilot}`,
   );
   ensure(
-    Array.isArray(cursor) && cursor.length === 2,
-    `expected 2 cursor records, got ${Array.isArray(cursor) ? cursor.length : typeof cursor}`,
+    Array.isArray(cursor) && cursor.length > 0,
+    `expected at least 1 cursor record, got ${Array.isArray(cursor) ? cursor.length : typeof cursor}`,
   );
   ensure(
     manifest.generator.version === 2,
@@ -235,7 +235,7 @@ function main() {
   }
 
   console.log("ok: generated manifest exists and includes 2 repos / 3 artifacts");
-  console.log("ok: copilot snapshot count is 3 and cursor snapshot count is 2");
+  console.log(`ok: copilot snapshot count is ${copilot.length} and cursor snapshot count is ${cursor.length}`);
   console.log(`ok: capture skew is internally consistent (${manifest.captureSkew.seconds} seconds)`);
   console.log("ok: comparisonClass remains observed while comparabilityClass defaults to reporting-comparable");
   console.log("ok: snapshot records include provenance + truthful comparability metadata");

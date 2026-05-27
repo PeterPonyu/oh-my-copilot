@@ -193,13 +193,15 @@ omcp_call_store() {
   local plugin_root
   plugin_root="$(git rev-parse --show-toplevel 2>/dev/null || pwd)/packages/copilot-cli-plugin"
 
-  node -e "
-    import('${plugin_root}/mcp-server/${module}.mjs').then(m =>
-      m.${fn}(${json_args})
-    ).then(result => {
+  # Args passed via process.argv, not interpolated into JS source, to avoid
+  # shell injection via $fn, $module, or $json_args.
+  node -e '
+    const [pluginRoot, mod, fn, jsonArgs] = process.argv.slice(1);
+    const parsed = JSON.parse(jsonArgs || "{}");
+    import(pluginRoot + "/mcp-server/" + mod + ".mjs").then(m => m[fn](parsed)).then(result => {
       if (result !== undefined) console.log(JSON.stringify(result));
     }).catch(e => {
-      console.error('[omcp-bridge]', e && e.message ? e.message : String(e));
+      console.error("[omcp-bridge]", e && e.message ? e.message : String(e));
     });
-  " || true
+  ' -- "$plugin_root" "$module" "$fn" "$json_args" || true
 }

@@ -357,7 +357,7 @@ function writeJson(path, payload) {
 function parseArgs(argv) {
   const args = {
     copilotRoot: ".",
-    cursorRoot: "/home/zeyufu/Desktop/oh-my-cursor",
+    cursorRoot: null,
     appRoot: "apps/cross-host-benchmark-site",
   };
   for (let i = 0; i < argv.length; i++) {
@@ -367,6 +367,12 @@ function parseArgs(argv) {
         "usage: harvest-cross-host-benchmark-data.mjs [--copilot-root PATH] [--cursor-root PATH] [--app-root PATH]",
       );
       console.log("\nHarvest Copilot/Cursor benchmark artifacts into app-local generated snapshots.");
+      console.log("\nOptions:");
+      console.log("  --copilot-root PATH  path to oh-my-copilot repo (default: .)");
+      console.log("  --cursor-root PATH   path to oh-my-cursor repo (required; auto-resolved to");
+      console.log("                       ../oh-my-cursor relative to --copilot-root if omitted)");
+      console.log("  --app-root PATH      path to the benchmark site app, relative to --copilot-root");
+      console.log("                       (default: apps/cross-host-benchmark-site)");
       process.exit(0);
     } else if (arg === "--copilot-root") {
       args.copilotRoot = argv[++i];
@@ -388,10 +394,28 @@ function parseArgs(argv) {
   return args;
 }
 
+function resolveCursorRoot(args) {
+  if (args.cursorRoot !== null) {
+    return resolveAbs(args.cursorRoot);
+  }
+  // Auto-resolve: look for ../oh-my-cursor relative to the copilot repo root.
+  const copilotRoot = resolveAbs(args.copilotRoot);
+  const candidate = resolve(copilotRoot, "..", "oh-my-cursor");
+  if (isDir(candidate)) {
+    return resolveAbs(candidate);
+  }
+  console.error(
+    "error: --cursor-root is required. " +
+    `Auto-resolve candidate '${candidate}' does not exist. ` +
+    "Pass --cursor-root PATH explicitly.",
+  );
+  process.exit(2);
+}
+
 function main() {
   const args = parseArgs(process.argv.slice(2));
   const copilotRoot = resolveAbs(args.copilotRoot);
-  const cursorRoot = resolveAbs(args.cursorRoot);
+  const cursorRoot = resolveCursorRoot(args);
   const appRoot = resolveAbs(join(copilotRoot, args.appRoot));
 
   const copilot = collectRepoHarvest(copilotRoot, "oh-my-copilot", "current-*/**/*_evaluation.json");
