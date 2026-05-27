@@ -31,6 +31,12 @@ jobs:
         run: bash scripts/validate-release-readiness.sh
       - name: Audit MCP tool references
         run: node scripts/audit-tool-refs.mjs
+      - name: Verify dist bundle is up to date
+        run: |
+          cd packages/copilot-cli-plugin/mcp-server
+          npm install
+          npm run build:bundle
+          git diff --exit-code dist/server.mjs || (echo 'dist/server.mjs is stale — run npm run build:bundle and commit'; exit 1)
       - name: Run mcp-server tests
         run: |
           cd packages/copilot-cli-plugin/mcp-server
