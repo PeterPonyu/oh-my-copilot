@@ -15645,6 +15645,9 @@ async function notepadWritePriority({ entry } = {}) {
 async function notepadWriteWorking({ entry } = {}) {
   return notepadWrite({ entry, priority: "working" });
 }
+async function notepadWriteManual({ entry } = {}) {
+  return notepadWrite({ entry, priority: "manual" });
+}
 async function notepadPrune({ maxAgeDays = DEFAULT_MAX_AGE_DAYS, lane } = {}) {
   if (typeof maxAgeDays !== "number" || maxAgeDays < 0) {
     throw new Error("maxAgeDays must be a non-negative number");
@@ -15925,6 +15928,41 @@ async function projectMemoryAddDirective({ text, scope = "permanent" } = {}) {
   emitResourceUpdate(DIRECTIVES_URI);
   return { ok: true, directive };
 }
+async function projectMemoryPrune({ maxAgeDays, keepNotes, keepDirectives } = {}) {
+  const memory = await readMemory();
+  const now = Date.now();
+  const cutoffMs = typeof maxAgeDays === "number" && maxAgeDays >= 0 ? maxAgeDays * 24 * 60 * 60 * 1e3 : null;
+  const beforeNotes = memory.notes.length;
+  const beforeDirectives = memory.directives.length;
+  if (cutoffMs !== null) {
+    memory.notes = memory.notes.filter((n) => {
+      const age = now - new Date(n.ts).getTime();
+      return age <= cutoffMs;
+    });
+    memory.directives = memory.directives.filter((d) => {
+      const age = now - new Date(d.ts).getTime();
+      return age <= cutoffMs;
+    });
+  }
+  const maxNotes = typeof keepNotes === "number" && keepNotes > 0 ? keepNotes : null;
+  const maxDirectives = typeof keepDirectives === "number" && keepDirectives > 0 ? keepDirectives : null;
+  if (maxNotes !== null && memory.notes.length > maxNotes) {
+    memory.notes = memory.notes.slice(-maxNotes);
+  }
+  if (maxDirectives !== null && memory.directives.length > maxDirectives) {
+    memory.directives = memory.directives.slice(-maxDirectives);
+  }
+  await writeMemory(memory);
+  emitResourceUpdate(NOTES_URI);
+  emitResourceUpdate(DIRECTIVES_URI);
+  return {
+    ok: true,
+    pruned_notes: beforeNotes - memory.notes.length,
+    pruned_directives: beforeDirectives - memory.directives.length,
+    remaining_notes: memory.notes.length,
+    remaining_directives: memory.directives.length
+  };
+}
 
 // trace-store.mjs
 import { readFile as readFile5, appendFile as appendFile2, mkdir as mkdir4, readdir as readdir3 } from "node:fs/promises";
@@ -16162,8 +16200,19 @@ async function wikiQuery({ q, k } = {}) {
   const limit = typeof k === "number" && k > 0 ? k : DEFAULT_QUERY_K;
   const index = await readIndex();
   const ql = q.toLowerCase();
+  const entries = Object.entries(index);
+  const bodyResults = await Promise.all(
+    entries.map(async ([slug]) => {
+      try {
+        return await readFile6(wikiFilePath(slug), "utf8");
+      } catch {
+        return null;
+      }
+    })
+  );
   const results = [];
-  for (const [slug, meta2] of Object.entries(index)) {
+  for (let i = 0; i < entries.length; i++) {
+    const [slug, meta2] = entries[i];
     let score = 0;
     if (typeof meta2?.title === "string" && meta2.title.toLowerCase().includes(ql)) {
       score += 3;
@@ -16176,8 +16225,8 @@ async function wikiQuery({ q, k } = {}) {
         }
       }
     }
-    try {
-      const body = await readFile6(wikiFilePath(slug), "utf8");
+    const body = bodyResults[i];
+    if (body !== null) {
       const bodyLower = body.toLowerCase();
       let hits = 0;
       let idx = 0;
@@ -16187,7 +16236,6 @@ async function wikiQuery({ q, k } = {}) {
         if (hits >= MAX_QUERY_BODY_HITS) break;
       }
       score += hits;
-    } catch {
     }
     if (score > 0) {
       results.push({
@@ -17498,6 +17546,17 @@ server.setRequestHandler(ListToolsRequestSchema, async () => ({
       }
     },
     {
+      name: "notepad_write_manual",
+      description: "Append a 'manual' lane entry to .omcp/notepad.md. Manual entries are pruned by default (use them for ad-hoc notes).",
+      inputSchema: {
+        type: "object",
+        properties: {
+          entry: { type: "string", description: "Text to append" }
+        },
+        required: ["entry"]
+      }
+    },
+    {
       name: "notepad_prune",
       description: "Drop entries older than maxAgeDays from the notepad. By default targets manual+working lanes only (priority lane is preserved). Pass {lane} to target a single lane explicitly.",
       inputSchema: {
@@ -17592,6 +17651,28 @@ server.setRequestHandler(ListToolsRequestSchema, async () => ({
           }
         },
         required: ["text"]
+      }
+    },
+    {
+      name: "project_memory_prune",
+      description: "Trim .omcp/project-memory.json by age and/or count cap. Pass {maxAgeDays} to drop entries older than N days. Pass {keepNotes} or {keepDirectives} to keep only the N most recent entries in each collection. Both filters can be combined.",
+      inputSchema: {
+        type: "object",
+        properties: {
+          maxAgeDays: {
+            type: "number",
+            description: "Drop notes and directives older than this many days."
+          },
+          keepNotes: {
+            type: "number",
+            description: "Keep only the N most recent notes (oldest-eviction)."
+          },
+          keepDirectives: {
+            type: "number",
+            description: "Keep only the N most recent directives (oldest-eviction)."
+          }
+        },
+        required: []
       }
     },
     {
@@ -17961,6 +18042,10 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
         result = await notepadWriteWorking({ entry: args?.entry });
         break;
       }
+      case "notepad_write_manual": {
+        result = await notepadWriteManual({ entry: args?.entry });
+        break;
+      }
       case "notepad_prune": {
         result = await notepadPrune({
           maxAgeDays: args?.maxAgeDays,
@@ -18113,6 +18198,14 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
         result = await projectMemoryAddDirective({
           text: args?.text,
           scope: args?.scope
+        });
+        break;
+      }
+      case "project_memory_prune": {
+        result = await projectMemoryPrune({
+          maxAgeDays: args?.maxAgeDays,
+          keepNotes: args?.keepNotes,
+          keepDirectives: args?.keepDirectives
         });
         break;
       }

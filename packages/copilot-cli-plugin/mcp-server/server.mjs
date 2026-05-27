@@ -25,6 +25,7 @@ import {
   notepadWrite,
   notepadWritePriority,
   notepadWriteWorking,
+  notepadWriteManual,
   notepadPrune,
   notepadStats,
 } from "./notepad-store.mjs";
@@ -34,6 +35,7 @@ import {
   projectMemoryWrite,
   projectMemoryAddNote,
   projectMemoryAddDirective,
+  projectMemoryPrune,
 } from "./project-memory-store.mjs";
 import {
   traceWrite,
@@ -241,6 +243,18 @@ server.setRequestHandler(ListToolsRequestSchema, async () => ({
       },
     },
     {
+      name: "notepad_write_manual",
+      description:
+        "Append a 'manual' lane entry to .omcp/notepad.md. Manual entries are pruned by default (use them for ad-hoc notes).",
+      inputSchema: {
+        type: "object",
+        properties: {
+          entry: { type: "string", description: "Text to append" },
+        },
+        required: ["entry"],
+      },
+    },
+    {
       name: "notepad_prune",
       description:
         "Drop entries older than maxAgeDays from the notepad. By default targets manual+working lanes only (priority lane is preserved). Pass {lane} to target a single lane explicitly.",
@@ -341,6 +355,29 @@ server.setRequestHandler(ListToolsRequestSchema, async () => ({
           },
         },
         required: ["text"],
+      },
+    },
+    {
+      name: "project_memory_prune",
+      description:
+        "Trim .omcp/project-memory.json by age and/or count cap. Pass {maxAgeDays} to drop entries older than N days. Pass {keepNotes} or {keepDirectives} to keep only the N most recent entries in each collection. Both filters can be combined.",
+      inputSchema: {
+        type: "object",
+        properties: {
+          maxAgeDays: {
+            type: "number",
+            description: "Drop notes and directives older than this many days.",
+          },
+          keepNotes: {
+            type: "number",
+            description: "Keep only the N most recent notes (oldest-eviction).",
+          },
+          keepDirectives: {
+            type: "number",
+            description: "Keep only the N most recent directives (oldest-eviction).",
+          },
+        },
+        required: [],
       },
     },
     {
@@ -743,6 +780,10 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
         result = await notepadWriteWorking({ entry: args?.entry });
         break;
       }
+      case "notepad_write_manual": {
+        result = await notepadWriteManual({ entry: args?.entry });
+        break;
+      }
       case "notepad_prune": {
         result = await notepadPrune({
           maxAgeDays: args?.maxAgeDays,
@@ -895,6 +936,14 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
         result = await projectMemoryAddDirective({
           text: args?.text,
           scope: args?.scope,
+        });
+        break;
+      }
+      case "project_memory_prune": {
+        result = await projectMemoryPrune({
+          maxAgeDays: args?.maxAgeDays,
+          keepNotes: args?.keepNotes,
+          keepDirectives: args?.keepDirectives,
         });
         break;
       }
