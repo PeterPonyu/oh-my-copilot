@@ -35,10 +35,10 @@ else
 fi
 SERVER_MJS="$PLUGIN_DIR/mcp-server/server.mjs"
 
-# Output path. Default is docs/validation/ (committed; for showcase + audit
-# artifacts). Pass --out to override (e.g. .omcp/validation/ for ephemeral
-# CI runs).
-OUT_DEFAULT="$REPO_ROOT/docs/validation/validation-$(date -u +%Y-%m-%dT%H%M%SZ).md"
+# Output path. Default is local runtime state so ad-hoc validation runs do
+# not leave untracked docs/validation reports behind. Pass --out docs/validation/...
+# when intentionally refreshing committed showcase/audit evidence.
+OUT_DEFAULT="$REPO_ROOT/.omcp/validation/validation-$(date -u +%Y-%m-%dT%H%M%SZ).md"
 OUT="$OUT_DEFAULT"
 REDACT="auto" # auto = redact when OUT is under docs/, raw when under .omcp/
 
@@ -104,7 +104,7 @@ Exercises every omcp store + hook + audit script via real I/O and writes a
 human-auditable Markdown report.
 
 Options:
-  --out <path>                Output path (default: docs/validation/...)
+  --out <path>                Output path (default: .omcp/validation/...)
   --redact / --no-redact      Force redaction on/off. Default 'auto':
                               redact when OUT is under docs/, raw under .omcp/
   --print-agentic-runbook     Print the manual-step runbook for real

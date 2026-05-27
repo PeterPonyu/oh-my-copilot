@@ -111,7 +111,7 @@ evidence.
 
 Root hooks write local evidence under `.copilot-hooks/`:
 
-- `.copilot-hooks/config.json` is created only when missing;
+- `.copilot-hooks/config.json` is created when missing or when its workspace root has drifted;
 - `.copilot-hooks/events.jsonl` receives structured events;
 - `.copilot-hooks/session.log` receives human-readable session summaries; and
 - `.copilot-hooks/tools.log` receives human-readable tool-use summaries.
