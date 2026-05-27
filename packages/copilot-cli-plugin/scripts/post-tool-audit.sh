@@ -10,8 +10,18 @@ set -euo pipefail
 REPO_ROOT="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
 cd "$REPO_ROOT"
 
-# shellcheck source=../../../.copilot-hooks/common.sh
-source .copilot-hooks/common.sh
+# Source common.sh: prefer workspace-local copy; fall back to plugin-bundled copy.
+_SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+if [[ -f ".copilot-hooks/common.sh" ]]; then
+  # shellcheck source=../../../.copilot-hooks/common.sh
+  source .copilot-hooks/common.sh
+elif [[ -f "${_SCRIPT_DIR}/common.sh" ]]; then
+  # shellcheck source=./common.sh
+  source "${_SCRIPT_DIR}/common.sh"
+else
+  echo "warn: common.sh not found in workspace .copilot-hooks/ or plugin scripts/; skipping post-tool-audit hook" >&2
+  exit 0
+fi
 
 copilot_hook_capture_stdin
 copilot_hook_init_config "plugin"
@@ -68,10 +78,12 @@ if [[ -n "${COPILOT_HOOK_STDIN_FILE:-}" ]] && [[ -f "${COPILOT_HOOK_STDIN_FILE:-
   fi
 fi
 
+# Parity guard runs warn-only in postToolUse to avoid hard-failing normal tool
+# use on false positives or slow scans. Hard-fail mode is reserved for explicit
+# release validators (validate-release-readiness.sh).
 if [[ -x "./skills/parity-guard/check-parity-claims.sh" ]]; then
   if ! ./skills/parity-guard/check-parity-claims.sh . >> .copilot-hooks/tools.log 2>&1; then
-    copilot_hook_warn "parity guard failed at $(date -u +%Y-%m-%dT%H:%M:%SZ)"
-    exit 1
+    copilot_hook_warn "parity guard warning at $(date -u +%Y-%m-%dT%H:%M:%SZ) (non-blocking; run validate-release-readiness.sh to hard-fail)"
   fi
 fi
 
