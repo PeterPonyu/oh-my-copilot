@@ -38,3 +38,11 @@ jobs:
           npm test
       - name: Run plugin E2E validation
         run: bash scripts/run-validation.sh --out .omcp/validation/ci-validation.md --no-redact
+      - name: Validate cross-host benchmark scripts
+        run: |
+          node --check scripts/harvest-cross-host-benchmark-data.mjs
+          node --check scripts/validate-cross-host-benchmark-data.mjs
+          node scripts/validate-cross-host-benchmark-data.mjs \
+            --app-root apps/cross-host-benchmark-site
+          node --test scripts/tests/harvest-cross-host-benchmark-data.test.mjs
+          node --test scripts/tests/validate-cross-host-benchmark-data.test.mjs
