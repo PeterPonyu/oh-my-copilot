@@ -16,10 +16,9 @@ copilot_hook_init_config() {
   local workspace_root
   workspace_root="$(copilot_hook_workspace_root)"
   mkdir -p .copilot-hooks
-  if [[ ! -f .copilot-hooks/config.json ]]; then
-    local tmp
-    tmp="$(mktemp)"
-    python3 - "$workspace_root" "$source_label" >"$tmp" <<'PY'
+  local tmp
+  tmp="$(mktemp)"
+  if python3 - "$workspace_root" "$source_label" .copilot-hooks/config.json >"$tmp" <<'PY'
 from __future__ import annotations
 import datetime as dt
 import json
@@ -29,24 +28,45 @@ import sys
 
 workspace_root = pathlib.Path(sys.argv[1]).resolve()
 source_label = sys.argv[2]
+config_path = pathlib.Path(sys.argv[3])
 slug = re.sub(r"[^a-z0-9._-]+", "-", workspace_root.name.lower()).strip("-") or "workspace"
-config = {
-    "schema_version": 1,
-    "log_schema": "oh-my-copilot-hook-log-v1",
-    "project_slug": slug,
-    "workspace_root": str(workspace_root),
-    "created_at": dt.datetime.now(dt.timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z"),
-    "default_source": source_label,
-    "log_files": {
-        "events": ".copilot-hooks/events.jsonl",
-        "session": ".copilot-hooks/session.log",
-        "tools": ".copilot-hooks/tools.log",
-        "warnings": ".copilot-hooks/warnings.log",
-    },
-}
+now = dt.datetime.now(dt.timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z")
+config = None
+if config_path.is_file():
+    try:
+        parsed = json.loads(config_path.read_text(encoding="utf-8"))
+    except json.JSONDecodeError:
+        parsed = None
+    if isinstance(parsed, dict) and pathlib.Path(str(parsed.get("workspace_root", ""))).expanduser().resolve() == workspace_root:
+        config = parsed
+
+if config is None:
+    config = {
+        "schema_version": 1,
+        "log_schema": "oh-my-copilot-hook-log-v1",
+        "project_slug": slug,
+        "workspace_root": str(workspace_root),
+        "created_at": now,
+        "default_source": source_label,
+        "log_files": {
+            "events": ".copilot-hooks/events.jsonl",
+            "session": ".copilot-hooks/session.log",
+            "tools": ".copilot-hooks/tools.log",
+            "warnings": ".copilot-hooks/warnings.log",
+        },
+    }
+
 print(json.dumps(config, indent=2))
 PY
-    mv "$tmp" .copilot-hooks/config.json
+  then
+    if [[ ! -f .copilot-hooks/config.json ]] || ! cmp -s "$tmp" .copilot-hooks/config.json; then
+      mv "$tmp" .copilot-hooks/config.json
+    else
+      rm -f "$tmp"
+    fi
+  else
+    rm -f "$tmp"
+    return 1
   fi
 }
 

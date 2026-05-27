@@ -279,7 +279,7 @@ is created. Treat that as example proof, not root proof.
 
 The workspace hook scripts use the same policy as the root workspace:
 
-- create `.copilot-hooks/config.json` only if it is missing
+- create `.copilot-hooks/config.json` when missing or when its workspace root has drifted
 - append structured events to `.copilot-hooks/events.jsonl`
 - keep human-readable summaries in `.copilot-hooks/session.log` and
   `.copilot-hooks/tools.log`

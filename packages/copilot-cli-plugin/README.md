@@ -133,7 +133,7 @@ aliases.
 Plugin hooks follow the same per-project logging contract as the root
 workspace:
 
-- create `.copilot-hooks/config.json` only if it is missing
+- create `.copilot-hooks/config.json` when missing or when its workspace root has drifted
 - append structured events to `.copilot-hooks/events.jsonl`
 - keep `.copilot-hooks/session.log` and `.copilot-hooks/tools.log`
   human-readable
