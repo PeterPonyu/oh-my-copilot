@@ -112,7 +112,7 @@ function isError(resp) {
   return resp?.result?.isError === true;
 }
 
-test("integration: tools/list returns all 39 registered tools with valid schemas", async (t) => {
+test("integration: tools/list returns all registered tools with valid schemas", async (t) => {
   const cwd = mkdtempSync(join(tmpdir(), "omcp-int-"));
   const client = new StdioClient(cwd);
   t.after(async () => {
@@ -122,7 +122,9 @@ test("integration: tools/list returns all 39 registered tools with valid schemas
 
   const resp = await client.send("tools/list");
   const tools = resp.result.tools;
-  assert.equal(tools.length, 39, `expected 39 tools, got ${tools.length}`);
+  // Use a floor rather than an exact count so adding tools doesn't break CI.
+  // The required-names list below is the authoritative presence check.
+  assert.ok(tools.length >= 41, `expected at least 41 tools, got ${tools.length}`);
 
   for (const tool of tools) {
     assert.ok(tool.name, "tool must have a name");
@@ -133,8 +135,8 @@ test("integration: tools/list returns all 39 registered tools with valid schemas
   const names = tools.map((t) => t.name);
   const required = [
     "state_read", "state_write", "state_list", "state_clear", "state_get_status", "state_list_active",
-    "notepad_read", "notepad_write", "notepad_write_priority", "notepad_write_working", "notepad_prune", "notepad_stats",
-    "project_memory_read", "project_memory_write", "project_memory_add_note", "project_memory_add_directive",
+    "notepad_read", "notepad_write", "notepad_write_priority", "notepad_write_working", "notepad_write_manual", "notepad_prune", "notepad_stats",
+    "project_memory_read", "project_memory_write", "project_memory_add_note", "project_memory_add_directive", "project_memory_prune",
     "trace_write", "trace_summary", "trace_timeline", "trace_list_sessions",
     "wiki_add", "wiki_read", "wiki_list", "wiki_query", "wiki_delete", "wiki_ingest", "wiki_lint",
     "shared_memory_write", "shared_memory_read", "shared_memory_list", "shared_memory_delete", "shared_memory_cleanup",
@@ -466,7 +468,7 @@ test("integration: bundled dist/server.mjs is functional (Wave-K-b)", async (t) 
 
   // tools/list returns all bundled tools
   const list = await client.send("tools/list");
-  assert.equal(list.result.tools.length, 39, "bundle exposes all 39 tools");
+  assert.ok(list.result.tools.length >= 41, `bundle exposes at least 41 tools, got ${list.result.tools.length}`);
 
   // Round-trip a write+read to verify dispatch + store I/O work in the bundle
   const w = await client.callTool("state_write", { key: "bundle-test", value: { ok: 1 } });
