@@ -6,6 +6,29 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+### sisyphus — top-tier orchestrator agent
+
+- Added `sisyphus` custom agent translated from oh-my-openagent
+  (`src/agents/sisyphus.ts`) for the Copilot CLI execution model.
+- Sisyphus is an orchestrator: it classifies intent (mandatory
+  verbalization before action), assesses codebase maturity, parallelizes
+  independent work by default, delegates to existing custom agents
+  (`explore`, `research`, `architect`, `executor`, `debugger`,
+  `test-engineer`, `verifier`, `code-simplifier`, `designer`, `writer`,
+  `git-master`, `code-reviewer`, `critic`, `tracer`,
+  `document-specialist`, `security-reviewer`), and treats `verifier`
+  evidence as non-negotiable before claiming completion.
+- Hard rules: implementation requires an explicit user verb; never
+  silently substitute one specialist for another; stop after 3
+  consecutive failures and escalate to `architect` + the user; default
+  bias is DELEGATE, not work-alone.
+- Uses omcp's existing MCP surfaces: notepad working/priority lanes for
+  per-turn state, project memory for durable directives, rules pending
+  for file-touch rules, wiki query before re-researching, shared memory
+  for cross-lane coordination.
+- Agent count is now 22. Root `.github` mirror regenerated. Plugin
+  orchestration validates; no mirror drift.
+
 ### Wave-Q follow-up
 
 - `git-master` skill: declared a co-author opt-in contract. Commits do not

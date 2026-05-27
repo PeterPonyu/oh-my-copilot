@@ -1,6 +1,6 @@
 # oh-my-copilot
 
-A Copilot CLI-native power pack for GitHub Copilot CLI: 21 agents, 44 skills, 43 typed slash commands, 4 hook events, and a 39-tool MCP server — installed as a single plugin.
+A Copilot CLI-native power pack for GitHub Copilot CLI: 22 agents, 44 skills, 43 typed slash commands, 4 hook events, and a 39-tool MCP server — installed as a single plugin.
 
 ## What you get
 
@@ -30,7 +30,7 @@ For the full installation guide (prerequisites, bootstrap script, troubleshootin
 
 | Dimension | Count | Notes |
 | --- | --- | --- |
-| Agents | 21 | reviewer, research, executor, planner, architect, debugger, ... |
+| Agents | 22 | sisyphus (orchestrator), reviewer, research, executor, planner, architect, debugger, ... |
 | Skills | 44 | autopilot, ralph, ralplan, team, deep-interview, wiki, build-fix, git-master, cancel, ... |
 | Slash commands | 43 | every user-invocable skill has a typed `/omcp:<cmd>` route |
 | Hook events | 4 | `sessionStart`, `preToolUse`, `postToolUse`, `sessionEnd` — all 4 events Copilot CLI v1.0.43 exposes |
