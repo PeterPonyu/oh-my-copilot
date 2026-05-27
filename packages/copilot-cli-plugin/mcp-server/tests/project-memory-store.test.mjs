@@ -1,4 +1,4 @@
-import { test } from "node:test";
+import { test, describe } from "node:test";
 import assert from "node:assert/strict";
 import { mkdtempSync, rmSync, readFileSync } from "node:fs";
 import { tmpdir } from "node:os";
@@ -9,6 +9,7 @@ import {
   projectMemoryWrite,
   projectMemoryAddNote,
   projectMemoryAddDirective,
+  _resetDedupForTests,
 } from "../project-memory-store.mjs";
 
 const originalCwd = process.cwd();
@@ -16,6 +17,7 @@ const originalCwd = process.cwd();
 function freshCwd() {
   const dir = mkdtempSync(join(tmpdir(), "omcp-pm-"));
   process.chdir(dir);
+  _resetDedupForTests();
   return dir;
 }
 
@@ -191,4 +193,40 @@ test("memory persists across calls and matches on-disk JSON", async (t) => {
   assert.equal(onDisk.notes.length, 1);
   assert.equal(onDisk.directives.length, 1);
   assert.deepEqual(onDisk.facts, { ans: 42 });
+});
+
+describe("memory dedup", () => {
+  test("identical content within window returns skip and does not duplicate", async (t) => {
+    const dir = freshCwd();
+    t.after(() => teardown(dir));
+
+    const first = await projectMemoryAddNote({ text: "duplicate me, please" });
+    assert.equal(first.status, "ok");
+    assert.equal(first.note.id, "n_1");
+
+    const second = await projectMemoryAddNote({ text: "duplicate me, please" });
+    assert.equal(second.status, "skip");
+    assert.equal(second.reason, "duplicate");
+    assert.equal(second.existing_id, "n_1");
+    assert.equal(second.note, undefined, "skipped writes do not return a note");
+
+    const { notes } = await projectMemoryRead({ kind: "notes" });
+    assert.equal(notes.length, 1, "durable store contains exactly one entry");
+  });
+
+  test("two different contents both produce ok writes with distinct ids", async (t) => {
+    const dir = freshCwd();
+    t.after(() => teardown(dir));
+
+    const a = await projectMemoryAddNote({ text: "first unique note" });
+    const b = await projectMemoryAddNote({ text: "second unique note" });
+
+    assert.equal(a.status, "ok");
+    assert.equal(b.status, "ok");
+    assert.equal(a.note.id, "n_1");
+    assert.equal(b.note.id, "n_2");
+
+    const { notes } = await projectMemoryRead({ kind: "notes" });
+    assert.equal(notes.length, 2);
+  });
 });

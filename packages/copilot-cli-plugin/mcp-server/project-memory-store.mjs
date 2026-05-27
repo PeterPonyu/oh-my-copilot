@@ -1,7 +1,7 @@
 import { readFile, writeFile, mkdir, rename } from "node:fs/promises";
 import { existsSync } from "node:fs";
 import { resolve, dirname } from "node:path";
-import { randomBytes } from "node:crypto";
+import { createHash, randomBytes } from "node:crypto";
 import { emitResourceUpdate } from "./events.mjs";
 
 const NOTES_URI = "omcp://project-memory/notes";
@@ -9,6 +9,34 @@ const DIRECTIVES_URI = "omcp://project-memory/directives";
 
 const MEMORY_FILE = ".omcp/project-memory.json";
 const SCHEMA_VERSION = 1;
+
+// In-memory LRU dedup window for project_memory writes.
+// Ported from oh-my-openagent src/features/comment-checker-core/dedupe-per-session.ts.
+// State is process-local; restart resets the window. Cross-session dedup is out of scope.
+const DEDUP_RECENT_LIMIT = 10;
+const recentHashes = new Map();
+
+function normalizeForHash(content) {
+  if (typeof content !== "string") return "";
+  return content.trim().replace(/\s+/g, " ").toLowerCase();
+}
+
+function hashContent(normalized) {
+  return createHash("sha256").update(normalized).digest("hex").slice(0, 16);
+}
+
+function rememberHash(hash, id) {
+  if (recentHashes.has(hash)) recentHashes.delete(hash);
+  recentHashes.set(hash, { id, ts: Date.now() });
+  while (recentHashes.size > DEDUP_RECENT_LIMIT) {
+    const oldestKey = recentHashes.keys().next().value;
+    recentHashes.delete(oldestKey);
+  }
+}
+
+export function _resetDedupForTests() {
+  recentHashes.clear();
+}
 
 function memoryPath() {
   return resolve(process.cwd(), MEMORY_FILE);
@@ -108,6 +136,19 @@ export async function projectMemoryAddNote({ text, tags } = {}) {
   if (typeof text !== "string" || text.length === 0) {
     throw new Error("project_memory_add_note requires non-empty 'text'");
   }
+  const normalized = normalizeForHash(text);
+  const hash = hashContent(normalized);
+  if (recentHashes.has(hash)) {
+    const existing = recentHashes.get(hash);
+    // LRU touch: re-insert to refresh recency (Map preserves insertion order).
+    rememberHash(hash, existing.id);
+    return {
+      ok: true,
+      status: "skip",
+      reason: "duplicate",
+      existing_id: existing.id,
+    };
+  }
   const memory = await readMemory();
   memory._seq += 1;
   const note = {
@@ -119,7 +160,8 @@ export async function projectMemoryAddNote({ text, tags } = {}) {
   memory.notes.push(note);
   await writeMemory(memory);
   emitResourceUpdate(NOTES_URI);
-  return { ok: true, note };
+  rememberHash(hash, note.id);
+  return { ok: true, status: "ok", note };
 }
 
 export async function projectMemoryAddDirective({ text, scope = "permanent" } = {}) {
