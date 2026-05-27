@@ -184,3 +184,46 @@ export async function projectMemoryAddDirective({ text, scope = "permanent" } = 
   emitResourceUpdate(DIRECTIVES_URI);
   return { ok: true, directive };
 }
+
+export async function projectMemoryPrune({ maxAgeDays, keepNotes, keepDirectives } = {}) {
+  const memory = await readMemory();
+  const now = Date.now();
+  const cutoffMs = typeof maxAgeDays === "number" && maxAgeDays >= 0
+    ? maxAgeDays * 24 * 60 * 60 * 1000
+    : null;
+
+  const beforeNotes = memory.notes.length;
+  const beforeDirectives = memory.directives.length;
+
+  if (cutoffMs !== null) {
+    memory.notes = memory.notes.filter((n) => {
+      const age = now - new Date(n.ts).getTime();
+      return age <= cutoffMs;
+    });
+    memory.directives = memory.directives.filter((d) => {
+      const age = now - new Date(d.ts).getTime();
+      return age <= cutoffMs;
+    });
+  }
+
+  const maxNotes = typeof keepNotes === "number" && keepNotes > 0 ? keepNotes : null;
+  const maxDirectives = typeof keepDirectives === "number" && keepDirectives > 0 ? keepDirectives : null;
+
+  if (maxNotes !== null && memory.notes.length > maxNotes) {
+    memory.notes = memory.notes.slice(-maxNotes);
+  }
+  if (maxDirectives !== null && memory.directives.length > maxDirectives) {
+    memory.directives = memory.directives.slice(-maxDirectives);
+  }
+
+  await writeMemory(memory);
+  emitResourceUpdate(NOTES_URI);
+  emitResourceUpdate(DIRECTIVES_URI);
+  return {
+    ok: true,
+    pruned_notes: beforeNotes - memory.notes.length,
+    pruned_directives: beforeDirectives - memory.directives.length,
+    remaining_notes: memory.notes.length,
+    remaining_directives: memory.directives.length,
+  };
+}

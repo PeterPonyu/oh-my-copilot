@@ -126,8 +126,22 @@ export async function wikiQuery({ q, k } = {}) {
   const index = await readIndex();
   const ql = q.toLowerCase();
 
+  const entries = Object.entries(index);
+
+  // Parallelize all body reads to avoid O(n) sequential disk I/O.
+  const bodyResults = await Promise.all(
+    entries.map(async ([slug]) => {
+      try {
+        return await readFile(wikiFilePath(slug), "utf8");
+      } catch {
+        return null;
+      }
+    })
+  );
+
   const results = [];
-  for (const [slug, meta] of Object.entries(index)) {
+  for (let i = 0; i < entries.length; i++) {
+    const [slug, meta] = entries[i];
     let score = 0;
     if (typeof meta?.title === "string" && meta.title.toLowerCase().includes(ql)) {
       score += 3;
@@ -140,8 +154,8 @@ export async function wikiQuery({ q, k } = {}) {
         }
       }
     }
-    try {
-      const body = await readFile(wikiFilePath(slug), "utf8");
+    const body = bodyResults[i];
+    if (body !== null) {
       const bodyLower = body.toLowerCase();
       let hits = 0;
       let idx = 0;
@@ -151,8 +165,6 @@ export async function wikiQuery({ q, k } = {}) {
         if (hits >= MAX_QUERY_BODY_HITS) break;
       }
       score += hits;
-    } catch {
-      // skip unreadable entries
     }
     if (score > 0) {
       results.push({
