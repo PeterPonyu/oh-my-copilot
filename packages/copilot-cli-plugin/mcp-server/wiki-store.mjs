@@ -1,8 +1,10 @@
 import { readFile, writeFile, appendFile, mkdir, rename, unlink, readdir } from "node:fs/promises";
 import { emitResourceUpdate } from "./events.mjs";
-import { existsSync } from "node:fs";
+import { existsSync, realpathSync } from "node:fs";
 import { resolve, join } from "node:path";
 import { randomBytes } from "node:crypto";
+
+const MAX_INGEST_BYTES = 2 * 1024 * 1024; // 2 MiB
 
 const WIKI_DIR = ".omcp/wiki";
 const INDEX_FILE = "_index.json";
@@ -197,8 +199,29 @@ export async function wikiIngest({ path, slug, tags } = {}) {
   if (typeof path !== "string" || path.length === 0) {
     throw new Error("wiki_ingest requires 'path'");
   }
-  const absPath = resolve(process.cwd(), path);
-  const body = await readFile(absPath, "utf8");
+  const workspaceRoot = realpathSync(process.cwd());
+  const absPath = resolve(workspaceRoot, path);
+  // Resolve symlinks and verify the real path stays inside the workspace
+  let realTarget;
+  try {
+    realTarget = realpathSync(absPath);
+  } catch {
+    throw new Error(`wiki_ingest: path does not exist or cannot be resolved: ${path}`);
+  }
+  if (!realTarget.startsWith(workspaceRoot + "/") && realTarget !== workspaceRoot) {
+    throw new Error(`wiki_ingest: path escapes workspace root: ${path}`);
+  }
+  // Size guard before reading
+  const { stat } = await import("node:fs/promises");
+  const info = await stat(realTarget);
+  if (info.size > MAX_INGEST_BYTES) {
+    throw new Error(`wiki_ingest: file exceeds max size (${MAX_INGEST_BYTES} bytes): ${path}`);
+  }
+  const body = await readFile(realTarget, "utf8");
+  // Binary detection: reject if NUL bytes present
+  if (body.includes("\0")) {
+    throw new Error(`wiki_ingest: file appears to be binary: ${path}`);
+  }
   const firstLine = body.split("\n", 1)[0]?.trim() ?? "";
   const title = firstLine.startsWith("# ") ? firstLine.slice(2).trim() : path;
   return wikiAdd({ title, body, tags, slug });

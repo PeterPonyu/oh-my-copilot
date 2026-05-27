@@ -244,3 +244,40 @@ test("wikiLint on empty wiki returns empty arrays", async (t) => {
   assert.deepEqual(r.orphans, []);
   assert.deepEqual(r.untracked, []);
 });
+
+// #69: wiki_ingest must reject paths that escape the workspace root
+test("wikiIngest rejects absolute path outside workspace", async (t) => {
+  const dir = freshCwd();
+  t.after(() => teardown(dir));
+
+  await assert.rejects(
+    wikiIngest({ path: "/etc/hostname", slug: "test-escape" }),
+    /escapes workspace root|does not exist/,
+    "absolute path outside workspace must be rejected",
+  );
+  // Verify nothing was persisted
+  assert.equal(existsSync(join(dir, ".omcp", "wiki", "test-escape.md")), false);
+});
+
+test("wikiIngest rejects path traversal outside workspace", async (t) => {
+  const dir = freshCwd();
+  t.after(() => teardown(dir));
+
+  await assert.rejects(
+    wikiIngest({ path: "../../etc/hostname", slug: "test-traverse" }),
+    /escapes workspace root|does not exist/,
+    "path traversal outside workspace must be rejected",
+  );
+});
+
+test("wikiIngest accepts valid in-workspace file", async (t) => {
+  const dir = freshCwd();
+  t.after(() => teardown(dir));
+
+  mkdirSync(join(dir, "docs"), { recursive: true });
+  writeFileSync(join(dir, "docs", "note.md"), "# My Note\n\nbody content", "utf8");
+
+  const r = await wikiIngest({ path: "docs/note.md", slug: "my-note" });
+  assert.equal(r.ok, true);
+  assert.equal(r.slug, "my-note");
+});
