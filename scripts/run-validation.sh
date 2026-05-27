@@ -254,10 +254,13 @@ shell_check "plugin-version" \
   "0.0.7"
 
 # 2. Tool count
+# Bumped to 41 after #78 (project_memory_prune) and #80 (notepad_write_manual) added two new tools.
+# Same anti-pattern as audit3 #79 in server.integration.test.mjs — a follow-up issue should
+# replace this exact-match check with a >=N structural floor.
 shell_check "tools-list-count" \
-  "Wave B-1..B-6 + rules policy: MCP server registers 39 tools." \
+  "Wave B-1..B-6 + rules policy: MCP server registers 41 tools." \
   "echo '{\"jsonrpc\":\"2.0\",\"id\":1,\"method\":\"tools/list\"}' | node $SERVER_MJS 2>&1 | head -1 | node -e 'let d=\"\"; process.stdin.on(\"data\",c=>d+=c); process.stdin.on(\"end\",()=>{const j=JSON.parse(d.trim()); console.log(j.result.tools.length)})'" \
-  "^39$"
+  "^41$"
 
 # 3-9. Per-store round-trips
 mcp_check "state-write-key-form" \
