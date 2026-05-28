@@ -20,7 +20,7 @@ const RULES_PENDING_URI = "omcp://rules/pending";
 // ANTHROPIC_KEY must precede OPENAI_KEY — both start with `sk-`.
 const REDACTION_PATTERNS = [
   { name: "AWS_KEY", regex: /AKIA[0-9A-Z]{16}/g, replacement: "[REDACTED:AWS_KEY]" },
-  { name: "GH_TOKEN", regex: /ghp_[A-Za-z0-9]{36,}/g, replacement: "[REDACTED:GH_TOKEN]" },
+  { name: "GH_TOKEN", regex: /(?:ghp|gho|ghs|ghu|ghr)_[A-Za-z0-9]{36,}|github_pat_[A-Za-z0-9_]{22,}/g, replacement: "[REDACTED:GH_TOKEN]" },
   { name: "ANTHROPIC_KEY", regex: /sk-ant-[A-Za-z0-9_-]{20,}/g, replacement: "[REDACTED:ANTHROPIC_KEY]" },
   { name: "OPENAI_KEY", regex: /sk-(?:proj-)?[A-Za-z0-9_-]{20,}/g, replacement: "[REDACTED:OPENAI_KEY]" },
   { name: "BEARER", regex: /Bearer [A-Za-z0-9_.~+/=-]{20,}/g, replacement: "Bearer [REDACTED]" },

@@ -9,11 +9,13 @@ local Copilot CLI plugin when prerequisites exist, then collect proof.
 | --- | --- | --- |
 | `bash` | Runs repository validation and bootstrap scripts. | Required by every script under `scripts/`. |
 | `python3` | Parses JSON and validates internal Markdown links. | Used by `validate-doc-links.sh` and bootstrap config checks. |
+| `node` >= 22 | Runs the bundled MCP server (`node ./mcp-server/dist/server.mjs`). | Check with `node --version`; the MCP server package declares `engines.node >=22`. |
 | `copilot` | Installs and exercises the local Copilot CLI plugin. | Required by `bootstrap-copilot-power.sh`. |
 | `gh` | Supports GitHub/Copilot CLI authenticated workflows. | Required by `bootstrap-copilot-power.sh`. |
 
 The docs and root-surface validation scripts are useful even before `copilot` or
-`gh` are available. The full bootstrap path requires both.
+`gh` are available. The full plugin/MCP path requires Node.js 22 or newer, and
+the full bootstrap path also requires both `copilot` and `gh`.
 
 ## Install path
 

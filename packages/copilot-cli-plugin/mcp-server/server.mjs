@@ -76,9 +76,10 @@ import {
 } from "./resources.mjs";
 import { listPrompts, getPrompt } from "./prompts.mjs";
 import { resourceEvents } from "./events.mjs";
+import packageJson from "./package.json" with { type: "json" };
 
 const server = new Server(
-  { name: "omcp", version: "0.8.0" },
+  { name: "omcp", version: packageJson.version },
   {
     capabilities: {
       tools: {},
@@ -765,11 +766,13 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
         break;
       }
       case "notepad_read": {
-        result = await notepadRead({ tail: args.tail });
+        const safeArgs = args ?? {};
+        result = await notepadRead({ tail: safeArgs.tail });
         break;
       }
       case "notepad_write": {
-        result = await notepadWrite({ entry: args.entry, priority: args.priority });
+        const safeArgs = args ?? {};
+        result = await notepadWrite({ entry: safeArgs.entry, priority: safeArgs.priority });
         break;
       }
       case "notepad_write_priority": {
@@ -948,8 +951,9 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
         break;
       }
       case "pipeline_record_transition": {
-        const from = args.from === "null" ? null : args.from;
-        transitionRecord({ from, to: args.to, artifact: args.artifact_path });
+        const safeArgs = args ?? {};
+        const from = safeArgs.from === "null" ? null : safeArgs.from;
+        transitionRecord({ from, to: safeArgs.to, artifact: safeArgs.artifact_path ?? safeArgs.artifact });
         result = { ok: true, recorded_at: new Date().toISOString() };
         break;
       }

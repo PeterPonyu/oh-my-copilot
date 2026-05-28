@@ -250,6 +250,23 @@ test("rulesPendingRead redacts content and project roots unless session-scoped",
 });
 
 describe("secret redaction", () => {
+  test("GitHub token redaction covers modern token prefixes", () => {
+    const samples = [
+      "classic ghp_abcdefghijklmnopqrstuvwxyzABCDEFGHIJ",
+      "fine-grained github_pat_1234567890_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ",
+      "oauth gho_abcdefghijklmnopqrstuvwxyzABCDEFGHIJ",
+      "server ghs_abcdefghijklmnopqrstuvwxyzABCDEFGHIJ",
+      "user ghu_abcdefghijklmnopqrstuvwxyzABCDEFGHIJ",
+      "refresh ghr_abcdefghijklmnopqrstuvwxyzABCDEFGHIJ",
+    ];
+
+    for (const sample of samples) {
+      const redacted = redactSecrets(sample);
+      assert.match(redacted, /\[REDACTED:GH_TOKEN\]/);
+      assert.doesNotMatch(redacted, /(?:ghp|gho|ghs|ghu|ghr)_|github_pat_/);
+    }
+  });
+
   test("AWS key in rule content is redacted on write (verified on disk)", async (t) => {
     const dir = freshCwd();
     t.after(() => teardown(dir));

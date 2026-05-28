@@ -50,7 +50,7 @@ mkdir -p dist
 npx esbuild server.mjs \
   --bundle \
   --platform=node \
-  --target=node18 \
+  --target=node22 \
   --format=esm \
   --outfile="$BUNDLE"
 chmod +x "$BUNDLE"
