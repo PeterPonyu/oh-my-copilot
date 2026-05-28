@@ -4,23 +4,44 @@ Workspace-state MCP server for oh-my-copilot.
 
 ## Installation
 
-After running `copilot plugin install`, execute the build script once to install dependencies:
+End-user plugin installs use the committed bundle in `dist/server.mjs`; they do
+not need to run `build.sh` or install MCP server dependencies. The build script
+is a development-only helper for maintainers who changed `server.mjs` or one of
+the store modules and need to regenerate the checked-in bundle.
 
 ```bash
+# Development only: refresh packages/copilot-cli-plugin/mcp-server/dist/server.mjs
 bash packages/copilot-cli-plugin/mcp-server/build.sh
 ```
 
-The script is idempotent — it skips `npm install` if `node_modules/` is already present and `package-lock.json` has not changed.
+The script is idempotent and skips rebuilding when source files and dependency
+checksums are unchanged.
 
 ## Tool Reference
 
+The authoritative tool schema is the MCP `tools/list` response emitted by
+`server.mjs`. Keep this README as the human-readable inventory and use tests plus
+`scripts/audit-tool-refs.mjs` to catch drift. Current tools (41):
+
+- `state_read`, `state_write`, `state_list`, `state_clear`, `state_get_status`, `state_list_active`
+- `notepad_read`, `notepad_write`, `notepad_write_priority`, `notepad_write_working`, `notepad_write_manual`, `notepad_prune`, `notepad_stats`
+- `project_memory_read`, `project_memory_write`, `project_memory_add_note`, `project_memory_add_directive`, `project_memory_prune`
+- `trace_write`, `trace_summary`, `trace_timeline`, `trace_list_sessions`
+- `wiki_add`, `wiki_read`, `wiki_list`, `wiki_query`, `wiki_delete`, `wiki_ingest`, `wiki_lint`
+- `shared_memory_write`, `shared_memory_read`, `shared_memory_list`, `shared_memory_delete`, `shared_memory_cleanup`
+- `rules_context_for_file`, `rules_pending_read`, `rules_pending_clear`, `rules_policy_report`
+- `plan_list`, `pipeline_record_transition`, `pipeline_state`
+
+Common storage-backed tools:
+
 | Tool | Signature | Purpose | Storage path |
 |---|---|---|---|
-| `state_read` | `(key: string) → { value: any \| null, exists: bool }` | Read a JSON value by key | `.omcp/state/<key>.json` |
+| `state_read` | `(key: string) → { value: any | null, exists: bool }` | Read a JSON value by key | `.omcp/state/<key>.json` |
 | `state_write` | `(key: string, value: any) → { ok: bool, path: string }` | Atomic write (temp + rename) | `.omcp/state/<key>.json` |
 | `state_list` | `() → { keys: string[] }` | List all state keys | `.omcp/state/` |
 | `notepad_read` | `(tail?: number) → { content: string }` | Read notepad, optionally last N lines | `.omcp/notepad.md` |
-| `notepad_write` | `(entry: string, priority?: "manual"\|"working"\|"priority") → { ok: bool }` | Append timestamped entry | `.omcp/notepad.md` |
+| `notepad_write` | `(entry: string, priority?: "manual"|"working"|"priority") → { ok: bool }` | Append timestamped entry | `.omcp/notepad.md` |
+| `notepad_write_manual` | `(entry: string) → { ok: bool }` | Append explicitly to the manual lane | `.omcp/notepad.md` |
 | `rules_context_for_file` | `(path: string, tool?: string, session_id?: string) → { matched: number, entry: object }` | Discover and capture pending rule context for a touched file | `.omcp/state/rules-pending.json` |
 | `rules_pending_read` | `(session_id?: string, limit?: number) → { entries: object[] }` | Read captured pending rule context; unscoped reads redact rule bodies and project roots | `.omcp/state/rules-pending.json` |
 | `rules_pending_clear` | `(session_id?: string) → { ok: bool, removed: number }` | Clear captured pending rule context | `.omcp/state/rules-pending.json` |
@@ -75,9 +96,9 @@ The server is registered in `.mcp.json` at the plugin root:
 ```json
 {
   "mcpServers": {
-    "oh-my-copilot": {
+    "omcp": {
       "command": "node",
-      "args": ["./mcp-server/server.mjs"],
+      "args": ["./mcp-server/dist/server.mjs"],
       "transport": "stdio"
     }
   }

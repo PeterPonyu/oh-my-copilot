@@ -1,4 +1,4 @@
-name: Docs Check
+name: CI
 
 on:
   pull_request:
@@ -44,6 +44,8 @@ jobs:
           npm test
       - name: Run plugin E2E validation
         run: bash scripts/run-validation.sh --out .omcp/validation/ci-validation.md --no-redact
+      - name: Run Python benchmark tests
+        run: python3 -m unittest discover -s benchmark -p 'test*.py'
       - name: Validate cross-host benchmark scripts
         run: |
           node --check scripts/harvest-cross-host-benchmark-data.mjs

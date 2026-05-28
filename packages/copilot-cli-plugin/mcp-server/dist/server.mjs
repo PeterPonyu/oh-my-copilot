@@ -16531,7 +16531,7 @@ var MAX_PENDING_ENTRIES = 50;
 var RULES_PENDING_URI = "omcp://rules/pending";
 var REDACTION_PATTERNS = [
   { name: "AWS_KEY", regex: /AKIA[0-9A-Z]{16}/g, replacement: "[REDACTED:AWS_KEY]" },
-  { name: "GH_TOKEN", regex: /ghp_[A-Za-z0-9]{36,}/g, replacement: "[REDACTED:GH_TOKEN]" },
+  { name: "GH_TOKEN", regex: /(?:ghp|gho|ghs|ghu|ghr)_[A-Za-z0-9]{36,}|github_pat_[A-Za-z0-9_]{22,}/g, replacement: "[REDACTED:GH_TOKEN]" },
   { name: "ANTHROPIC_KEY", regex: /sk-ant-[A-Za-z0-9_-]{20,}/g, replacement: "[REDACTED:ANTHROPIC_KEY]" },
   { name: "OPENAI_KEY", regex: /sk-(?:proj-)?[A-Za-z0-9_-]{20,}/g, replacement: "[REDACTED:OPENAI_KEY]" },
   { name: "BEARER", regex: /Bearer [A-Za-z0-9_.~+/=-]{20,}/g, replacement: "Bearer [REDACTED]" },
@@ -17387,9 +17387,34 @@ ${userArgs}
   };
 }
 
+// package.json
+var package_default = {
+  name: "oh-my-copilot-mcp-server",
+  version: "0.0.7",
+  private: true,
+  type: "module",
+  engines: {
+    node: ">=22"
+  },
+  bin: {
+    "oh-my-copilot-mcp": "./server.mjs"
+  },
+  scripts: {
+    test: "node --test 'tests/*.test.mjs'",
+    build: "bash build.sh",
+    "build:bundle": "esbuild server.mjs --bundle --platform=node --target=node22 --format=esm --outfile=dist/server.mjs"
+  },
+  dependencies: {
+    "@modelcontextprotocol/sdk": "^1.18.0"
+  },
+  devDependencies: {
+    esbuild: "^0.28.0"
+  }
+};
+
 // server.mjs
 var server = new Server(
-  { name: "omcp", version: "0.8.0" },
+  { name: "omcp", version: package_default.version },
   {
     capabilities: {
       tools: {},
@@ -18027,11 +18052,13 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
         break;
       }
       case "notepad_read": {
-        result = await notepadRead({ tail: args.tail });
+        const safeArgs = args ?? {};
+        result = await notepadRead({ tail: safeArgs.tail });
         break;
       }
       case "notepad_write": {
-        result = await notepadWrite({ entry: args.entry, priority: args.priority });
+        const safeArgs = args ?? {};
+        result = await notepadWrite({ entry: safeArgs.entry, priority: safeArgs.priority });
         break;
       }
       case "notepad_write_priority": {
@@ -18210,8 +18237,9 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
         break;
       }
       case "pipeline_record_transition": {
-        const from = args.from === "null" ? null : args.from;
-        transitionRecord({ from, to: args.to, artifact: args.artifact_path });
+        const safeArgs = args ?? {};
+        const from = safeArgs.from === "null" ? null : safeArgs.from;
+        transitionRecord({ from, to: safeArgs.to, artifact: safeArgs.artifact_path ?? safeArgs.artifact });
         result = { ok: true, recorded_at: (/* @__PURE__ */ new Date()).toISOString() };
         break;
       }

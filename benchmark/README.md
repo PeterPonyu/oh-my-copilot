@@ -25,6 +25,9 @@ the current repository behaves like a usable Copilot product:
 
 # 3. Full enhanced proof matrix
 ./benchmark/run_full_comparison.sh --run-agent-smoke --variant enhanced
+
+# 4. Python benchmark unit tests (also run by CI)
+python3 -m unittest discover -s benchmark -p 'test*.py'
 ```
 
 ## Profiles

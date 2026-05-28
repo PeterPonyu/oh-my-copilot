@@ -67,6 +67,10 @@ class StdioClient {
     return this.send("tools/call", { name, arguments: args });
   }
 
+  async callToolWithoutArguments(name) {
+    return this.send("tools/call", { name });
+  }
+
   // Wait until a notification matching predicate arrives, or timeout.
   // Returns the matching message, or throws on timeout.
   async awaitNotification(predicate, timeoutMs = 3000) {
@@ -303,6 +307,27 @@ test("integration: notepad lanes round-trip", async (t) => {
   const pruned = unwrap(await client.callTool("notepad_prune", { maxAgeDays: 999 }));
   assert.equal(pruned.kept, 3);
   assert.equal(pruned.pruned, 0);
+});
+
+test("integration: tools/call tolerates omitted arguments for notepad and pipeline tools", async (t) => {
+  const cwd = mkdtempSync(join(tmpdir(), "omcp-int-"));
+  const client = new StdioClient(cwd);
+  t.after(async () => {
+    await client.close();
+    rmSync(cwd, { recursive: true, force: true });
+  });
+
+  const read = await client.callToolWithoutArguments("notepad_read");
+  assert.ok(!isError(read), "notepad_read without arguments should not crash");
+  assert.equal(unwrap(read).content, "");
+
+  const write = await client.callToolWithoutArguments("notepad_write");
+  assert.ok(isError(write), "notepad_write without arguments should return a validation error");
+  assert.match(write.result.content[0].text, /notepad write requires non-empty 'entry'/);
+
+  const pipeline = await client.callToolWithoutArguments("pipeline_record_transition");
+  assert.ok(isError(pipeline), "pipeline_record_transition without arguments should return a validation error");
+  assert.match(pipeline.result.content[0].text, /invalid stage/);
 });
 
 test("integration: project memory round-trip", async (t) => {

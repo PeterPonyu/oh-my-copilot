@@ -33,7 +33,7 @@ local plugin state contract.
 
 ## 3. Bootstrap when prerequisites are present
 
-If `copilot` and `gh` are installed and authenticated for your environment, run:
+If `node` >= 22, `copilot`, and `gh` are installed and authenticated for your environment, run:
 
 ```bash
 ./scripts/bootstrap-copilot-power.sh
