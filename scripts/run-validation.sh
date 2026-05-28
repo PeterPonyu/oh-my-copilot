@@ -254,13 +254,12 @@ shell_check "plugin-version" \
   "0.0.7"
 
 # 2. Tool count
-# Bumped to 41 after #78 (project_memory_prune) and #80 (notepad_write_manual) added two new tools.
-# Same anti-pattern as audit3 #79 in server.integration.test.mjs — a follow-up issue should
-# replace this exact-match check with a >=N structural floor.
+# Keep a structural floor instead of an exact count so valid new tools do not
+# false-fail the validation harness. This mirrors server.integration.test.mjs.
 shell_check "tools-list-count" \
-  "Wave B-1..B-6 + rules policy: MCP server registers 41 tools." \
-  "echo '{\"jsonrpc\":\"2.0\",\"id\":1,\"method\":\"tools/list\"}' | node $SERVER_MJS 2>&1 | head -1 | node -e 'let d=\"\"; process.stdin.on(\"data\",c=>d+=c); process.stdin.on(\"end\",()=>{const j=JSON.parse(d.trim()); console.log(j.result.tools.length)})'" \
-  "^41$"
+  "Wave B-1..B-6 + rules policy: MCP server registers at least 41 tools." \
+  "echo '{\"jsonrpc\":\"2.0\",\"id\":1,\"method\":\"tools/list\"}' | node $SERVER_MJS 2>&1 | head -1 | node -e 'let d=\"\"; process.stdin.on(\"data\",c=>d+=c); process.stdin.on(\"end\",()=>{const j=JSON.parse(d.trim()); const count=j.result.tools.length; if (count < 41) { console.error(\"expected at least 41 tools, got \" + count); process.exit(1); } console.log(\"ok:\" + count);})'" \
+  "^ok:[0-9]+$"
 
 # 3-9. Per-store round-trips
 mcp_check "state-write-key-form" \
