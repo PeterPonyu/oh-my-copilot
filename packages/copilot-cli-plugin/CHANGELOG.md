@@ -8,9 +8,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Hyperplan — adversarial 5-member planning skill
 
-- Added `/omcp:hyperplan` skill + command translating oh-my-openagent's
-  `hyperplan` workflow (adversarial 5-member cross-critique → distillation →
-  mandatory planner handoff) for the Copilot CLI execution model.
+- Added `/omcp:hyperplan` skill + command — an adversarial 5-member
+  cross-critique → distillation → mandatory planner handoff workflow for
+  the Copilot CLI execution model.
 - Roles map to existing custom agents already shipped with omcp:
   `code-simplifier` (skeptic), `test-engineer` (validator), `research`
   (researcher), `architect` (architect), `analyst` (creative challenger).
@@ -25,9 +25,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### ulw-loop — ultrawork with mandatory Oracle verification gate
 
-- Added `/omcp:ulw-loop` skill + command translating oh-my-openagent's
-  `ULW_LOOP_TEMPLATE` (ultrawork variant where the verifier confirms
-  completion) for the Copilot CLI execution model.
+- Added `/omcp:ulw-loop` skill + command — the ultrawork variant where the
+  verifier confirms completion, for the Copilot CLI execution model.
 - The completion contract: emitting `<promise>DONE</promise>` *opens* the
   verification gate but does not close the loop. The `verifier` agent
   (Oracle) reads touched files, re-runs cited commands, and returns
@@ -44,8 +43,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### sisyphus — top-tier orchestrator agent
 
-- Added `sisyphus` custom agent translated from oh-my-openagent
-  (`src/agents/sisyphus.ts`) for the Copilot CLI execution model.
+- Added `sisyphus` custom agent for the Copilot CLI execution model.
 - Sisyphus is an orchestrator: it classifies intent (mandatory
   verbalization before action), assesses codebase maturity, parallelizes
   independent work by default, delegates to existing custom agents

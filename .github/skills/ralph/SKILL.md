@@ -6,8 +6,6 @@ argument-hint: "[--no-deslop] [--critic=architect|critic|codex] <task descriptio
 level: 4
 ---
 
-<!-- omc-port-translated: v1 -->
-<!-- source: references/oh-my-claudecode/skills/ralph/SKILL.md | wave: 4.5 -->
 # [OMCP] Ralph
 
 [RALPH + ULTRAWORK - ITERATION {{ITERATION}}/{{MAX}}]

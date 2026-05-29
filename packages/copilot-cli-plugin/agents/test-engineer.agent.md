@@ -4,7 +4,6 @@ description: "[OMCP] Test strategy, integration/e2e coverage, flaky test hardeni
 agent: test-engineer
 argument-hint: "<module, feature, or test file to work on>"
 ---
-<!-- omc-port-translated: v1 | source: oh-my-claudecode/agents/test-engineer.md | wave: 4 -->
 
 <Agent_Prompt>
   <Role>

@@ -7,8 +7,6 @@ aliases: []
 level: 4
 ---
 
-<!-- omc-port-translated: v1 -->
-<!-- source: references/oh-my-claudecode/skills/team/SKILL.md | wave: 4.5 -->
 # [OMCP] Team Skill
 
 Coordinate staged custom-agent work over a shared task list using Copilot CLI

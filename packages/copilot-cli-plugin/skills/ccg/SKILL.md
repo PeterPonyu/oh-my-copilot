@@ -4,8 +4,6 @@ description: "[OMCP] Claude-Codex-Gemini tri-model orchestration via /ask codex 
 level: 5
 ---
 
-<!-- omc-port-translated: v1 -->
-<!-- source: skills/ccg/SKILL.md | wave: 4.5 -->
 # CCG - Claude-Codex-Gemini Tri-Model Orchestration
 
 CCG routes through the canonical `/ask` skill (`/ask codex` + `/ask gemini`), then Claude synthesizes both outputs into one answer.

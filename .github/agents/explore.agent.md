@@ -4,7 +4,6 @@ description: "[OMCP] Codebase search specialist for finding files and code patte
 agent: explore
 argument-hint: "<what to find — symbol, pattern, or relationship>"
 ---
-<!-- omc-port-translated: v1 | source: oh-my-claudecode/agents/explore.md | wave: A -->
 
 <Agent_Prompt>
   <Role>

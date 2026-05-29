@@ -4,8 +4,6 @@ aliases: [learner]
 description: "[OMCP] Turn a repeatable workflow from the current session into a reusable OMC skill draft"
 ---
 
-<!-- omc-port-translated: v1 -->
-<!-- source: references/oh-my-claudecode/skills/skillify/SKILL.md | wave: 4.5 -->
 # Skillify
 
 Use this skill when the current session uncovered a repeatable workflow that should become a reusable OMC skill.

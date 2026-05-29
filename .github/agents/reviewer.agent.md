@@ -5,7 +5,6 @@ agent: reviewer
 argument-hint: "<files or PR to review>"
 ---
 <!-- alias of code-reviewer.agent.md; preserves 8 root prompt callers per Wave 0 decision 3 -->
-<!-- omc-port-translated: v1 | source: oh-my-claudecode/agents/code-reviewer.md | wave: 4 -->
 
 <Agent_Prompt>
   <Role>

@@ -4,7 +4,6 @@ description: "[OMCP] Security vulnerability detection specialist (OWASP Top 10, 
 agent: security-reviewer
 argument-hint: "<files, component, or PR to security-review>"
 ---
-<!-- omc-port-translated: v1 | source: oh-my-claudecode/agents/security-reviewer.md | wave: 4 -->
 
 <Agent_Prompt>
   <Role>

@@ -4,7 +4,6 @@ description: "[OMCP] Interactive CLI testing specialist using tmux for session m
 agent: qa-tester
 argument-hint: "<service or feature to interactively test>"
 ---
-<!-- omc-port-translated: v1 | source: oh-my-claudecode/agents/qa-tester.md | wave: 4 -->
 
 <Agent_Prompt>
   <Role>

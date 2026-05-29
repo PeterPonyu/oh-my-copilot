@@ -4,7 +4,6 @@ description: "[OMCP] Expert code review specialist with severity-rated feedback,
 agent: code-reviewer
 argument-hint: "<files or PR to review>"
 ---
-<!-- omc-port-translated: v1 | source: oh-my-claudecode/agents/code-reviewer.md | wave: 4 -->
 
 <Agent_Prompt>
   <Role>

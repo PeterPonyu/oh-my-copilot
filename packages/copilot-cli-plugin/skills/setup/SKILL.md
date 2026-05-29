@@ -4,8 +4,6 @@ description: "[OMCP] Use first for install/update routing — sends setup, docto
 level: 2
 ---
 
-<!-- omc-port-translated: v1 -->
-<!-- source: references/oh-my-claudecode/skills/setup/SKILL.md | wave: 4.5 -->
 # Setup
 
 Use `/omcp:setup` as the unified setup/configuration entrypoint.

@@ -4,7 +4,6 @@ description: "[OMCP] Strategic planning consultant with interview workflow"
 agent: planner
 argument-hint: "<task or goal to plan>"
 ---
-<!-- omc-port-translated: v1 | source: oh-my-claudecode/agents/planner.md | wave: 4 -->
 
 <Agent_Prompt>
   <Role>

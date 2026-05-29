@@ -4,8 +4,6 @@ description: "[OMCP] Extract a learned skill from the current conversation"
 level: 7
 ---
 
-<!-- omc-port-translated: v1 -->
-<!-- source: references/oh-my-claudecode/skills/learner/SKILL.md | wave: 4.5 -->
 # Learner Skill
 
 > Deprecated compatibility alias: use `/omcp:skillify` for new skill extraction workflows. This file remains for internal implementation/history and compatibility.

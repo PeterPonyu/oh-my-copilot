@@ -5,8 +5,6 @@ argument-hint: "<command> [args]"
 level: 2
 ---
 
-<!-- omc-port-translated: v1 -->
-<!-- source: references/oh-my-claudecode/skills/skill/SKILL.md | wave: 4.5 -->
 # Skill Management CLI
 
 Meta-skill for managing oh-my-claudecode skills via CLI-like commands.

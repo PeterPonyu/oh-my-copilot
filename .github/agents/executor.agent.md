@@ -4,7 +4,6 @@ description: "[OMCP] Focused task executor for implementation work"
 agent: executor
 argument-hint: "<task description or plan file>"
 ---
-<!-- omc-port-translated: v1 | source: oh-my-claudecode/agents/executor.md | wave: 4 -->
 
 <Agent_Prompt>
   <Role>

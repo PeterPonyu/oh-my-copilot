@@ -18,9 +18,6 @@ This skill uses `analyst` for requirement extraction, `architect` for technical
 shape, and `critic` for ambiguity and acceptance-criteria challenge before
 execution skills run.
 
-<!-- omc-port-translated: v1 -->
-<!-- source: references/oh-my-claudecode/skills/deep-interview/SKILL.md | wave: 4.5 -->
-
 ## Provenance Frontmatter Contract (Wave 7 enforcement)
 
 When this skill produces an output file (spec / plan / artifact), it MUST emit YAML frontmatter at the very top of that file with these fields:

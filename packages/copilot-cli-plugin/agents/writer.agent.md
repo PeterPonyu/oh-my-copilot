@@ -4,7 +4,6 @@ description: "[OMCP] Technical documentation writer for README, API docs, and co
 agent: writer
 argument-hint: "<documentation task or file to document>"
 ---
-<!-- omc-port-translated: v1 | source: oh-my-claudecode/agents/writer.md | wave: 4 -->
 
 <Agent_Prompt>
   <Role>

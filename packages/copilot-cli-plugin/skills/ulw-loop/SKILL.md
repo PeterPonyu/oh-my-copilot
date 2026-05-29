@@ -6,8 +6,6 @@ argument-hint: "[--max-iterations=N] [--strategy=reset|continue] <task descripti
 level: 4
 ---
 
-<!-- omc-port-translated: v1 | source: oh-my-openagent ULW_LOOP_TEMPLATE | wave: Q -->
-
 # [OMCP] ULW Loop — Ultrawork with Oracle Verification
 
 [ULW LOOP - ITERATION {{ITERATION}}/{{MAX}}]
@@ -20,8 +18,8 @@ the work is done only when the `verifier` agent (the Oracle) confirms it.
 Emitting a `<promise>DONE</promise>` opens the verification gate; it does
 not close the loop.
 
-This is the Copilot translation of oh-my-openagent's `ULW_LOOP_TEMPLATE`
-(ultrawork variant with Oracle verification, max 500 iterations).
+This is the ultrawork variant with Oracle verification (max 500
+iterations) for the Copilot CLI execution model.
 
 ## When to use
 

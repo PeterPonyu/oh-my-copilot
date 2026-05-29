@@ -4,8 +4,6 @@ description: "[OMCP] Configure popular MCP servers for enhanced agent capabiliti
 level: 2
 ---
 
-<!-- omc-port-translated: v1 -->
-<!-- source: references/oh-my-claudecode/skills/mcp-setup/SKILL.md | wave: 4.5 -->
 # MCP Setup
 
 Configure Model Context Protocol (MCP) servers to extend Claude Code's capabilities with external tools like web search, file system access, and GitHub integration.

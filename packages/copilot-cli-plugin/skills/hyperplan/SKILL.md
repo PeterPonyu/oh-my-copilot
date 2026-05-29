@@ -6,8 +6,6 @@ argument-hint: "<planning request>"
 level: 4
 ---
 
-<!-- omc-port-translated: v1 | source: oh-my-openagent/.opencode/skills/hyperplan/SKILL.md | wave: Q -->
-
 # [OMCP] Hyperplan — Adversarial Multi-Agent Planning
 
 > **MANDATORY:** First action when this skill loads — say "HYPERPLAN MODE ENABLED!" so the user knows orchestration started.

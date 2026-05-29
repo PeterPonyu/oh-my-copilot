@@ -13,8 +13,6 @@ next-skill-args: --consensus --direct
 handoff: .omcp/specs/deep-dive-{slug}.md
 ---
 
-<!-- omc-port-translated: v1 -->
-<!-- source: references/oh-my-claudecode/skills/deep-dive/SKILL.md | wave: 4.5 -->
 <Purpose>
 Deep Dive orchestrates a 2-stage pipeline that first investigates WHY something happened (trace) then precisely defines WHAT to do about it (deep-interview). The trace stage runs 3 parallel causal investigation lanes, and its findings feed into the interview stage via a 3-point injection mechanism — enriching the starting point, providing system context, and seeding initial questions. The result is a crystal-clear spec grounded in evidence, not assumptions.
 </Purpose>

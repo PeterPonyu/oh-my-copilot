@@ -5,8 +5,6 @@ aliases: []
 level: 4
 ---
 
-<!-- omc-port-translated: v1 -->
-<!-- source: references/oh-my-claudecode/skills/omc-teams/SKILL.md | wave: A -->
 # CLI Teams Skill
 
 Spawn N CLI worker processes in tmux panes to execute tasks in parallel. Supports `claude`, `codex`, and `gemini` agent types. Distinct from the in-Copilot `/omcp:team` skill: this one drives external CLI binaries via tmux panes; `/omcp:team` orchestrates Copilot's own subagents.

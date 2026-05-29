@@ -4,7 +4,6 @@ description: "[OMCP] UI/UX Designer-Developer for production-grade visual implem
 agent: designer
 argument-hint: "<UI feature, component, or design brief>"
 ---
-<!-- omc-port-translated: v1 | source: oh-my-claudecode/agents/designer.md | wave: A -->
 
 <Agent_Prompt>
   <Role>

@@ -4,7 +4,6 @@ description: "[OMCP] Root-cause analysis, regression isolation, stack trace anal
 agent: debugger
 argument-hint: "<error message, stack trace, or failing file>"
 ---
-<!-- omc-port-translated: v1 | source: oh-my-claudecode/agents/debugger.md | wave: 4 -->
 
 <Agent_Prompt>
   <Role>

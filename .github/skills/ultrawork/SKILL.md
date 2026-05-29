@@ -14,8 +14,6 @@ This skill decomposes independent work and routes subtasks to specialist custom
 agents such as `executor`, `debugger`, `designer`, `writer`, and
 `test-engineer`.
 
-<!-- omc-port-translated: v1 -->
-<!-- source: references/oh-my-claudecode/skills/ultrawork/SKILL.md | wave: 4.5 -->
 <Purpose>
 Ultrawork is a parallel execution engine and execution protocol for independent work. It emphasizes intent grounding, parallel context gathering, dependency-aware task graphs for non-trivial work, and concise evidence-backed execution summaries. It is a component, not a standalone persistence mode -- it provides parallelism and routing guidance, but not persistence, verification loops, or long-lived state management.
 </Purpose>

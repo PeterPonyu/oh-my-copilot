@@ -5,8 +5,6 @@ argument-hint: "[--mission-dir <path>] [--max-runtime <duration>] [--cron <spec>
 level: 4
 ---
 
-<!-- omc-port-translated: v1 -->
-<!-- source: references/oh-my-claudecode/skills/autoresearch/SKILL.md | wave: 4.5 -->
 <Purpose>
 Autoresearch is a stateful skill for bounded, evaluator-driven iterative improvement. It owns one mission at a time, keeps iterating through non-passing results, records each evaluation and decision as durable artifacts, and stops only when an explicit max-runtime ceiling or another explicit terminal condition is reached.
 </Purpose>

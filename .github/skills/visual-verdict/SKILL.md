@@ -4,8 +4,6 @@ description: "[OMCP] Structured visual QA verdict for screenshot-to-reference co
 level: 2
 ---
 
-<!-- omc-port-translated: v1 -->
-<!-- source: references/oh-my-claudecode/skills/visual-verdict/SKILL.md | wave: 4.5 -->
 <Purpose>
 Use this skill to compare generated UI screenshots against one or more reference images and return a strict JSON verdict that can drive the next edit iteration.
 </Purpose>

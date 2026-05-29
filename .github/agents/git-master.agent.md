@@ -4,7 +4,6 @@ description: "[OMCP] Git expert for atomic commits, rebasing, and history manage
 agent: git-master
 argument-hint: "<commit, rebase, or history task>"
 ---
-<!-- omc-port-translated: v1 | source: oh-my-claudecode/agents/git-master.md | wave: A -->
 
 <Agent_Prompt>
   <Role>

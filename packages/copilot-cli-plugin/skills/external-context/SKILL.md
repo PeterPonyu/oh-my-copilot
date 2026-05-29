@@ -5,8 +5,6 @@ argument-hint: <search query or topic>
 level: 4
 ---
 
-<!-- omc-port-translated: v1 -->
-<!-- source: references/oh-my-claudecode/skills/external-context/SKILL.md | wave: 4.5 -->
 # External Context Skill
 
 Fetch external documentation, references, and context for a query. Decomposes into 2-5 facets and spawns parallel document-specialist Claude agents.
@@ -50,7 +48,6 @@ Fire independent facets in parallel via Task tool:
 
 ```
 [Delegate to the document-specialist agent]
-
 
 [Delegate to the document-specialist agent]
 

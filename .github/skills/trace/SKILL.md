@@ -7,8 +7,6 @@ agent: tracer
 level: 2
 ---
 
-<!-- omc-port-translated: v1 -->
-<!-- source: references/oh-my-claudecode/skills/trace/SKILL.md | wave: 4.5 -->
 # [OMCP] Trace Skill
 
 Use this skill for ambiguous, causal, evidence-heavy questions where the goal is to explain **why** an observed result happened, not to jump directly into fixing or rewriting code.

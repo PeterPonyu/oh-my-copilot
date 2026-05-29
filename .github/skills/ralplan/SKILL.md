@@ -6,9 +6,6 @@ argument-hint: "[--interactive] [--deliberate] [--architect codex] [--critic cod
 level: 4
 ---
 
-<!-- omc-port-translated: v1 -->
-<!-- source: references/oh-my-claudecode/skills/ralplan/SKILL.md | wave: 4.5 -->
-
 ## Provenance Frontmatter Contract (Wave 7 enforcement)
 
 When this skill produces an output file (spec / plan / artifact), it MUST emit YAML frontmatter at the very top of that file with these fields:
