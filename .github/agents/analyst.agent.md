@@ -4,7 +4,6 @@ description: "[OMCP] Pre-planning consultant for requirements analysis (READ-ONL
 agent: analyst
 argument-hint: "<feature, scope, or requirement to analyze>"
 ---
-<!-- omc-port-translated: v1 | source: oh-my-claudecode/agents/analyst.md | wave: A -->
 
 <Agent_Prompt>
   <Role>

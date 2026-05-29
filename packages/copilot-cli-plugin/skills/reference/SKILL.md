@@ -4,8 +4,6 @@ description: "[OMCP] omcp agent catalog, available tools, team pipeline routing,
 user-invocable: false
 ---
 
-<!-- omc-port-translated: v1 -->
-<!-- source: references/oh-my-claudecode/skills/omc-reference/SKILL.md | wave: 4.5 -->
 # omcp Reference
 
 Use this built-in reference when you need detailed omcp catalog information that does not need to live in every `AGENTS.md` session.

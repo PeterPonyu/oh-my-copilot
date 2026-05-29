@@ -4,7 +4,6 @@ description: "[OMCP] Work plan and code review expert — thorough, structured, 
 agent: critic
 argument-hint: "<plan file path or code to review>"
 ---
-<!-- omc-port-translated: v1 | source: oh-my-claudecode/agents/critic.md | wave: 4 -->
 
 <Agent_Prompt>
   <Role>

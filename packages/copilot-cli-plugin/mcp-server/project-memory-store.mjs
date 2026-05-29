@@ -11,7 +11,6 @@ const MEMORY_FILE = ".omcp/project-memory.json";
 const SCHEMA_VERSION = 1;
 
 // In-memory LRU dedup window for project_memory writes.
-// Ported from oh-my-openagent src/features/comment-checker-core/dedupe-per-session.ts.
 // State is process-local; restart resets the window. Cross-session dedup is out of scope.
 const DEDUP_RECENT_LIMIT = 10;
 const recentHashes = new Map();

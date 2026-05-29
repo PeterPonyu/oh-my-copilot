@@ -5,8 +5,6 @@ aliases: [psm]
 level: 2
 ---
 
-<!-- omc-port-translated: v1 -->
-<!-- source: references/oh-my-claudecode/skills/project-session-manager/SKILL.md | wave: 4.5 -->
 # Project Session Manager (PSM) Skill
 
 `psm` is the compatibility alias for this canonical skill entrypoint.

@@ -4,8 +4,6 @@ description: "[OMCP] Generic release assistant — analyzes repo release rules, 
 level: 3
 ---
 
-<!-- omc-port-translated: v1 -->
-<!-- source: references/oh-my-claudecode/skills/release/SKILL.md | wave: 4.5 -->
 # Release Skill
 
 A thin, repo-aware release assistant. On first run it inspects the project and CI to derive release rules, stores them in `.omcp/RELEASE_RULE.md` for future use, then walks you through a release using those rules.

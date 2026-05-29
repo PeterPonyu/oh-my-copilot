@@ -4,8 +4,6 @@ description: "[OMCP] Install or refresh oh-my-claudecode for plugin, npm, and lo
 level: 2
 ---
 
-<!-- omc-port-translated: v1 -->
-<!-- source: skills/omc-setup/SKILL.md | wave: 4.5 -->
 # OMC Setup
 
 This is the **only command you need to learn**. After running this, everything else is automatic.

@@ -16,8 +16,6 @@ triggers:
 level: 2
 ---
 
-<!-- omc-port-translated: v1 -->
-<!-- source: references/oh-my-claudecode/skills/configure-notifications/SKILL.md | wave: 4.5 -->
 # Configure Notifications
 
 Set up OMC notification integrations so you're alerted when sessions end, need input, or complete background tasks.

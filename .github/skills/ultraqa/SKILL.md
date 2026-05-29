@@ -15,8 +15,6 @@ This skill coordinates `verifier`, `test-engineer`, `qa-tester`, `debugger`,
 regression loops. `qa-tester` covers interactive CLI/service validation in the
 `--interactive` lane.
 
-<!-- omc-port-translated: v1 -->
-<!-- source: references/oh-my-claudecode/skills/ultraqa/SKILL.md | wave: 4.5 -->
 # UltraQA Skill
 
 [ULTRAQA ACTIVATED - AUTONOMOUS QA CYCLING]

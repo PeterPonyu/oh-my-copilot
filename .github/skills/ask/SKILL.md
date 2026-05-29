@@ -3,8 +3,6 @@ name: ask
 description: "[OMCP] Process-first advisor routing for Claude, Codex, or Gemini via `omc ask`, with artifact capture and no raw CLI assembly"
 ---
 
-<!-- omc-port-translated: v1 -->
-<!-- source: references/oh-my-claudecode/skills/ask/SKILL.md | wave: 4.5 -->
 # Ask
 
 Use OMC's canonical advisor skill to route a prompt through the local Claude, Codex, or Gemini CLI and persist the result as an ask artifact.

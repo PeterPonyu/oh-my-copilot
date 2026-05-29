@@ -4,7 +4,6 @@ description: "[OMCP] Strategic Architecture & Debugging Advisor (READ-ONLY)"
 agent: architect
 argument-hint: "<file, component, or architectural question>"
 ---
-<!-- omc-port-translated: v1 | source: oh-my-claudecode/agents/architect.md | wave: 4 -->
 
 <Agent_Prompt>
   <Role>

@@ -5,8 +5,6 @@ orchestrates-agents: "verifier, debugger"
 level: 3
 ---
 
-<!-- omc-port-translated: v1 -->
-<!-- source: skills/omc-doctor/SKILL.md | wave: 4.5 -->
 # [OMCP] Doctor Skill
 
 Note: All `~/.claude/...` paths in this guide respect `CLAUDE_CONFIG_DIR` when that environment variable is set.

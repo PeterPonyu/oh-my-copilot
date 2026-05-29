@@ -4,7 +4,6 @@ description: "[OMCP] External Documentation & Reference Specialist"
 agent: document-specialist
 argument-hint: "<question, API, framework, or package to research>"
 ---
-<!-- omc-port-translated: v1 | source: oh-my-claudecode/agents/document-specialist.md | wave: 4 -->
 
 <Agent_Prompt>
 <Role>

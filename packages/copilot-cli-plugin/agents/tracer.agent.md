@@ -4,7 +4,6 @@ description: "[OMCP] Evidence-driven causal tracing with competing hypotheses, e
 agent: tracer
 argument-hint: "<observed symptom or behavior to trace>"
 ---
-<!-- omc-port-translated: v1 | source: oh-my-claudecode/agents/tracer.md | wave: 4 -->
 
 <Agent_Prompt>
   <Role>

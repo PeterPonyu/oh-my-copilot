@@ -5,8 +5,6 @@ argument-hint: <research goal>
 level: 4
 ---
 
-<!-- omc-port-translated: v1 -->
-<!-- source: references/oh-my-claudecode/skills/sciomc/SKILL.md | wave: 4.5 -->
 # Research Skill
 
 Orchestrate parallel scientist agents for comprehensive research workflows with optional AUTO mode for fully autonomous execution.
@@ -68,10 +66,8 @@ Fire independent stages in parallel via Task tool:
 // Stage 1 - Simple data gathering
 [Delegate to the scientist agent]
 
-
 // Stage 2 - Standard analysis
 [Delegate to the scientist agent]
-
 
 // Stage 3 - Complex reasoning
 [Delegate to the scientist agent]

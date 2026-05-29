@@ -5,8 +5,6 @@ argument-hint: "[--force|--all]"
 level: 2
 ---
 
-<!-- omc-port-translated: v1 -->
-<!-- source: references/oh-my-claudecode/skills/cancel/SKILL.md | wave: 4.5 -->
 # Cancel Skill
 
 Intelligent cancellation that detects and cancels the active OMC mode.

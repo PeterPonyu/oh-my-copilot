@@ -5,8 +5,6 @@ argument-hint: "init|char|rel|scene|query|validate|synopsis|status|export [args]
 level: 7
 ---
 
-<!-- omc-port-translated: v1 -->
-<!-- source: skills/writer-memory/SKILL.md | wave: 4.5 -->
 # Writer Memory - Agentic Memory System for Writers
 
 Persistent memory system designed for creative writers, with first-class support for Korean storytelling workflows.

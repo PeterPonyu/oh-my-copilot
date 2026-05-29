@@ -4,8 +4,6 @@ description: "[OMCP] Clean AI-generated code slop with a regression-safe, deleti
 level: 3
 ---
 
-<!-- omc-port-translated: v1 -->
-<!-- source: references/oh-my-claudecode/skills/ai-slop-cleaner/SKILL.md | wave: 4.5 -->
 # AI Slop Cleaner
 
 Use this skill to clean AI-generated code slop without drifting scope or changing intended behavior. In OMC, this is the bounded cleanup workflow for code that works but feels bloated, repetitive, weakly tested, or over-abstracted.

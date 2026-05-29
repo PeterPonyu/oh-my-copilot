@@ -4,7 +4,6 @@ description: "[OMCP] Data analysis and research execution specialist"
 agent: scientist
 argument-hint: "<data file, analysis objective, or research question>"
 ---
-<!-- omc-port-translated: v1 | source: oh-my-claudecode/agents/scientist.md | wave: 4 -->
 
 <Agent_Prompt>
   <Role>

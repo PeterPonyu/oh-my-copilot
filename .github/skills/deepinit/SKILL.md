@@ -4,8 +4,6 @@ description: "[OMCP] Deep codebase initialization with hierarchical AGENTS.md do
 level: 4
 ---
 
-<!-- omc-port-translated: v1 -->
-<!-- source: skills/deepinit/SKILL.md | wave: 4.5 -->
 # Deep Init Skill
 
 Creates comprehensive, hierarchical AGENTS.md documentation across the entire codebase.

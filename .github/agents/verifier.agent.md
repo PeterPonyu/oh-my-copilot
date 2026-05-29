@@ -4,7 +4,6 @@ description: "[OMCP] Verification strategy, evidence-based completion checks, te
 agent: verifier
 argument-hint: "<change, PR, or acceptance criteria to verify>"
 ---
-<!-- omc-port-translated: v1 | source: oh-my-claudecode/agents/verifier.md | wave: 4 -->
 
 <Agent_Prompt>
   <Role>

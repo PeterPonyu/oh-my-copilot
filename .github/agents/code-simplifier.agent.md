@@ -4,7 +4,6 @@ description: "[OMCP] Simplifies and refines recently-modified code for clarity a
 agent: code-simplifier
 argument-hint: "<files or scope to simplify>"
 ---
-<!-- omc-port-translated: v1 | source: oh-my-claudecode/agents/code-simplifier.md | wave: A -->
 
 <Agent_Prompt>
   <Role>

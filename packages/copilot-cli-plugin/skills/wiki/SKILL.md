@@ -4,8 +4,6 @@ description: "[OMCP] LLM Wiki — persistent markdown knowledge base that compou
 triggers: ["wiki", "wiki this", "wiki add", "wiki lint", "wiki query"]
 ---
 
-<!-- omc-port-translated: v1 -->
-<!-- source: skills/wiki/SKILL.md | wave: 4.5 -->
 # Wiki
 
 Persistent, self-maintained markdown knowledge base for project and session knowledge. Inspired by Karpathy's LLM Wiki concept.

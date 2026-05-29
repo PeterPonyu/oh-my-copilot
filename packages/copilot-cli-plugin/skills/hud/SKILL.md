@@ -7,8 +7,6 @@ scope: ~/.claude/**  # DOCUMENTATION ONLY - Allowed write scope
 level: 2
 ---
 
-<!-- omc-port-translated: v1 -->
-<!-- source: references/oh-my-claudecode/skills/hud/SKILL.md | wave: 4.5 -->
 # HUD Skill
 
 Configure the OMC HUD (Heads-Up Display) for the statusline.

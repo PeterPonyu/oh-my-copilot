@@ -4,8 +4,6 @@ description: "[OMCP] Verify that a change really works before you claim completi
 orchestrates-agents: "verifier, test-engineer"
 ---
 
-<!-- omc-port-translated: v1 -->
-<!-- source: references/oh-my-claudecode/skills/verify/SKILL.md | wave: 4.5 -->
 # [OMCP] Verify
 
 Use this skill when the user wants confidence that a feature, fix, or refactor actually works.

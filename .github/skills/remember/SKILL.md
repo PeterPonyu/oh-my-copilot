@@ -3,8 +3,6 @@ name: remember
 description: "[OMCP] Review reusable project knowledge and decide what belongs in project memory, rules, notepad, wiki, shared memory, or durable docs"
 ---
 
-<!-- omc-port-translated: v1 -->
-<!-- source: references/oh-my-claudecode/skills/remember/SKILL.md | wave: 4.5 -->
 # Remember
 
 Use this skill when the user wants to preserve or organize useful knowledge discovered during a session, including project memory, rules, wiki pages, notepad entries, and durable instructions.
