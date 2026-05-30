@@ -28,6 +28,12 @@ For the full installation guide (prerequisites, bootstrap script, troubleshootin
 
 ## Plugin surface
 
+The installed plugin remains intentionally compact by default: all 45 slash routes,
+46 skills, and 22 agents are classified as **advanced** inventory surfaces, while
+the 4 hooks and 41 MCP tools are **internal**. That keeps the first-run/default
+surface at 0 user-invocable routes and 0 agents, under the suite ceiling of 5 and
+6 respectively, without hiding the opt-in power-pack inventory.
+
 | Dimension | Count | Notes |
 | --- | --- | --- |
 | Agents | 22 | sisyphus (orchestrator), reviewer, research, executor, planner, architect, debugger, ... |

@@ -67,6 +67,11 @@ command itself, not as trailing text in a longer sentence.
 This package is an **experimental local Copilot CLI plugin** for turning parts
 of the research repo into reusable Copilot CLI power surfaces.
 
+Surface classification is fail-closed in `docs/surface-inventory.json`: skills,
+typed slash commands, and agents are **advanced** opt-in surfaces; hooks and MCP
+tools are **internal**; no route or agent is part of the first-run/default
+surface.
+
 It is still intentionally bounded:
 
 - no tmux worker runtime

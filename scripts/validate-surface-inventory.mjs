@@ -113,12 +113,26 @@ function assertSurfaceInventoryEntries(inventory) {
   if (!Array.isArray(entries)) {
     fail("surface_inventory must be an array for suite-wide inventory gates");
   }
-  const requiredKeys = ["name", "kind", "classification", "path", "first_run", "rationale", "validator"];
+  const requiredStringKeys = ["name", "kind", "classification", "path", "rationale", "validator"];
+  const allowedKinds = new Set(["skill", "command", "agent", "hook", "mcp_tool"]);
+  const allowedClassifications = new Set(["default", "advanced", "internal", "deprecated"]);
   for (const [index, entry] of entries.entries()) {
-    for (const key of requiredKeys) {
+    for (const key of requiredStringKeys) {
       if (typeof entry[key] !== "string" || !entry[key].trim()) {
         fail(`surface_inventory[${index}] missing required string field ${key}`);
       }
+    }
+    if (!allowedKinds.has(entry.kind)) {
+      fail(`surface_inventory[${index}] has unknown kind ${entry.kind}`);
+    }
+    if (!allowedClassifications.has(entry.classification)) {
+      fail(`surface_inventory[${index}] has unknown classification ${entry.classification}`);
+    }
+    if (typeof entry.first_run !== "boolean") {
+      fail(`surface_inventory[${index}] first_run must be boolean`);
+    }
+    if ((entry.kind === "hook" || entry.kind === "mcp_tool") && entry.classification === "default") {
+      fail(`surface_inventory[${index}] ${entry.kind} cannot be part of the default user surface`);
     }
   }
   const expectedCount =
@@ -136,6 +150,20 @@ function assertSurfaceInventoryEntries(inventory) {
   assertArray("surface_inventory agents", inventory.surfaces.agents.names, byKind("agent"));
   assertArray("surface_inventory hooks", inventory.surfaces.hooks.events, byKind("hook"));
   assertArray("surface_inventory MCP tools", inventory.surfaces.mcpTools.names, byKind("mcp_tool"));
+  const defaultUserInvocable = entries.filter((entry) =>
+    entry.classification === "default" && (entry.kind === "skill" || entry.kind === "command")
+  ).length;
+  const defaultAgents = entries.filter((entry) =>
+    entry.classification === "default" && entry.kind === "agent"
+  ).length;
+  if (defaultUserInvocable > 5) {
+    fail(`default user-invocable surface ceiling exceeded: ${defaultUserInvocable} > 5`);
+  }
+  if (defaultAgents > 6) {
+    fail(`default agent ceiling exceeded: ${defaultAgents} > 6`);
+  }
+  log(`default user-invocable ceiling ok (${defaultUserInvocable}/5)`);
+  log(`default agent ceiling ok (${defaultAgents}/6)`);
   log(`surface_inventory entries validated (${entries.length})`);
 }
 
