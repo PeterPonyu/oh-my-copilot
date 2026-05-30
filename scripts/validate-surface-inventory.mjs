@@ -107,6 +107,38 @@ function assertReadmeCounts(inventory) {
   }
 }
 
+
+function assertSurfaceInventoryEntries(inventory) {
+  const entries = inventory.surface_inventory;
+  if (!Array.isArray(entries)) {
+    fail("surface_inventory must be an array for suite-wide inventory gates");
+  }
+  const requiredKeys = ["name", "kind", "classification", "path", "first_run", "rationale", "validator"];
+  for (const [index, entry] of entries.entries()) {
+    for (const key of requiredKeys) {
+      if (typeof entry[key] !== "string" || !entry[key].trim()) {
+        fail(`surface_inventory[${index}] missing required string field ${key}`);
+      }
+    }
+  }
+  const expectedCount =
+    inventory.surfaces.skills.count +
+    inventory.surfaces.commands.count +
+    inventory.surfaces.agents.count +
+    inventory.surfaces.hooks.count +
+    inventory.surfaces.mcpTools.count;
+  if (entries.length !== expectedCount) {
+    fail(`surface_inventory count drift: expected ${expectedCount}, got ${entries.length}`);
+  }
+  const byKind = (kind) => sorted(entries.filter((entry) => entry.kind === kind).map((entry) => entry.name));
+  assertArray("surface_inventory skills", inventory.surfaces.skills.names, byKind("skill"));
+  assertArray("surface_inventory commands", inventory.surfaces.commands.names, byKind("command"));
+  assertArray("surface_inventory agents", inventory.surfaces.agents.names, byKind("agent"));
+  assertArray("surface_inventory hooks", inventory.surfaces.hooks.events, byKind("hook"));
+  assertArray("surface_inventory MCP tools", inventory.surfaces.mcpTools.names, byKind("mcp_tool"));
+  log(`surface_inventory entries validated (${entries.length})`);
+}
+
 function assertHostBoundaries() {
   const readme = read("README.md");
   const limitations = read("docs/known-limitations.md");
@@ -155,6 +187,7 @@ function main() {
   assertCount("MCP tools", inventory.surfaces.mcpTools.count, live.mcpTools.length);
 
   assertReadmeCounts(inventory);
+  assertSurfaceInventoryEntries(inventory);
   assertHostBoundaries();
   console.log("SURFACE_INVENTORY_OK");
 }

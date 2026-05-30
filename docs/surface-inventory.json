@@ -217,5 +217,1429 @@
       "supported Cursor host surface",
       "OMC/OMX/Cursor parity claims as proof of repo behavior"
     ]
-  }
+  },
+  "surface_inventory": [
+    {
+      "name": "ai-slop-cleaner",
+      "kind": "skill",
+      "classification": "repo-owned-plugin-surface",
+      "path": "packages/copilot-cli-plugin/skills/ai-slop-cleaner/SKILL.md",
+      "first_run": "node scripts/validate-surface-inventory.mjs",
+      "rationale": "Copilot CLI plugin skill shipped by oh-my-copilot.",
+      "validator": "node scripts/validate-plugin-orchestration.mjs"
+    },
+    {
+      "name": "ask",
+      "kind": "skill",
+      "classification": "repo-owned-plugin-surface",
+      "path": "packages/copilot-cli-plugin/skills/ask/SKILL.md",
+      "first_run": "node scripts/validate-surface-inventory.mjs",
+      "rationale": "Copilot CLI plugin skill shipped by oh-my-copilot.",
+      "validator": "node scripts/validate-plugin-orchestration.mjs"
+    },
+    {
+      "name": "autopilot",
+      "kind": "skill",
+      "classification": "repo-owned-plugin-surface",
+      "path": "packages/copilot-cli-plugin/skills/autopilot/SKILL.md",
+      "first_run": "node scripts/validate-surface-inventory.mjs",
+      "rationale": "Copilot CLI plugin skill shipped by oh-my-copilot.",
+      "validator": "node scripts/validate-plugin-orchestration.mjs"
+    },
+    {
+      "name": "autoresearch",
+      "kind": "skill",
+      "classification": "repo-owned-plugin-surface",
+      "path": "packages/copilot-cli-plugin/skills/autoresearch/SKILL.md",
+      "first_run": "node scripts/validate-surface-inventory.mjs",
+      "rationale": "Copilot CLI plugin skill shipped by oh-my-copilot.",
+      "validator": "node scripts/validate-plugin-orchestration.mjs"
+    },
+    {
+      "name": "build-fix",
+      "kind": "skill",
+      "classification": "repo-owned-plugin-surface",
+      "path": "packages/copilot-cli-plugin/skills/build-fix/SKILL.md",
+      "first_run": "node scripts/validate-surface-inventory.mjs",
+      "rationale": "Copilot CLI plugin skill shipped by oh-my-copilot.",
+      "validator": "node scripts/validate-plugin-orchestration.mjs"
+    },
+    {
+      "name": "cancel",
+      "kind": "skill",
+      "classification": "repo-owned-plugin-surface",
+      "path": "packages/copilot-cli-plugin/skills/cancel/SKILL.md",
+      "first_run": "node scripts/validate-surface-inventory.mjs",
+      "rationale": "Copilot CLI plugin skill shipped by oh-my-copilot.",
+      "validator": "node scripts/validate-plugin-orchestration.mjs"
+    },
+    {
+      "name": "ccg",
+      "kind": "skill",
+      "classification": "repo-owned-plugin-surface",
+      "path": "packages/copilot-cli-plugin/skills/ccg/SKILL.md",
+      "first_run": "node scripts/validate-surface-inventory.mjs",
+      "rationale": "Copilot CLI plugin skill shipped by oh-my-copilot.",
+      "validator": "node scripts/validate-plugin-orchestration.mjs"
+    },
+    {
+      "name": "cli-teams",
+      "kind": "skill",
+      "classification": "repo-owned-plugin-surface",
+      "path": "packages/copilot-cli-plugin/skills/cli-teams/SKILL.md",
+      "first_run": "node scripts/validate-surface-inventory.mjs",
+      "rationale": "Copilot CLI plugin skill shipped by oh-my-copilot.",
+      "validator": "node scripts/validate-plugin-orchestration.mjs"
+    },
+    {
+      "name": "configure-notifications",
+      "kind": "skill",
+      "classification": "repo-owned-plugin-surface",
+      "path": "packages/copilot-cli-plugin/skills/configure-notifications/SKILL.md",
+      "first_run": "node scripts/validate-surface-inventory.mjs",
+      "rationale": "Copilot CLI plugin skill shipped by oh-my-copilot.",
+      "validator": "node scripts/validate-plugin-orchestration.mjs"
+    },
+    {
+      "name": "debug",
+      "kind": "skill",
+      "classification": "repo-owned-plugin-surface",
+      "path": "packages/copilot-cli-plugin/skills/debug/SKILL.md",
+      "first_run": "node scripts/validate-surface-inventory.mjs",
+      "rationale": "Copilot CLI plugin skill shipped by oh-my-copilot.",
+      "validator": "node scripts/validate-plugin-orchestration.mjs"
+    },
+    {
+      "name": "deep-dive",
+      "kind": "skill",
+      "classification": "repo-owned-plugin-surface",
+      "path": "packages/copilot-cli-plugin/skills/deep-dive/SKILL.md",
+      "first_run": "node scripts/validate-surface-inventory.mjs",
+      "rationale": "Copilot CLI plugin skill shipped by oh-my-copilot.",
+      "validator": "node scripts/validate-plugin-orchestration.mjs"
+    },
+    {
+      "name": "deep-interview",
+      "kind": "skill",
+      "classification": "repo-owned-plugin-surface",
+      "path": "packages/copilot-cli-plugin/skills/deep-interview/SKILL.md",
+      "first_run": "node scripts/validate-surface-inventory.mjs",
+      "rationale": "Copilot CLI plugin skill shipped by oh-my-copilot.",
+      "validator": "node scripts/validate-plugin-orchestration.mjs"
+    },
+    {
+      "name": "deepinit",
+      "kind": "skill",
+      "classification": "repo-owned-plugin-surface",
+      "path": "packages/copilot-cli-plugin/skills/deepinit/SKILL.md",
+      "first_run": "node scripts/validate-surface-inventory.mjs",
+      "rationale": "Copilot CLI plugin skill shipped by oh-my-copilot.",
+      "validator": "node scripts/validate-plugin-orchestration.mjs"
+    },
+    {
+      "name": "docs-ship",
+      "kind": "skill",
+      "classification": "repo-owned-plugin-surface",
+      "path": "packages/copilot-cli-plugin/skills/docs-ship/SKILL.md",
+      "first_run": "node scripts/validate-surface-inventory.mjs",
+      "rationale": "Copilot CLI plugin skill shipped by oh-my-copilot.",
+      "validator": "node scripts/validate-plugin-orchestration.mjs"
+    },
+    {
+      "name": "external-context",
+      "kind": "skill",
+      "classification": "repo-owned-plugin-surface",
+      "path": "packages/copilot-cli-plugin/skills/external-context/SKILL.md",
+      "first_run": "node scripts/validate-surface-inventory.mjs",
+      "rationale": "Copilot CLI plugin skill shipped by oh-my-copilot.",
+      "validator": "node scripts/validate-plugin-orchestration.mjs"
+    },
+    {
+      "name": "git-master",
+      "kind": "skill",
+      "classification": "repo-owned-plugin-surface",
+      "path": "packages/copilot-cli-plugin/skills/git-master/SKILL.md",
+      "first_run": "node scripts/validate-surface-inventory.mjs",
+      "rationale": "Copilot CLI plugin skill shipped by oh-my-copilot.",
+      "validator": "node scripts/validate-plugin-orchestration.mjs"
+    },
+    {
+      "name": "hud",
+      "kind": "skill",
+      "classification": "repo-owned-plugin-surface",
+      "path": "packages/copilot-cli-plugin/skills/hud/SKILL.md",
+      "first_run": "node scripts/validate-surface-inventory.mjs",
+      "rationale": "Copilot CLI plugin skill shipped by oh-my-copilot.",
+      "validator": "node scripts/validate-plugin-orchestration.mjs"
+    },
+    {
+      "name": "hyperplan",
+      "kind": "skill",
+      "classification": "repo-owned-plugin-surface",
+      "path": "packages/copilot-cli-plugin/skills/hyperplan/SKILL.md",
+      "first_run": "node scripts/validate-surface-inventory.mjs",
+      "rationale": "Copilot CLI plugin skill shipped by oh-my-copilot.",
+      "validator": "node scripts/validate-plugin-orchestration.mjs"
+    },
+    {
+      "name": "iterate-loop",
+      "kind": "skill",
+      "classification": "repo-owned-plugin-surface",
+      "path": "packages/copilot-cli-plugin/skills/iterate-loop/SKILL.md",
+      "first_run": "node scripts/validate-surface-inventory.mjs",
+      "rationale": "Copilot CLI plugin skill shipped by oh-my-copilot.",
+      "validator": "node scripts/validate-plugin-orchestration.mjs"
+    },
+    {
+      "name": "learner",
+      "kind": "skill",
+      "classification": "repo-owned-plugin-surface",
+      "path": "packages/copilot-cli-plugin/skills/learner/SKILL.md",
+      "first_run": "node scripts/validate-surface-inventory.mjs",
+      "rationale": "Copilot CLI plugin skill shipped by oh-my-copilot.",
+      "validator": "node scripts/validate-plugin-orchestration.mjs"
+    },
+    {
+      "name": "mcp-setup",
+      "kind": "skill",
+      "classification": "repo-owned-plugin-surface",
+      "path": "packages/copilot-cli-plugin/skills/mcp-setup/SKILL.md",
+      "first_run": "node scripts/validate-surface-inventory.mjs",
+      "rationale": "Copilot CLI plugin skill shipped by oh-my-copilot.",
+      "validator": "node scripts/validate-plugin-orchestration.mjs"
+    },
+    {
+      "name": "omc-doctor",
+      "kind": "skill",
+      "classification": "repo-owned-plugin-surface",
+      "path": "packages/copilot-cli-plugin/skills/omc-doctor/SKILL.md",
+      "first_run": "node scripts/validate-surface-inventory.mjs",
+      "rationale": "Copilot CLI plugin skill shipped by oh-my-copilot.",
+      "validator": "node scripts/validate-plugin-orchestration.mjs"
+    },
+    {
+      "name": "omc-setup",
+      "kind": "skill",
+      "classification": "repo-owned-plugin-surface",
+      "path": "packages/copilot-cli-plugin/skills/omc-setup/SKILL.md",
+      "first_run": "node scripts/validate-surface-inventory.mjs",
+      "rationale": "Copilot CLI plugin skill shipped by oh-my-copilot.",
+      "validator": "node scripts/validate-plugin-orchestration.mjs"
+    },
+    {
+      "name": "parity-guard",
+      "kind": "skill",
+      "classification": "repo-owned-plugin-surface",
+      "path": "packages/copilot-cli-plugin/skills/parity-guard/SKILL.md",
+      "first_run": "node scripts/validate-surface-inventory.mjs",
+      "rationale": "Copilot CLI plugin skill shipped by oh-my-copilot.",
+      "validator": "node scripts/validate-plugin-orchestration.mjs"
+    },
+    {
+      "name": "plan",
+      "kind": "skill",
+      "classification": "repo-owned-plugin-surface",
+      "path": "packages/copilot-cli-plugin/skills/plan/SKILL.md",
+      "first_run": "node scripts/validate-surface-inventory.mjs",
+      "rationale": "Copilot CLI plugin skill shipped by oh-my-copilot.",
+      "validator": "node scripts/validate-plugin-orchestration.mjs"
+    },
+    {
+      "name": "project-session-manager",
+      "kind": "skill",
+      "classification": "repo-owned-plugin-surface",
+      "path": "packages/copilot-cli-plugin/skills/project-session-manager/SKILL.md",
+      "first_run": "node scripts/validate-surface-inventory.mjs",
+      "rationale": "Copilot CLI plugin skill shipped by oh-my-copilot.",
+      "validator": "node scripts/validate-plugin-orchestration.mjs"
+    },
+    {
+      "name": "ralph",
+      "kind": "skill",
+      "classification": "repo-owned-plugin-surface",
+      "path": "packages/copilot-cli-plugin/skills/ralph/SKILL.md",
+      "first_run": "node scripts/validate-surface-inventory.mjs",
+      "rationale": "Copilot CLI plugin skill shipped by oh-my-copilot.",
+      "validator": "node scripts/validate-plugin-orchestration.mjs"
+    },
+    {
+      "name": "ralplan",
+      "kind": "skill",
+      "classification": "repo-owned-plugin-surface",
+      "path": "packages/copilot-cli-plugin/skills/ralplan/SKILL.md",
+      "first_run": "node scripts/validate-surface-inventory.mjs",
+      "rationale": "Copilot CLI plugin skill shipped by oh-my-copilot.",
+      "validator": "node scripts/validate-plugin-orchestration.mjs"
+    },
+    {
+      "name": "reference",
+      "kind": "skill",
+      "classification": "repo-owned-plugin-surface",
+      "path": "packages/copilot-cli-plugin/skills/reference/SKILL.md",
+      "first_run": "node scripts/validate-surface-inventory.mjs",
+      "rationale": "Copilot CLI plugin skill shipped by oh-my-copilot.",
+      "validator": "node scripts/validate-plugin-orchestration.mjs"
+    },
+    {
+      "name": "release",
+      "kind": "skill",
+      "classification": "repo-owned-plugin-surface",
+      "path": "packages/copilot-cli-plugin/skills/release/SKILL.md",
+      "first_run": "node scripts/validate-surface-inventory.mjs",
+      "rationale": "Copilot CLI plugin skill shipped by oh-my-copilot.",
+      "validator": "node scripts/validate-plugin-orchestration.mjs"
+    },
+    {
+      "name": "remember",
+      "kind": "skill",
+      "classification": "repo-owned-plugin-surface",
+      "path": "packages/copilot-cli-plugin/skills/remember/SKILL.md",
+      "first_run": "node scripts/validate-surface-inventory.mjs",
+      "rationale": "Copilot CLI plugin skill shipped by oh-my-copilot.",
+      "validator": "node scripts/validate-plugin-orchestration.mjs"
+    },
+    {
+      "name": "review",
+      "kind": "skill",
+      "classification": "repo-owned-plugin-surface",
+      "path": "packages/copilot-cli-plugin/skills/review/SKILL.md",
+      "first_run": "node scripts/validate-surface-inventory.mjs",
+      "rationale": "Copilot CLI plugin skill shipped by oh-my-copilot.",
+      "validator": "node scripts/validate-plugin-orchestration.mjs"
+    },
+    {
+      "name": "sciomc",
+      "kind": "skill",
+      "classification": "repo-owned-plugin-surface",
+      "path": "packages/copilot-cli-plugin/skills/sciomc/SKILL.md",
+      "first_run": "node scripts/validate-surface-inventory.mjs",
+      "rationale": "Copilot CLI plugin skill shipped by oh-my-copilot.",
+      "validator": "node scripts/validate-plugin-orchestration.mjs"
+    },
+    {
+      "name": "self-improve",
+      "kind": "skill",
+      "classification": "repo-owned-plugin-surface",
+      "path": "packages/copilot-cli-plugin/skills/self-improve/SKILL.md",
+      "first_run": "node scripts/validate-surface-inventory.mjs",
+      "rationale": "Copilot CLI plugin skill shipped by oh-my-copilot.",
+      "validator": "node scripts/validate-plugin-orchestration.mjs"
+    },
+    {
+      "name": "setup",
+      "kind": "skill",
+      "classification": "repo-owned-plugin-surface",
+      "path": "packages/copilot-cli-plugin/skills/setup/SKILL.md",
+      "first_run": "node scripts/validate-surface-inventory.mjs",
+      "rationale": "Copilot CLI plugin skill shipped by oh-my-copilot.",
+      "validator": "node scripts/validate-plugin-orchestration.mjs"
+    },
+    {
+      "name": "skill",
+      "kind": "skill",
+      "classification": "repo-owned-plugin-surface",
+      "path": "packages/copilot-cli-plugin/skills/skill/SKILL.md",
+      "first_run": "node scripts/validate-surface-inventory.mjs",
+      "rationale": "Copilot CLI plugin skill shipped by oh-my-copilot.",
+      "validator": "node scripts/validate-plugin-orchestration.mjs"
+    },
+    {
+      "name": "skillify",
+      "kind": "skill",
+      "classification": "repo-owned-plugin-surface",
+      "path": "packages/copilot-cli-plugin/skills/skillify/SKILL.md",
+      "first_run": "node scripts/validate-surface-inventory.mjs",
+      "rationale": "Copilot CLI plugin skill shipped by oh-my-copilot.",
+      "validator": "node scripts/validate-plugin-orchestration.mjs"
+    },
+    {
+      "name": "team",
+      "kind": "skill",
+      "classification": "repo-owned-plugin-surface",
+      "path": "packages/copilot-cli-plugin/skills/team/SKILL.md",
+      "first_run": "node scripts/validate-surface-inventory.mjs",
+      "rationale": "Copilot CLI plugin skill shipped by oh-my-copilot.",
+      "validator": "node scripts/validate-plugin-orchestration.mjs"
+    },
+    {
+      "name": "trace",
+      "kind": "skill",
+      "classification": "repo-owned-plugin-surface",
+      "path": "packages/copilot-cli-plugin/skills/trace/SKILL.md",
+      "first_run": "node scripts/validate-surface-inventory.mjs",
+      "rationale": "Copilot CLI plugin skill shipped by oh-my-copilot.",
+      "validator": "node scripts/validate-plugin-orchestration.mjs"
+    },
+    {
+      "name": "ultraqa",
+      "kind": "skill",
+      "classification": "repo-owned-plugin-surface",
+      "path": "packages/copilot-cli-plugin/skills/ultraqa/SKILL.md",
+      "first_run": "node scripts/validate-surface-inventory.mjs",
+      "rationale": "Copilot CLI plugin skill shipped by oh-my-copilot.",
+      "validator": "node scripts/validate-plugin-orchestration.mjs"
+    },
+    {
+      "name": "ultrawork",
+      "kind": "skill",
+      "classification": "repo-owned-plugin-surface",
+      "path": "packages/copilot-cli-plugin/skills/ultrawork/SKILL.md",
+      "first_run": "node scripts/validate-surface-inventory.mjs",
+      "rationale": "Copilot CLI plugin skill shipped by oh-my-copilot.",
+      "validator": "node scripts/validate-plugin-orchestration.mjs"
+    },
+    {
+      "name": "ulw-loop",
+      "kind": "skill",
+      "classification": "repo-owned-plugin-surface",
+      "path": "packages/copilot-cli-plugin/skills/ulw-loop/SKILL.md",
+      "first_run": "node scripts/validate-surface-inventory.mjs",
+      "rationale": "Copilot CLI plugin skill shipped by oh-my-copilot.",
+      "validator": "node scripts/validate-plugin-orchestration.mjs"
+    },
+    {
+      "name": "verify",
+      "kind": "skill",
+      "classification": "repo-owned-plugin-surface",
+      "path": "packages/copilot-cli-plugin/skills/verify/SKILL.md",
+      "first_run": "node scripts/validate-surface-inventory.mjs",
+      "rationale": "Copilot CLI plugin skill shipped by oh-my-copilot.",
+      "validator": "node scripts/validate-plugin-orchestration.mjs"
+    },
+    {
+      "name": "visual-verdict",
+      "kind": "skill",
+      "classification": "repo-owned-plugin-surface",
+      "path": "packages/copilot-cli-plugin/skills/visual-verdict/SKILL.md",
+      "first_run": "node scripts/validate-surface-inventory.mjs",
+      "rationale": "Copilot CLI plugin skill shipped by oh-my-copilot.",
+      "validator": "node scripts/validate-plugin-orchestration.mjs"
+    },
+    {
+      "name": "wiki",
+      "kind": "skill",
+      "classification": "repo-owned-plugin-surface",
+      "path": "packages/copilot-cli-plugin/skills/wiki/SKILL.md",
+      "first_run": "node scripts/validate-surface-inventory.mjs",
+      "rationale": "Copilot CLI plugin skill shipped by oh-my-copilot.",
+      "validator": "node scripts/validate-plugin-orchestration.mjs"
+    },
+    {
+      "name": "writer-memory",
+      "kind": "skill",
+      "classification": "repo-owned-plugin-surface",
+      "path": "packages/copilot-cli-plugin/skills/writer-memory/SKILL.md",
+      "first_run": "node scripts/validate-surface-inventory.mjs",
+      "rationale": "Copilot CLI plugin skill shipped by oh-my-copilot.",
+      "validator": "node scripts/validate-plugin-orchestration.mjs"
+    },
+    {
+      "name": "ai-slop-cleaner",
+      "kind": "command",
+      "classification": "repo-owned-plugin-surface",
+      "path": "packages/copilot-cli-plugin/commands/ai-slop-cleaner.md",
+      "first_run": "node scripts/validate-surface-inventory.mjs",
+      "rationale": "Typed /omcp slash command route for a plugin skill.",
+      "validator": "node scripts/validate-plugin-orchestration.mjs"
+    },
+    {
+      "name": "ask",
+      "kind": "command",
+      "classification": "repo-owned-plugin-surface",
+      "path": "packages/copilot-cli-plugin/commands/ask.md",
+      "first_run": "node scripts/validate-surface-inventory.mjs",
+      "rationale": "Typed /omcp slash command route for a plugin skill.",
+      "validator": "node scripts/validate-plugin-orchestration.mjs"
+    },
+    {
+      "name": "autopilot",
+      "kind": "command",
+      "classification": "repo-owned-plugin-surface",
+      "path": "packages/copilot-cli-plugin/commands/autopilot.md",
+      "first_run": "node scripts/validate-surface-inventory.mjs",
+      "rationale": "Typed /omcp slash command route for a plugin skill.",
+      "validator": "node scripts/validate-plugin-orchestration.mjs"
+    },
+    {
+      "name": "autoresearch",
+      "kind": "command",
+      "classification": "repo-owned-plugin-surface",
+      "path": "packages/copilot-cli-plugin/commands/autoresearch.md",
+      "first_run": "node scripts/validate-surface-inventory.mjs",
+      "rationale": "Typed /omcp slash command route for a plugin skill.",
+      "validator": "node scripts/validate-plugin-orchestration.mjs"
+    },
+    {
+      "name": "build-fix",
+      "kind": "command",
+      "classification": "repo-owned-plugin-surface",
+      "path": "packages/copilot-cli-plugin/commands/build-fix.md",
+      "first_run": "node scripts/validate-surface-inventory.mjs",
+      "rationale": "Typed /omcp slash command route for a plugin skill.",
+      "validator": "node scripts/validate-plugin-orchestration.mjs"
+    },
+    {
+      "name": "cancel",
+      "kind": "command",
+      "classification": "repo-owned-plugin-surface",
+      "path": "packages/copilot-cli-plugin/commands/cancel.md",
+      "first_run": "node scripts/validate-surface-inventory.mjs",
+      "rationale": "Typed /omcp slash command route for a plugin skill.",
+      "validator": "node scripts/validate-plugin-orchestration.mjs"
+    },
+    {
+      "name": "ccg",
+      "kind": "command",
+      "classification": "repo-owned-plugin-surface",
+      "path": "packages/copilot-cli-plugin/commands/ccg.md",
+      "first_run": "node scripts/validate-surface-inventory.mjs",
+      "rationale": "Typed /omcp slash command route for a plugin skill.",
+      "validator": "node scripts/validate-plugin-orchestration.mjs"
+    },
+    {
+      "name": "cli-teams",
+      "kind": "command",
+      "classification": "repo-owned-plugin-surface",
+      "path": "packages/copilot-cli-plugin/commands/cli-teams.md",
+      "first_run": "node scripts/validate-surface-inventory.mjs",
+      "rationale": "Typed /omcp slash command route for a plugin skill.",
+      "validator": "node scripts/validate-plugin-orchestration.mjs"
+    },
+    {
+      "name": "configure-notifications",
+      "kind": "command",
+      "classification": "repo-owned-plugin-surface",
+      "path": "packages/copilot-cli-plugin/commands/configure-notifications.md",
+      "first_run": "node scripts/validate-surface-inventory.mjs",
+      "rationale": "Typed /omcp slash command route for a plugin skill.",
+      "validator": "node scripts/validate-plugin-orchestration.mjs"
+    },
+    {
+      "name": "debug",
+      "kind": "command",
+      "classification": "repo-owned-plugin-surface",
+      "path": "packages/copilot-cli-plugin/commands/debug.md",
+      "first_run": "node scripts/validate-surface-inventory.mjs",
+      "rationale": "Typed /omcp slash command route for a plugin skill.",
+      "validator": "node scripts/validate-plugin-orchestration.mjs"
+    },
+    {
+      "name": "deep-dive",
+      "kind": "command",
+      "classification": "repo-owned-plugin-surface",
+      "path": "packages/copilot-cli-plugin/commands/deep-dive.md",
+      "first_run": "node scripts/validate-surface-inventory.mjs",
+      "rationale": "Typed /omcp slash command route for a plugin skill.",
+      "validator": "node scripts/validate-plugin-orchestration.mjs"
+    },
+    {
+      "name": "deep-interview",
+      "kind": "command",
+      "classification": "repo-owned-plugin-surface",
+      "path": "packages/copilot-cli-plugin/commands/deep-interview.md",
+      "first_run": "node scripts/validate-surface-inventory.mjs",
+      "rationale": "Typed /omcp slash command route for a plugin skill.",
+      "validator": "node scripts/validate-plugin-orchestration.mjs"
+    },
+    {
+      "name": "deepinit",
+      "kind": "command",
+      "classification": "repo-owned-plugin-surface",
+      "path": "packages/copilot-cli-plugin/commands/deepinit.md",
+      "first_run": "node scripts/validate-surface-inventory.mjs",
+      "rationale": "Typed /omcp slash command route for a plugin skill.",
+      "validator": "node scripts/validate-plugin-orchestration.mjs"
+    },
+    {
+      "name": "docs-ship",
+      "kind": "command",
+      "classification": "repo-owned-plugin-surface",
+      "path": "packages/copilot-cli-plugin/commands/docs-ship.md",
+      "first_run": "node scripts/validate-surface-inventory.mjs",
+      "rationale": "Typed /omcp slash command route for a plugin skill.",
+      "validator": "node scripts/validate-plugin-orchestration.mjs"
+    },
+    {
+      "name": "external-context",
+      "kind": "command",
+      "classification": "repo-owned-plugin-surface",
+      "path": "packages/copilot-cli-plugin/commands/external-context.md",
+      "first_run": "node scripts/validate-surface-inventory.mjs",
+      "rationale": "Typed /omcp slash command route for a plugin skill.",
+      "validator": "node scripts/validate-plugin-orchestration.mjs"
+    },
+    {
+      "name": "git-master",
+      "kind": "command",
+      "classification": "repo-owned-plugin-surface",
+      "path": "packages/copilot-cli-plugin/commands/git-master.md",
+      "first_run": "node scripts/validate-surface-inventory.mjs",
+      "rationale": "Typed /omcp slash command route for a plugin skill.",
+      "validator": "node scripts/validate-plugin-orchestration.mjs"
+    },
+    {
+      "name": "hud",
+      "kind": "command",
+      "classification": "repo-owned-plugin-surface",
+      "path": "packages/copilot-cli-plugin/commands/hud.md",
+      "first_run": "node scripts/validate-surface-inventory.mjs",
+      "rationale": "Typed /omcp slash command route for a plugin skill.",
+      "validator": "node scripts/validate-plugin-orchestration.mjs"
+    },
+    {
+      "name": "hyperplan",
+      "kind": "command",
+      "classification": "repo-owned-plugin-surface",
+      "path": "packages/copilot-cli-plugin/commands/hyperplan.md",
+      "first_run": "node scripts/validate-surface-inventory.mjs",
+      "rationale": "Typed /omcp slash command route for a plugin skill.",
+      "validator": "node scripts/validate-plugin-orchestration.mjs"
+    },
+    {
+      "name": "iterate-loop",
+      "kind": "command",
+      "classification": "repo-owned-plugin-surface",
+      "path": "packages/copilot-cli-plugin/commands/iterate-loop.md",
+      "first_run": "node scripts/validate-surface-inventory.mjs",
+      "rationale": "Typed /omcp slash command route for a plugin skill.",
+      "validator": "node scripts/validate-plugin-orchestration.mjs"
+    },
+    {
+      "name": "learner",
+      "kind": "command",
+      "classification": "repo-owned-plugin-surface",
+      "path": "packages/copilot-cli-plugin/commands/learner.md",
+      "first_run": "node scripts/validate-surface-inventory.mjs",
+      "rationale": "Typed /omcp slash command route for a plugin skill.",
+      "validator": "node scripts/validate-plugin-orchestration.mjs"
+    },
+    {
+      "name": "mcp-setup",
+      "kind": "command",
+      "classification": "repo-owned-plugin-surface",
+      "path": "packages/copilot-cli-plugin/commands/mcp-setup.md",
+      "first_run": "node scripts/validate-surface-inventory.mjs",
+      "rationale": "Typed /omcp slash command route for a plugin skill.",
+      "validator": "node scripts/validate-plugin-orchestration.mjs"
+    },
+    {
+      "name": "omc-doctor",
+      "kind": "command",
+      "classification": "repo-owned-plugin-surface",
+      "path": "packages/copilot-cli-plugin/commands/omc-doctor.md",
+      "first_run": "node scripts/validate-surface-inventory.mjs",
+      "rationale": "Typed /omcp slash command route for a plugin skill.",
+      "validator": "node scripts/validate-plugin-orchestration.mjs"
+    },
+    {
+      "name": "omc-setup",
+      "kind": "command",
+      "classification": "repo-owned-plugin-surface",
+      "path": "packages/copilot-cli-plugin/commands/omc-setup.md",
+      "first_run": "node scripts/validate-surface-inventory.mjs",
+      "rationale": "Typed /omcp slash command route for a plugin skill.",
+      "validator": "node scripts/validate-plugin-orchestration.mjs"
+    },
+    {
+      "name": "parity-guard",
+      "kind": "command",
+      "classification": "repo-owned-plugin-surface",
+      "path": "packages/copilot-cli-plugin/commands/parity-guard.md",
+      "first_run": "node scripts/validate-surface-inventory.mjs",
+      "rationale": "Typed /omcp slash command route for a plugin skill.",
+      "validator": "node scripts/validate-plugin-orchestration.mjs"
+    },
+    {
+      "name": "plan",
+      "kind": "command",
+      "classification": "repo-owned-plugin-surface",
+      "path": "packages/copilot-cli-plugin/commands/plan.md",
+      "first_run": "node scripts/validate-surface-inventory.mjs",
+      "rationale": "Typed /omcp slash command route for a plugin skill.",
+      "validator": "node scripts/validate-plugin-orchestration.mjs"
+    },
+    {
+      "name": "project-session-manager",
+      "kind": "command",
+      "classification": "repo-owned-plugin-surface",
+      "path": "packages/copilot-cli-plugin/commands/project-session-manager.md",
+      "first_run": "node scripts/validate-surface-inventory.mjs",
+      "rationale": "Typed /omcp slash command route for a plugin skill.",
+      "validator": "node scripts/validate-plugin-orchestration.mjs"
+    },
+    {
+      "name": "ralph",
+      "kind": "command",
+      "classification": "repo-owned-plugin-surface",
+      "path": "packages/copilot-cli-plugin/commands/ralph.md",
+      "first_run": "node scripts/validate-surface-inventory.mjs",
+      "rationale": "Typed /omcp slash command route for a plugin skill.",
+      "validator": "node scripts/validate-plugin-orchestration.mjs"
+    },
+    {
+      "name": "ralplan",
+      "kind": "command",
+      "classification": "repo-owned-plugin-surface",
+      "path": "packages/copilot-cli-plugin/commands/ralplan.md",
+      "first_run": "node scripts/validate-surface-inventory.mjs",
+      "rationale": "Typed /omcp slash command route for a plugin skill.",
+      "validator": "node scripts/validate-plugin-orchestration.mjs"
+    },
+    {
+      "name": "release",
+      "kind": "command",
+      "classification": "repo-owned-plugin-surface",
+      "path": "packages/copilot-cli-plugin/commands/release.md",
+      "first_run": "node scripts/validate-surface-inventory.mjs",
+      "rationale": "Typed /omcp slash command route for a plugin skill.",
+      "validator": "node scripts/validate-plugin-orchestration.mjs"
+    },
+    {
+      "name": "remember",
+      "kind": "command",
+      "classification": "repo-owned-plugin-surface",
+      "path": "packages/copilot-cli-plugin/commands/remember.md",
+      "first_run": "node scripts/validate-surface-inventory.mjs",
+      "rationale": "Typed /omcp slash command route for a plugin skill.",
+      "validator": "node scripts/validate-plugin-orchestration.mjs"
+    },
+    {
+      "name": "review",
+      "kind": "command",
+      "classification": "repo-owned-plugin-surface",
+      "path": "packages/copilot-cli-plugin/commands/review.md",
+      "first_run": "node scripts/validate-surface-inventory.mjs",
+      "rationale": "Typed /omcp slash command route for a plugin skill.",
+      "validator": "node scripts/validate-plugin-orchestration.mjs"
+    },
+    {
+      "name": "sciomc",
+      "kind": "command",
+      "classification": "repo-owned-plugin-surface",
+      "path": "packages/copilot-cli-plugin/commands/sciomc.md",
+      "first_run": "node scripts/validate-surface-inventory.mjs",
+      "rationale": "Typed /omcp slash command route for a plugin skill.",
+      "validator": "node scripts/validate-plugin-orchestration.mjs"
+    },
+    {
+      "name": "self-improve",
+      "kind": "command",
+      "classification": "repo-owned-plugin-surface",
+      "path": "packages/copilot-cli-plugin/commands/self-improve.md",
+      "first_run": "node scripts/validate-surface-inventory.mjs",
+      "rationale": "Typed /omcp slash command route for a plugin skill.",
+      "validator": "node scripts/validate-plugin-orchestration.mjs"
+    },
+    {
+      "name": "setup",
+      "kind": "command",
+      "classification": "repo-owned-plugin-surface",
+      "path": "packages/copilot-cli-plugin/commands/setup.md",
+      "first_run": "node scripts/validate-surface-inventory.mjs",
+      "rationale": "Typed /omcp slash command route for a plugin skill.",
+      "validator": "node scripts/validate-plugin-orchestration.mjs"
+    },
+    {
+      "name": "skill",
+      "kind": "command",
+      "classification": "repo-owned-plugin-surface",
+      "path": "packages/copilot-cli-plugin/commands/skill.md",
+      "first_run": "node scripts/validate-surface-inventory.mjs",
+      "rationale": "Typed /omcp slash command route for a plugin skill.",
+      "validator": "node scripts/validate-plugin-orchestration.mjs"
+    },
+    {
+      "name": "skillify",
+      "kind": "command",
+      "classification": "repo-owned-plugin-surface",
+      "path": "packages/copilot-cli-plugin/commands/skillify.md",
+      "first_run": "node scripts/validate-surface-inventory.mjs",
+      "rationale": "Typed /omcp slash command route for a plugin skill.",
+      "validator": "node scripts/validate-plugin-orchestration.mjs"
+    },
+    {
+      "name": "team",
+      "kind": "command",
+      "classification": "repo-owned-plugin-surface",
+      "path": "packages/copilot-cli-plugin/commands/team.md",
+      "first_run": "node scripts/validate-surface-inventory.mjs",
+      "rationale": "Typed /omcp slash command route for a plugin skill.",
+      "validator": "node scripts/validate-plugin-orchestration.mjs"
+    },
+    {
+      "name": "trace",
+      "kind": "command",
+      "classification": "repo-owned-plugin-surface",
+      "path": "packages/copilot-cli-plugin/commands/trace.md",
+      "first_run": "node scripts/validate-surface-inventory.mjs",
+      "rationale": "Typed /omcp slash command route for a plugin skill.",
+      "validator": "node scripts/validate-plugin-orchestration.mjs"
+    },
+    {
+      "name": "ultraqa",
+      "kind": "command",
+      "classification": "repo-owned-plugin-surface",
+      "path": "packages/copilot-cli-plugin/commands/ultraqa.md",
+      "first_run": "node scripts/validate-surface-inventory.mjs",
+      "rationale": "Typed /omcp slash command route for a plugin skill.",
+      "validator": "node scripts/validate-plugin-orchestration.mjs"
+    },
+    {
+      "name": "ultrawork",
+      "kind": "command",
+      "classification": "repo-owned-plugin-surface",
+      "path": "packages/copilot-cli-plugin/commands/ultrawork.md",
+      "first_run": "node scripts/validate-surface-inventory.mjs",
+      "rationale": "Typed /omcp slash command route for a plugin skill.",
+      "validator": "node scripts/validate-plugin-orchestration.mjs"
+    },
+    {
+      "name": "ulw-loop",
+      "kind": "command",
+      "classification": "repo-owned-plugin-surface",
+      "path": "packages/copilot-cli-plugin/commands/ulw-loop.md",
+      "first_run": "node scripts/validate-surface-inventory.mjs",
+      "rationale": "Typed /omcp slash command route for a plugin skill.",
+      "validator": "node scripts/validate-plugin-orchestration.mjs"
+    },
+    {
+      "name": "verify",
+      "kind": "command",
+      "classification": "repo-owned-plugin-surface",
+      "path": "packages/copilot-cli-plugin/commands/verify.md",
+      "first_run": "node scripts/validate-surface-inventory.mjs",
+      "rationale": "Typed /omcp slash command route for a plugin skill.",
+      "validator": "node scripts/validate-plugin-orchestration.mjs"
+    },
+    {
+      "name": "visual-verdict",
+      "kind": "command",
+      "classification": "repo-owned-plugin-surface",
+      "path": "packages/copilot-cli-plugin/commands/visual-verdict.md",
+      "first_run": "node scripts/validate-surface-inventory.mjs",
+      "rationale": "Typed /omcp slash command route for a plugin skill.",
+      "validator": "node scripts/validate-plugin-orchestration.mjs"
+    },
+    {
+      "name": "wiki",
+      "kind": "command",
+      "classification": "repo-owned-plugin-surface",
+      "path": "packages/copilot-cli-plugin/commands/wiki.md",
+      "first_run": "node scripts/validate-surface-inventory.mjs",
+      "rationale": "Typed /omcp slash command route for a plugin skill.",
+      "validator": "node scripts/validate-plugin-orchestration.mjs"
+    },
+    {
+      "name": "writer-memory",
+      "kind": "command",
+      "classification": "repo-owned-plugin-surface",
+      "path": "packages/copilot-cli-plugin/commands/writer-memory.md",
+      "first_run": "node scripts/validate-surface-inventory.mjs",
+      "rationale": "Typed /omcp slash command route for a plugin skill.",
+      "validator": "node scripts/validate-plugin-orchestration.mjs"
+    },
+    {
+      "name": "analyst",
+      "kind": "agent",
+      "classification": "repo-owned-plugin-surface",
+      "path": "packages/copilot-cli-plugin/agents/analyst.agent.md",
+      "first_run": "node scripts/validate-surface-inventory.mjs",
+      "rationale": "Copilot CLI plugin custom agent prompt.",
+      "validator": "node scripts/validate-plugin-orchestration.mjs"
+    },
+    {
+      "name": "architect",
+      "kind": "agent",
+      "classification": "repo-owned-plugin-surface",
+      "path": "packages/copilot-cli-plugin/agents/architect.agent.md",
+      "first_run": "node scripts/validate-surface-inventory.mjs",
+      "rationale": "Copilot CLI plugin custom agent prompt.",
+      "validator": "node scripts/validate-plugin-orchestration.mjs"
+    },
+    {
+      "name": "code-reviewer",
+      "kind": "agent",
+      "classification": "repo-owned-plugin-surface",
+      "path": "packages/copilot-cli-plugin/agents/code-reviewer.agent.md",
+      "first_run": "node scripts/validate-surface-inventory.mjs",
+      "rationale": "Copilot CLI plugin custom agent prompt.",
+      "validator": "node scripts/validate-plugin-orchestration.mjs"
+    },
+    {
+      "name": "code-simplifier",
+      "kind": "agent",
+      "classification": "repo-owned-plugin-surface",
+      "path": "packages/copilot-cli-plugin/agents/code-simplifier.agent.md",
+      "first_run": "node scripts/validate-surface-inventory.mjs",
+      "rationale": "Copilot CLI plugin custom agent prompt.",
+      "validator": "node scripts/validate-plugin-orchestration.mjs"
+    },
+    {
+      "name": "critic",
+      "kind": "agent",
+      "classification": "repo-owned-plugin-surface",
+      "path": "packages/copilot-cli-plugin/agents/critic.agent.md",
+      "first_run": "node scripts/validate-surface-inventory.mjs",
+      "rationale": "Copilot CLI plugin custom agent prompt.",
+      "validator": "node scripts/validate-plugin-orchestration.mjs"
+    },
+    {
+      "name": "debugger",
+      "kind": "agent",
+      "classification": "repo-owned-plugin-surface",
+      "path": "packages/copilot-cli-plugin/agents/debugger.agent.md",
+      "first_run": "node scripts/validate-surface-inventory.mjs",
+      "rationale": "Copilot CLI plugin custom agent prompt.",
+      "validator": "node scripts/validate-plugin-orchestration.mjs"
+    },
+    {
+      "name": "designer",
+      "kind": "agent",
+      "classification": "repo-owned-plugin-surface",
+      "path": "packages/copilot-cli-plugin/agents/designer.agent.md",
+      "first_run": "node scripts/validate-surface-inventory.mjs",
+      "rationale": "Copilot CLI plugin custom agent prompt.",
+      "validator": "node scripts/validate-plugin-orchestration.mjs"
+    },
+    {
+      "name": "document-specialist",
+      "kind": "agent",
+      "classification": "repo-owned-plugin-surface",
+      "path": "packages/copilot-cli-plugin/agents/document-specialist.agent.md",
+      "first_run": "node scripts/validate-surface-inventory.mjs",
+      "rationale": "Copilot CLI plugin custom agent prompt.",
+      "validator": "node scripts/validate-plugin-orchestration.mjs"
+    },
+    {
+      "name": "executor",
+      "kind": "agent",
+      "classification": "repo-owned-plugin-surface",
+      "path": "packages/copilot-cli-plugin/agents/executor.agent.md",
+      "first_run": "node scripts/validate-surface-inventory.mjs",
+      "rationale": "Copilot CLI plugin custom agent prompt.",
+      "validator": "node scripts/validate-plugin-orchestration.mjs"
+    },
+    {
+      "name": "explore",
+      "kind": "agent",
+      "classification": "repo-owned-plugin-surface",
+      "path": "packages/copilot-cli-plugin/agents/explore.agent.md",
+      "first_run": "node scripts/validate-surface-inventory.mjs",
+      "rationale": "Copilot CLI plugin custom agent prompt.",
+      "validator": "node scripts/validate-plugin-orchestration.mjs"
+    },
+    {
+      "name": "git-master",
+      "kind": "agent",
+      "classification": "repo-owned-plugin-surface",
+      "path": "packages/copilot-cli-plugin/agents/git-master.agent.md",
+      "first_run": "node scripts/validate-surface-inventory.mjs",
+      "rationale": "Copilot CLI plugin custom agent prompt.",
+      "validator": "node scripts/validate-plugin-orchestration.mjs"
+    },
+    {
+      "name": "planner",
+      "kind": "agent",
+      "classification": "repo-owned-plugin-surface",
+      "path": "packages/copilot-cli-plugin/agents/planner.agent.md",
+      "first_run": "node scripts/validate-surface-inventory.mjs",
+      "rationale": "Copilot CLI plugin custom agent prompt.",
+      "validator": "node scripts/validate-plugin-orchestration.mjs"
+    },
+    {
+      "name": "qa-tester",
+      "kind": "agent",
+      "classification": "repo-owned-plugin-surface",
+      "path": "packages/copilot-cli-plugin/agents/qa-tester.agent.md",
+      "first_run": "node scripts/validate-surface-inventory.mjs",
+      "rationale": "Copilot CLI plugin custom agent prompt.",
+      "validator": "node scripts/validate-plugin-orchestration.mjs"
+    },
+    {
+      "name": "research",
+      "kind": "agent",
+      "classification": "repo-owned-plugin-surface",
+      "path": "packages/copilot-cli-plugin/agents/research.agent.md",
+      "first_run": "node scripts/validate-surface-inventory.mjs",
+      "rationale": "Copilot CLI plugin custom agent prompt.",
+      "validator": "node scripts/validate-plugin-orchestration.mjs"
+    },
+    {
+      "name": "reviewer",
+      "kind": "agent",
+      "classification": "repo-owned-plugin-surface",
+      "path": "packages/copilot-cli-plugin/agents/reviewer.agent.md",
+      "first_run": "node scripts/validate-surface-inventory.mjs",
+      "rationale": "Copilot CLI plugin custom agent prompt.",
+      "validator": "node scripts/validate-plugin-orchestration.mjs"
+    },
+    {
+      "name": "scientist",
+      "kind": "agent",
+      "classification": "repo-owned-plugin-surface",
+      "path": "packages/copilot-cli-plugin/agents/scientist.agent.md",
+      "first_run": "node scripts/validate-surface-inventory.mjs",
+      "rationale": "Copilot CLI plugin custom agent prompt.",
+      "validator": "node scripts/validate-plugin-orchestration.mjs"
+    },
+    {
+      "name": "security-reviewer",
+      "kind": "agent",
+      "classification": "repo-owned-plugin-surface",
+      "path": "packages/copilot-cli-plugin/agents/security-reviewer.agent.md",
+      "first_run": "node scripts/validate-surface-inventory.mjs",
+      "rationale": "Copilot CLI plugin custom agent prompt.",
+      "validator": "node scripts/validate-plugin-orchestration.mjs"
+    },
+    {
+      "name": "sisyphus",
+      "kind": "agent",
+      "classification": "repo-owned-plugin-surface",
+      "path": "packages/copilot-cli-plugin/agents/sisyphus.agent.md",
+      "first_run": "node scripts/validate-surface-inventory.mjs",
+      "rationale": "Copilot CLI plugin custom agent prompt.",
+      "validator": "node scripts/validate-plugin-orchestration.mjs"
+    },
+    {
+      "name": "test-engineer",
+      "kind": "agent",
+      "classification": "repo-owned-plugin-surface",
+      "path": "packages/copilot-cli-plugin/agents/test-engineer.agent.md",
+      "first_run": "node scripts/validate-surface-inventory.mjs",
+      "rationale": "Copilot CLI plugin custom agent prompt.",
+      "validator": "node scripts/validate-plugin-orchestration.mjs"
+    },
+    {
+      "name": "tracer",
+      "kind": "agent",
+      "classification": "repo-owned-plugin-surface",
+      "path": "packages/copilot-cli-plugin/agents/tracer.agent.md",
+      "first_run": "node scripts/validate-surface-inventory.mjs",
+      "rationale": "Copilot CLI plugin custom agent prompt.",
+      "validator": "node scripts/validate-plugin-orchestration.mjs"
+    },
+    {
+      "name": "verifier",
+      "kind": "agent",
+      "classification": "repo-owned-plugin-surface",
+      "path": "packages/copilot-cli-plugin/agents/verifier.agent.md",
+      "first_run": "node scripts/validate-surface-inventory.mjs",
+      "rationale": "Copilot CLI plugin custom agent prompt.",
+      "validator": "node scripts/validate-plugin-orchestration.mjs"
+    },
+    {
+      "name": "writer",
+      "kind": "agent",
+      "classification": "repo-owned-plugin-surface",
+      "path": "packages/copilot-cli-plugin/agents/writer.agent.md",
+      "first_run": "node scripts/validate-surface-inventory.mjs",
+      "rationale": "Copilot CLI plugin custom agent prompt.",
+      "validator": "node scripts/validate-plugin-orchestration.mjs"
+    },
+    {
+      "name": "postToolUse",
+      "kind": "hook",
+      "classification": "repo-owned-plugin-surface",
+      "path": "packages/copilot-cli-plugin/hooks.json",
+      "first_run": "node scripts/validate-surface-inventory.mjs",
+      "rationale": "Copilot CLI plugin lifecycle hook event in the checked-in manifest.",
+      "validator": "./scripts/validate-root-copilot-surfaces.sh"
+    },
+    {
+      "name": "preToolUse",
+      "kind": "hook",
+      "classification": "repo-owned-plugin-surface",
+      "path": "packages/copilot-cli-plugin/hooks.json",
+      "first_run": "node scripts/validate-surface-inventory.mjs",
+      "rationale": "Copilot CLI plugin lifecycle hook event in the checked-in manifest.",
+      "validator": "./scripts/validate-root-copilot-surfaces.sh"
+    },
+    {
+      "name": "sessionEnd",
+      "kind": "hook",
+      "classification": "repo-owned-plugin-surface",
+      "path": "packages/copilot-cli-plugin/hooks.json",
+      "first_run": "node scripts/validate-surface-inventory.mjs",
+      "rationale": "Copilot CLI plugin lifecycle hook event in the checked-in manifest.",
+      "validator": "./scripts/validate-root-copilot-surfaces.sh"
+    },
+    {
+      "name": "sessionStart",
+      "kind": "hook",
+      "classification": "repo-owned-plugin-surface",
+      "path": "packages/copilot-cli-plugin/hooks.json",
+      "first_run": "node scripts/validate-surface-inventory.mjs",
+      "rationale": "Copilot CLI plugin lifecycle hook event in the checked-in manifest.",
+      "validator": "./scripts/validate-root-copilot-surfaces.sh"
+    },
+    {
+      "name": "notepad_prune",
+      "kind": "mcp_tool",
+      "classification": "repo-owned-plugin-surface",
+      "path": "packages/copilot-cli-plugin/mcp-server/server.mjs",
+      "first_run": "node scripts/validate-surface-inventory.mjs",
+      "rationale": "Tool exposed by the bundled OMCP MCP server.",
+      "validator": "cd packages/copilot-cli-plugin/mcp-server && npm test"
+    },
+    {
+      "name": "notepad_read",
+      "kind": "mcp_tool",
+      "classification": "repo-owned-plugin-surface",
+      "path": "packages/copilot-cli-plugin/mcp-server/server.mjs",
+      "first_run": "node scripts/validate-surface-inventory.mjs",
+      "rationale": "Tool exposed by the bundled OMCP MCP server.",
+      "validator": "cd packages/copilot-cli-plugin/mcp-server && npm test"
+    },
+    {
+      "name": "notepad_stats",
+      "kind": "mcp_tool",
+      "classification": "repo-owned-plugin-surface",
+      "path": "packages/copilot-cli-plugin/mcp-server/server.mjs",
+      "first_run": "node scripts/validate-surface-inventory.mjs",
+      "rationale": "Tool exposed by the bundled OMCP MCP server.",
+      "validator": "cd packages/copilot-cli-plugin/mcp-server && npm test"
+    },
+    {
+      "name": "notepad_write",
+      "kind": "mcp_tool",
+      "classification": "repo-owned-plugin-surface",
+      "path": "packages/copilot-cli-plugin/mcp-server/server.mjs",
+      "first_run": "node scripts/validate-surface-inventory.mjs",
+      "rationale": "Tool exposed by the bundled OMCP MCP server.",
+      "validator": "cd packages/copilot-cli-plugin/mcp-server && npm test"
+    },
+    {
+      "name": "notepad_write_manual",
+      "kind": "mcp_tool",
+      "classification": "repo-owned-plugin-surface",
+      "path": "packages/copilot-cli-plugin/mcp-server/server.mjs",
+      "first_run": "node scripts/validate-surface-inventory.mjs",
+      "rationale": "Tool exposed by the bundled OMCP MCP server.",
+      "validator": "cd packages/copilot-cli-plugin/mcp-server && npm test"
+    },
+    {
+      "name": "notepad_write_priority",
+      "kind": "mcp_tool",
+      "classification": "repo-owned-plugin-surface",
+      "path": "packages/copilot-cli-plugin/mcp-server/server.mjs",
+      "first_run": "node scripts/validate-surface-inventory.mjs",
+      "rationale": "Tool exposed by the bundled OMCP MCP server.",
+      "validator": "cd packages/copilot-cli-plugin/mcp-server && npm test"
+    },
+    {
+      "name": "notepad_write_working",
+      "kind": "mcp_tool",
+      "classification": "repo-owned-plugin-surface",
+      "path": "packages/copilot-cli-plugin/mcp-server/server.mjs",
+      "first_run": "node scripts/validate-surface-inventory.mjs",
+      "rationale": "Tool exposed by the bundled OMCP MCP server.",
+      "validator": "cd packages/copilot-cli-plugin/mcp-server && npm test"
+    },
+    {
+      "name": "pipeline_record_transition",
+      "kind": "mcp_tool",
+      "classification": "repo-owned-plugin-surface",
+      "path": "packages/copilot-cli-plugin/mcp-server/server.mjs",
+      "first_run": "node scripts/validate-surface-inventory.mjs",
+      "rationale": "Tool exposed by the bundled OMCP MCP server.",
+      "validator": "cd packages/copilot-cli-plugin/mcp-server && npm test"
+    },
+    {
+      "name": "pipeline_state",
+      "kind": "mcp_tool",
+      "classification": "repo-owned-plugin-surface",
+      "path": "packages/copilot-cli-plugin/mcp-server/server.mjs",
+      "first_run": "node scripts/validate-surface-inventory.mjs",
+      "rationale": "Tool exposed by the bundled OMCP MCP server.",
+      "validator": "cd packages/copilot-cli-plugin/mcp-server && npm test"
+    },
+    {
+      "name": "plan_list",
+      "kind": "mcp_tool",
+      "classification": "repo-owned-plugin-surface",
+      "path": "packages/copilot-cli-plugin/mcp-server/server.mjs",
+      "first_run": "node scripts/validate-surface-inventory.mjs",
+      "rationale": "Tool exposed by the bundled OMCP MCP server.",
+      "validator": "cd packages/copilot-cli-plugin/mcp-server && npm test"
+    },
+    {
+      "name": "project_memory_add_directive",
+      "kind": "mcp_tool",
+      "classification": "repo-owned-plugin-surface",
+      "path": "packages/copilot-cli-plugin/mcp-server/server.mjs",
+      "first_run": "node scripts/validate-surface-inventory.mjs",
+      "rationale": "Tool exposed by the bundled OMCP MCP server.",
+      "validator": "cd packages/copilot-cli-plugin/mcp-server && npm test"
+    },
+    {
+      "name": "project_memory_add_note",
+      "kind": "mcp_tool",
+      "classification": "repo-owned-plugin-surface",
+      "path": "packages/copilot-cli-plugin/mcp-server/server.mjs",
+      "first_run": "node scripts/validate-surface-inventory.mjs",
+      "rationale": "Tool exposed by the bundled OMCP MCP server.",
+      "validator": "cd packages/copilot-cli-plugin/mcp-server && npm test"
+    },
+    {
+      "name": "project_memory_prune",
+      "kind": "mcp_tool",
+      "classification": "repo-owned-plugin-surface",
+      "path": "packages/copilot-cli-plugin/mcp-server/server.mjs",
+      "first_run": "node scripts/validate-surface-inventory.mjs",
+      "rationale": "Tool exposed by the bundled OMCP MCP server.",
+      "validator": "cd packages/copilot-cli-plugin/mcp-server && npm test"
+    },
+    {
+      "name": "project_memory_read",
+      "kind": "mcp_tool",
+      "classification": "repo-owned-plugin-surface",
+      "path": "packages/copilot-cli-plugin/mcp-server/server.mjs",
+      "first_run": "node scripts/validate-surface-inventory.mjs",
+      "rationale": "Tool exposed by the bundled OMCP MCP server.",
+      "validator": "cd packages/copilot-cli-plugin/mcp-server && npm test"
+    },
+    {
+      "name": "project_memory_write",
+      "kind": "mcp_tool",
+      "classification": "repo-owned-plugin-surface",
+      "path": "packages/copilot-cli-plugin/mcp-server/server.mjs",
+      "first_run": "node scripts/validate-surface-inventory.mjs",
+      "rationale": "Tool exposed by the bundled OMCP MCP server.",
+      "validator": "cd packages/copilot-cli-plugin/mcp-server && npm test"
+    },
+    {
+      "name": "rules_context_for_file",
+      "kind": "mcp_tool",
+      "classification": "repo-owned-plugin-surface",
+      "path": "packages/copilot-cli-plugin/mcp-server/server.mjs",
+      "first_run": "node scripts/validate-surface-inventory.mjs",
+      "rationale": "Tool exposed by the bundled OMCP MCP server.",
+      "validator": "cd packages/copilot-cli-plugin/mcp-server && npm test"
+    },
+    {
+      "name": "rules_pending_clear",
+      "kind": "mcp_tool",
+      "classification": "repo-owned-plugin-surface",
+      "path": "packages/copilot-cli-plugin/mcp-server/server.mjs",
+      "first_run": "node scripts/validate-surface-inventory.mjs",
+      "rationale": "Tool exposed by the bundled OMCP MCP server.",
+      "validator": "cd packages/copilot-cli-plugin/mcp-server && npm test"
+    },
+    {
+      "name": "rules_pending_read",
+      "kind": "mcp_tool",
+      "classification": "repo-owned-plugin-surface",
+      "path": "packages/copilot-cli-plugin/mcp-server/server.mjs",
+      "first_run": "node scripts/validate-surface-inventory.mjs",
+      "rationale": "Tool exposed by the bundled OMCP MCP server.",
+      "validator": "cd packages/copilot-cli-plugin/mcp-server && npm test"
+    },
+    {
+      "name": "rules_policy_report",
+      "kind": "mcp_tool",
+      "classification": "repo-owned-plugin-surface",
+      "path": "packages/copilot-cli-plugin/mcp-server/server.mjs",
+      "first_run": "node scripts/validate-surface-inventory.mjs",
+      "rationale": "Tool exposed by the bundled OMCP MCP server.",
+      "validator": "cd packages/copilot-cli-plugin/mcp-server && npm test"
+    },
+    {
+      "name": "shared_memory_cleanup",
+      "kind": "mcp_tool",
+      "classification": "repo-owned-plugin-surface",
+      "path": "packages/copilot-cli-plugin/mcp-server/server.mjs",
+      "first_run": "node scripts/validate-surface-inventory.mjs",
+      "rationale": "Tool exposed by the bundled OMCP MCP server.",
+      "validator": "cd packages/copilot-cli-plugin/mcp-server && npm test"
+    },
+    {
+      "name": "shared_memory_delete",
+      "kind": "mcp_tool",
+      "classification": "repo-owned-plugin-surface",
+      "path": "packages/copilot-cli-plugin/mcp-server/server.mjs",
+      "first_run": "node scripts/validate-surface-inventory.mjs",
+      "rationale": "Tool exposed by the bundled OMCP MCP server.",
+      "validator": "cd packages/copilot-cli-plugin/mcp-server && npm test"
+    },
+    {
+      "name": "shared_memory_list",
+      "kind": "mcp_tool",
+      "classification": "repo-owned-plugin-surface",
+      "path": "packages/copilot-cli-plugin/mcp-server/server.mjs",
+      "first_run": "node scripts/validate-surface-inventory.mjs",
+      "rationale": "Tool exposed by the bundled OMCP MCP server.",
+      "validator": "cd packages/copilot-cli-plugin/mcp-server && npm test"
+    },
+    {
+      "name": "shared_memory_read",
+      "kind": "mcp_tool",
+      "classification": "repo-owned-plugin-surface",
+      "path": "packages/copilot-cli-plugin/mcp-server/server.mjs",
+      "first_run": "node scripts/validate-surface-inventory.mjs",
+      "rationale": "Tool exposed by the bundled OMCP MCP server.",
+      "validator": "cd packages/copilot-cli-plugin/mcp-server && npm test"
+    },
+    {
+      "name": "shared_memory_write",
+      "kind": "mcp_tool",
+      "classification": "repo-owned-plugin-surface",
+      "path": "packages/copilot-cli-plugin/mcp-server/server.mjs",
+      "first_run": "node scripts/validate-surface-inventory.mjs",
+      "rationale": "Tool exposed by the bundled OMCP MCP server.",
+      "validator": "cd packages/copilot-cli-plugin/mcp-server && npm test"
+    },
+    {
+      "name": "state_clear",
+      "kind": "mcp_tool",
+      "classification": "repo-owned-plugin-surface",
+      "path": "packages/copilot-cli-plugin/mcp-server/server.mjs",
+      "first_run": "node scripts/validate-surface-inventory.mjs",
+      "rationale": "Tool exposed by the bundled OMCP MCP server.",
+      "validator": "cd packages/copilot-cli-plugin/mcp-server && npm test"
+    },
+    {
+      "name": "state_get_status",
+      "kind": "mcp_tool",
+      "classification": "repo-owned-plugin-surface",
+      "path": "packages/copilot-cli-plugin/mcp-server/server.mjs",
+      "first_run": "node scripts/validate-surface-inventory.mjs",
+      "rationale": "Tool exposed by the bundled OMCP MCP server.",
+      "validator": "cd packages/copilot-cli-plugin/mcp-server && npm test"
+    },
+    {
+      "name": "state_list",
+      "kind": "mcp_tool",
+      "classification": "repo-owned-plugin-surface",
+      "path": "packages/copilot-cli-plugin/mcp-server/server.mjs",
+      "first_run": "node scripts/validate-surface-inventory.mjs",
+      "rationale": "Tool exposed by the bundled OMCP MCP server.",
+      "validator": "cd packages/copilot-cli-plugin/mcp-server && npm test"
+    },
+    {
+      "name": "state_list_active",
+      "kind": "mcp_tool",
+      "classification": "repo-owned-plugin-surface",
+      "path": "packages/copilot-cli-plugin/mcp-server/server.mjs",
+      "first_run": "node scripts/validate-surface-inventory.mjs",
+      "rationale": "Tool exposed by the bundled OMCP MCP server.",
+      "validator": "cd packages/copilot-cli-plugin/mcp-server && npm test"
+    },
+    {
+      "name": "state_read",
+      "kind": "mcp_tool",
+      "classification": "repo-owned-plugin-surface",
+      "path": "packages/copilot-cli-plugin/mcp-server/server.mjs",
+      "first_run": "node scripts/validate-surface-inventory.mjs",
+      "rationale": "Tool exposed by the bundled OMCP MCP server.",
+      "validator": "cd packages/copilot-cli-plugin/mcp-server && npm test"
+    },
+    {
+      "name": "state_write",
+      "kind": "mcp_tool",
+      "classification": "repo-owned-plugin-surface",
+      "path": "packages/copilot-cli-plugin/mcp-server/server.mjs",
+      "first_run": "node scripts/validate-surface-inventory.mjs",
+      "rationale": "Tool exposed by the bundled OMCP MCP server.",
+      "validator": "cd packages/copilot-cli-plugin/mcp-server && npm test"
+    },
+    {
+      "name": "trace_list_sessions",
+      "kind": "mcp_tool",
+      "classification": "repo-owned-plugin-surface",
+      "path": "packages/copilot-cli-plugin/mcp-server/server.mjs",
+      "first_run": "node scripts/validate-surface-inventory.mjs",
+      "rationale": "Tool exposed by the bundled OMCP MCP server.",
+      "validator": "cd packages/copilot-cli-plugin/mcp-server && npm test"
+    },
+    {
+      "name": "trace_summary",
+      "kind": "mcp_tool",
+      "classification": "repo-owned-plugin-surface",
+      "path": "packages/copilot-cli-plugin/mcp-server/server.mjs",
+      "first_run": "node scripts/validate-surface-inventory.mjs",
+      "rationale": "Tool exposed by the bundled OMCP MCP server.",
+      "validator": "cd packages/copilot-cli-plugin/mcp-server && npm test"
+    },
+    {
+      "name": "trace_timeline",
+      "kind": "mcp_tool",
+      "classification": "repo-owned-plugin-surface",
+      "path": "packages/copilot-cli-plugin/mcp-server/server.mjs",
+      "first_run": "node scripts/validate-surface-inventory.mjs",
+      "rationale": "Tool exposed by the bundled OMCP MCP server.",
+      "validator": "cd packages/copilot-cli-plugin/mcp-server && npm test"
+    },
+    {
+      "name": "trace_write",
+      "kind": "mcp_tool",
+      "classification": "repo-owned-plugin-surface",
+      "path": "packages/copilot-cli-plugin/mcp-server/server.mjs",
+      "first_run": "node scripts/validate-surface-inventory.mjs",
+      "rationale": "Tool exposed by the bundled OMCP MCP server.",
+      "validator": "cd packages/copilot-cli-plugin/mcp-server && npm test"
+    },
+    {
+      "name": "wiki_add",
+      "kind": "mcp_tool",
+      "classification": "repo-owned-plugin-surface",
+      "path": "packages/copilot-cli-plugin/mcp-server/server.mjs",
+      "first_run": "node scripts/validate-surface-inventory.mjs",
+      "rationale": "Tool exposed by the bundled OMCP MCP server.",
+      "validator": "cd packages/copilot-cli-plugin/mcp-server && npm test"
+    },
+    {
+      "name": "wiki_delete",
+      "kind": "mcp_tool",
+      "classification": "repo-owned-plugin-surface",
+      "path": "packages/copilot-cli-plugin/mcp-server/server.mjs",
+      "first_run": "node scripts/validate-surface-inventory.mjs",
+      "rationale": "Tool exposed by the bundled OMCP MCP server.",
+      "validator": "cd packages/copilot-cli-plugin/mcp-server && npm test"
+    },
+    {
+      "name": "wiki_ingest",
+      "kind": "mcp_tool",
+      "classification": "repo-owned-plugin-surface",
+      "path": "packages/copilot-cli-plugin/mcp-server/server.mjs",
+      "first_run": "node scripts/validate-surface-inventory.mjs",
+      "rationale": "Tool exposed by the bundled OMCP MCP server.",
+      "validator": "cd packages/copilot-cli-plugin/mcp-server && npm test"
+    },
+    {
+      "name": "wiki_lint",
+      "kind": "mcp_tool",
+      "classification": "repo-owned-plugin-surface",
+      "path": "packages/copilot-cli-plugin/mcp-server/server.mjs",
+      "first_run": "node scripts/validate-surface-inventory.mjs",
+      "rationale": "Tool exposed by the bundled OMCP MCP server.",
+      "validator": "cd packages/copilot-cli-plugin/mcp-server && npm test"
+    },
+    {
+      "name": "wiki_list",
+      "kind": "mcp_tool",
+      "classification": "repo-owned-plugin-surface",
+      "path": "packages/copilot-cli-plugin/mcp-server/server.mjs",
+      "first_run": "node scripts/validate-surface-inventory.mjs",
+      "rationale": "Tool exposed by the bundled OMCP MCP server.",
+      "validator": "cd packages/copilot-cli-plugin/mcp-server && npm test"
+    },
+    {
+      "name": "wiki_query",
+      "kind": "mcp_tool",
+      "classification": "repo-owned-plugin-surface",
+      "path": "packages/copilot-cli-plugin/mcp-server/server.mjs",
+      "first_run": "node scripts/validate-surface-inventory.mjs",
+      "rationale": "Tool exposed by the bundled OMCP MCP server.",
+      "validator": "cd packages/copilot-cli-plugin/mcp-server && npm test"
+    },
+    {
+      "name": "wiki_read",
+      "kind": "mcp_tool",
+      "classification": "repo-owned-plugin-surface",
+      "path": "packages/copilot-cli-plugin/mcp-server/server.mjs",
+      "first_run": "node scripts/validate-surface-inventory.mjs",
+      "rationale": "Tool exposed by the bundled OMCP MCP server.",
+      "validator": "cd packages/copilot-cli-plugin/mcp-server && npm test"
+    }
+  ]
 }
