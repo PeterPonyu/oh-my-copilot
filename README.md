@@ -55,6 +55,7 @@ bash scripts/run-validation.sh        # 17-check end-to-end (server + bundled to
 bash scripts/validate-doc-links.sh    # docs cross-refs
 bash scripts/validate-power-surfaces.sh   # manifest counts vs filesystem
 node scripts/audit-tool-refs.mjs      # MCP tool reference audit (skill prompts ↔ registered tools)
+node scripts/validate-surface-inventory.mjs # inventory + README + host-boundary guard
 ```
 
 The full bootstrap entry point is `bash scripts/bootstrap-copilot-power.sh`. For agentic interactive proof, see `docs/validation/agentic-tmux-2026-05-07-wave-l.md`.
@@ -68,6 +69,7 @@ The full bootstrap entry point is `bash scripts/bootstrap-copilot-power.sh`. For
 | **Day-to-day usage** | [`docs/usage.md`](./docs/usage.md) |
 | **Limitations + host-product caveats** | [`docs/known-limitations.md`](./docs/known-limitations.md) |
 | **Hook surface (4 events)** | [`docs/hook-surface.md`](./docs/hook-surface.md) |
+| **Surface inventory** | [`docs/surface-inventory.json`](./docs/surface-inventory.json) |
 | **State contract** | [`docs/state-contract.md`](./docs/state-contract.md) |
 | **Plugin internals** | [`docs/plugin-internal/orchestration.md`](./docs/plugin-internal/orchestration.md), [`docs/plugin-internal/state-management.md`](./docs/plugin-internal/state-management.md) |
 | **Design + scope** | [`docs/design-spec.md`](./docs/design-spec.md), [`docs/v1-repo-blueprint.md`](./docs/v1-repo-blueprint.md) |

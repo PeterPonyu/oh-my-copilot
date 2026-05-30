@@ -131,6 +131,8 @@ PY
   log "root Copilot mirror has no drift from plugin sources"
   (cd "$ROOT" && node scripts/validate-plugin-orchestration.mjs >/dev/null)
   log "plugin orchestration metadata validates"
+  (cd "$ROOT" && node scripts/validate-surface-inventory.mjs >/dev/null)
+  log "surface inventory validates"
 }
 
 validate_docs_mentions() {
