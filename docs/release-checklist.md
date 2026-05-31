@@ -43,6 +43,8 @@ reusable plugin behavior, and keeps [`examples/`](../examples/) illustrative.
 Run these commands from the repository root:
 
 ```bash
+./scripts/validate-fast-sanity.sh
+./scripts/validate-full-local.sh --skip-release-readiness
 ./scripts/validate-doc-links.sh
 ./scripts/check-mirror-drift.sh
 node scripts/validate-plugin-orchestration.mjs
@@ -51,6 +53,7 @@ node scripts/validate-plugin-orchestration.mjs
 ./scripts/validate-root-copilot-surfaces.sh
 ./scripts/validate-copilot-state-contract.sh
 ./scripts/validate-benchmark-evidence.sh
+./scripts/validate-structural-e2e.sh
 ./scripts/validate-release-readiness.sh
 ```
 
@@ -116,7 +119,10 @@ Release readiness evidence:
 - Power surface validation: PASS/FAIL — ./scripts/validate-power-surfaces.sh
 - Root surface validation: PASS/FAIL — ./scripts/validate-root-copilot-surfaces.sh
 - Copilot state contract: PASS/FAIL — ./scripts/validate-copilot-state-contract.sh
+- Fast sanity validation: PASS/FAIL — ./scripts/validate-fast-sanity.sh
+- Full local validation: PASS/FAIL — ./scripts/validate-full-local.sh --skip-release-readiness
 - Benchmark evidence validation: PASS/FAIL — ./scripts/validate-benchmark-evidence.sh
+- Structural E2E validation: PASS/FAIL — ./scripts/validate-structural-e2e.sh
 - Release readiness validation: PASS/FAIL — ./scripts/validate-release-readiness.sh
 - Copilot CLI smoke: PASS/FAIL/SKIPPED — ./scripts/smoke-copilot-cli.sh
 - Agent prompt smoke: PASS/FAIL/SKIPPED — RUN_COPILOT_AGENT_SMOKE=1 ./scripts/smoke-copilot-cli.sh
