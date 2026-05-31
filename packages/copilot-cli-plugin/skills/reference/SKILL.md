@@ -75,7 +75,7 @@ Invoke built-in workflows via `/omcp:<name>`.
 - `team` — coordinated team orchestration
 - `ccg` — Codex + Gemini + Claude synthesis lane
 - `ultraqa` — QA cycle: test, verify, fix, repeat
-- `omc-plan` — planning workflow and `/plan`-safe alias
+- `plan` — strategic planning workflow (`/omcp:plan`)
 - `ralplan` — consensus planning workflow
 - `sciomc` — science/research workflow
 - `external-context` — external docs/research workflow

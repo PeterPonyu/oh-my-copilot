@@ -20,7 +20,7 @@ Output target: `.omcp/plans/<slug>.md`. The smoke test at `scripts/smoke-copilot
 
 # Ralplan (Consensus Planning Alias)
 
-Ralplan is a shorthand alias for `/omcp:omc-plan --consensus`. It triggers iterative planning with Planner, Architect, and Critic agents until consensus is reached, with **RALPLAN-DR structured deliberation** (short mode by default, deliberate mode for high-risk work).
+Ralplan is a shorthand alias for `/omcp:plan --consensus`. It triggers iterative planning with Planner, Architect, and Critic agents until consensus is reached, with **RALPLAN-DR structured deliberation** (short mode by default, deliberate mode for high-risk work).
 
 ## Agent orchestration
 
@@ -52,7 +52,7 @@ critic enforces testability and fair alternative analysis before execution.
 This skill invokes the Plan skill in consensus mode:
 
 ```text
-/omcp:omc-plan --consensus <arguments>
+/omcp:plan --consensus <arguments>
 ```
 
 The consensus workflow:
