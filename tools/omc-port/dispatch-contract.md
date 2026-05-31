@@ -13,7 +13,7 @@ through YAML frontmatter + auto-delegation; everything else becomes prose.
 ## 1. Frontmatter contract
 
 The Copilot-side frontmatter shape is verified against the live repo file
-`/home/zeyufu/Desktop/oh-my-copilot/.github/prompts/research.prompt.md` (lines 1–6):
+`<workspace>/oh-my-copilot/.github/prompts/research.prompt.md` (lines 1–6):
 
 ```yaml
 ---
@@ -138,7 +138,7 @@ Anything else gets a TODO marker so reviewers can extend the v1 server later.
 ## 8. Frontmatter source citation
 
 The 4-field contract above is verified against
-`/home/zeyufu/Desktop/oh-my-copilot/.github/prompts/research.prompt.md`,
+`<workspace>/oh-my-copilot/.github/prompts/research.prompt.md`,
 lines 1–6, which is the only live evidence of Copilot CLI's frontmatter shape in
 this repo today. Any future fields must be added to this contract first, with a
 new repo-evidence citation, before the translator emits them.

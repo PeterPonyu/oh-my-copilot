@@ -48,7 +48,7 @@
         "weight": 20,
         "required": true,
         "passed": true,
-        "evidence": "ok: .gitignore blocks speculative Cursor state files\nok: user-level Cursor auth/model state is stored outside the repo: /home/zeyufu/.cursor/cli-config.json\nok: cursor auth user is fuzeyu09@gmail.com\nok: cursor default model is default\nok: Cursor state contract validation complete"
+        "evidence": "ok: .gitignore blocks speculative Cursor state files\nok: user-level Cursor auth/model state is stored outside the repo: ~/.cursor/cli-config.json\nok: cursor auth user is fuzeyu09@gmail.com\nok: cursor default model is default\nok: Cursor state contract validation complete"
       },
       {
         "name": "backbone_verify",
@@ -122,7 +122,7 @@
         "weight": 20,
         "required": true,
         "passed": true,
-        "evidence": "ok: .gitignore blocks speculative Cursor state files\nok: user-level Cursor auth/model state is stored outside the repo: /home/zeyufu/.cursor/cli-config.json\nok: cursor auth user is fuzeyu09@gmail.com\nok: cursor default model is default\nok: Cursor state contract validation complete"
+        "evidence": "ok: .gitignore blocks speculative Cursor state files\nok: user-level Cursor auth/model state is stored outside the repo: ~/.cursor/cli-config.json\nok: cursor auth user is fuzeyu09@gmail.com\nok: cursor default model is default\nok: Cursor state contract validation complete"
       },
       {
         "name": "backbone_verify",

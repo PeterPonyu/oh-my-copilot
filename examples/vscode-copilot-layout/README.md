@@ -29,7 +29,7 @@ It is still bounded:
 Open this folder itself as the VS Code workspace root:
 
 ```text
-/home/zeyufu/Desktop/oh-my-copilot/examples/vscode-copilot-layout
+<workspace>/oh-my-copilot/examples/vscode-copilot-layout
 ```
 
 Then test:

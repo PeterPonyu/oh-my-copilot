@@ -36,7 +36,7 @@ from benchmark.runs.recorder import Recorder  # noqa: E402
 
 DEFAULT_MODEL_ARG = "gpt-5-mini"
 TASKS_PATH = Path(__file__).parent / "a1_tasks.json"
-WITH_OMC_CWD = ROOT  # /home/zeyufu/Desktop/oh-my-copilot
+WITH_OMC_CWD = ROOT  # <workspace>/oh-my-copilot
 PREMIUM_REQUEST_BUDGET = 50  # ~ $2 cap at $0.04/request
 COPILOT_TIMEOUT_S = 240.0
 ARMS = ("vanilla", "with-omc")

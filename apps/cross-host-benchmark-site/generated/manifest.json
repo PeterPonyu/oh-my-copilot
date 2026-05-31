@@ -4,7 +4,7 @@
     "script": "scripts/harvest-cross-host-benchmark-data.py",
     "version": 2
   },
-  "outputRoot": "/home/zeyufu/Desktop/oh-my-copilot/apps/cross-host-benchmark-site/generated",
+  "outputRoot": "<workspace>/oh-my-copilot/apps/cross-host-benchmark-site/generated",
   "comparisonPolicy": {
     "comparisonClass": "observed",
     "defaultComparabilityClass": "reporting-comparable",
@@ -19,7 +19,7 @@
   "repos": [
     {
       "repo": "oh-my-copilot",
-      "root": "/home/zeyufu/Desktop/oh-my-copilot",
+      "root": "<workspace>/oh-my-copilot",
       "sourceBranch": "main",
       "sourceSha": "fbf84fd",
       "workspaceBranch": "main",
@@ -33,7 +33,7 @@
     },
     {
       "repo": "oh-my-cursor",
-      "root": "/home/zeyufu/Desktop/oh-my-cursor",
+      "root": "<workspace>/oh-my-cursor",
       "sourceBranch": "main",
       "sourceSha": "ce0db00",
       "workspaceBranch": "main",

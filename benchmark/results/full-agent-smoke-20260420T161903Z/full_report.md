@@ -1,6 +1,6 @@
 # Benchmark Results (full)
 
-Root: `/home/zeyufu/Desktop/oh-my-copilot`
+Root: `<workspace>/oh-my-copilot`
 
 | Check | Result | Duration (s) |
 | --- | --- | ---: |
@@ -99,16 +99,16 @@ Tokens    ↑ 17.6k • ↓ 256 • 16.9k (cached) • 247 (reasoning)
 ## install_state
 
 ```text
-ok: installed source path exists: /home/zeyufu/Desktop/oh-my-copilot/packages/copilot-cli-plugin
-ok: plugin config entry found in /home/zeyufu/.copilot/config.json
-ok: installed plugin cache verified at /home/zeyufu/.copilot/installed-plugins/_direct/copilot-cli-plugin
+ok: installed source path exists: <workspace>/oh-my-copilot/packages/copilot-cli-plugin
+ok: plugin config entry found in ~/.copilot/config.json
+ok: installed plugin cache verified at ~/.copilot/installed-plugins/_direct/copilot-cli-plugin
 INSTALL_STATE: ok
 
 INSTALL_STATE_SUMMARY
 =====================
-- Root: /home/zeyufu/Desktop/oh-my-copilot
-- Plugin manifest: /home/zeyufu/Desktop/oh-my-copilot/packages/copilot-cli-plugin/plugin.json
-- Copilot config: /home/zeyufu/.copilot/config.json
+- Root: <workspace>/oh-my-copilot
+- Plugin manifest: <workspace>/oh-my-copilot/packages/copilot-cli-plugin/plugin.json
+- Copilot config: ~/.copilot/config.json
 - Expected plugin name: oh-my-copilot-power-pack
 - Result: PASS
 ```

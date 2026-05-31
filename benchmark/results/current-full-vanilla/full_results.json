@@ -55,7 +55,7 @@
     "command": "./scripts/check-install-state.sh",
     "success": true,
     "duration_sec": 0.04,
-    "output_tail": "ok: installed source path is canonical: /home/zeyufu/Desktop/oh-my-copilot/packages/copilot-cli-plugin\nok: plugin config entry found in /home/zeyufu/.copilot/config.json\nok: installed plugin cache verified at /home/zeyufu/.copilot/installed-plugins/_direct/copilot-cli-plugin\nINSTALL_STATE: ok\n\nINSTALL_STATE_SUMMARY\n=====================\n- Root: /home/zeyufu/Desktop/oh-my-copilot\n- Plugin manifest: /home/zeyufu/Desktop/oh-my-copilot/packages/copilot-cli-plugin/plugin.json\n- Copilot config: /home/zeyufu/.copilot/config.json\n- Expected plugin name: oh-my-copilot-power-pack\n- Result: PASS",
+    "output_tail": "ok: installed source path is canonical: <workspace>/oh-my-copilot/packages/copilot-cli-plugin\nok: plugin config entry found in ~/.copilot/config.json\nok: installed plugin cache verified at ~/.copilot/installed-plugins/_direct/copilot-cli-plugin\nINSTALL_STATE: ok\n\nINSTALL_STATE_SUMMARY\n=====================\n- Root: <workspace>/oh-my-copilot\n- Plugin manifest: <workspace>/oh-my-copilot/packages/copilot-cli-plugin/plugin.json\n- Copilot config: ~/.copilot/config.json\n- Expected plugin name: oh-my-copilot-power-pack\n- Result: PASS",
     "markers": [
       "INSTALL_STATE: ok"
     ]
