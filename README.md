@@ -28,6 +28,12 @@ For the full installation guide (prerequisites, bootstrap script, troubleshootin
 
 ## Plugin surface
 
+The installed plugin remains intentionally compact by default: all 45 slash routes,
+46 skills, and 22 agents are classified as **advanced** inventory surfaces, while
+the 4 hooks and 41 MCP tools are **internal**. That keeps the first-run/default
+surface at 0 user-invocable routes and 0 agents, under the suite ceiling of 5 and
+6 respectively, without hiding the opt-in power-pack inventory.
+
 | Dimension | Count | Notes |
 | --- | --- | --- |
 | Agents | 22 | sisyphus (orchestrator), reviewer, research, executor, planner, architect, debugger, ... |
@@ -55,6 +61,7 @@ bash scripts/run-validation.sh        # 17-check end-to-end (server + bundled to
 bash scripts/validate-doc-links.sh    # docs cross-refs
 bash scripts/validate-power-surfaces.sh   # manifest counts vs filesystem
 node scripts/audit-tool-refs.mjs      # MCP tool reference audit (skill prompts ↔ registered tools)
+node scripts/validate-surface-inventory.mjs # inventory + README + host-boundary guard
 ```
 
 The full bootstrap entry point is `bash scripts/bootstrap-copilot-power.sh`. For agentic interactive proof, see `docs/validation/agentic-tmux-2026-05-07-wave-l.md`.
@@ -68,6 +75,7 @@ The full bootstrap entry point is `bash scripts/bootstrap-copilot-power.sh`. For
 | **Day-to-day usage** | [`docs/usage.md`](./docs/usage.md) |
 | **Limitations + host-product caveats** | [`docs/known-limitations.md`](./docs/known-limitations.md) |
 | **Hook surface (4 events)** | [`docs/hook-surface.md`](./docs/hook-surface.md) |
+| **Surface inventory** | [`docs/surface-inventory.json`](./docs/surface-inventory.json) |
 | **State contract** | [`docs/state-contract.md`](./docs/state-contract.md) |
 | **Plugin internals** | [`docs/plugin-internal/orchestration.md`](./docs/plugin-internal/orchestration.md), [`docs/plugin-internal/state-management.md`](./docs/plugin-internal/state-management.md) |
 | **Design + scope** | [`docs/design-spec.md`](./docs/design-spec.md), [`docs/v1-repo-blueprint.md`](./docs/v1-repo-blueprint.md) |
