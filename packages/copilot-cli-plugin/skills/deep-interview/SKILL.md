@@ -3,8 +3,8 @@ name: deep-interview
 description: "[OMCP] Socratic deep interview with mathematical ambiguity gating before autonomous execution"
 orchestrates-agents: "analyst, architect, critic"
 argument-hint: "[--quick|--standard|--deep] [--autoresearch] <idea or vague description>"
-pipeline: [deep-interview, omc-plan, autopilot]
-next-skill: omc-plan
+pipeline: [deep-interview, plan, autopilot]
+next-skill: plan
 next-skill-args: --consensus --direct
 handoff: .omcp/specs/deep-interview-{slug}.md
 level: 3
@@ -45,7 +45,7 @@ Deep Interview implements Ouroboros-inspired Socratic questioning with mathemati
 
 <Do_Not_Use_When>
 - User has a detailed, specific request with file paths, function names, or acceptance criteria -- execute directly
-- User wants to explore options or brainstorm -- use `omc-plan` skill instead
+- User wants to explore options or brainstorm -- use `plan` skill instead
 - User wants a quick fix or single change -- delegate to executor or ralph
 - User says "just do it" or "skip the questions" -- respect their intent
 - User already has a PRD or plan file -- use ralph or autopilot with that plan
@@ -78,7 +78,7 @@ When arguments include `--autoresearch`, Deep Interview becomes the zero-learnin
 - If no usable mission brief is present yet, start by asking: **"What should autoresearch improve or prove for this repo?"**
 - After the mission is clear, collect an evaluator command. If the user leaves it blank, infer one only when repo evidence is strong; otherwise keep interviewing until an evaluator is explicit enough to launch safely.
 - Keep the usual one-question-per-round rule, but treat **mission clarity** and **evaluator clarity** as hard readiness gates in addition to the normal ambiguity threshold.
-- Once ready, do **not** bridge into `omc-plan`, `autopilot`, `ralph`, `team`, or the hard-deprecated `omc autoresearch` CLI. Instead write the mission/evaluator setup artifacts and invoke:
+- Once ready, do **not** bridge into `plan`, `autopilot`, `ralph`, `team`, or the hard-deprecated `omc autoresearch` CLI. Instead write the mission/evaluator setup artifacts and invoke:
   - `[Run /autoresearch to continue the pipeline]
 <!-- TODO: P0/P1 skill autoresearch may need its slash command in commands/autoresearch.md (Wave 6) -->`
 - This handoff enters the real stateful autoresearch skill. After a successful handoff, announce the mission slug, evaluator command/script, max-runtime ceiling, and artifact location.
@@ -105,7 +105,7 @@ When arguments include `--autoresearch`, Deep Interview becomes the zero-learnin
    - Inspect the initial idea plus any pasted artifacts, logs, transcripts, or file excerpts for prompt-budget risk before writing state or generating the first question.
    - If the initial context is oversized or likely to crowd out downstream prompts, produce a concise prompt-safe summary that preserves user intent, decisions, constraints, unknowns, cited files/symbols, and any explicit non-goals.
    - Treat the summary as the canonical `initial_idea` and store the raw oversized material only as external/advisory context if it can be referenced safely; do not paste the raw oversized context into question-generation, ambiguity-scoring, spec-crystallization, or execution-handoff prompts.
-   - Wait until the summary exists before ambiguity scoring, weakest-dimension selection, brownfield exploration prompts, or any bridge to `omc-plan`, `autopilot`, `ralph`, or `team`.
+   - Wait until the summary exists before ambiguity scoring, weakest-dimension selection, brownfield exploration prompts, or any bridge to `plan`, `autopilot`, `ralph`, or `team`.
 3.7. **Artifact path discipline**:
    - Final specs MUST be written to `.omcp/specs/deep-interview-{slug}.md` exactly.
    - Ephemeral interview artifacts (scoring scratchpads, prompt-safe summaries, transient queues, resume metadata) belong in `.omcp/state/` or in `state_write` state, never in the repo root or arbitrary working files.
@@ -402,10 +402,10 @@ After the spec is written, present execution options via `AskUserQuestion`:
 
 1. **Ralplan → Autopilot (Recommended)**
    - Description: "3-stage pipeline: consensus-refine this spec with Planner/Architect/Critic, then execute with full autopilot. Maximum quality."
-   - Action: Invoke `[Run /omc-plan to continue the pipeline]`
-with `--consensus --direct` flags and the spec file path as context. The `--direct` flag skips the omc-plan skill's interview phase (the deep interview already gathered requirements), while `--consensus` triggers the Planner/Architect/Critic loop. When consensus completes and produces a plan in `.omcp/plans/`, invoke `[Run /omcp:autopilot to continue the pipeline]`
+   - Action: Invoke `[Run /omcp:plan to continue the pipeline]`
+with `--consensus --direct` flags and the spec file path as context. The `--direct` flag skips the plan skill's interview phase (the deep interview already gathered requirements), while `--consensus` triggers the Planner/Architect/Critic loop. When consensus completes and produces a plan in `.omcp/plans/`, invoke `[Run /omcp:autopilot to continue the pipeline]`
 with the consensus plan as Phase 0+1 output — autopilot skips both Expansion and Planning, starting directly at Phase 2 (Execution).
-   - Pipeline: `deep-interview spec → omc-plan --consensus --direct → autopilot execution`
+   - Pipeline: `deep-interview spec → plan --consensus --direct → autopilot execution`
 
 2. **Execute with autopilot (skip ralplan)**
    - Description: "Full autonomous pipeline — planning, parallel implementation, QA, validation. Faster but without consensus refinement."
@@ -587,7 +587,7 @@ Why bad: 45% ambiguity means nearly half the requirements are unclear. The mathe
 - [ ] Spec includes: goal, constraints, acceptance criteria, clarity breakdown, transcript
 - [ ] Execution bridge presented via AskUserQuestion
 - [ ] Selected execution mode invoked via Skill() (never direct implementation)
-- [ ] If 3-stage pipeline selected: omc-plan --consensus --direct invoked, then autopilot with consensus plan
+- [ ] If 3-stage pipeline selected: plan --consensus --direct invoked, then autopilot with consensus plan
 - [ ] State cleaned up after execution handoff
 - [ ] Brownfield confirmation questions cite repo evidence (file/path/pattern) before asking the user to decide
 - [ ] Scope-fuzzy tasks can trigger ontology-style questioning to stabilize the core entity before feature elaboration
@@ -642,7 +642,7 @@ The recommended execution path chains three quality gates:
   → Socratic Q&A until ambiguity ≤ <resolvedThresholdPercent>
   → Spec written to .omcp/specs/deep-interview-{slug}.md
   → User selects "Ralplan → Autopilot"
-  → /omc-plan --consensus --direct (spec as input, skip interview)
+  → /omcp:plan --consensus --direct (spec as input, skip interview)
     → Planner creates implementation plan from spec
     → Architect reviews for architectural soundness
     → Critic validates quality and testability
@@ -655,7 +655,7 @@ The recommended execution path chains three quality gates:
     → Phase 5: Cleanup
 ```
 
-**The omc-plan skill receives the spec with `--consensus --direct` flags** because the deep interview already did the requirements gathering. The `--direct` flag (supported by the omc-plan skill, which ralplan aliases) skips the interview phase and goes straight to Planner → Architect → Critic consensus. The consensus plan includes:
+**The plan skill receives the spec with `--consensus --direct` flags** because the deep interview already did the requirements gathering. The `--direct` flag (supported by the plan skill, which ralplan aliases) skips the interview phase and goes straight to Planner → Architect → Critic consensus. The consensus plan includes:
 - RALPLAN-DR summary (Principles, Decision Drivers, Options)
 - ADR (Decision, Drivers, Alternatives, Why chosen, Consequences)
 - Testable acceptance criteria (inherited from deep-interview spec)
