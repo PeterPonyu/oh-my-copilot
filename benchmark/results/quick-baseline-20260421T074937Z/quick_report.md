@@ -1,8 +1,8 @@
 # Benchmark Results (quick)
 
-Root: `/home/zeyufu/Desktop/oh-my-copilot`
+Root: `<workspace>/oh-my-copilot`
 
-Invocation root: `/home/zeyufu/Desktop/oh-my-copilot`
+Invocation root: `<workspace>/oh-my-copilot`
 
 Variant: `vanilla`
 

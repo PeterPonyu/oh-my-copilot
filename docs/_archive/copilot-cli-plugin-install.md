@@ -19,7 +19,7 @@ the MCP server, verifying the install, and understanding log paths.
 Install from the checked-out repository path:
 
 ```bash
-copilot plugin install /home/zeyufu/Desktop/oh-my-copilot/packages/copilot-cli-plugin
+copilot plugin install <workspace>/oh-my-copilot/packages/copilot-cli-plugin
 ```
 
 The CLI writes plugin metadata to `~/.copilot/config.json` and caches the

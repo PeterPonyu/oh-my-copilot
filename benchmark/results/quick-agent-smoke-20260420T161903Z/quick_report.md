@@ -1,6 +1,6 @@
 # Benchmark Results (quick)
 
-Root: `/home/zeyufu/Desktop/oh-my-copilot`
+Root: `<workspace>/oh-my-copilot`
 
 | Check | Result | Duration (s) |
 | --- | --- | ---: |

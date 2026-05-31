@@ -55,7 +55,7 @@ Official references:
 Use the repository root:
 
 ```text
-/home/zeyufu/Desktop/oh-my-copilot
+<workspace>/oh-my-copilot
 ```
 
 The root registration target is expected to host:
@@ -124,7 +124,7 @@ instructions, agents, skills, and hooks.
 Open this folder in VS Code:
 
 ```text
-/home/zeyufu/Desktop/oh-my-copilot
+<workspace>/oh-my-copilot
 ```
 
 Why: the root registration surfaces are discovered relative to the workspace
@@ -185,7 +185,7 @@ Pass criteria:
 Run a root Copilot session from:
 
 ```text
-/home/zeyufu/Desktop/oh-my-copilot
+<workspace>/oh-my-copilot
 ```
 
 Then inspect:
@@ -208,7 +208,7 @@ Pass criteria:
 Open this folder in VS Code, not the repo root:
 
 ```text
-/home/zeyufu/Desktop/oh-my-copilot/examples/vscode-copilot-layout
+<workspace>/oh-my-copilot/examples/vscode-copilot-layout
 ```
 
 Why: VS Code discovers `.github/copilot-instructions.md`, `.github/instructions`,
@@ -269,7 +269,7 @@ To prove the example hook behavior with Copilot CLI, use the standalone-copy
 test:
 
 ```bash
-cd /home/zeyufu/Desktop/oh-my-copilot
+cd <workspace>/oh-my-copilot
 ./scripts/prove-vscode-hook-standalone.sh
 ```
 

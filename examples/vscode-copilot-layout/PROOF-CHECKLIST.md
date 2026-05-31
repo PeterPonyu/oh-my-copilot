@@ -7,7 +7,7 @@ Use this checklist to prove the workspace is doing more than just loading files.
 Open this folder itself in VS Code:
 
 ```text
-/home/zeyufu/Desktop/oh-my-copilot/examples/vscode-copilot-layout
+<workspace>/oh-my-copilot/examples/vscode-copilot-layout
 ```
 
 If you open the repo root instead, the workspace-local `.github` and `AGENTS.md`

@@ -1,6 +1,6 @@
 # oh-my-codex Source Synthesis
 
-_Source inspected: `/home/zeyufu/Desktop/oh-my-codex-main`._
+_Source inspected: `<workspace>/oh-my-codex-main`._
 _Inspection date: 2026-04-20._
 
 This note summarizes what `oh-my-copilot` should learn from `oh-my-codex`

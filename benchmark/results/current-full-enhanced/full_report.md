@@ -1,8 +1,8 @@
 # Benchmark Results (full)
 
-Root: `/home/zeyufu/Desktop/oh-my-copilot`
+Root: `<workspace>/oh-my-copilot`
 
-Invocation root: `/home/zeyufu/Desktop/oh-my-copilot`
+Invocation root: `<workspace>/oh-my-copilot`
 
 Variant: `enhanced`
 
@@ -132,16 +132,16 @@ Tokens    ↑ 17.7k • ↓ 127 • 16.9k (cached) • 118 (reasoning)
 ## install_state
 
 ```text
-ok: installed source path is canonical: /home/zeyufu/Desktop/oh-my-copilot/packages/copilot-cli-plugin
-ok: plugin config entry found in /home/zeyufu/.copilot/config.json
-ok: installed plugin cache verified at /home/zeyufu/.copilot/installed-plugins/_direct/copilot-cli-plugin
+ok: installed source path is canonical: <workspace>/oh-my-copilot/packages/copilot-cli-plugin
+ok: plugin config entry found in ~/.copilot/config.json
+ok: installed plugin cache verified at ~/.copilot/installed-plugins/_direct/copilot-cli-plugin
 INSTALL_STATE: ok
 
 INSTALL_STATE_SUMMARY
 =====================
-- Root: /home/zeyufu/Desktop/oh-my-copilot
-- Plugin manifest: /home/zeyufu/Desktop/oh-my-copilot/packages/copilot-cli-plugin/plugin.json
-- Copilot config: /home/zeyufu/.copilot/config.json
+- Root: <workspace>/oh-my-copilot
+- Plugin manifest: <workspace>/oh-my-copilot/packages/copilot-cli-plugin/plugin.json
+- Copilot config: ~/.copilot/config.json
 - Expected plugin name: oh-my-copilot-power-pack
 - Result: PASS
 ```

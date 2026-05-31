@@ -3,10 +3,14 @@
 # Run this after rubric_judge.py completes.
 set -euo pipefail
 
-RUNS=/home/zeyufu/Desktop/oh-my-copilot/benchmark/runs
-CURSOR_VANILLA=/home/zeyufu/Desktop/oh-my-cursor/benchmark/runs/data/20260427T101854Z__A1-full__vanilla__cursor-auto__622369f2f1c6
-CURSOR_OMC=/home/zeyufu/Desktop/oh-my-cursor/benchmark/runs/data/20260427T104802Z__A1-full__with-omc__cursor-auto__18b43db282c1
-CASE_DIR=/home/zeyufu/Desktop/oh-my-cursor/benchmark/case-studies
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+REPO_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
+WORKSPACE_ROOT="$(cd "$REPO_ROOT/.." && pwd)"
+
+RUNS="$SCRIPT_DIR"
+CURSOR_VANILLA="${CURSOR_VANILLA:-$WORKSPACE_ROOT/oh-my-cursor/benchmark/runs/data/20260427T101854Z__A1-full__vanilla__cursor-auto__622369f2f1c6}"
+CURSOR_OMC="${CURSOR_OMC:-$WORKSPACE_ROOT/oh-my-cursor/benchmark/runs/data/20260427T104802Z__A1-full__with-omc__cursor-auto__18b43db282c1}"
+CASE_DIR="${CASE_DIR:-$WORKSPACE_ROOT/oh-my-cursor/benchmark/case-studies}"
 
 echo "=== Building rubric_scores.jsonl from per-pair judgment files ==="
 python3 -c "

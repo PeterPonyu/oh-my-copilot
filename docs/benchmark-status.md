@@ -9,7 +9,7 @@ Snapshot git SHA: `20310a2` on `codex/benchmark-practical-task-smoke`
 
 Environment notes:
 
-- local repository root: `/home/zeyufu/Desktop/oh-my-copilot`
+- local repository root: `<workspace>/oh-my-copilot`
 - GitHub Copilot CLI: `1.0.34`
 - reusable plugin source: `packages/copilot-cli-plugin/`
 - live agent smoke enabled where noted

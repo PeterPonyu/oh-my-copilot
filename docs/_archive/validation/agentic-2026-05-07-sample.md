@@ -149,7 +149,7 @@ postToolUse events from THIS session.
 **Hook lifecycle:**
 > "The last 5 lines do not contain new sessionStart or postToolUse
 > events from this session. They are all for cwd
-> `/home/zeyufu/Desktop/oh-my-copilot` at 2026-05-07T03:42:13Z, not
+> `<workspace>/oh-my-copilot` at 2026-05-07T03:42:13Z, not
 > this session's cwd `/tmp/agentic-C`. A direct search for
 > `/tmp/agentic-C` in that file returned no matches."
 
