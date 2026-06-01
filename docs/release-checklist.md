@@ -48,6 +48,7 @@ Run these commands from the repository root:
 ./scripts/validate-doc-links.sh
 ./scripts/check-mirror-drift.sh
 node scripts/validate-plugin-orchestration.mjs
+node scripts/validate-skill-receipts.mjs
 ./packages/copilot-cli-plugin/skills/parity-guard/check-parity-claims.sh .
 ./scripts/validate-power-surfaces.sh
 ./scripts/validate-root-copilot-surfaces.sh
@@ -103,6 +104,12 @@ owned by the bootstrap/install path and should be recorded separately.
   plugin canonical sources.
 - Confirm namespaced plugin routes remain documented for reusable installed
   plugin work.
+- Confirm the post-artifact `ai-slop-cleaner` quality step is still wired into
+  the autopilot (Phase 3.5), ultrawork (Step 11), and ralph (Step 7.5)
+  pipelines and documented in
+  [`docs/plugin-internal/orchestration.md`](./plugin-internal/orchestration.md);
+  `node scripts/validate-skill-receipts.mjs` enforces both the provenance
+  receipt contract and this integration.
 - Confirm no generated `.copilot-hooks/*.log`, `.copilot-hooks/*.jsonl`, or
   `.copilot-hooks/config.json` files are staged.
 
@@ -115,6 +122,7 @@ Release readiness evidence:
 - Docs validation: PASS/FAIL — ./scripts/validate-doc-links.sh
 - Mirror drift validation: PASS/FAIL — ./scripts/check-mirror-drift.sh
 - Plugin orchestration validation: PASS/FAIL — node scripts/validate-plugin-orchestration.mjs
+- Skill receipt + ai-slop integration validation: PASS/FAIL — node scripts/validate-skill-receipts.mjs
 - Parity wording scan: PASS/FAIL — ./packages/copilot-cli-plugin/skills/parity-guard/check-parity-claims.sh .
 - Power surface validation: PASS/FAIL — ./scripts/validate-power-surfaces.sh
 - Root surface validation: PASS/FAIL — ./scripts/validate-root-copilot-surfaces.sh

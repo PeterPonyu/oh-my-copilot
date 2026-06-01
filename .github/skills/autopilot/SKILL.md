@@ -53,6 +53,7 @@ Most non-trivial software tasks require coordinated phases: understanding requir
 <Execution_Policy>
 - Each phase must complete before the next begins
 - Parallel execution is used within phases where possible (Phase 2 and Phase 4)
+- A post-artifact anti-slop cleanup pass (Phase 3.5) runs the `ai-slop-cleaner` skill on the executor's changed files after QA passes and before validation
 - QA cycles repeat up to 5 times; if the same error persists 3 times, stop and report the fundamental issue
 - Validation requires approval from all reviewers; rejected items get fixed and re-validated
 - Cancel with `/omcp:cancel` at any time; progress is preserved for resume
@@ -84,13 +85,19 @@ Most non-trivial software tasks require coordinated phases: understanding requir
    - Repeat up to 5 cycles
    - Stop early if the same error repeats 3 times (indicates a fundamental issue)
 
-5. **Phase 4 - Validation**: Multi-perspective review in parallel
+5. **Phase 3.5 - Anti-slop cleanup** (post-artifact quality step, runs after QA passes and before validation):
+   - **Invoke the `ai-slop-cleaner` skill via the Skill tool: `Skill("ai-slop-cleaner")`.** Run in standard mode (not `--review`) bounded to the files the executor produced this run.
+   - **ai-slop-cleaner is a SKILL, not an agent.** Do NOT call it via `Task(subagent_type="oh-my-copilot:ai-slop-cleaner")` — that subagent type does not exist. If you see "Agent type not found", retry with the Skill tool — do NOT substitute a similarly-named agent as a "closest match".
+   - Keep the cleanup scope to the changed-file set; do not broaden it to unrelated files.
+   - After the cleanup pass, re-run build/lint/tests (loop back into Phase 3 QA if any regression appears) before proceeding to Phase 4.
+
+6. **Phase 4 - Validation**: Multi-perspective review in parallel
    - Architect: Functional completeness
    - Security-reviewer: Vulnerability check
    - Code-reviewer: Quality review
    - All must approve; fix and re-validate on rejection
 
-6. **Phase 5 - Cleanup**: Delete all state files on successful completion
+7. **Phase 5 - Cleanup**: Delete all state files on successful completion
    - Remove `.omcp/state/autopilot-state.json`, `ralph-state.json`, `ultrawork-state.json`, `ultraqa-state.json`
    - Run `/omcp:cancel` for clean exit
 </Steps>
@@ -136,7 +143,8 @@ Why bad: This is an exploration/brainstorming request. Respond conversationally 
 </Escalation_And_Stop_Conditions>
 
 <Final_Checklist>
-- [ ] All 5 phases completed (Expansion, Planning, Execution, QA, Validation)
+- [ ] All phases completed (Expansion, Planning, Execution, QA, Anti-slop cleanup, Validation)
+- [ ] ai-slop-cleaner pass completed on the executor's changed files (Phase 3.5)
 - [ ] All validators approved in Phase 4
 - [ ] Tests pass (verified with fresh test run output)
 - [ ] Build succeeds (verified with fresh build output)

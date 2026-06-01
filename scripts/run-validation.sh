@@ -322,6 +322,12 @@ shell_check "audit-tool-refs" \
   "node $REPO_ROOT/scripts/audit-tool-refs.mjs" \
   "OK: every referenced tool"
 
+# 10b. Skill receipt + ai-slop integration validator (COPILOT-3 / COPILOT-4)
+shell_check "skill-receipts" \
+  "COPILOT-3/4: pipeline-stage skills declare the provenance/receipt contract and the ai-slop-cleaner quality step is wired into autopilot, ultrawork, and ralph." \
+  "node $REPO_ROOT/scripts/validate-skill-receipts.mjs" \
+  "provenance/receipt contract and ai-slop-cleaner quality step validate"
+
 # 11. Hook bridge helper exists
 shell_check "omcp-call-store-defined" \
   "Wave C-3: omcp_call_store helper is defined in .copilot-hooks/common.sh." \
