@@ -328,6 +328,12 @@ shell_check "skill-receipts" \
   "node $REPO_ROOT/scripts/validate-skill-receipts.mjs" \
   "provenance/receipt contract and ai-slop-cleaner quality step validate"
 
+# 10c. Skill <-> command parity gate (COPILOT-8)
+shell_check "skill-command-parity" \
+  "COPILOT-8: every user-invocable skill has a command, 'reference' is the only non-invocable skill, and live counts match the README (22 agents / 46 skills / 45 commands)." \
+  "node $REPO_ROOT/scripts/validate-skill-command-parity.mjs" \
+  "skill-command parity validates"
+
 # 11. Hook bridge helper exists
 shell_check "omcp-call-store-defined" \
   "Wave C-3: omcp_call_store helper is defined in .copilot-hooks/common.sh." \

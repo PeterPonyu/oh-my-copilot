@@ -7,6 +7,7 @@ import { basename, dirname, join, relative, resolve } from "node:path";
 import { tmpdir } from "node:os";
 import { spawnSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
+import { checkOrchestrationRefs } from "./lib/orchestration-refs.mjs";
 
 const __filename = fileURLToPath(import.meta.url);
 const REPO_ROOT = resolve(dirname(__filename), "..");
@@ -37,6 +38,7 @@ const MAIN_FEATURE_SKILLS = [
 const REQUIRED_VALIDATION_SURFACES = [
   "scripts/check-mirror-drift.sh",
   "scripts/validate-plugin-orchestration.mjs",
+  "scripts/validate-skill-command-parity.mjs",
   "scripts/run-validation.sh",
   "scripts/smoke-copilot-cli.sh",
   "scripts/audit-tool-refs.mjs",
@@ -243,6 +245,17 @@ function main() {
     }
   }
 
+  // COPILOT-7: orchestration-reference integrity across ALL skills, not just
+  // the curated MAIN_FEATURE_SKILLS list. A skill that names a non-existent
+  // agent in `orchestrates-agents`, or chains to a non-existent skill via
+  // `next-skill`, must fail at validation/load time — never silently at user
+  // runtime when the dispatcher tries to resolve a dangling reference. The
+  // check lives in scripts/lib/orchestration-refs.mjs so it is unit-testable
+  // against synthetic plugin trees.
+  for (const refError of checkOrchestrationRefs(PLUGIN_ROOT)) {
+    fail(refError);
+  }
+
   const commandFiles = listFiles(COMMANDS_DIR, (path) => path.endsWith(".md"));
   if (commandFiles.length < 40) fail(`expected at least 40 plugin command files, found ${commandFiles.length}`);
   for (const file of commandFiles) {
@@ -277,6 +290,8 @@ function main() {
   for (const snippet of [
     "scripts/check-mirror-drift.sh",
     "scripts/validate-plugin-orchestration.mjs",
+    "scripts/validate-skill-command-parity.mjs",
+    "scripts/tests/orchestration-refs.test.mjs",
     "scripts/validate-skill-receipts.mjs",
     "scripts/run-validation.sh",
     "npm test",
