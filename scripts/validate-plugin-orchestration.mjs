@@ -44,6 +44,7 @@ const REQUIRED_VALIDATION_SURFACES = [
   "scripts/validate-fast-sanity.sh",
   "scripts/validate-full-local.sh",
   "scripts/validate-structural-e2e.sh",
+  "scripts/validate-skill-receipts.mjs",
   ".github/workflows/docs-check.yml",
 ];
 
@@ -276,6 +277,7 @@ function main() {
   for (const snippet of [
     "scripts/check-mirror-drift.sh",
     "scripts/validate-plugin-orchestration.mjs",
+    "scripts/validate-skill-receipts.mjs",
     "scripts/run-validation.sh",
     "npm test",
   ]) {

@@ -71,6 +71,11 @@ Sequential task execution wastes time when tasks are independent. Ultrawork enab
    - Affected tests pass
    - Manual QA completed for implemented behavior
    - No new errors introduced
+11. **Anti-slop cleanup** (post-artifact quality step, after executors produce code and before reporting completion):
+   - **Invoke the `ai-slop-cleaner` skill via the Skill tool: `Skill("ai-slop-cleaner")`.** Run in standard mode (not `--review`) bounded to the files the executors changed this run.
+   - **ai-slop-cleaner is a SKILL, not an agent.** Do NOT call it via `Task(subagent_type="oh-my-copilot:ai-slop-cleaner")` — that subagent type does not exist. If you see "Agent type not found", retry with the Skill tool — do NOT substitute a similarly-named agent as a "closest match".
+   - Keep the cleanup scope to the changed-file set; do not broaden it to unrelated files.
+   - Re-run the lightweight verification (build/typecheck, affected tests) after the cleanup pass; loop back if a regression appears.
 </Steps>
 
 <Tool_Usage>
@@ -82,6 +87,7 @@ Sequential task execution wastes time when tasks are independent. Ultrawork enab
 ` for complex work
 - Use `run_in_background: true` for package installs, builds, and test suites
 - Use foreground execution for quick status checks and file operations
+- Use `Skill("ai-slop-cleaner")` for the post-artifact anti-slop cleanup pass. `ai-slop-cleaner` is a skill, not an agent — invoke it via the Skill tool, never via `Task(subagent_type=...)`.
 </Tool_Usage>
 
 <Examples>
@@ -141,6 +147,7 @@ Why bad: Opus is expensive overkill for a trivial fix. Use executor with Haiku i
 - [ ] Build/typecheck passes
 - [ ] Affected tests pass
 - [ ] No new errors introduced
+- [ ] ai-slop-cleaner pass completed on the changed-file set (post-artifact quality step)
 </Final_Checklist>
 
 <Advanced>

@@ -75,6 +75,34 @@ correct output type. If the frontmatter is missing or the stage does not
 match, the skill aborts with a clear error rather than silently processing
 a wrong file.
 
+The provenance/receipt contract is enforced statically by
+`scripts/validate-skill-receipts.mjs` (deterministic, offline): it asserts
+each pipeline-stage skill declares `produced-by`, `produced-at`,
+`pipeline-stage`, and documents the `mcp__omcp__pipeline_record_transition`
+write into `.omcp/state/pipeline-state.json`. The runtime counterpart is the
+Wave 7 provenance smoke in `scripts/smoke-copilot-cli.sh`.
+
+---
+
+## Anti-slop cleanup quality step
+
+Every orchestrating skill that produces code runs the `ai-slop-cleaner`
+skill as a **post-artifact quality step** before the work is reported
+complete:
+
+- **autopilot:** Phase 3.5 — after QA (Phase 3) passes and before validation
+  (Phase 4), bounded to the executor's changed files.
+- **ultrawork:** Step 11 — after executors produce code and verification
+  passes, before reporting completion, bounded to the changed-file set.
+- **ralph:** Step 7.5 — mandatory deslop pass after reviewer approval
+  (opt out with `--no-deslop`), followed by regression re-verification.
+
+`ai-slop-cleaner` is a **skill, not an agent** — orchestrators invoke it via
+`Skill("ai-slop-cleaner")`, never via `Task(subagent_type=...)`. Each
+integration keeps the cleanup scope to the changed-file set and re-runs
+build/lint/tests after the pass so a cleanup-induced regression is caught.
+The wiring is enforced by `scripts/validate-skill-receipts.mjs`.
+
 ---
 
 ## MCP tool surface (8 tools)
