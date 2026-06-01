@@ -1,9 +1,10 @@
 {
   "mcpServers": {
     "omcp": {
-      "command": "node",
+      "command": "bash",
       "args": [
-        "./mcp-server/dist/server.mjs"
+        "-lc",
+        "set -e; rel='mcp-server/dist/server.mjs'; for base in \"$PWD/packages/copilot-cli-plugin\" \"$PWD\" \"$HOME/.copilot/installed-plugins/_direct/copilot-cli-plugin\" \"$HOME/.copilot/installed-plugins/_direct\"/* \"$HOME/.copilot/installed-plugins\"/*/*; do [ -f \"$base/plugin.json\" ] || continue; grep -Eq '\"name\"[[:space:]]*:[[:space:]]*\"omcp\"' \"$base/plugin.json\" || continue; if [ -f \"$base/$rel\" ]; then exec node \"$base/$rel\"; fi; done; echo \"omcp MCP launcher could not find $rel from cwd=$PWD\" >&2; exit 1"
       ],
       "transport": "stdio"
     }
