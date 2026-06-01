@@ -21,6 +21,12 @@ jobs:
         run: bash scripts/check-mirror-drift.sh
       - name: Validate plugin orchestration metadata
         run: node scripts/validate-plugin-orchestration.mjs
+      - name: Validate skill-command parity gate
+        run: node scripts/validate-skill-command-parity.mjs
+      - name: Run orchestration + parity validator tests
+        run: |
+          node --test scripts/tests/orchestration-refs.test.mjs
+          node --test scripts/tests/validate-skill-command-parity.test.mjs
       - name: Validate skill receipts and ai-slop integration
         run: node scripts/validate-skill-receipts.mjs
       - name: Validate power surfaces

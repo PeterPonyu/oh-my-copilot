@@ -38,13 +38,20 @@ fi
 # Truncate payload for log lines (keep first 200 chars)
 PAYLOAD_TRUNC="${PAYLOAD:0:200}"
 
-# Skip policy check if patterns file is missing
+NOW="$(date -u +%Y-%m-%dT%H:%M:%SZ 2>/dev/null || date +%Y-%m-%dT%H:%M:%SZ)"
+
+# Skip policy check if patterns file is missing — but make the degradation
+# observable. A silent `exit 0` would mislead operators into believing policy
+# is being enforced when it is not. Emit a WARNING to stderr and the warnings
+# log, then fail open (continue) so the tool flow is never broken.
 if [ ! -f "$PATTERNS_FILE" ]; then
+  printf 'pre-tool-policy-gate WARNING: patterns file missing at %s; policy NOT enforced (failing open)\n' \
+    "$PATTERNS_FILE" >&2
+  printf '%s policy-gate WARNING patterns_file_missing path=%s policy=NOT_ENFORCED\n' \
+    "$NOW" "$PATTERNS_FILE" >> "$WARNINGS_LOG"
   printf '{"continue": true}\n'
   exit 0
 fi
-
-NOW="$(date -u +%Y-%m-%dT%H:%M:%SZ 2>/dev/null || date +%Y-%m-%dT%H:%M:%SZ)"
 
 # Read patterns file line by line; skip blank lines and comments
 while IFS= read -r pattern || [ -n "$pattern" ]; do

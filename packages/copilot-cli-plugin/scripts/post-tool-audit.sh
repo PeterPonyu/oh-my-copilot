@@ -28,6 +28,26 @@ copilot_hook_init_config "plugin"
 copilot_hook_log_event "postToolUse" "plugin"
 copilot_hook_append_legacy "postToolUse" "plugin" ".copilot-hooks/tools.log"
 
+# Detect jq parse failures up front instead of silently swallowing them with
+# `|| true` further down. A non-empty stdin envelope that jq cannot parse means
+# every downstream `jq ... // empty` extraction will quietly yield nothing, so
+# tool_failure traces and rules context would be silently skipped. Capture jq's
+# exit code explicitly and log a trace/warning so the degradation is observable.
+# The hook still fails open (we never exit non-zero on a parse failure).
+if [[ -n "${COPILOT_HOOK_STDIN_FILE:-}" ]] && [[ -s "${COPILOT_HOOK_STDIN_FILE:-}" ]] && command -v jq >/dev/null 2>&1; then
+  # Capture jq's exit code explicitly. The `|| jq_rc=$?` form keeps `set -e`
+  # from aborting the hook when jq reports a parse error (its whole purpose
+  # here is to observe that error, not crash on it).
+  jq_rc=0
+  jq_err="$(jq -e 'type' "$COPILOT_HOOK_STDIN_FILE" 2>&1 >/dev/null)" || jq_rc=$?
+  if [[ "$jq_rc" -ne 0 ]]; then
+    payload_snip="$(LC_ALL=C tr '\r\n\t' '   ' < "$COPILOT_HOOK_STDIN_FILE" | head -c 200)"
+    copilot_hook_warn "post-tool-audit jq parse failure (rc=$jq_rc): ${jq_err}; payload_trunc=${payload_snip}"
+    printf 'source=plugin event=jqParseFailure rc=%s payload_trunc=%s\n' \
+      "$jq_rc" "$payload_snip" >> .copilot-hooks/tools.log
+  fi
+fi
+
 # Wave-C-3: write a trace event on tool failure (per ADR-2). Best-effort
 # failure detection — looks for exit_code != 0 or non-empty error field
 # in the captured envelope. Bridge errors are absorbed by omcp_call_store.
