@@ -71,6 +71,9 @@ for path in \
   scripts/validate-benchmark-evidence.sh \
   scripts/validate-cross-host-benchmark-data.mjs \
   scripts/validate-release-readiness.sh \
+  scripts/validate-fast-sanity.sh \
+  scripts/validate-full-local.sh \
+  scripts/validate-structural-e2e.sh \
   scripts/smoke-copilot-cli.sh \
   packages/copilot-cli-plugin/skills/parity-guard/check-parity-claims.sh \
   packages/copilot-cli-plugin/plugin.json
@@ -88,6 +91,9 @@ for path in \
   scripts/validate-copilot-state-contract.sh \
   scripts/validate-benchmark-evidence.sh \
   scripts/validate-release-readiness.sh \
+  scripts/validate-fast-sanity.sh \
+  scripts/validate-full-local.sh \
+  scripts/validate-structural-e2e.sh \
   scripts/smoke-copilot-cli.sh \
   packages/copilot-cli-plugin/skills/parity-guard/check-parity-claims.sh
 do
@@ -101,6 +107,8 @@ require_contains "release checklist keeps examples illustrative" 'examples?.*ill
 require_contains "release checklist documents versioning" 'version|semantic-version|plugin\.json' docs/release-checklist.md
 require_contains "release checklist documents release notes" 'release notes' docs/release-checklist.md
 require_contains "release checklist documents Copilot CLI smoke" 'smoke-copilot-cli\.sh|RUN_COPILOT_AGENT_SMOKE' docs/release-checklist.md
+require_contains "release checklist documents fast/full local gates" 'validate-fast-sanity\.sh|validate-full-local\.sh' docs/release-checklist.md
+require_contains "release checklist documents structural E2E" 'validate-structural-e2e\.sh' docs/release-checklist.md
 require_contains "release checklist documents parity wording scan" 'parity-guard|check-parity-claims' docs/release-checklist.md
 
 python3 - "$ROOT/packages/copilot-cli-plugin/plugin.json" <<'PY'

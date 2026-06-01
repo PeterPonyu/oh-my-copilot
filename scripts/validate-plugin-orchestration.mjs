@@ -39,6 +39,9 @@ const REQUIRED_VALIDATION_SURFACES = [
   "scripts/smoke-copilot-cli.sh",
   "scripts/audit-tool-refs.mjs",
   "scripts/validate-release-readiness.sh",
+  "scripts/validate-fast-sanity.sh",
+  "scripts/validate-full-local.sh",
+  "scripts/validate-structural-e2e.sh",
   ".github/workflows/docs-check.yml",
 ];
 

@@ -21,15 +21,25 @@ The fastest mental model is:
 These checks do not require a successful plugin install:
 
 ```bash
+./scripts/validate-fast-sanity.sh
+./scripts/validate-full-local.sh --skip-release-readiness
+```
+
+The fast sanity gate checks shell syntax, mirror drift, plugin orchestration
+metadata, README counts, docs links, root Copilot surfaces, translator fixtures,
+and the credential-free structural E2E fixture. The full local gate adds power,
+pages, state-contract, benchmark, MCP server, and script-level tests while
+keeping live Copilot/model calls out of the default path.
+
+For narrower debugging, run individual validators directly:
+
+```bash
 ./scripts/validate-doc-links.sh
 ./scripts/validate-power-surfaces.sh
 ./scripts/validate-root-copilot-surfaces.sh
 ./scripts/validate-copilot-state-contract.sh
+./scripts/validate-structural-e2e.sh
 ```
-
-They verify the docs contract, root Copilot surface inventory, plugin/example
-boundaries, prompt-to-agent routing, root skill references, and the canonical
-local plugin state contract.
 
 ## 3. Bootstrap when prerequisites are present
 
