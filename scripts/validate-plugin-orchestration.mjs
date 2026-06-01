@@ -2,8 +2,10 @@
 // Validate the OMCP plugin as the canonical Copilot CLI customization source.
 // This is intentionally dependency-free so it can run in CI before installs.
 
-import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
+import { existsSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, rmSync, statSync, symlinkSync } from "node:fs";
 import { basename, dirname, join, relative, resolve } from "node:path";
+import { tmpdir } from "node:os";
+import { spawnSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -97,6 +99,89 @@ function parseFrontmatter(path) {
   return { data, body: text.slice(end + 4).trim() };
 }
 
+
+function makeFakeInstalledHome() {
+  const root = mkdtempSync(join(tmpdir(), "omcp-install-root-"));
+  const direct = join(root, ".copilot", "installed-plugins", "_direct");
+  mkdirSync(direct, { recursive: true });
+  symlinkSync(PLUGIN_ROOT, join(direct, "copilot-cli-plugin"), "dir");
+  return root;
+}
+
+function runWithFakeInstall(command, { input = "", timeout = 3000 } = {}) {
+  return runProcessWithFakeInstall("bash", ["-lc", command], { input, timeout });
+}
+
+function runProcessWithFakeInstall(command, args, { input = "", timeout = 3000 } = {}) {
+  const home = makeFakeInstalledHome();
+  const cwd = mkdtempSync(join(tmpdir(), "omcp-non-plugin-cwd-"));
+  try {
+    return spawnSync(command, args, {
+      cwd,
+      env: { ...process.env, HOME: home },
+      input,
+      encoding: "utf8",
+      timeout,
+      maxBuffer: 1024 * 1024,
+    });
+  } finally {
+    rmSync(home, { recursive: true, force: true });
+    rmSync(cwd, { recursive: true, force: true });
+  }
+}
+
+function validateInstalledRuntimeLaunchers() {
+  const mcpPath = join(PLUGIN_ROOT, ".mcp.json");
+  const hooksPath = join(PLUGIN_ROOT, "hooks.json");
+  const mcp = JSON.parse(read(mcpPath));
+  const server = mcp.mcpServers?.omcp;
+  if (!server) {
+    fail("packages/copilot-cli-plugin/.mcp.json missing omcp server");
+  } else {
+    const args = Array.isArray(server.args) ? server.args : [];
+    const launcher = args.join("\n");
+    if (server.command !== "bash" || !args.includes("-lc")) {
+      fail("omcp MCP launcher must use bash -lc so it can discover the installed plugin root from any cwd");
+    }
+    if (launcher.includes("./mcp-server/dist/server.mjs")) {
+      fail("omcp MCP launcher must not rely on ./mcp-server/dist/server.mjs relative to cwd");
+    }
+    if (!launcher.includes("installed-plugins") || !launcher.includes("plugin.json")) {
+      fail("omcp MCP launcher must search installed plugin roots by plugin.json");
+    }
+    const init = `${JSON.stringify({ jsonrpc: "2.0", id: 1, method: "initialize", params: { protocolVersion: "2024-11-05", capabilities: {}, clientInfo: { name: "validator", version: "0" } } })}\n`;
+    const result = runProcessWithFakeInstall(server.command, args, { input: init, timeout: 1500 });
+    if (!String(result.stdout || "").includes('"serverInfo":{"name":"omcp"')) {
+      fail(`omcp MCP launcher did not initialize from non-plugin cwd via fake installed cache (status=${result.status}, signal=${result.signal}, stderr=${String(result.stderr || "").slice(0, 300)})`);
+    }
+  }
+
+  const hooks = JSON.parse(read(hooksPath));
+  for (const [eventName, entries] of Object.entries(hooks.hooks || {})) {
+    for (const [index, entry] of entries.entries()) {
+      const bash = String(entry.bash || "");
+      if (bash.includes("packages/copilot-cli-plugin/scripts/")) {
+        fail(`hook ${eventName}[${index}] must not call packages/copilot-cli-plugin/scripts relative to cwd`);
+      }
+      if (!bash.includes("installed-plugins") || !bash.includes("plugin.json")) {
+        fail(`hook ${eventName}[${index}] must discover installed plugin roots by plugin.json`);
+      }
+      const result = runWithFakeInstall(bash, { input: "{}\n", timeout: 3000 });
+      if (result.status !== 0) {
+        fail(`hook ${eventName}[${index}] failed from non-plugin cwd via fake installed cache (status=${result.status}, stderr=${String(result.stderr || "").slice(0, 300)})`);
+      }
+      const stderr = String(result.stderr || "");
+      if (stderr.includes("No such file or directory")) {
+        fail(`hook ${eventName}[${index}] still emits No such file or directory from non-plugin cwd`);
+      }
+      if (stderr.includes("common.sh not found")) {
+        fail(`hook ${eventName}[${index}] could not find bundled common.sh from non-plugin cwd`);
+      }
+    }
+  }
+  note("installed-runtime launchers: MCP + hooks resolve outside plugin cwd");
+}
+
 function parseAgentList(value) {
   return String(value || "")
     .split(",")
@@ -181,6 +266,8 @@ function main() {
   for (const path of REQUIRED_VALIDATION_SURFACES.map((p) => join(REPO_ROOT, p))) {
     if (!existsSync(path)) fail(`missing validation surface: ${rel(path)}`);
   }
+
+  validateInstalledRuntimeLaunchers();
 
   const workflow = read(join(REPO_ROOT, ".github", "workflows", "docs-check.yml"));
   for (const snippet of [

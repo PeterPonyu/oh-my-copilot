@@ -4,7 +4,7 @@
     "sessionStart": [
       {
         "type": "command",
-        "bash": "bash packages/copilot-cli-plugin/scripts/log-session-start.sh",
+        "bash": "rel='scripts/log-session-start.sh'; for base in \"$PWD/packages/copilot-cli-plugin\" \"$PWD\" \"$HOME/.copilot/installed-plugins/_direct/copilot-cli-plugin\" \"$HOME/.copilot/installed-plugins/_direct\"/* \"$HOME/.copilot/installed-plugins\"/*/*; do [ -f \"$base/plugin.json\" ] || continue; grep -Eq '\"name\"[[:space:]]*:[[:space:]]*\"omcp\"' \"$base/plugin.json\" || continue; if [ -f \"$base/$rel\" ]; then exec bash \"$base/$rel\"; fi; done; printf '{\"continue\":true,\"reason\":\"omcp hook script not found\"}\\n'",
         "cwd": ".",
         "timeoutSec": 5
       }
@@ -12,7 +12,7 @@
     "preToolUse": [
       {
         "type": "command",
-        "bash": "bash packages/copilot-cli-plugin/scripts/pre-tool-policy-gate.sh",
+        "bash": "rel='scripts/pre-tool-policy-gate.sh'; for base in \"$PWD/packages/copilot-cli-plugin\" \"$PWD\" \"$HOME/.copilot/installed-plugins/_direct/copilot-cli-plugin\" \"$HOME/.copilot/installed-plugins/_direct\"/* \"$HOME/.copilot/installed-plugins\"/*/*; do [ -f \"$base/plugin.json\" ] || continue; grep -Eq '\"name\"[[:space:]]*:[[:space:]]*\"omcp\"' \"$base/plugin.json\" || continue; if [ -f \"$base/$rel\" ]; then exec bash \"$base/$rel\"; fi; done; printf '{\"continue\":true,\"reason\":\"omcp hook script not found\"}\\n'",
         "cwd": ".",
         "timeoutSec": 5
       }
@@ -20,7 +20,7 @@
     "postToolUse": [
       {
         "type": "command",
-        "bash": "bash packages/copilot-cli-plugin/scripts/post-tool-audit.sh",
+        "bash": "rel='scripts/post-tool-audit.sh'; for base in \"$PWD/packages/copilot-cli-plugin\" \"$PWD\" \"$HOME/.copilot/installed-plugins/_direct/copilot-cli-plugin\" \"$HOME/.copilot/installed-plugins/_direct\"/* \"$HOME/.copilot/installed-plugins\"/*/*; do [ -f \"$base/plugin.json\" ] || continue; grep -Eq '\"name\"[[:space:]]*:[[:space:]]*\"omcp\"' \"$base/plugin.json\" || continue; if [ -f \"$base/$rel\" ]; then exec bash \"$base/$rel\"; fi; done; printf '{\"continue\":true,\"reason\":\"omcp hook script not found\"}\\n'",
         "cwd": ".",
         "timeoutSec": 5
       }
@@ -28,7 +28,7 @@
     "sessionEnd": [
       {
         "type": "command",
-        "bash": "bash packages/copilot-cli-plugin/scripts/session-end-audit.sh",
+        "bash": "rel='scripts/session-end-audit.sh'; for base in \"$PWD/packages/copilot-cli-plugin\" \"$PWD\" \"$HOME/.copilot/installed-plugins/_direct/copilot-cli-plugin\" \"$HOME/.copilot/installed-plugins/_direct\"/* \"$HOME/.copilot/installed-plugins\"/*/*; do [ -f \"$base/plugin.json\" ] || continue; grep -Eq '\"name\"[[:space:]]*:[[:space:]]*\"omcp\"' \"$base/plugin.json\" || continue; if [ -f \"$base/$rel\" ]; then exec bash \"$base/$rel\"; fi; done; printf '{\"continue\":true,\"reason\":\"omcp hook script not found\"}\\n'",
         "cwd": ".",
         "timeoutSec": 5
       }
