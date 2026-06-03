@@ -1,0 +1,12 @@
+{
+  "name": "oh-my-copilot",
+  "private": true,
+  "version": "0.0.0",
+  "scripts": {
+    "test": "npm --prefix packages/copilot-cli-plugin/mcp-server test && node --test 'scripts/tests/*.test.mjs'",
+    "e2e:structural": "OMCP_E2E_STRUCTURAL=1 bash scripts/local/e2e.sh",
+    "e2e:headless": "OMCP_E2E_HEADLESS=1 bash scripts/local/e2e.sh",
+    "e2e:real": "OMCP_E2E_HEADLESS=1 OMCP_E2E_REAL=1 bash scripts/local/e2e.sh",
+    "verify": "npm test && npm run e2e:structural"
+  }
+}
