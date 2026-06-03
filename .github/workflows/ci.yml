@@ -1,0 +1,36 @@
+name: CI
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  fast:
+    name: structural (no secrets)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - run: npm run e2e:structural
+  e2e-real:
+    name: real pipeline e2e (consumes model quota)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      COPILOT_GITHUB_TOKEN: ${{ secrets.COPILOT_GITHUB_TOKEN }}
+      RUN_COPILOT_AGENT_SMOKE: '1'
+      COPILOT_SMOKE_MODEL: gpt-5-mini
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Verify Copilot CLI available
+        run: command -v copilot || { echo "Copilot CLI not installed on runner — install step TBD by maintainer"; exit 1; }
+      - run: npm run e2e:real
