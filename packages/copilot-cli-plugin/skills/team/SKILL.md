@@ -26,7 +26,7 @@ The `swarm` compatibility alias was removed in #1131.
 ### Parameters
 
 - **N** - Number of teammate agents (1-20). Optional; defaults to auto-sizing based on task decomposition.
-- **agent-type** - OMC agent to spawn for the `team-exec` stage (e.g., executor, debugger, designer, codex, gemini). Optional; defaults to stage-aware routing. Use `codex` to spawn Codex CLI workers or `gemini` for Gemini CLI workers (requires respective CLIs installed). See Stage Agent Routing below.
+- **agent-type** - omcp agent to spawn for the `team-exec` stage (e.g., executor, debugger, designer, codex, gemini). Optional; defaults to stage-aware routing. Use `codex` to spawn Codex CLI workers or `gemini` for Gemini CLI workers (requires respective CLIs installed). See Stage Agent Routing below.
 - **task** - High-level task to decompose and distribute among teammates
 - **ralph** - Optional modifier. When present, wraps the team pipeline in Ralph's persistence loop (retry on failure, architect verification before completion). See Team + Ralph Composition below.
 
@@ -198,7 +198,7 @@ The lead writes handoffs to `.omcp/handoffs/<stage-name>.md`.
 ### Phase 1: Parse Input
 
 - Extract **N** (agent count), validate 1-20
-- Extract **agent-type**, validate it maps to a known OMC subagent
+- Extract **agent-type**, validate it maps to a known omcp subagent
 - Extract **task** description
 
 ### Phase 2: Analyze & Decompose
@@ -232,7 +232,7 @@ Call `TeamCreate` with a slug derived from the task:
 
 The current session becomes the team lead (`team-lead@fix-ts-errors`).
 
-Write OMC state using the `state_write` MCP tool for proper session-scoped persistence:
+Write omcp state using the `state_write` MCP tool for proper session-scoped persistence:
 
 ```
 state_write(mode="team", active=true, current_phase="team-plan", state={
@@ -386,7 +386,7 @@ Monitor for stuck or failed teammates:
 
 ### Phase 6.5: Stage Transitions (State Persistence)
 
-On every stage transition, update OMC state:
+On every stage transition, update omcp state:
 
 ```
 // Entering team-exec after planning
@@ -434,7 +434,7 @@ When all real tasks (non-internal) are completed or failed:
      "team_name": "fix-ts-errors"
    }
    ```
-5. **Clean OMC state** -- Remove `.omcp/state/team-state.json`
+5. **Clean omcp state** -- Remove `.omcp/state/team-state.json`
 6. **Report summary** -- Present results to the user
 
 ## Agent Preamble
@@ -481,7 +481,7 @@ Do NOT mark the task as completed. Leave it in_progress so the lead can reassign
 == RULES ==
 - NEVER spawn sub-agents or use the Task tool
 - NEVER run tmux pane/session orchestration commands (for example `tmux split-window`, `tmux new-session`)
-- NEVER run team spawning/orchestration skills or commands (for example `$team`, `$ultrawork`, `$autopilot`, `$ralph`, `omc team ...`, `omx team ...`)
+- NEVER run team spawning/orchestration skills or commands (for example `$team`, `$ultrawork`, `$autopilot`, `$ralph`, `omcp team ...`, `omx team ...`)
 - ALWAYS use absolute file paths
 - ALWAYS report progress via SendMessage to "team-lead"
 - Use SendMessage with type "message" only -- never "broadcast"
@@ -492,7 +492,7 @@ Do NOT mark the task as completed. Leave it in_progress so the lead can reassign
 When composing teammate prompts, append a short addendum based on worker type:
 
 - `claude_worker`: Emphasize strict TaskList/TaskUpdate/SendMessage loop and no orchestration commands.
-- `codex_worker`: Emphasize CLI API lifecycle (`omc team api ... --json`) and explicit failure ACKs with stderr.
+- `codex_worker`: Emphasize CLI API lifecycle (`omcp team api ... --json`) and explicit failure ACKs with stderr.
 - `gemini_worker`: Emphasize bounded file ownership and milestone ACKs after each completed sub-step.
 
 This addendum must preserve the core rule: **worker = executor only, never leader/orchestrator**.
@@ -874,7 +874,7 @@ If teammates are unresponsive, `TeamDelete` may fail. In that case, the cancel s
 
 ## Runtime V2 (Event-Driven)
 
-When `OMC_RUNTIME_V2=1` is set, the team runtime uses an event-driven architecture instead of the legacy done.json polling watchdog:
+When `OMCP_RUNTIME_V2=1` is set, the team runtime uses an event-driven architecture instead of the legacy done.json polling watchdog:
 
 - **No done.json**: Task completion is detected via CLI API lifecycle transitions (claim-task, transition-task-status)
 - **Snapshot-based monitoring**: Each poll cycle takes a point-in-time snapshot of tasks and workers, computes deltas, and emits events
@@ -886,7 +886,7 @@ The v2 runtime is feature-flagged and can be enabled per-session. The legacy v1 
 
 ## Dynamic Scaling
 
-When `OMC_TEAM_SCALING_ENABLED=1` is set, the team supports mid-session scaling:
+When `OMCP_TEAM_SCALING_ENABLED=1` is set, the team supports mid-session scaling:
 
 - **scale_up**: Add workers to a running team (respects max_workers limit)
 - **scale_down**: Remove idle workers with graceful drain (workers finish current task before removal)
@@ -895,7 +895,7 @@ When `OMC_TEAM_SCALING_ENABLED=1` is set, the team supports mid-session scaling:
 
 ## Configuration
 
-Optional settings live in `.claude/omc.jsonc` (project) or `~/.config/claude-omc/config.jsonc` (user). Project values override user values; `OMC_TEAM_ROLE_OVERRIDES` (env JSON) supersedes both.
+Optional settings live in `.omcp/omcp.jsonc` (project) or `~/.config/omcp/config.jsonc` (user). Project values override user values; `OMCP_TEAM_ROLE_OVERRIDES` (env JSON) supersedes both.
 
 ```jsonc
 {
@@ -926,7 +926,7 @@ Declare which provider (`claude`, `codex`, `gemini`) and which model tier should
 ### Example — user target mapping
 
 ```jsonc
-// .claude/omc.jsonc
+// .omcp/omcp.jsonc
 {
   "team": {
     "roleRouting": {
@@ -969,14 +969,14 @@ User-friendly aliases normalize via `normalizeDelegationRole()` — e.g. `review
 ### Env override
 
 ```bash
-OMC_TEAM_ROLE_OVERRIDES='{"critic":{"provider":"codex"},"code-reviewer":{"provider":"gemini"}}'
+OMCP_TEAM_ROLE_OVERRIDES='{"critic":{"provider":"codex"},"code-reviewer":{"provider":"gemini"}}'
 ```
 
-Precedence: `OMC_TEAM_ROLE_OVERRIDES` > `.claude/omc.jsonc` (project) > `~/.config/claude-omc/config.jsonc` (user) > built-in defaults. Invalid JSON logs a warning and is ignored — env overrides are best-effort and never abort the run.
+Precedence: `OMCP_TEAM_ROLE_OVERRIDES` > `.omcp/omcp.jsonc` (project) > `~/.config/omcp/config.jsonc` (user) > built-in defaults. Invalid JSON logs a warning and is ignored — env overrides are best-effort and never abort the run.
 
 ### Fallback when a CLI is missing
 
-If the CLI for a configured provider is absent from `PATH` at spawn time, `buildLaunchArgs()` throws, the team lead emits a visible `SendMessage` warning, and the runtime falls back to a deterministic Claude assignment pre-computed by `buildResolvedRoutingSnapshot` (same tier + same agent, `provider: "claude"`). Fallback is loud by design — silent fallback is a test failure. Probe provider availability with `omc doctor --team-routing`.
+If the CLI for a configured provider is absent from `PATH` at spawn time, `buildLaunchArgs()` throws, the team lead emits a visible `SendMessage` warning, and the runtime falls back to a deterministic Claude assignment pre-computed by `buildResolvedRoutingSnapshot` (same tier + same agent, `provider: "claude"`). Fallback is loud by design — silent fallback is a test failure. Probe provider availability with `omcp doctor --team-routing`.
 
 ### Stickiness — resolved once, reused everywhere
 
@@ -993,7 +993,7 @@ On successful completion:
 1. `TeamDelete` handles all Claude Code state:
    - Removes `~/.claude/teams/{team_name}/` (config)
    - Removes `~/.claude/tasks/{team_name}/` (all task files + lock)
-2. OMC state cleanup via MCP tools:
+2. omcp state cleanup via MCP tools:
    ```
    state_clear(mode="team")
    ```

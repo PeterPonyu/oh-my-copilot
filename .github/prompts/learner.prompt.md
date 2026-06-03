@@ -16,7 +16,7 @@ The skill at `skills/learner/SKILL.md` defines the full procedure:
 1. Identify the candidate skill from `{{ARGUMENTS}}` (or infer from recent session activity).
 2. Extract the procedure: trigger condition, steps, success criteria, failure modes.
 3. Write a SKILL.md draft with proper frontmatter (name, description, level, triggers).
-4. Save to `.omcp/skills/omc-learned/<slug>/SKILL.md` (project-local) — promote to `${CLAUDE_CONFIG_DIR:-~/.claude}/skills/omc-learned/` only if the user explicitly asks (rare; for truly portable insights).
+4. Save to `.omcp/skills/omc-learned/<slug>/SKILL.md` (project-local) — promote to `${COPILOT_CONFIG_DIR:-~/.copilot}/skills/omc-learned/` only if the user explicitly asks (rare; for truly portable insights).
 
 Don't auto-promote. Don't compress aggressively. The point is to preserve the *why* and *when*, not just the *how*.
 

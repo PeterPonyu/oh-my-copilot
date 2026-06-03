@@ -21,7 +21,7 @@ Use this when you want parallel external perspectives without launching tmux tea
 
 - **Codex CLI**: `npm install -g @openai/codex` (or `@openai/codex`)
 - **Gemini CLI**: `npm install -g @google/gemini-cli`
-- `omc ask` command available
+- `/omcp:ask` skill available (the advisor router used below)
 - If either CLI is unavailable, continue with whichever provider is available and note the limitation
 
 ## How It Works
@@ -31,9 +31,11 @@ Use this when you want parallel external perspectives without launching tmux tea
    - Codex prompt (analysis/architecture/backend)
    - Gemini prompt (UX/design/docs/alternatives)
 
-2. Claude runs via CLI (skill nesting not supported):
-   - `omc ask codex "<codex prompt>"`
-   - `omc ask gemini "<gemini prompt>"`
+2. Claude runs each advisor's provider CLI directly, following the
+   `/omcp:ask` routing logic (skill nesting is not supported, so apply the
+   ask procedure inline rather than invoking the skill):
+   - run the Codex CLI with `<codex prompt>`
+   - run the Gemini CLI with `<gemini prompt>`
 
 3. Artifacts are written under `.omcp/artifacts/ask/`
 
@@ -53,14 +55,20 @@ Split the user request into:
 
 ### 2. Invoke advisors via CLI
 
-> **Note:** Skill nesting (invoking a skill from within an active skill) is not supported in Claude Code. Always use the direct CLI path via Bash tool.
+> **Note:** Skill nesting (invoking a skill from within an active skill) is not
+> supported, so do not call `/omcp:ask` here. Instead apply the `/omcp:ask`
+> routing logic inline: run each provider CLI directly via the Bash tool and
+> persist its output under `.omcp/artifacts/ask/` exactly as the ask skill does.
 
-Run both advisors:
+Run both advisors (provider CLIs, invoked directly):
 
 ```bash
-omc ask codex "<codex prompt>"
-omc ask gemini "<gemini prompt>"
+codex exec "<codex prompt>"      # Codex CLI
+gemini -p "<gemini prompt>"      # Gemini CLI
 ```
+
+(Use whatever the installed provider CLI's non-interactive flag is; the goal is
+one prompt in, one response out, captured to an artifact.)
 
 ### 3. Collect artifacts
 

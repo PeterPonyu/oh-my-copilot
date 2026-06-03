@@ -7,7 +7,7 @@ level: 2
 
 # Skill Management CLI
 
-Meta-skill for managing oh-my-claudecode skills via CLI-like commands.
+Meta-skill for managing omcp skills via CLI-like commands.
 
 ## Subcommands
 
@@ -17,19 +17,19 @@ Show all available skills organized by scope.
 
 **Behavior:**
 1. Scan bundled built-in skills in the plugin `skills/` directory (read-only)
-2. Scan user skills at `${CLAUDE_CONFIG_DIR:-~/.claude}/skills/omc-learned/`
+2. Scan user skills at `${COPILOT_CONFIG_DIR:-~/.copilot}/skills/omc-learned/`
 3. Scan project skills at `.omcp/skills/`
 4. Parse YAML frontmatter for metadata
 5. Display in organized table format:
 
 ```
-BUILT-IN SKILLS (bundled with oh-my-claudecode):
+BUILT-IN SKILLS (bundled with omcp):
 | Name              | Description                    | Scope    |
 |-------------------|--------------------------------|----------|
 | visual-verdict    | Structured visual QA verdicts  | built-in |
 | ralph             | Persistence loop               | built-in |
 
-USER SKILLS (~/.claude/skills/omc-learned/):
+USER SKILLS (~/.copilot/skills/omc-learned/):
 | Name              | Triggers           | Quality | Usage | Scope |
 |-------------------|--------------------|---------|-------|-------|
 | error-handler     | fix, error         | 95%     | 42    | user  |
@@ -43,7 +43,7 @@ PROJECT SKILLS (.omcp/skills/):
 
 **Fallback:** If quality/usage stats not available, show "N/A"
 
-**Built-in skill note:** Built-in skills are bundled with oh-my-claudecode and are discoverable/readable, but not removed or edited through `/skill remove` or `/skill edit`.
+**Built-in skill note:** Built-in skills are bundled with omcp and are discoverable/readable, but not removed or edited through `/skill remove` or `/skill edit`.
 
 ---
 
@@ -61,7 +61,7 @@ Interactive wizard for creating a new skill.
 4. **Ask for argument hint** (optional)
    - Example: "<file> [options]"
 5. **Ask for scope:**
-   - `user` → `${CLAUDE_CONFIG_DIR:-~/.claude}/skills/omc-learned/<name>/SKILL.md`
+   - `user` → `${COPILOT_CONFIG_DIR:-~/.copilot}/skills/omc-learned/<name>/SKILL.md`
    - `project` → `.omcp/skills/<name>/SKILL.md`
 6. **Create skill file** with template:
 
@@ -115,7 +115,7 @@ Triggers (comma-separated): log, logger, logging
 Argument hint (optional): <level> [message]
 Scope (user/project): user
 
-✓ Created skill at ~/.claude/skills/omc-learned/custom-logger/SKILL.md
+✓ Created skill at ~/.copilot/skills/omc-learned/custom-logger/SKILL.md
 → Edit with: /skill edit custom-logger
 ```
 
@@ -127,13 +127,13 @@ Remove a skill by name.
 
 **Behavior:**
 1. **Search for skill** in both scopes:
-   - `${CLAUDE_CONFIG_DIR:-~/.claude}/skills/omc-learned/<name>/SKILL.md`
+   - `${COPILOT_CONFIG_DIR:-~/.copilot}/skills/omc-learned/<name>/SKILL.md`
    - `.omcp/skills/<name>/SKILL.md`
 2. **If found:**
    - Display skill info (name, description, scope)
    - **Ask for confirmation:** "Delete '<name>' skill from <scope>? (yes/no)"
 3. **If confirmed:**
-   - Delete entire skill directory (e.g., `${CLAUDE_CONFIG_DIR:-~/.claude}/skills/omc-learned/<name>/`)
+   - Delete entire skill directory (e.g., `${COPILOT_CONFIG_DIR:-~/.copilot}/skills/omc-learned/<name>/`)
    - Report: "✓ Removed skill '<name>' from <scope>"
 4. **If not found:**
    - Report: "✗ Skill '<name>' not found in user or project scope"
@@ -145,7 +145,7 @@ Remove a skill by name.
 User: /skill remove old-logger
 Assistant: Found skill 'old-logger' in user scope:
   Description: Legacy logging utility
-  Scope: user (~/.claude/skills/omc-learned/)
+  Scope: user (~/.copilot/skills/omc-learned/)
 
 Delete 'old-logger' skill? (yes/no)
 
@@ -261,13 +261,13 @@ Show detailed information about a skill.
 
 ```
 Skill: custom-logger
-Scope: user (~/.claude/skills/omc-learned/custom-logger/)
+Scope: user (~/.copilot/skills/omc-learned/custom-logger/)
 Description: Enhanced logging with structured output
 Triggers: log, logger, logging
 Argument Hint: <level> [message]
 Quality: 95% (if available)
 Usage Count: 42 times (if available)
-File Path: /home/user/.claude/skills/omc-learned/custom-logger/SKILL.md
+File Path: /home/user/.copilot/skills/omc-learned/custom-logger/SKILL.md
 
 --- FULL CONTENT ---
 [entire markdown content]
@@ -282,7 +282,7 @@ Assistant: Skill: custom-logger
 Scope: user
 Description: Enhanced logging with structured output
 Triggers: log, logger, logging
-File: ~/.claude/skills/omc-learned/custom-logger/SKILL.md
+File: ~/.copilot/skills/omc-learned/custom-logger/SKILL.md
 
 --- CONTENT ---
 # Custom Logger Skill
@@ -300,7 +300,7 @@ Sync skills between user and project scopes.
 
 **Behavior:**
 1. **Scan both scopes:**
-   - User skills: `${CLAUDE_CONFIG_DIR:-~/.claude}/skills/omc-learned/`
+   - User skills: `${COPILOT_CONFIG_DIR:-~/.copilot}/skills/omc-learned/`
    - Project skills: `.omcp/skills/`
 2. **Compare and categorize:**
    - User-only skills (not in project)
@@ -370,7 +370,7 @@ First, check if skill directories exist and create them if needed:
 
 ```bash
 # Check and create user-level skills directory
-USER_SKILLS_DIR="${CLAUDE_CONFIG_DIR:-$HOME/.claude}/skills/omc-learned"
+USER_SKILLS_DIR="${COPILOT_CONFIG_DIR:-$HOME/.copilot}/skills/omc-learned"
 if [ -d "$USER_SKILLS_DIR" ]; then
   echo "User skills directory exists: $USER_SKILLS_DIR"
 else
@@ -394,15 +394,15 @@ Scan both directories and show a comprehensive inventory:
 
 ```bash
 # Scan user-level skills
-echo "=== USER-LEVEL SKILLS (~/.claude/skills/omc-learned/) ==="
-if [ -d "${CLAUDE_CONFIG_DIR:-$HOME/.claude}/skills/omc-learned" ]; then
-  USER_COUNT=$(find "${CLAUDE_CONFIG_DIR:-$HOME/.claude}/skills/omc-learned" -name "*.md" 2>/dev/null | wc -l)
+echo "=== USER-LEVEL SKILLS (~/.copilot/skills/omc-learned/) ==="
+if [ -d "${COPILOT_CONFIG_DIR:-$HOME/.copilot}/skills/omc-learned" ]; then
+  USER_COUNT=$(find "${COPILOT_CONFIG_DIR:-$HOME/.copilot}/skills/omc-learned" -name "*.md" 2>/dev/null | wc -l)
   echo "Total skills: $USER_COUNT"
 
   if [ $USER_COUNT -gt 0 ]; then
     echo ""
     echo "Skills found:"
-    find "${CLAUDE_CONFIG_DIR:-$HOME/.claude}/skills/omc-learned" -name "*.md" -type f -exec sh -c '
+    find "${COPILOT_CONFIG_DIR:-$HOME/.copilot}/skills/omc-learned" -name "*.md" -type f -exec sh -c '
       FILE="$1"
       NAME=$(grep -m1 "^name:" "$FILE" 2>/dev/null | sed "s/name: //")
       DESC=$(grep -m1 "^description:" "$FILE" 2>/dev/null | sed "s/description: //")
@@ -477,7 +477,7 @@ Ask user to provide either:
 - **Paste content**: Paste skill markdown content directly
 
 Then ask for scope:
-- **User-level** (~/.claude/skills/omc-learned/) - Available across all projects
+- **User-level** (~/.copilot/skills/omc-learned/) - Available across all projects
 - **Project-level** (.omcp/skills/) - Only for this project
 
 Validate the skill format and save to the chosen location.
@@ -771,7 +771,7 @@ Good skills are:
 > /omcp:skill list
 
 Checking skill directories...
-✓ User skills directory exists: ~/.claude/skills/omc-learned/
+✓ User skills directory exists: ~/.copilot/skills/omc-learned/
 ✓ Project skills directory exists: .omcp/skills/
 
 Scanning for skills...

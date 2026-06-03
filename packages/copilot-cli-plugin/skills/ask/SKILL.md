@@ -1,11 +1,11 @@
 ---
 name: ask
-description: "[OMCP] Process-first advisor routing for Claude, Codex, or Gemini via `omc ask`, with artifact capture and no raw CLI assembly"
+description: "[OMCP] Process-first advisor routing for Claude, Codex, or Gemini via `/omcp:ask`, with artifact capture and no raw CLI assembly"
 ---
 
 # Ask
 
-Use OMC's canonical advisor skill to route a prompt through the local Claude, Codex, or Gemini CLI and persist the result as an ask artifact.
+Use omcp's canonical advisor skill to route a prompt through the local Claude, Codex, or Gemini CLI and persist the result as an ask artifact.
 
 ## Usage
 
@@ -23,13 +23,22 @@ Examples:
 
 ## Routing
 
-**Required execution path — always use this command:**
+**Required execution path — always go through this `/omcp:ask` skill:**
 
 ```bash
-omc ask {{ARGUMENTS}}
+/omcp:ask {{ARGUMENTS}}
 ```
 
-**Do NOT manually construct raw provider CLI commands.** Never run `codex`, `claude`, or `gemini` directly to fulfill this skill. The `omc ask` wrapper handles correct flag selection, artifact persistence, and provider-version compatibility automatically. Manually assembling provider CLI flags will produce incorrect or outdated invocations.
+This skill *is* the advisor wrapper: follow the procedure below to select the
+provider, build a minimal correct invocation, run it, and persist the artifact.
+**Do NOT bypass this routing by improvising raw provider CLI flags ad hoc.**
+Parse `{{ARGUMENTS}}` as `<provider> <question>`, confirm the provider CLI is
+installed (see Requirements), invoke it with the question, then write the result
+to the artifact path below. This keeps flag selection, artifact persistence, and
+provider-version handling consistent across every advisor call.
+
+> This plugin ships no standalone `omc`/`omcp` advisor binary — the `/omcp:ask`
+> skill body is the authoritative routing path.
 
 ## Requirements
 
@@ -44,7 +53,7 @@ gemini --version
 
 ## Artifacts
 
-`omc ask` writes artifacts to:
+`/omcp:ask` writes artifacts to:
 
 ```text
 .omcp/artifacts/ask/<provider>-<slug>-<timestamp>.md

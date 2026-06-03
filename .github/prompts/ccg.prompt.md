@@ -13,7 +13,7 @@ Claude-Codex-Gemini parallel advisor. Use when:
 
 The skill at `skills/ccg/SKILL.md` defines the full procedure:
 
-1. In parallel: invoke `omc ask codex "<q>"` AND `omc ask gemini "<q>"` (each saves to `.omcp/artifacts/ask/`).
+1. In parallel, apply the `/omcp:ask` routing to both Codex and Gemini — run each provider's CLI directly with `<q>` (each saves to `.omcp/artifacts/ask/`).
 2. Wait for both to complete; if one provider is unavailable, continue with the rest and note the gap.
 3. Synthesize Claude's response that integrates findings from both, citing each source artifact path. Don't just concatenate — find consensus, flag disagreements, recommend.
 

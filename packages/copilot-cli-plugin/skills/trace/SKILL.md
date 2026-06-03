@@ -11,7 +11,7 @@ level: 2
 
 Use this skill for ambiguous, causal, evidence-heavy questions where the goal is to explain **why** an observed result happened, not to jump directly into fixing or rewriting code.
 
-This is the orchestration layer on top of the built-in `tracer` agent. The goal is to make tracing feel like a reusable OMC operating lane: restate the observation, generate competing explanations, gather evidence in parallel, rank the explanations, and propose the next probe that would collapse uncertainty fastest.
+This is the orchestration layer on top of the built-in `tracer` agent. The goal is to make tracing feel like a reusable omcp operating lane: restate the observation, generate competing explanations, gather evidence in parallel, rank the explanations, and propose the next probe that would collapse uncertainty fastest.
 
 ## Good entry cases
 
@@ -85,14 +85,26 @@ Down-rank a hypothesis when:
 
 ## Team-mode orchestration shape
 
-Use **Claude built-in team mode** for `/trace`.
+Run `/trace` over the port's own team runtime: **Copilot CLI custom-agent
+delegation**, driven the way `/omcp:team` orchestrates it. The lead spawns
+parallel `tracer` custom agents (via the Copilot CLI delegation / `Task`
+surface) over a shared task list, coordinates them through the plugin's
+state and `SendMessage`/shared-memory surfaces, and synthesizes their
+findings. This is the same Copilot-native mechanism the `/omcp:team` skill
+documents — there is **no Claude-Code "built-in team mode" on Copilot CLI**,
+so do not depend on one.
+
+If parallel custom-agent delegation is unavailable in the current Copilot CLI
+session, fall back to **single-agent sequential execution**: the lead runs each
+tracer lane itself, one after another, then synthesizes. The output structure is
+identical — only the parallelism is lost.
 
 The lead should:
 
 1. Restate the observed result or “why” question precisely
 2. Extract the tracing target
 3. Generate multiple deliberately different candidate hypotheses
-4. Spawn **3 tracer lanes by default** in team mode
+4. Spawn **3 tracer lanes by default** as parallel `tracer` custom agents (or run them sequentially under the fallback above)
 5. Assign one tracer worker per lane
 6. Instruct each tracer worker to gather evidence **for** and **against** its lane
 7. Run a **rebuttal round** between the leading hypothesis and the strongest remaining alternative
@@ -209,7 +221,7 @@ Use a team-oriented orchestration prompt along these lines:
 
 1. “Restate the observation exactly.”
 2. “Generate 3 deliberately different hypotheses.”
-3. “Create one tracer lane per hypothesis using Claude built-in team mode.”
+3. “Create one tracer lane per hypothesis as parallel `tracer` custom agents via Copilot CLI delegation (or run the lanes sequentially if delegation is unavailable).”
 4. “For each lane, gather evidence for and against, rank evidence strength, and name the critical unknown plus best discriminating probe.”
 5. “Apply systems, premortem, and science lenses to the leaders if useful.”
 6. “Run a rebuttal round between the top two explanations.”

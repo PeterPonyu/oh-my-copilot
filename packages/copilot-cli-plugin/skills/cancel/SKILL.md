@@ -1,15 +1,15 @@
 ---
 name: cancel
-description: "[OMCP] Cancel any active OMC mode (autopilot, ralph, ultrawork, ultraqa, swarm, ultrapilot, pipeline, team)"
+description: "[OMCP] Cancel any active omcp mode (autopilot, ralph, ultrawork, ultraqa, swarm, ultrapilot, pipeline, team)"
 argument-hint: "[--force|--all]"
 level: 2
 ---
 
 # Cancel Skill
 
-Intelligent cancellation that detects and cancels the active OMC mode.
+Intelligent cancellation that detects and cancels the active omcp mode.
 
-**The cancel skill is the standard way to complete and exit any OMC mode.**
+**The cancel skill is the standard way to complete and exit any omcp mode.**
 When the stop hook detects work is complete, it instructs the LLM to invoke
 this skill for proper state cleanup. If cancel fails or is interrupted,
 retry with `--force` flag, or wait for the 2-hour staleness timeout as
@@ -313,7 +313,7 @@ Clear directly: `state_clear(mode="ultraqa", session_id)`
 
 #### No Active Modes
 
-Report: "No active OMC modes detected. Use --force to clear all state files anyway."
+Report: "No active omcp modes detected. Use --force to clear all state files anyway."
 
 ## Implementation Notes
 
@@ -345,8 +345,8 @@ Mode-specific subsections below describe what extra cleanup each handler perform
 | Pipeline | "Pipeline cancelled. Sequential agent chain stopped." |
 | Team | "Team cancelled. Teammates shut down and cleaned up." |
 | Plan Consensus | "Plan Consensus cancelled. Planning session ended." |
-| Force | "All OMC modes cleared. You are free to start fresh." |
-| None | "No active OMC modes detected." |
+| Force | "All omcp modes cleared. You are free to start fresh." |
+| None | "No active omcp modes detected." |
 
 ## What Gets Preserved
 
@@ -376,7 +376,7 @@ When cancelling modes that may have spawned MCP workers (team bridge daemons), t
 
 1. **Check for active MCP workers**: Look for heartbeat files at `.omcp/state/team-bridge/{team}/*.heartbeat.json`
 2. **Send shutdown signals**: Write shutdown signal files for each active worker
-3. **Kill tmux sessions**: Run `tmux kill-session -t omc-team-{team}-{worker}` for each worker
+3. **Kill tmux sessions**: Run `tmux kill-session -t omcp-team-{team}-{worker}` for each worker
 4. **Clean up heartbeat files**: Remove all heartbeat files for the team
 5. **Clean up shadow registry**: Remove `.omcp/state/team-mcp-workers.json`
 
@@ -386,6 +386,6 @@ When `--force` is used, also clean up:
 ```bash
 rm -rf .omcp/state/team-bridge/       # Heartbeat files
 rm -f .omcp/state/team-mcp-workers.json  # Shadow registry
-# Kill all omc-team-* tmux sessions
-tmux list-sessions -F '#{session_name}' 2>/dev/null | grep '^omc-team-' | while read s; do tmux kill-session -t "$s" 2>/dev/null; done
+# Kill all omcp-team-* tmux sessions
+tmux list-sessions -F '#{session_name}' 2>/dev/null | grep '^omcp-team-' | while read s; do tmux kill-session -t "$s" 2>/dev/null; done
 ```
