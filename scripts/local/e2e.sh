@@ -32,15 +32,16 @@ write_result() {
   local journey="${2:-}"
   local model_backed="${3:-false}"
   local rf="$EVIDENCE_DIR/e2e-result.json"
-  python3 - "$rf" "$tier" "$journey" "$model_backed" "$TIMESTAMP" <<'PY'
+  python3 - "$rf" "$tier" "$journey" "$model_backed" "$TIMESTAMP" "$LOG" <<'PY'
 import json, pathlib, sys
-rf, tier, journey, model_backed, ts = sys.argv[1:]
+rf, tier, journey, model_backed, ts, log_path = sys.argv[1:]
 result = {
   "host": "copilot",
   "brand": "OMCP",
   "tier": tier,
   "passed": True,
   "journey": journey,
+  "evidence_paths": [log_path],
   "modelBacked": model_backed == "true",
   "timestamp": ts,
   "marker": f"[OMCP] e2e passed (tier={tier})"

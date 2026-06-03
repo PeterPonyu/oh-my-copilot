@@ -16,7 +16,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '22'
       - run: npm run e2e:structural
   e2e-real:
     name: real pipeline e2e (consumes model quota)
@@ -30,7 +30,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '22'
       - name: Verify Copilot CLI available
         run: command -v copilot || { echo "Copilot CLI not installed on runner — install step TBD by maintainer"; exit 1; }
       - run: npm run e2e:real
