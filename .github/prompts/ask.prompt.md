@@ -1,6 +1,6 @@
 ---
 name: ask
-description: "[OMCP] Process-first advisor routing — query Claude, Codex, or Gemini via `omc ask` with artifact capture"
+description: "[OMCP] Process-first advisor routing — query Claude, Codex, or Gemini via `/omcp:ask` with artifact capture"
 argument-hint: "<claude|codex|gemini> <question>"
 ---
 
@@ -10,9 +10,9 @@ Single-provider external advisor. Routes a question to one of the three configur
 
 The skill at `skills/ask/SKILL.md` defines the full procedure. Parse `{{ARGUMENTS}}` as `<provider> <question>`:
 
-- `claude <q>` → invoke `omc ask claude` (or skip if Claude CLI unavailable)
-- `codex <q>` → invoke `omc ask codex` (or skip if Codex CLI unavailable)
-- `gemini <q>` → invoke `omc ask gemini` (or skip if Gemini CLI unavailable)
+- `claude <q>` → route through `/omcp:ask claude` (or skip if Claude CLI unavailable)
+- `codex <q>` → route through `/omcp:ask codex` (or skip if Codex CLI unavailable)
+- `gemini <q>` → route through `/omcp:ask gemini` (or skip if Gemini CLI unavailable)
 
 For multi-provider tri-perspective synthesis, use `/omcp:ccg <q>` instead — that calls both codex + gemini and synthesizes Claude's view across all three.
 

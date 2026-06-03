@@ -1,16 +1,24 @@
 ---
 name: omc-setup
-description: "[OMCP] Install or refresh oh-my-claudecode for plugin, npm, and local-dev setups from the canonical setup flow"
+description: "[OMCP] OMC-interop setup. Installs/refreshes a separate oh-my-claudecode (Claude Code) install — NOT this Copilot CLI plugin."
 level: 2
 ---
 
-# OMC Setup
+# OMC-interop Setup
 
-This is the **only command you need to learn**. After running this, everything else is automatic.
+> **Scope:** This is the **oh-my-claudecode (Claude Code) interop** setup flow.
+> It installs/refreshes OMC for a *separate* Claude Code install on this machine
+> — it does **NOT** install or configure this Copilot CLI plugin (omcp).
+>
+> **To install or refresh omcp itself**, run:
+> `copilot plugin install ./packages/copilot-cli-plugin` (see the project README).
+> The plugin has no separate setup wizard; installing it via Copilot CLI is all
+> that is required. Only continue below if you also run Claude Code and want
+> oh-my-claudecode set up there.
 
 **When this skill is invoked, immediately execute the workflow below. Do not only restate or summarize these instructions back to the user.**
 
-Note: All `~/.claude/...` paths in this guide respect `CLAUDE_CONFIG_DIR` when that environment variable is set.
+Note: All `~/.claude/...` paths in this guide respect `CLAUDE_CONFIG_DIR` when that environment variable is set, and refer to the Claude Code install being configured (interop), not omcp's own `.omcp/` state.
 
 ## Best-Fit Use
 

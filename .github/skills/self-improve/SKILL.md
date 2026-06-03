@@ -7,7 +7,7 @@ level: 4
 
 # Self-Improvement Orchestrator
 
-You are the **loop controller** for the self-improvement system. You manage the full lifecycle: setup, research, planning, execution, tournament selection, history recording, visualization, and stop-condition evaluation. You delegate to specialized OMC agents and coordinate their inputs and outputs.
+You are the **loop controller** for the self-improvement system. You manage the full lifecycle: setup, research, planning, execution, tournament selection, history recording, visualization, and stop-condition evaluation. You delegate to specialized omcp agents and coordinate their inputs and outputs.
 
 ---
 
@@ -59,7 +59,7 @@ Treat `<self-improve-root>/` below as that resolved root:
     └── progress.png           # Generated chart
 ```
 
-OMC mode lifecycle: `.omcp/state/sessions/{sessionId}/self-improve-state.json`
+omcp mode lifecycle: `.omcp/state/sessions/{sessionId}/self-improve-state.json`
 
 ---
 
@@ -67,7 +67,7 @@ OMC mode lifecycle: `.omcp/state/sessions/{sessionId}/self-improve-state.json`
 
 All augmentations delivered via Task description context at spawn time. No modifications to existing agent .md files.
 
-| Step | Role | OMC Agent | Model |
+| Step | Role | omcp Agent | Model |
 |------|------|-----------|-------|
 | Research | Codebase analysis + hypothesis generation | general-purpose Agent | opus |
 | Planning | Hypothesis → structured plan | oh-my-copilot:planner | opus |
@@ -133,7 +133,7 @@ Read these files at startup and at the beginning of each iteration:
 
 ## Git Strategy
 
-All git operations happen inside the target repo, NOT in the OMC project root.
+All git operations happen inside the target repo, NOT in the omcp project root.
 
 - **Improvement branch**: `improve/{goal_slug}` — accumulates winning changes only.
 - **Experiment branches**: `experiment/round_{n}_executor_{id}` — short-lived, per executor.

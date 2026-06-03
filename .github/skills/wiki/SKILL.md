@@ -77,7 +77,7 @@ omcp's wiki has no `category` field; use **tags** to express category-like dimen
 Use `[[page-name]]` wiki-link syntax to create cross-references between pages.
 
 ## Auto-Capture
-At session end, significant discoveries are automatically captured as session-log pages. Configure via `wiki.autoCapture` in `.omc-config.json` (default: enabled).
+At session end, significant discoveries are automatically captured as session-log pages. Configure via `wiki.autoCapture` in `.omcp/omcp.jsonc` (default: enabled).
 
 ## Hard Constraints
 - NO vector embeddings — query uses keyword + tag matching only

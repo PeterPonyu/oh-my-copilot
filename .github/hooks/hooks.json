@@ -9,12 +9,28 @@
         "timeoutSec": 15
       }
     ],
+    "preToolUse": [
+      {
+        "type": "command",
+        "bash": "bash ./.copilot-hooks/pre-tool-policy-gate.sh",
+        "cwd": ".",
+        "timeoutSec": 20
+      }
+    ],
     "postToolUse": [
       {
         "type": "command",
         "bash": "bash ./.copilot-hooks/post-tool-audit.sh",
         "cwd": ".",
         "timeoutSec": 20
+      }
+    ],
+    "sessionEnd": [
+      {
+        "type": "command",
+        "bash": "bash ./.copilot-hooks/session-end-audit.sh",
+        "cwd": ".",
+        "timeoutSec": 15
       }
     ]
   }

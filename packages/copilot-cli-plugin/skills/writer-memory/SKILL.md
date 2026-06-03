@@ -226,7 +226,7 @@ The system synthesizes answers from all relevant memory types.
 
 ## Integration
 
-### With OMC Notepad System
+### With omcp Notepad System
 <!-- cross-host: deliberate -->
 Writer Memory integrates with `.omc/notepad.md`:
 - Scene ideas can be captured as notes

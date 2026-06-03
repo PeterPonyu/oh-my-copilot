@@ -21,7 +21,7 @@ Use **AskUserQuestion** with **one question at a time** and **no more than 3 opt
 **Question:** "What kind of MCP setup would you like?"
 
 **Options:**
-1. **Recommended starter setup** - Fast path for the most common OMC MCP additions
+1. **Recommended starter setup** - Fast path for the most common omcp MCP additions
 2. **Individual popular server** - Pick one built-in server from a short follow-up menu
 3. **Custom server** - Add your own stdio or HTTP MCP server
 
@@ -201,7 +201,7 @@ claude mcp add --transport http --header "Authorization: Bearer <token>" <server
 
 ### Company-context convention
 
-If the custom server is meant to provide organization-specific reference material to OMC workflows, prefer a single tool named `get_company_context` that returns markdown via `{ context: string }`.
+If the custom server is meant to provide organization-specific reference material to omcp workflows, prefer a single tool named `get_company_context` that returns markdown via `{ context: string }`.
 
 Example local registration:
 
@@ -209,7 +209,7 @@ Example local registration:
 claude mcp add company-context -- node examples/vendor-mcp-server/server.mjs
 ```
 
-Then point OMC at the full tool name in `.claude/omc.jsonc` or `~/.config/claude-omc/config.jsonc`:
+Then point omcp at the full tool name in `.omcp/omcp.jsonc` or `~/.config/omcp/config.jsonc`:
 
 ```jsonc
 {

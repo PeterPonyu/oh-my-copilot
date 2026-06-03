@@ -9,11 +9,11 @@ level: 2
 
 `psm` is the compatibility alias for this canonical skill entrypoint.
 
-> **Quick Start (worktree-first):** Start with `omc teleport` when you want an isolated issue/PR/feature worktree before adding any tmux/session orchestration:
+> **Quick Start (worktree-first):** Start with `/psm teleport` when you want an isolated issue/PR/feature worktree before adding any tmux/session orchestration:
 > ```bash
-> omc teleport #123          # Create worktree for issue/PR
-> omc teleport my-feature    # Create worktree for feature
-> omc teleport list          # List worktrees
+> /psm teleport #123          # Create worktree for issue/PR
+> /psm teleport my-feature    # Create worktree for feature
+> /psm teleport list          # List worktrees
 > ```
 > See [Teleport Command](#teleport-command) below for details.
 
@@ -25,19 +25,19 @@ Canonical slash command: `/omcp:project-session-manager` (alias: `/omcp:psm`).
 
 | Command | Description | Example |
 |---------|-------------|---------|
-| `review <ref>` | PR review session | `/psm review omc#123` |
-| `fix <ref>` | Issue fix session | `/psm fix omc#42` |
-| `feature <proj> <name>` | Feature development | `/psm feature omc add-webhooks` |
+| `review <ref>` | PR review session | `/psm review omcp#123` |
+| `fix <ref>` | Issue fix session | `/psm fix omcp#42` |
+| `feature <proj> <name>` | Feature development | `/psm feature omcp add-webhooks` |
 | `list [project]` | List active sessions | `/psm list` |
-| `attach <session>` | Attach to session | `/psm attach omc:pr-123` |
-| `kill <session>` | Kill session | `/psm kill omc:pr-123` |
+| `attach <session>` | Attach to session | `/psm attach omcp:pr-123` |
+| `kill <session>` | Kill session | `/psm kill omcp:pr-123` |
 | `cleanup` | Clean merged/closed | `/psm cleanup` |
 | `status` | Current session info | `/psm status` |
 
 ## Project References
 
 Supported formats:
-- **Alias**: `omc#123` (requires `~/.psm/projects.json`)
+- **Alias**: `omcp#123` (requires `~/.psm/projects.json`)
 - **Full**: `owner/repo#123`
 - **URL**: `https://github.com/owner/repo/pull/123`
 - **Current**: `#123` (uses current directory's repo)
@@ -49,9 +49,9 @@ Supported formats:
 ```json
 {
   "aliases": {
-    "omc": {
-      "repo": "Yeachan-Heo/oh-my-claudecode",
-      "local": "~/Workspace/oh-my-claudecode",
+    "omcp": {
+      "repo": "PeterPonyu/oh-my-copilot",
+      "local": "~/Workspace/oh-my-copilot",
       "default_base": "main"
     }
   },
@@ -156,9 +156,9 @@ The Jira CLI handles authentication separately from PSM.
 
 | Type | Tmux Session | Worktree Dir |
 |------|--------------|--------------|
-| PR Review | `psm:omc:pr-123` | `~/.psm/worktrees/omc/pr-123` |
-| Issue Fix | `psm:omc:issue-42` | `~/.psm/worktrees/omc/issue-42` |
-| Feature | `psm:omc:feat-auth` | `~/.psm/worktrees/omc/feat-auth` |
+| PR Review | `psm:omcp:pr-123` | `~/.psm/worktrees/omcp/pr-123` |
+| Issue Fix | `psm:omcp:issue-42` | `~/.psm/worktrees/omcp/issue-42` |
+| Feature | `psm:omcp:feat-auth` | `~/.psm/worktrees/omcp/feat-auth` |
 
 ---
 
@@ -265,11 +265,11 @@ Parse `{{ARGUMENTS}}` to determine:
    ```
    Session ready!
 
-     ID: omc:pr-123
-     Worktree: ~/.psm/worktrees/omc/pr-123
-     Tmux: psm:omc:pr-123
+     ID: omcp:pr-123
+     Worktree: ~/.psm/worktrees/omcp/pr-123
+     Tmux: psm:omcp:pr-123
 
-   To attach: tmux attach -t psm:omc:pr-123
+   To attach: tmux attach -t psm:omcp:pr-123
    ```
 
 ### Subcommand: `fix <ref>`
@@ -366,8 +366,8 @@ Parse `{{ARGUMENTS}}` to determine:
 
    ID                 | Type    | Status   | Worktree
    -------------------|---------|----------|---------------------------
-   omc:pr-123        | review  | active   | ~/.psm/worktrees/omc/pr-123
-   omc:issue-42      | fix     | detached | ~/.psm/worktrees/omc/issue-42
+   omcp:pr-123        | review  | active   | ~/.psm/worktrees/omcp/pr-123
+   omcp:issue-42      | fix     | detached | ~/.psm/worktrees/omcp/issue-42
    ```
 
 ### Subcommand: `attach <session>`
@@ -439,9 +439,9 @@ Parse `{{ARGUMENTS}}` to determine:
 5. **Report**:
    ```
    Cleanup complete:
-     Removed: omc:pr-123 (merged)
-     Removed: omc:issue-42 (closed)
-     Kept: omc:feat-auth (active)
+     Removed: omcp:pr-123 (merged)
+     Removed: omcp:issue-42 (closed)
+     Kept: omcp:feat-auth (active)
    ```
 
 ### Subcommand: `status`
@@ -463,7 +463,7 @@ Parse `{{ARGUMENTS}}` to determine:
 
 3. **Show status**:
    ```
-   Current Session: omc:pr-123
+   Current Session: omcp:pr-123
    Type: review
    PR: #123 - Add webhook support
    Branch: feature/webhooks
@@ -483,25 +483,25 @@ Parse `{{ARGUMENTS}}` to determine:
 
 ## Teleport Command
 
-The `omc teleport` command provides a lightweight alternative to full PSM sessions. It creates git worktrees without tmux session management — ideal for quick, isolated development.
+The `/psm teleport` command provides a lightweight alternative to full PSM sessions. It creates git worktrees without tmux session management — ideal for quick, isolated development.
 
 ### Usage
 
 ```bash
 # Create worktree for an issue or PR
-omc teleport #123
-omc teleport owner/repo#123
-omc teleport https://github.com/owner/repo/issues/42
+/psm teleport #123
+/psm teleport owner/repo#123
+/psm teleport https://github.com/owner/repo/issues/42
 
 # Create worktree for a feature
-omc teleport my-feature
+/psm teleport my-feature
 
 # List existing worktrees
-omc teleport list
+/psm teleport list
 
 # Remove a worktree
-omc teleport remove issue/my-repo-123
-omc teleport remove --force feat/my-repo-my-feature
+/psm teleport remove issue/my-repo-123
+/psm teleport remove --force feat/my-repo-my-feature
 ```
 
 ### Options
@@ -509,14 +509,14 @@ omc teleport remove --force feat/my-repo-my-feature
 | Flag | Description | Default |
 |------|-------------|---------|
 | `--worktree` | Create worktree (default, kept for compatibility) | `true` |
-| `--path <path>` | Custom worktree root directory | `~/Workspace/omc-worktrees/` |
+| `--path <path>` | Custom worktree root directory | `~/Workspace/omcp-worktrees/` |
 | `--base <branch>` | Base branch to create from | `main` |
 | `--json` | Output as JSON | `false` |
 
 ### Worktree Layout
 
 ```
-~/Workspace/omc-worktrees/
+~/Workspace/omcp-worktrees/
 ├── issue/
 │   └── my-repo-123/        # Issue worktrees
 ├── pr/
@@ -563,9 +563,9 @@ if [[ ! -f ~/.psm/projects.json ]]; then
   cat > ~/.psm/projects.json << 'EOF'
 {
   "aliases": {
-    "omc": {
-      "repo": "Yeachan-Heo/oh-my-claudecode",
-      "local": "~/Workspace/oh-my-claudecode",
+    "omcp": {
+      "repo": "PeterPonyu/oh-my-copilot",
+      "local": "~/Workspace/oh-my-copilot",
       "default_base": "main"
     }
   },

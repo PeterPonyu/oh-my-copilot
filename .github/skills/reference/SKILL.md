@@ -41,12 +41,12 @@ Prefix: `omcp:`. See `agents/*.md` for full prompts.
 ## Tools Reference
 
 ### External AI / orchestration
-- `/team N:executor "task"`
-- `omc team N:codex|gemini "..."`
-- `omc ask <claude|codex|gemini>`
-- `/ccg`
+- `/omcp:team N:executor "task"`
+- `/omcp:cli-teams N:codex|gemini "..."` (external CLI-team runtime in tmux panes)
+- `/omcp:ask <claude|codex|gemini>`
+- `/omcp:ccg`
 
-### OMC state
+### omcp state
 - `state_read`, `state_write`, `state_clear`, `state_list_active`, `state_get_status`
 
 ### Team runtime
@@ -128,10 +128,10 @@ Use git trailers to preserve decision context in every commit message.
 
 ### Example
 ```text
-feat(docs): reduce always-loaded OMC instruction footprint
+feat(docs): reduce always-loaded omcp instruction footprint
 
 Move reference-only orchestration content into a native Claude skill so
-session-start guidance stays small while detailed OMC reference remains available.
+session-start guidance stays small while detailed omcp reference remains available.
 
 Constraint: Preserve CLAUDE.md marker-based installation flow
 Rejected: Sync all built-in skills in legacy install | broader behavior change than issue requires

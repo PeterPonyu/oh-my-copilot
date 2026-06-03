@@ -64,7 +64,9 @@ required_root_files=(
   .github/hooks/hooks.json
   .copilot-hooks/common.sh
   .copilot-hooks/session-start.sh
+  .copilot-hooks/pre-tool-policy-gate.sh
   .copilot-hooks/post-tool-audit.sh
+  .copilot-hooks/session-end-audit.sh
 )
 
 contains() {
@@ -98,7 +100,9 @@ validate_required_files() {
   done
   require_exec .copilot-hooks/common.sh
   require_exec .copilot-hooks/session-start.sh
+  require_exec .copilot-hooks/pre-tool-policy-gate.sh
   require_exec .copilot-hooks/post-tool-audit.sh
+  require_exec .copilot-hooks/session-end-audit.sh
   log "all required root Copilot files exist"
 }
 
@@ -241,7 +245,10 @@ validate_hooks() {
     cd "$ROOT"
     HOOK_SOURCE=root-workspace ./.copilot-hooks/session-start.sh </dev/null
     printf '{"tool":"validate-root-copilot-surfaces.sh","source":"release-readiness"}\n' |
+      HOOK_SOURCE=root-workspace ./.copilot-hooks/pre-tool-policy-gate.sh >/dev/null
+    printf '{"tool":"validate-root-copilot-surfaces.sh","source":"release-readiness"}\n' |
       HOOK_SOURCE=root-workspace ./.copilot-hooks/post-tool-audit.sh >/dev/null
+    HOOK_SOURCE=root-workspace ./.copilot-hooks/session-end-audit.sh </dev/null
   )
   log "root hook scripts emit fresh evidence"
 
@@ -264,13 +271,21 @@ def event(*names: str):
     raise SystemExit(f"hooks.json missing event: {'/'.join(names)}")
 
 session = event("sessionStart", "SessionStart")
+pre_tool = event("preToolUse", "PreToolUse")
 post_tool = event("postToolUse", "PostToolUse")
+session_end = event("sessionEnd", "SessionEnd")
 serialized_session = json.dumps(session)
+serialized_pre_tool = json.dumps(pre_tool)
 serialized_post_tool = json.dumps(post_tool)
+serialized_session_end = json.dumps(session_end)
 if ".copilot-hooks/session-start.sh" not in serialized_session:
     raise SystemExit("sessionStart hook must call .copilot-hooks/session-start.sh")
+if ".copilot-hooks/pre-tool-policy-gate.sh" not in serialized_pre_tool:
+    raise SystemExit("preToolUse hook must call .copilot-hooks/pre-tool-policy-gate.sh")
 if ".copilot-hooks/post-tool-audit.sh" not in serialized_post_tool:
     raise SystemExit("postToolUse hook must call .copilot-hooks/post-tool-audit.sh")
+if ".copilot-hooks/session-end-audit.sh" not in serialized_session_end:
+    raise SystemExit("sessionEnd hook must call .copilot-hooks/session-end-audit.sh")
 PY
   log "root hook policy parses and calls root scripts"
   require_contains "root hook policy is versioned" '"version"' \
