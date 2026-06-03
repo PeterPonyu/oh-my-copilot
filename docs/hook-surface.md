@@ -1,40 +1,55 @@
-# Hook surface (Copilot CLI v1.0.42)
+# Hook surface (Copilot CLI v1.0.43)
 
-This document records the hook events Copilot CLI exposes to plugins as of
-v1.0.42, what the omcp plugin uses each for, and which OMC hook events have no
-Copilot CLI equivalent.
+This document records the lifecycle hook events GitHub Copilot CLI exposes to
+plugins, which of them the omcp plugin currently wires, and which it leaves
+available-but-unwired.
 
-omcp does not promise OMC parity for hooks. The 4 events below are everything
-Copilot CLI fires today; the additional OMC hook events are product-level
-features outside the plugin layer.
+omcp wires **4** of Copilot CLI's lifecycle hook events today. Copilot CLI fires
+more than four events — the plugin simply does not register a script for every
+one yet. The event set below is taken from GitHub's official hooks
+documentation:
 
-## Events fired by Copilot CLI
+- <https://docs.github.com/en/copilot/reference/hooks-configuration>
+- <https://docs.github.com/en/copilot/how-tos/copilot-cli/customize-copilot/use-hooks>
 
-| Event | Fired | omcp script | Purpose in omcp |
-|---|---|---|---|
-| `sessionStart` | Once at CLI start | `scripts/log-session-start.sh` | Initialize hook event log; can later restore active state via `state_list_active` |
-| `preToolUse` | Before each tool call | `scripts/pre-tool-policy-gate.sh` | Policy gate hook; logs and can deny |
-| `postToolUse` | After each tool call | `scripts/post-tool-audit.sh` | Audit log + parity-guard run; can later parse exit code and call `trace_write` on failure |
-| `sessionEnd` | Once at CLI exit | `scripts/session-end-audit.sh` | Final audit log; can later persist final state and run `notepad_prune` |
+Hook configuration files use JSON `version: 1`.
+
+## Events wired by omcp
 
 These four are configured in `packages/copilot-cli-plugin/hooks.json`.
 
-## OMC events without a Copilot CLI equivalent
+| Event | Fired | omcp script | Purpose in omcp |
+|---|---|---|---|
+| `sessionStart` | A new or resumed session begins | `scripts/log-session-start.sh` | Initialize hook event log; can later restore active state via `state_list_active` |
+| `preToolUse` | Before each tool executes | `scripts/pre-tool-policy-gate.sh` | Policy gate hook; logs and can deny |
+| `postToolUse` | After each tool completes successfully | `scripts/post-tool-audit.sh` | Audit log + parity-guard run; can later parse exit code and call `trace_write` on failure |
+| `sessionEnd` | The session terminates | `scripts/session-end-audit.sh` | Final audit log; can later persist final state and run `notepad_prune` |
 
-These exist in oh-my-claudecode but have no fire path in Copilot CLI v1.0.42 —
-they are host-product limits, not omcp porting omissions.
+## Events Copilot CLI exposes but omcp does not yet wire
 
-| OMC event | Why unavailable | Workaround |
+These events are fired by Copilot CLI per the official reference, but the plugin
+does not currently register a script for them. They are **available for future
+wiring**, not host-product limits.
+
+| Event | Fired | Potential omcp use |
 |---|---|---|
-| `UserPromptSubmit` | Copilot does not fire a hook on user message submit | Inspect last user turn from inside `postToolUse` after the first tool call (imperfect) |
-| `PostToolUseFailure` | No separate failure event; failure is implicit in `postToolUse` envelope | Parse exit code / stderr inside `postToolUse` |
-| `SubagentStart` / `SubagentStop` | Copilot's built-in delegation does not surface lifecycle events to plugins | None — plugins cannot observe subagent boundaries |
-| `PreCompact` | No context-compaction hook | None — state must be persisted defensively in `postToolUse` |
-| `PermissionRequest` | Permission system is internal to Copilot | None — plugins cannot intercept permission prompts |
-| `Stop` | Same semantics as `sessionEnd` for omcp purposes | Use `sessionEnd` |
+| `userPromptSubmitted` | The user submits a prompt | Capture the user turn directly instead of inferring it from the first `postToolUse` |
+| `postToolUseFailure` | A tool completes with a failure | Dedicated failure path for `trace_write` instead of parsing exit code inside `postToolUse` |
+| `preCompact` | Context compaction is about to begin (manual or automatic) | Persist durable state defensively before the context window is compacted |
+| `agentStop` | The main agent finishes a turn | Turn-level bookkeeping / end-of-turn state flush |
+| `subagentStart` | A subagent is spawned (before it runs) | Observe delegation boundaries for team/trace orchestration |
+| `subagentStop` | A subagent completes | Reconcile subagent results into team/trace state |
+| `errorOccurred` | An error occurs during execution | Record errors into the trace/audit log |
+| `permissionRequest` | Before the permission service runs (programmatic approve/deny) | Policy-driven auto-approval/denial of tool execution |
+| `notification` | The CLI emits a system notification (shell/agent completion, permission prompts, etc.) | Surface notifications to external integrations |
+
+> Behavior note: for most events, non-zero exits and timeouts are logged and the
+> agent continues. `preToolUse` is the exception — its errors, crashes, and
+> timeouts **deny** the tool call rather than silently allowing it.
 
 ## Future expansion
 
-When Copilot CLI exposes new hook events, register them in `hooks.json` and
-add a row above. No deeper integration is possible from a plugin until the
-host fires the event.
+To wire an additional event, register it in
+`packages/copilot-cli-plugin/hooks.json` with a script and add a row to the
+"Events wired by omcp" table above (moving it up from the unwired table). No
+deeper integration is possible from a plugin until the host fires the event.

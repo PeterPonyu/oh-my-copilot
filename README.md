@@ -7,7 +7,7 @@ A Copilot CLI-native power pack for GitHub Copilot CLI: 22 agents, 46 skills, 45
 - **Typed slash commands** — `/omcp:autopilot`, `/omcp:ralph`, `/omcp:ulw-loop`, `/omcp:hyperplan`, `/omcp:wiki`, `/omcp:build-fix`, `/omcp:git-master`, `/omcp:cancel`, ... 45 user-invocable routes that the LLM can resolve at the `❯` prompt.
 - **Persistent state** — wiki, project memory, notepad, traces, shared memory, and pipeline state all live under `.omcp/` and survive across sessions.
 - **Real MCP server** — single ~616 KB bundled file (`mcp-server/dist/server.mjs`); no `npm install` needed at install time.
-- **Hooks for the 4 lifecycle events** Copilot CLI v1.0.43 exposes: `sessionStart`, `preToolUse`, `postToolUse`, `sessionEnd`.
+- **Hooks wiring 4 of Copilot CLI's lifecycle events**: `sessionStart`, `preToolUse`, `postToolUse`, `sessionEnd`. Copilot CLI exposes more events (e.g. `userPromptSubmitted`, `postToolUseFailure`, `preCompact`, `errorOccurred`, `agentStop`, `subagentStart`/`subagentStop`); the plugin wires the four it currently uses. See [`docs/hook-surface.md`](./docs/hook-surface.md).
 
 ## Install
 
@@ -39,7 +39,7 @@ surface at 0 user-invocable routes and 0 agents, under the suite ceiling of 5 an
 | Agents | 22 | sisyphus (orchestrator), reviewer, research, executor, planner, architect, debugger, ... |
 | Skills | 46 | autopilot, ralph, ralplan, team, deep-interview, ulw-loop, hyperplan, wiki, build-fix, git-master, cancel, ... |
 | Slash commands | 45 | every user-invocable skill has a typed `/omcp:<cmd>` route |
-| Hook events | 4 | `sessionStart`, `preToolUse`, `postToolUse`, `sessionEnd` — all 4 events Copilot CLI v1.0.43 exposes |
+| Hook events | 4 | `sessionStart`, `preToolUse`, `postToolUse`, `sessionEnd` wired — 4 of the lifecycle events Copilot CLI exposes (it also fires `userPromptSubmitted`, `postToolUseFailure`, `preCompact`, `errorOccurred`, `agentStop`, `subagentStart`/`subagentStop`, not yet wired) |
 | MCP server tools | 41 | state (6), notepad (7), plan (1), pipeline (2), project memory (5), trace (4), wiki (7), shared memory (5), rules policy (4) |
 
 ## First commands to try
@@ -74,7 +74,7 @@ The full bootstrap entry point is `bash scripts/bootstrap-copilot-power.sh`. For
 | **Quick start** | [`docs/quick-start.md`](./docs/quick-start.md) |
 | **Day-to-day usage** | [`docs/usage.md`](./docs/usage.md) |
 | **Limitations + host-product caveats** | [`docs/known-limitations.md`](./docs/known-limitations.md) |
-| **Hook surface (4 events)** | [`docs/hook-surface.md`](./docs/hook-surface.md) |
+| **Hook surface (4 wired of more available)** | [`docs/hook-surface.md`](./docs/hook-surface.md) |
 | **Surface inventory** | [`docs/surface-inventory.json`](./docs/surface-inventory.json) |
 | **State contract** | [`docs/state-contract.md`](./docs/state-contract.md) |
 | **Plugin internals** | [`docs/plugin-internal/orchestration.md`](./docs/plugin-internal/orchestration.md), [`docs/plugin-internal/state-management.md`](./docs/plugin-internal/state-management.md) |
