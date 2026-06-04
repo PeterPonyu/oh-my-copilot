@@ -1,0 +1,22 @@
+{
+  "name": "hello-cli-ts",
+  "version": "0.1.0",
+  "description": "Minimal Hello World CLI in TypeScript (example)",
+  "main": "dist/index.js",
+  "bin": {
+    "hello-ts": "bin/hello-ts"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "clean": "rm -rf dist",
+    "start": "node dist/index.js",
+    "dev": "ts-node src/index.ts"
+  },
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^20.19.41",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.3"
+  }
+}
