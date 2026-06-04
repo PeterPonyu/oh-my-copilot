@@ -281,37 +281,50 @@ if command -v copilot >/dev/null 2>&1 && [[ "$plugin_installed" == "yes" ]] && [
   artifact_dir="$WORK/scratch"
   mkdir -p "$spec_out_dir" "$plan_out_dir" "$artifact_dir"
 
-  # Step 1: deep-interview → spec
-  timeout "$TIMEOUT_SECONDS" copilot \
-    --agent "omcp:deep-interview" \
+  # Pipeline steps: deep-interview, ralplan, and autopilot are SKILLS/COMMANDS
+  # (not agents). They live in skills/ and commands/, not agents/. Invoke via the
+  # slash-command route (-p "/omcp:<name> ..."), NOT --agent omcp:<name>.
+  # Each prompt directs the skill to write its output file per the SKILL.md
+  # Provenance Frontmatter Contract; --allow-all grants the write permission.
+  # Use a longer per-step timeout: skills orchestrate internal agent passes.
+  WAVE7_TIMEOUT="${COPILOT_WAVE7_TIMEOUT:-180}"
+
+  # Step 1: deep-interview → spec (slash-command route)
+  # Use local time (no -u): stat -c %y (used by e2e_pipeline_assert_chain) also
+  # returns local time, so both produced-at values and art_t share the same TZ.
+  _di_ts="$(date +%Y-%m-%dT%H:%M:%S)"
+  timeout "$WAVE7_TIMEOUT" copilot \
     --model "$SMOKE_MODEL" \
     --allow-all \
     --no-color \
     -s \
-    -p "$(cat "$prompt_file")" 2>&1 | tee "$WORK/deep-interview.log" || fail "Wave 7: deep-interview step failed"
+    -p "/omcp:deep-interview --quick Do not ask questions. Write the spec for '$(cat "$prompt_file")' to ${spec_out_dir}/spec.md with YAML frontmatter lines: 'produced-by: deep-interview', 'produced-at: ${_di_ts}', 'pipeline-stage: spec'." \
+    2>&1 | tee "$WORK/deep-interview.log" || fail "Wave 7: deep-interview step failed"
+  spec_file="$spec_out_dir/spec.md"
+  [[ -f "$spec_file" ]] || fail "Wave 7: deep-interview did not write spec file to $spec_file"
 
-  # Step 2: ralplan → plan
-  timeout "$TIMEOUT_SECONDS" copilot \
-    --agent "omcp:ralplan" \
+  # Step 2: ralplan → plan (slash-command route; fed spec path from step 1)
+  _rp_ts="$(date +%Y-%m-%dT%H:%M:%S)"
+  timeout "$WAVE7_TIMEOUT" copilot \
     --model "$SMOKE_MODEL" \
     --allow-all \
     --no-color \
     -s \
-    -p "refine the spec produced by deep-interview" 2>&1 | tee "$WORK/ralplan.log" || fail "Wave 7: ralplan step failed"
+    -p "/omcp:ralplan --quick Write the implementation plan for the spec at ${spec_file} to ${plan_out_dir}/plan.md with YAML frontmatter lines: 'produced-by: ralplan', 'produced-at: ${_rp_ts}', 'pipeline-stage: plan'." \
+    2>&1 | tee "$WORK/ralplan.log" || fail "Wave 7: ralplan step failed"
+  plan_file="$plan_out_dir/plan.md"
+  [[ -f "$plan_file" ]] || fail "Wave 7: ralplan did not write plan file to $plan_file"
 
-  # Step 3: autopilot → artifact
-  timeout "$TIMEOUT_SECONDS" copilot \
-    --agent "omcp:autopilot" \
+  # Step 3: autopilot → artifact (slash-command route; fed plan path from step 2)
+  timeout "$WAVE7_TIMEOUT" copilot \
     --model "$SMOKE_MODEL" \
     --allow-all \
     --no-color \
     -s \
-    -p "implement the plan produced by ralplan" 2>&1 | tee "$WORK/autopilot.log" || fail "Wave 7: autopilot step failed"
-
-  # Locate outputs (prefer WORK-relative then repo-relative)
-  spec_file=$(ls -1 "$spec_out_dir"/*.md .omc/specs/*.md 2>/dev/null | head -1)
-  plan_file=$(ls -1 "$plan_out_dir"/*.md .omc/plans/*.md 2>/dev/null | head -1)
-  artifact=$(find "$artifact_dir" scratch/ -type f \( -name '*.ts' -o -name '*.py' -o -name '*.js' \) 2>/dev/null | head -1)
+    -p "/omcp:autopilot Write a minimal TypeScript implementation to ${artifact_dir}/watcher.ts for the plan at ${plan_file}." \
+    2>&1 | tee "$WORK/autopilot.log" || fail "Wave 7: autopilot step failed"
+  artifact=$(find "$artifact_dir" -type f \( -name '*.ts' -o -name '*.py' -o -name '*.js' \) 2>/dev/null | head -1)
+  [[ -n "$artifact" ]] || fail "Wave 7: autopilot did not write artifact to $artifact_dir"
 
   e2e_pipeline_assert_chain "$spec_file" "$plan_file" "$artifact" \
     || { rm -rf "$WORK"; fail "Wave 7: provenance assertion failed"; }
