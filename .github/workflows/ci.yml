@@ -18,6 +18,19 @@ jobs:
         with:
           node-version: '22'
       - run: npm run e2e:structural
+  headless:
+    name: headless e2e (no secrets)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install Copilot CLI
+        run: npm install -g @github/copilot
+      - run: npm run e2e:headless
+
   e2e-real:
     name: real pipeline e2e (consumes model quota)
     runs-on: ubuntu-latest
