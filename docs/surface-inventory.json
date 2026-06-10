@@ -19,7 +19,7 @@
   "surfaces": {
     "skills": {
       "ownership": "repo-owned-plugin-surface",
-      "count": 46,
+      "count": 44,
       "names": [
         "ai-slop-cleaner",
         "ask",
@@ -42,8 +42,6 @@
         "iterate-loop",
         "learner",
         "mcp-setup",
-        "omc-doctor",
-        "omc-setup",
         "parity-guard",
         "plan",
         "project-session-manager",
@@ -71,7 +69,7 @@
     },
     "commands": {
       "ownership": "repo-owned-plugin-surface",
-      "count": 45,
+      "count": 43,
       "names": [
         "ai-slop-cleaner",
         "ask",
@@ -94,8 +92,6 @@
         "iterate-loop",
         "learner",
         "mcp-setup",
-        "omc-doctor",
-        "omc-setup",
         "parity-guard",
         "plan",
         "project-session-manager",
@@ -404,24 +400,6 @@
       "kind": "skill",
       "classification": "advanced",
       "path": "packages/copilot-cli-plugin/skills/mcp-setup/SKILL.md",
-      "first_run": false,
-      "rationale": "Advanced Copilot CLI plugin skill shipped by oh-my-copilot; installable but outside the compact default surface.",
-      "validator": "node scripts/validate-plugin-orchestration.mjs"
-    },
-    {
-      "name": "omc-doctor",
-      "kind": "skill",
-      "classification": "advanced",
-      "path": "packages/copilot-cli-plugin/skills/omc-doctor/SKILL.md",
-      "first_run": false,
-      "rationale": "Advanced Copilot CLI plugin skill shipped by oh-my-copilot; installable but outside the compact default surface.",
-      "validator": "node scripts/validate-plugin-orchestration.mjs"
-    },
-    {
-      "name": "omc-setup",
-      "kind": "skill",
-      "classification": "advanced",
-      "path": "packages/copilot-cli-plugin/skills/omc-setup/SKILL.md",
       "first_run": false,
       "rationale": "Advanced Copilot CLI plugin skill shipped by oh-my-copilot; installable but outside the compact default surface.",
       "validator": "node scripts/validate-plugin-orchestration.mjs"
@@ -818,24 +796,6 @@
       "kind": "command",
       "classification": "advanced",
       "path": "packages/copilot-cli-plugin/commands/mcp-setup.md",
-      "first_run": false,
-      "rationale": "Typed /omcp slash command route for a plugin skill.",
-      "validator": "node scripts/validate-plugin-orchestration.mjs"
-    },
-    {
-      "name": "omc-doctor",
-      "kind": "command",
-      "classification": "advanced",
-      "path": "packages/copilot-cli-plugin/commands/omc-doctor.md",
-      "first_run": false,
-      "rationale": "Typed /omcp slash command route for a plugin skill.",
-      "validator": "node scripts/validate-plugin-orchestration.mjs"
-    },
-    {
-      "name": "omc-setup",
-      "kind": "command",
-      "classification": "advanced",
-      "path": "packages/copilot-cli-plugin/commands/omc-setup.md",
       "first_run": false,
       "rationale": "Typed /omcp slash command route for a plugin skill.",
       "validator": "node scripts/validate-plugin-orchestration.mjs"
