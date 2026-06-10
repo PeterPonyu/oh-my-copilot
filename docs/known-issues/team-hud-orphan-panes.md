@@ -1,8 +1,11 @@
-# Known Issue: Team mode degenerates into N stacked HUD panes
+# Known Issue: Team mode degenerates into N stacked HUD panes (upstream: oh-my-codex)
 
 **Status: OPEN — not yet fixed**
-**Affects: oh-my-copilot (omcp) team mode, HUD reconcile path**
-**First observed: repo HEAD `fa48811`**
+**Affects: the oh-my-codex (`omx` 0.18.7) tmux HUD/team runtime.** oh-my-copilot
+ships no tmux/HUD runtime of its own — the bug was observed while running `omx`
+team mode with this repository as the working directory, and is recorded here
+for omcp users who hit it in that setup. No omcp code is implicated.
+**First observed: with this repo checked out at `fa48811` (cwd only)**
 
 ## Summary
 
@@ -34,11 +37,11 @@ Observed: **8 panes, all `omx hud --watch --preset=focused`, 0 leader, 0 workers
 
 ### D1 — Per-turn HUD reconcile never reaps dead-leader HUDs
 
-`reconcileHudForPromptSubmit()` in `dist/hud/reconcile.js` dedups on
+`reconcileHudForPromptSubmit()` in oh-my-codex's `dist/hud/reconcile.js` dedups on
 `leaderPaneId === currentPaneId`. Once the original leader pane (`%21`) is
 destroyed, every subsequent reconcile call fails the owner match, creates a new
 HUD instead of reaping the orphaned one, and never calls `reapDeadHudPanes()`.
-The bootstrap path (`dist/cli/index.js` `inside-tmux` branch) does call
+The bootstrap path (oh-my-codex's `dist/cli/index.js` `inside-tmux` branch) does call
 `reapDeadHudPanes()` — the two paths are asymmetric.
 
 ### D2 — `chooseTeamLeaderPaneId` can elect a HUD pane as the leader
@@ -86,5 +89,9 @@ dead-leader HUDs on next start.
 
 - Original forensic capture: `OMX_TEAM_HUD_ORPHAN_ISSUE.md` (untracked root file,
   preserved in the main checkout at the time of discovery)
-- Source files implicated: `dist/hud/reconcile.js`, `dist/hud/tmux.js`,
+- Source files implicated — all inside the **installed `oh-my-codex` package**
+  (e.g. `<node prefix>/lib/node_modules/oh-my-codex/`), none of them in this
+  repository: `dist/hud/reconcile.js`, `dist/hud/tmux.js`,
   `dist/team/tmux-session.js`, `dist/cli/index.js`
+- Upstream: report/fix belongs in the `oh-my-codex` project; this doc exists so
+  omcp users can recognize and recover from the failure mode.

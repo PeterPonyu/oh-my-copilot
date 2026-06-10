@@ -235,7 +235,7 @@ When `safeMode` is `true` (default), the HUD strips ANSI codes and uses ASCII-on
 If the HUD is not showing:
 1. Run `/omcp:hud setup` to auto-install and configure
 2. Restart Claude Code after setup completes
-3. If still not working, run `/omcp:verify` for full diagnostics
+3. If still not working, run `bash scripts/run-validation.sh` from the repo root, or use `/omcp:verify` for diagnostics
 
 **Legacy string format migration:** Older OMC versions wrote `statusLine` as a plain string (e.g., `"~/.claude/hud/omc-hud.mjs"`). Modern Claude Code (v2.1+) requires an object format. Running the installer or `/omcp:hud setup` will auto-migrate legacy strings to the correct object format:
 ```json

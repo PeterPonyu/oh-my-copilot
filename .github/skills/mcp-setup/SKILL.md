@@ -159,7 +159,7 @@ TROUBLESHOOTING:
 - If MCP servers don't appear, run `claude mcp list` to check status
 - Ensure you have Node.js 18+ installed for npx-based servers
 - For GitHub Docker option, ensure Docker is installed and running
-- Run /omcp:verify to diagnose issues
+- Run `bash scripts/run-validation.sh` from the repo root, or use `/omcp:verify` to diagnose issues
 
 MANAGING MCP SERVERS:
 - Add more servers: /omcp:mcp-setup or `claude mcp add ...`

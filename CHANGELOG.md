@@ -33,10 +33,13 @@ see [`packages/copilot-cli-plugin/CHANGELOG.md`](./packages/copilot-cli-plugin/C
 
 ### Docs — known issues
 
-- Added `docs/known-issues/team-hud-orphan-panes.md`: tracks the open bug where
-  team mode degenerates into N stacked HUD panes after the leader pane is
-  destroyed. Status: **open / not yet fixed**. Includes root-cause analysis (D1:
-  per-turn reconcile never reaps dead-leader HUDs; D2: `chooseTeamLeaderPaneId`
-  can elect a HUD pane as leader), suggested fixes, and recovery steps.
+- Added `docs/known-issues/team-hud-orphan-panes.md`: tracks an open **upstream
+  oh-my-codex (`omx` 0.18.7) runtime bug** where team mode degenerates into N
+  stacked HUD panes after the leader pane is destroyed — observed while running
+  `omx` with this repo as cwd; no omcp code is implicated (omcp ships no
+  tmux/HUD runtime). Status: **open / not yet fixed upstream**. Includes
+  root-cause analysis (D1: per-turn reconcile never reaps dead-leader HUDs; D2:
+  `chooseTeamLeaderPaneId` can elect a HUD pane as leader), suggested upstream
+  fixes, and recovery steps for affected users.
   Original forensic capture preserved as `OMX_TEAM_HUD_ORPHAN_ISSUE.md` (untracked)
   in the main checkout.
