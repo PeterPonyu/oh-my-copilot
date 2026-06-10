@@ -25,25 +25,25 @@ All data persists in `.writer-memory/memory.json` for git-friendly collaboration
 
 | Command | Action |
 |---------|--------|
-| `/oh-my-copilot:writer-memory init <project-name>` | Initialize new project memory |
-| `/oh-my-copilot:writer-memory status` | Show memory overview (character count, scene count, etc) |
-| `/oh-my-copilot:writer-memory char add <name>` | Add new character |
-| `/oh-my-copilot:writer-memory char <name>` | View character details |
-| `/oh-my-copilot:writer-memory char update <name> <field> <value>` | Update character field |
-| `/oh-my-copilot:writer-memory char list` | List all characters |
-| `/oh-my-copilot:writer-memory rel add <char1> <char2> <type>` | Add relationship |
-| `/oh-my-copilot:writer-memory rel <char1> <char2>` | View relationship |
-| `/oh-my-copilot:writer-memory rel update <char1> <char2> <event>` | Add relationship event |
-| `/oh-my-copilot:writer-memory scene add <title>` | Add new scene |
-| `/oh-my-copilot:writer-memory scene <id>` | View scene details |
-| `/oh-my-copilot:writer-memory scene list` | List all scenes |
-| `/oh-my-copilot:writer-memory theme add <name>` | Add theme |
-| `/oh-my-copilot:writer-memory world set <field> <value>` | Set world attribute |
-| `/oh-my-copilot:writer-memory query <question>` | Query memory naturally (Korean supported) |
-| `/oh-my-copilot:writer-memory validate <character> <dialogue>` | Check if dialogue matches character tone |
-| `/oh-my-copilot:writer-memory synopsis` | Generate emotion-focused synopsis |
-| `/oh-my-copilot:writer-memory export` | Export full memory as readable markdown |
-| `/oh-my-copilot:writer-memory backup` | Create manual backup |
+| `/omcp:writer-memory init <project-name>` | Initialize new project memory |
+| `/omcp:writer-memory status` | Show memory overview (character count, scene count, etc) |
+| `/omcp:writer-memory char add <name>` | Add new character |
+| `/omcp:writer-memory char <name>` | View character details |
+| `/omcp:writer-memory char update <name> <field> <value>` | Update character field |
+| `/omcp:writer-memory char list` | List all characters |
+| `/omcp:writer-memory rel add <char1> <char2> <type>` | Add relationship |
+| `/omcp:writer-memory rel <char1> <char2>` | View relationship |
+| `/omcp:writer-memory rel update <char1> <char2> <event>` | Add relationship event |
+| `/omcp:writer-memory scene add <title>` | Add new scene |
+| `/omcp:writer-memory scene <id>` | View scene details |
+| `/omcp:writer-memory scene list` | List all scenes |
+| `/omcp:writer-memory theme add <name>` | Add theme |
+| `/omcp:writer-memory world set <field> <value>` | Set world attribute |
+| `/omcp:writer-memory query <question>` | Query memory naturally (Korean supported) |
+| `/omcp:writer-memory validate <character> <dialogue>` | Check if dialogue matches character tone |
+| `/omcp:writer-memory synopsis` | Generate emotion-focused synopsis |
+| `/omcp:writer-memory export` | Export full memory as readable markdown |
+| `/omcp:writer-memory backup` | Create manual backup |
 
 ## Memory Types
 

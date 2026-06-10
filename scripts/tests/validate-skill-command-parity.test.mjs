@@ -7,7 +7,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { spawnSync } from "node:child_process";
-import { cpSync, mkdtempSync, rmSync, unlinkSync, writeFileSync, readFileSync } from "node:fs";
+import { cpSync, mkdtempSync, readdirSync, rmSync, unlinkSync, writeFileSync, readFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
@@ -92,17 +92,22 @@ test("parity FAILS when README counts disagree with live inventory", () => {
   const dir = stagePlugin();
   const readme = join(dir, "README.md");
   try {
-    // README claims 45 commands, but we delete one command -> 44 live.
+    // Claim the staged tree's real counts, then delete one command so ONLY
+    // the command count mismatches (claim = live + 1). Computed from the
+    // staged copy so the fixture survives future surface-count changes.
+    const liveSkills = readdirSync(join(dir, "skills"), { withFileTypes: true }).filter((e) => e.isDirectory()).length;
+    const claimedCommands = readdirSync(join(dir, "commands")).filter((f) => f.endsWith(".md")).length;
     unlinkSync(join(dir, "commands", "cancel.md"));
-    // Re-create a matching skill-less state is irrelevant; we only need the
-    // count cross-check. Write a README whose lead sentence claims 45.
     writeFileSync(
       readme,
-      "# oh-my-copilot\n\n22 agents, 46 skills, 45 typed slash commands, 4 hook events, and a 41-tool MCP server.\n",
+      `# oh-my-copilot\n\n22 agents, ${liveSkills} skills, ${claimedCommands} typed slash commands, 4 hook events, and a 41-tool MCP server.\n`,
     );
     const result = run("--plugin-root", dir, "--readme", readme);
     assert.equal(result.status, 1, `expected exit 1, got ${result.status}`);
-    assert.match(result.stderr, /README claims 45 slash commands but live inventory has 44/);
+    assert.match(
+      result.stderr,
+      new RegExp(`README claims ${claimedCommands} slash commands but live inventory has ${claimedCommands - 1}`),
+    );
   } finally {
     rmSync(dir, { recursive: true, force: true });
   }

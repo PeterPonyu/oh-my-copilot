@@ -330,7 +330,7 @@ shell_check "skill-receipts" \
 
 # 10c. Skill <-> command parity gate (COPILOT-8)
 shell_check "skill-command-parity" \
-  "COPILOT-8: every user-invocable skill has a command, 'reference' is the only non-invocable skill, and live counts match the README (22 agents / 46 skills / 45 commands)." \
+  "COPILOT-8: every user-invocable skill has a command, 'reference' is the only non-invocable skill, and live counts match the README's stated surface numbers." \
   "node $REPO_ROOT/scripts/validate-skill-command-parity.mjs" \
   "skill-command parity validates"
 

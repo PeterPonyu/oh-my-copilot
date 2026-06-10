@@ -102,11 +102,11 @@ If both unavailable:
 ## Invocation
 
 ```bash
-/oh-my-copilot:ccg <task description>
+/omcp:ccg <task description>
 ```
 
 Example:
 
 ```bash
-/oh-my-copilot:ccg Review this PR - architecture/security via Codex and UX/readability via Gemini
+/omcp:ccg Review this PR - architecture/security via Codex and UX/readability via Gemini
 ```

@@ -1,41 +1,37 @@
 ---
 name: setup
-description: "[OMCP] Use first for install/update routing — sends setup, doctor, or MCP requests to the correct OMC setup flow"
+description: "[OMCP] Use first for MCP server configuration and plugin setup"
 level: 2
 ---
 
 # Setup
 
-Use `/omcp:setup` as the unified setup/configuration entrypoint.
+Use `/omcp:setup` as the setup/configuration entrypoint for this plugin.
 
 ## Usage
 
 ```bash
-/omcp:setup                # full setup wizard
-/omcp:setup doctor         # installation diagnostics
 /omcp:setup mcp            # MCP server configuration
-/omcp:setup wizard --local # explicit wizard path
+/omcp:setup mcp github     # GitHub MCP server setup
 ```
 
 ## Routing
 
-Process the request by the **first argument only** so install/setup questions land on the right flow immediately:
+Process the request by the **first argument only**:
 
-- No argument, `wizard`, `local`, `global`, or `--force` -> route to `/omcp:omc-setup` with the same remaining args
-- `doctor` -> route to `/omcp:omc-doctor` with everything after the `doctor` token
 - `mcp` -> route to `/omcp:mcp-setup` with everything after the `mcp` token
+- No argument or unrecognised -> show this help and suggest `/omcp:verify` for diagnostics
 
 Examples:
 
 ```bash
-/omcp:setup --local          # => /omcp:omc-setup --local
-/omcp:setup doctor --json    # => /omcp:omc-doctor --json
 /omcp:setup mcp github       # => /omcp:mcp-setup github
 ```
 
 ## Notes
 
-- `/omcp:omc-setup`, `/omcp:omc-doctor`, and `/omcp:mcp-setup` remain valid compatibility entrypoints.
+- `/omcp:mcp-setup` remains a valid direct entrypoint.
+- To diagnose the plugin install, run `bash scripts/run-validation.sh` from the repo root, or use `/omcp:verify`.
 - Prefer `/omcp:setup` in new documentation and user guidance.
 
 Task: {{ARGUMENTS}}

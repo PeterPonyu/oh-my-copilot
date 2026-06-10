@@ -32,7 +32,6 @@ const MAIN_FEATURE_SKILLS = [
   "debug",
   "trace",
   "parity-guard",
-  "omc-doctor",
 ];
 
 const REQUIRED_VALIDATION_SURFACES = [

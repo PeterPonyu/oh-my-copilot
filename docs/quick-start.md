@@ -63,7 +63,7 @@ From the repository root, prefer the root-local names for current-directory work
 | Review docs, registration, or surface changes | `reviewer` or `/review` |
 | Verify validation evidence and smoke-test gaps | `verifier` or `/verify` |
 | Source-ground capability claims | `research` |
-| Check install/bootstrap proof | `/omcp:omc-doctor` or `/omcp:verify` |
+| Check install/bootstrap proof | `/omcp:verify` or `bash scripts/run-validation.sh` |
 | Review the reusable plugin package | `/omcp:review` |
 | Run docs shipment checks | `docs-ship` skill |
 | Scan for parity-risk wording | `parity-guard` skill |

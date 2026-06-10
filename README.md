@@ -1,10 +1,10 @@
 # oh-my-copilot
 
-A Copilot CLI-native power pack for GitHub Copilot CLI: 22 agents, 46 skills, 45 typed slash commands, 4 hook events, and a 41-tool MCP server — installed as a single plugin.
+A Copilot CLI-native power pack for GitHub Copilot CLI: 22 agents, 44 skills, 43 typed slash commands, 4 hook events, and a 41-tool MCP server — installed as a single plugin.
 
 ## What you get
 
-- **Typed slash commands** — `/omcp:autopilot`, `/omcp:ralph`, `/omcp:ulw-loop`, `/omcp:hyperplan`, `/omcp:wiki`, `/omcp:build-fix`, `/omcp:git-master`, `/omcp:cancel`, ... 45 user-invocable routes that the LLM can resolve at the `❯` prompt.
+- **Typed slash commands** — `/omcp:autopilot`, `/omcp:ralph`, `/omcp:ulw-loop`, `/omcp:hyperplan`, `/omcp:wiki`, `/omcp:build-fix`, `/omcp:git-master`, `/omcp:cancel`, ... 43 user-invocable routes that the LLM can resolve at the `❯` prompt.
 - **Persistent state** — wiki, project memory, notepad, traces, shared memory, and pipeline state all live under `.omcp/` and survive across sessions.
 - **Real MCP server** — single ~616 KB bundled file (`mcp-server/dist/server.mjs`); no `npm install` needed at install time.
 - **Hooks wiring 4 of Copilot CLI's lifecycle events**: `sessionStart`, `preToolUse`, `postToolUse`, `sessionEnd`. Copilot CLI exposes more events (e.g. `userPromptSubmitted`, `postToolUseFailure`, `preCompact`, `errorOccurred`, `agentStop`, `subagentStart`/`subagentStop`); the plugin wires the four it currently uses. See [`docs/hook-surface.md`](./docs/hook-surface.md).
@@ -28,8 +28,8 @@ For the full installation guide (prerequisites, bootstrap script, troubleshootin
 
 ## Plugin surface
 
-The installed plugin remains intentionally compact by default: all 45 slash routes,
-46 skills, and 22 agents are classified as **advanced** inventory surfaces, while
+The installed plugin remains intentionally compact by default: all 43 slash routes,
+44 skills, and 22 agents are classified as **advanced** inventory surfaces, while
 the 4 hooks and 41 MCP tools are **internal**. That keeps the first-run/default
 surface at 0 user-invocable routes and 0 agents, under the suite ceiling of 5 and
 6 respectively, without hiding the opt-in power-pack inventory.
@@ -37,8 +37,8 @@ surface at 0 user-invocable routes and 0 agents, under the suite ceiling of 5 an
 | Dimension | Count | Notes |
 | --- | --- | --- |
 | Agents | 22 | sisyphus (orchestrator), reviewer, research, executor, planner, architect, debugger, ... |
-| Skills | 46 | autopilot, ralph, ralplan, team, deep-interview, ulw-loop, hyperplan, wiki, build-fix, git-master, cancel, ... |
-| Slash commands | 45 | every user-invocable skill has a typed `/omcp:<cmd>` route |
+| Skills | 44 | autopilot, ralph, ralplan, team, deep-interview, ulw-loop, hyperplan, wiki, build-fix, git-master, cancel, ... |
+| Slash commands | 43 | every user-invocable skill has a typed `/omcp:<cmd>` route |
 | Hook events | 4 | `sessionStart`, `preToolUse`, `postToolUse`, `sessionEnd` wired — 4 of the lifecycle events Copilot CLI exposes (it also fires `userPromptSubmitted`, `postToolUseFailure`, `preCompact`, `errorOccurred`, `agentStop`, `subagentStart`/`subagentStop`, not yet wired) |
 | MCP server tools | 41 | state (6), notepad (7), plan (1), pipeline (2), project memory (5), trace (4), wiki (7), shared memory (5), rules policy (4) |
 
@@ -51,7 +51,7 @@ After install, in an interactive `copilot` session:
 /omcp:autopilot create a TODO list for this repo    # full pipeline: spec → plan → code
 /omcp:ralplan refactor the auth module              # consensus planning (Planner/Architect/Critic)
 /omcp:cancel --all                                  # stop active modes
-/omcp:omc-doctor                                    # diagnose interop with Claude Code's OMC plugin
+/omcp:verify                                        # validate this plugin's install state
 ```
 
 ## Validate

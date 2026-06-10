@@ -8,8 +8,8 @@
 //   2. Every command has a matching `skills/<id>/SKILL.md`.
 //   3. The lone non-invocable `reference` skill is the ONLY skill without a
 //      command (no other skill may quietly lack a command).
-//   4. Live counts match the README's stated numbers
-//      (22 agents / 46 skills / 45 commands).
+//   4. Live counts match the README's stated numbers (the agents/skills/
+//      commands figures in the README lead sentence).
 //
 // Dependency-free so it runs in CI before any install. Accepts overrides so a
 // unit test can point it at a synthetic plugin tree:
