@@ -1,0 +1,69 @@
+name: CI
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  fast:
+    name: structural (no secrets)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm run e2e:structural
+  headless:
+    name: headless e2e (no secrets)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install Copilot CLI
+        run: npm install -g @github/copilot@1.0.59
+      - run: npm run e2e:headless
+
+  e2e-real:
+    name: real pipeline e2e (consumes model quota)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      COPILOT_GITHUB_TOKEN: ${{ secrets.COPILOT_GITHUB_TOKEN }}
+      RUN_COPILOT_AGENT_SMOKE: '1'
+      COPILOT_SMOKE_MODEL: gpt-5-mini
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      # Skip-clean gate: without the COPILOT_GITHUB_TOKEN secret the real tier
+      # cannot run; skip honestly (no pass marker, message in the log) instead
+      # of hard-failing every push. Set the secret to make this lane real.
+      - name: Gate on credential (skip cleanly when absent)
+        id: gate
+        run: |
+          if [ -z "$COPILOT_GITHUB_TOKEN" ]; then
+            echo "run=0" >> "$GITHUB_OUTPUT"
+            echo "::notice::COPILOT_GITHUB_TOKEN secret absent — real pipeline e2e SKIPPED cleanly (no pass marker emitted)."
+          else
+            echo "run=1" >> "$GITHUB_OUTPUT"
+          fi
+      - name: Install Copilot CLI (pinned, supply-chain)
+        if: steps.gate.outputs.run == '1'
+        run: npm install -g @github/copilot@1.0.59
+      - run: npm run e2e:real
+        if: steps.gate.outputs.run == '1'

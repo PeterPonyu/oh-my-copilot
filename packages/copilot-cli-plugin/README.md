@@ -151,7 +151,7 @@ audit across repositories.
 | Dimension | Count |
 | --- | --- |
 | Agents | 22 |
-| Skills | 46 |
-| Slash commands | 45 |
+| Skills | 44 |
+| Slash commands | 43 |
 | Hook events | 4 |
 | MCP server tools | 41 |

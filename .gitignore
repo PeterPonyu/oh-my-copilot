@@ -12,3 +12,6 @@ __pycache__/
 apps/cross-host-benchmark-site/dist-task3/
 apps/cross-host-benchmark-site/*.tsbuildinfo
 benchmark/runs/data/
+
+# accidentally committed dependency trees under examples/
+examples/**/node_modules/

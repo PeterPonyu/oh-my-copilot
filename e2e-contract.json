@@ -1,0 +1,10 @@
+{
+  "brand": "OMCP",
+  "host": "copilot",
+  "hostClass": "host-plugin",
+  "evidenceDir": ".omcp/evidence",
+  "journey": "deep-interview -> ralplan -> autopilot (real model)",
+  "markerPrefix": "OMCP",
+  "requiresSecret": true,
+  "npmScripts": ["e2e:structural", "e2e:headless", "e2e:real", "verify"]
+}

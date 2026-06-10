@@ -35,9 +35,9 @@ Spawn N CLI worker processes in tmux panes to execute tasks in parallel. Support
 
 - **tmux binary** must be installed and discoverable (`command -v tmux`)
 - **Classic tmux session optional** for in-place pane splitting (`$TMUX` set). Inside cmux or a plain terminal, `omcp team` falls back to a detached tmux session instead of splitting the current surface.
-- **claude** CLI: `npm install -g @anthropic-ai/claude-code`
-- **codex** CLI: `npm install -g @openai/codex`
-- **gemini** CLI: `npm install -g @google/gemini-cli`
+- **claude** CLI *(optional external worker — not a plugin dependency)*: `npm install -g @anthropic-ai/claude-code`; required only when spawning `claude` workers
+- **codex** CLI *(optional external worker — not a plugin dependency)*: `npm install -g @openai/codex`; required only when spawning `codex` workers
+- **gemini** CLI *(optional external worker — not a plugin dependency)*: `npm install -g @google/gemini-cli`; required only when spawning `gemini` workers
 
 > **About `omcp team`:** the `omcp team ...` commands below drive the omcp
 > external tmux-team launcher — a process-orchestration runtime, separate from
