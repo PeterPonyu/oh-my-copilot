@@ -31,6 +31,16 @@ copilot plugin install "$(pwd)/packages/copilot-cli-plugin"
 ```
 
 Use an absolute path instead of `$(pwd)` when running from another working directory.
+Copilot CLI may warn that direct plugin installs from local paths, repositories, or
+URLs are deprecated; the upstream warning is tracked in
+[github/copilot-cli#2877](https://github.com/github/copilot-cli/issues/2877), and
+GitHub's CLI reference documents marketplace installs with the
+`plugin@marketplace` form. The local-path install remains the supported
+development and verification path for this repository today. The planned release
+install target is `omcp@oh-my-copilot` once the `oh-my-copilot` marketplace is
+published and added with `copilot plugin marketplace add`. Until then, keep
+automation pinned to the local package path above and treat the warning as a
+forward-compatibility notice rather than a setup failure.
 
 Upstream references for manifest shape and plugin behavior:
 
